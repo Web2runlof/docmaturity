@@ -1,12 +1,13 @@
 import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
-import { BANK_VERSION, DIMENSIONS, LEVEL_DESCRIPTIONS, LEVEL_NAMES, QUESTIONS, SOURCES } from '@/data/bank';
-import { DEFAULT_TARGET, DEFAULT_THRESHOLDS, EVIDENCE_FACTOR, EVIDENCE_LABEL, LEVEL_COLORS, PRIORITY_WEIGHTS, RISK_BANDS, SOLIDITY_WEIGHTS, SPECIAL_LABEL } from '@/engine/constants';
+import { BANK_VERSION, DIMENSIONS, LEVEL_DESCRIPTIONS, LEVEL_NAMES, QUESTIONS, SOURCES, componentMatrix, getDimensionFamily } from '@/data/bank';
+import { DEFAULT_TARGET, DEFAULT_THRESHOLDS, EVIDENCE_FACTOR, EVIDENCE_LABEL, LENS_DIMENSIONS, LEVEL_COLORS, PRIORITY_WEIGHTS, RISK_BANDS, SOLIDITY_WEIGHTS, SPECIAL_EFFECT, SPECIAL_LABEL, SYSTEM_CAPABILITY_IDS, VALIDATED_EVIDENCE_LEVEL } from '@/engine/constants';
+import { dimensionRangeLabel } from '@/engine/analyze';
 import { CONTRADICTION_RULES } from '@/engine/triangulation';
 import { INITIATIVE_TEMPLATES } from '@/data/recommendations/initiatives';
 import { PHASES } from '@/engine/recommendations';
-import { LOCAL_DATA_NOTICE } from '@/services/storage';
+import { LOCAL_DATA_NOTICE, MGDA_FAMILIES, MODEL_NAME, WORK_CYCLE } from '@/config/vocabulary';
 import { PBKDF2_ITERATIONS } from '@/services/crypto';
 import { Sources, VERIFICATION_LABEL } from '@/features/methodology/LibraryPage';
 import type { EvidenceStatus } from '@/types/domain';
@@ -48,33 +49,34 @@ function Formula({ children, note }: { children: ReactNode; note?: ReactNode }) 
 }
 
 export function HowItWorksPage() {
-  const steps: [string, string, string][] = [
-    ['Caracterizar la organización', 'Se registra el perfil organizacional (público, privado, salud, educación, financiero, entre otros), el volumen documental y los sistemas. Los campos desconocidos se marcan como tales y no se rellenan automáticamente.', 'Organizaciones → Nueva organización'],
-    ['Crear la evaluación y definir su alcance', 'Se elige la modalidad (rápida, estándar, profesional o personalizada), las metas por criterio y las ponderaciones. Las exclusiones deben justificarse y quedan registradas.', 'Evaluaciones → Nueva evaluación → Alcance'],
-    ['Registrar participantes y entrevistar', 'Cada participante se identifica con un código y un perfil. La entrevista puede ser dirigida por el evaluador o distribuida mediante un archivo de asignación que la persona responde sin conexión.', 'Entrevistas'],
-    ['Registrar evidencias', 'Cada evidencia se asocia a un criterio, con su estado de revisión E0 a E3. Se prefieren referencias a documentos antes que adjuntos con información sensible.', 'Evidencias'],
-    ['Validar en la mesa de validación', 'El evaluador revisa discrepancias entre entrevistados, contradicciones entre criterios, respuestas «no aplica» y niveles altos sin evidencia, y registra el nivel validado con su justificación.', 'Mesa de validación'],
-    ['Analizar, priorizar y planear', 'El dashboard muestra la madurez por dimensión con su cobertura y soporte de evidencias. Las brechas alimentan los riesgos, la priorización y una hoja de ruta editable en cuatro fases.', 'Resultados → Brechas → Hoja de ruta → Informes'],
-  ];
   return (
-    <Page eyebrow="Cómo funciona" title="Del primer dato a la hoja de ruta" intro="DOCMATURITY organiza el trabajo de diagnóstico en un ciclo de seis momentos. Todo ocurre en el navegador del evaluador; los archivos solo salen del dispositivo cuando él los exporta.">
+    <Page eyebrow="Cómo funciona" title="Del primer dato a la hoja de ruta" intro="DOCMATURITY organiza el trabajo de diagnóstico en un ciclo de seis momentos. Todo ocurre en el navegador de la persona evaluadora; los archivos solo salen del dispositivo cuando la persona evaluadora los exporta.">
       <Block title="El ciclo de trabajo">
         <ol className="space-y-0 divide-y divide-line border-y border-line">
-          {steps.map(([t, d, where], i) => (
-            <li key={t} className="grid gap-3 py-5 md:grid-cols-[64px_1fr_220px]">
+          {WORK_CYCLE.map((step, i) => (
+            <li key={step.key} className="grid gap-3 py-5 md:grid-cols-[64px_1fr_240px]">
               <span className="font-display text-2xl font-semibold text-slate-300 num">{String(i + 1).padStart(2, '0')}</span>
-              <div><h3 className="font-semibold">{t}</h3><p className="mt-1 text-sm text-muted">{d}</p></div>
-              <p className="text-xs text-teal md:text-right">{where}</p>
+              <div><h3 className="font-semibold">{step.title}</h3><p className="mt-1 text-sm text-muted">{step.text}</p></div>
+              <p className="text-xs md:text-right">
+                <span className="block text-[0.68rem] uppercase tracking-wider text-muted">Dónde se hace</span>
+                {step.where.map((w, k) => (
+                  <span key={w.label}>
+                    {k > 0 && <span className="text-muted"> · </span>}
+                    {w.to ? <Link to={w.to} className="font-medium text-teal underline-offset-2 hover:underline">{w.label}</Link> : <span className="text-ink">{w.label}</span>}
+                  </span>
+                ))}
+                {step.where.some((w) => !w.to) && <span className="mt-1 block text-[0.68rem] text-muted">Las secciones sin enlace están dentro de cada evaluación.</span>}
+              </p>
             </li>
           ))}
         </ol>
       </Block>
       <Block title="Respuestas especiales">
-        <p>Una pregunta puede no tener respuesta numérica. Ninguna de estas situaciones se convierte en cero: se excluyen del cálculo y reducen la cobertura. Solo el «no aplica» validado retira el criterio del alcance.</p>
-        <dl className="grid gap-3 sm:grid-cols-2">{Object.entries(SPECIAL_LABEL).map(([k, v]) => <div key={k} className="rounded-md border border-line p-3"><dt className="text-sm font-semibold">{v}</dt><dd className="font-mono text-xs text-muted">{k}</dd></div>)}</dl>
+        <p>Una pregunta puede no tener respuesta numérica. Ninguna de estas situaciones se convierte en cero. La mayoría deja el criterio sin puntuación y reduce la cobertura; «No aplica (validado)» y «No asignada» no la reducen.</p>
+        <dl className="grid gap-3 sm:grid-cols-2">{Object.entries(SPECIAL_LABEL).map(([k, v]) => <div key={k} className="rounded-md border border-line p-3"><dt className="text-sm font-semibold">{v}</dt><dd className="mt-1 text-xs text-muted">{SPECIAL_EFFECT[k]}</dd></div>)}</dl>
       </Block>
       <Block title="Entrevistas distribuidas">
-        <p>El evaluador exporta un archivo <code className="rounded bg-slate-100 px-1">.dm-assignment.json</code> por participante. La persona lo abre en <Link to="/responder" className="text-teal hover:underline">Responder entrevista</Link>, responde a su ritmo y descarga un archivo <code className="rounded bg-slate-100 px-1">.dm-interview.json</code>. Al importarlo, la aplicación verifica estructura, versión del banco, asignación y hash SHA-256; detecta duplicados y, si llega una revisión, muestra las diferencias para aceptarla o rechazarla.</p>
+        <p>La persona evaluadora exporta un archivo <code className="rounded bg-slate-100 px-1">.dm-assignment.json</code> por participante. La persona entrevistada lo abre en <Link to="/responder" className="text-teal hover:underline">Responder entrevista</Link>, responde a su ritmo y descarga un archivo <code className="rounded bg-slate-100 px-1">.dm-interview.json</code>. Al importarlo, la aplicación verifica estructura, versión del banco, asignación y hash SHA-256; detecta duplicados y, si llega una revisión, muestra las diferencias para aceptarla o rechazarla.</p>
         <p className="text-sm text-muted">El hash permite detectar alteraciones accidentales del contenido. No es una firma digital ni identifica de forma fehaciente a quien respondió.</p>
       </Block>
       <div><Link to="/app" className="inline-flex h-11 items-center gap-2 rounded-md bg-navy px-5 text-sm font-semibold text-white hover:bg-navy-dark">Abrir la aplicación <ArrowRight className="size-4" aria-hidden /></Link></div>
@@ -85,7 +87,7 @@ export function HowItWorksPage() {
 export function MethodologyPage() {
   const t = DEFAULT_THRESHOLDS;
   return (
-    <Page eyebrow={`Metodología · banco ${BANK_VERSION}`} title="Modelo DIAM: DocMaturity Integrated Assessment Model" intro={`${DIMENSIONS.length} dimensiones, ${QUESTIONS.length} criterios originales y ${QUESTIONS.length * 6} descriptores de nivel redactados individualmente. Las fórmulas se aplican de forma determinista y se documentan aquí sin simplificaciones.`}>
+    <Page eyebrow={`Metodología · banco ${BANK_VERSION}`} title={MODEL_NAME} intro={`${DIMENSIONS.length} dimensiones, ${QUESTIONS.length} criterios originales y ${QUESTIONS.length * 6} descriptores de nivel redactados individualmente. Las fórmulas se aplican de forma determinista y se documentan aquí sin simplificaciones.`}>
       <Block title="Escala de madurez" id="escala">
         <ol className="grid gap-2">{LEVEL_NAMES.map((name, i) => (
           <li key={name} className="grid grid-cols-[8px_120px_1fr] items-start gap-4 rounded-md border border-line bg-white p-3">
@@ -98,38 +100,63 @@ export function MethodologyPage() {
       </Block>
       <Block title="Dimensiones y ponderaciones" id="dimensiones">
         <div className="overflow-x-auto"><table className="table-pro">
-          <thead><tr><th>Dimensión</th><th>Componente MGDA</th><th>Criterios</th><th>Peso por defecto</th></tr></thead>
-          <tbody>{DIMENSIONS.map((d) => <tr key={d.id}><td><span className="font-medium text-navy">{d.id} · {d.name}</span><div className="max-w-md text-xs text-muted">{d.summary}</div></td><td className="text-xs">{d.mgdaComponent}</td><td className="num">{QUESTIONS.filter((q) => q.dimensionId === d.id).length}</td><td className="num">{n(d.defaultWeight)}</td></tr>)}</tbody>
+          <thead><tr><th>Dimensión</th><th>Familia (componente MGDA predominante)</th><th>Criterios</th><th>Peso por defecto</th></tr></thead>
+          <tbody>{DIMENSIONS.map((d) => { const fam = getDimensionFamily(d.id); return <tr key={d.id}><td><span className="font-medium text-navy">{d.id} · {d.name}</span><div className="max-w-md text-xs text-muted">{d.summary}</div></td><td className="text-xs">{MGDA_FAMILIES.find((f) => f.key === fam)?.title} <span className="text-muted">· {fam}</span></td><td className="num">{QUESTIONS.filter((q) => q.dimensionId === d.id).length}</td><td className="num">{n(d.defaultWeight)}</td></tr>; })}</tbody>
         </table></div>
       </Block>
+      <Block title="Criterios por componente MGDA" id="componentes">
+        <p>El componente MGDA es un atributo de cada criterio y es la fuente de verdad para los resultados por componente. La familia de cada dimensión corresponde a su componente MGDA predominante; cada criterio conserva su propio componente, por lo que una dimensión puede aportar criterios a varios componentes.</p>
+        <div className="overflow-x-auto"><table className="table-pro">
+          <thead><tr><th>Dimensión</th>{MGDA_FAMILIES.map((f) => <th key={f.key} className="whitespace-nowrap">{f.key}</th>)}<th>Total</th></tr></thead>
+          <tbody>{componentMatrix().map((r) => <tr key={r.dimensionId}><td className="whitespace-nowrap font-medium text-navy">{r.dimensionId}</td>{MGDA_FAMILIES.map((f) => <td key={f.key} className={`num ${f.key === getDimensionFamily(r.dimensionId) ? 'font-semibold text-navy' : 'text-muted'}`}>{r.counts[f.key] ?? '—'}</td>)}<td className="num">{Object.values(r.counts).reduce((x, y) => x + y, 0)}</td></tr>)}</tbody>
+          <tfoot><tr><th>Total</th>{MGDA_FAMILIES.map((f) => <td key={f.key} className="num font-semibold">{QUESTIONS.filter((q) => q.mgdaComponent === f.key).length}</td>)}<td className="num font-semibold">{QUESTIONS.length}</td></tr></tfoot>
+        </table></div>
+        <p className="text-xs text-muted">En negrita, el componente predominante de cada dimensión.</p>
+      </Block>
       <Block title="Consolidación de respuestas" id="consolidacion">
-        <p>Primero se toma una respuesta por participante único; luego se consolida el criterio con la mediana, robusta frente a valores extremos. También se calculan media, mínimo, máximo, rango y desviación.</p>
-        <Formula note="Con valores 4, 3, 2, 1: mediana 2,5; media 2,5; rango 3; acuerdo 0,4.">Puntaje del criterio = mediana(respuestas numéricas por participante)</Formula>
+        <p>Una respuesta por participante y mediana entre participantes: de cada persona se toma su respuesta más reciente al criterio; luego el criterio se consolida con la mediana de esas respuestas, robusta frente a valores extremos. También se calculan media, mínimo, máximo, rango y desviación.</p>
+        <Formula note="Con valores 4, 3, 2, 1: mediana 2,50; media 2,50; rango 3; acuerdo 0,40.">Puntaje del criterio = mediana(una respuesta numérica por participante)</Formula>
         <Formula note={`Hay discrepancia cuando el rango es igual o superior a ${t.discrepancyRange}.`}>Acuerdo = 1 − rango / 5</Formula>
       </Block>
       <Block title="Madurez por dimensión y global" id="madurez">
         <Formula note="Solo se incluyen criterios aplicables con puntuación; los pesos se renormalizan sobre los criterios disponibles.">Dimensión = Σ(puntaje × peso) / Σ(peso)</Formula>
         <Formula note="Las dimensiones con cobertura insuficiente se excluyen y se informa la exclusión.">Global = Σ(dimensión × peso de la dimensión) / Σ(pesos incluidos)</Formula>
-        <p>Se presentan dos lecturas: la <strong>madurez preliminar</strong> (percibida, a partir de entrevistas) y la <strong>madurez validada</strong> (niveles confirmados por el evaluador en la mesa de validación). La etiqueta «madurez integral validada» solo se usa con alta cobertura de validación sobre el banco completo.</p>
+        <p>Se presentan dos series: la <strong>madurez percibida</strong> o preliminar (a partir de entrevistas) y la <strong>madurez validada</strong> (niveles confirmados por el evaluador en la mesa de validación). Cada serie se calcula sobre sus propios criterios: si la validada cubre menos dimensiones que la percibida, se informa sobre qué dimensiones se calculó (por ejemplo, «calculada sobre D01–D05») y se marca como <strong>exploratoria</strong>. Todos los indicadores de una vista se recalculan sobre la misma serie; los que dependen solo de las respuestas se marcan «solo percibida». La etiqueta «madurez integral validada» solo se usa con alta cobertura de validación sobre el banco completo.</p>
+      </Block>
+      <Block title="Lecturas diferenciadas" id="lecturas">
+        <p>El DIAM no fusiona en un único indicador conceptos distintos. Las lecturas se calculan así:</p>
+        <ul className="list-disc space-y-1.5 pl-5 text-sm">
+          <li><strong>Madurez organizacional</strong>: promedio ponderado por dimensión, con los mismos pesos de la madurez global, de {dimensionRangeLabel([...LENS_DIMENSIONS.organizational])}.</li>
+          <li><strong>Madurez tecnológica</strong>: igual, sobre {dimensionRangeLabel([...LENS_DIMENSIONS.technological])}. Las dos lecturas son una partición de las quince dimensiones: D10 (seguridad, riesgos y cumplimiento) se ubica en la tecnológica y D13 (gobierno de datos y conocimiento) en la organizacional. Las dimensiones sin datos se informan y no se cuentan como cero, por lo que cada lectura puede reproducirse con las madureces por dimensión y sus pesos.</li>
+          <li><strong>Capacidades funcionales de sistemas</strong>: promedio ponderado de {SYSTEM_CAPABILITY_IDS.length} criterios de captura, retención, integridad, metadatos y portabilidad ({SYSTEM_CAPABILITY_IDS.join(', ')}).</li>
+          <li><strong>Capacidades sustentadas con evidencia</strong>: promedio de los criterios validados con evidencia E2 o E3. Un criterio validado en nivel {VALIDATED_EVIDENCE_LEVEL} o superior con evidencia E0 o E1 se marca «Validado sin evidencia suficiente» y no se cuenta.</li>
+          <li><strong>Posibles brechas normativas</strong>: criterios con posible obligación o por validar cuyo nivel está por debajo del mínimo recomendado. Requieren validación jurídica.</li>
+        </ul>
       </Block>
       <Block title="Cobertura, evidencias y solidez" id="cobertura">
-        <Formula note={`Bandas: < ${t.coverageInsufficient} % insuficiente; < ${t.coverageExploratory} % exploratoria; < ${t.coveragePartial} % parcial; desde ${t.coveragePartial} % alta.`}>Cobertura = criterios aplicables con puntuación / criterios aplicables del alcance × 100</Formula>
+        <Formula note={`Bandas: < ${t.coverageInsufficient} % insuficiente; de ${t.coverageInsufficient} % a < ${t.coverageExploratory} % exploratoria; de ${t.coverageExploratory} % a < ${t.coveragePartial} % parcial; desde ${t.coveragePartial} % alta.`}>Cobertura del diagnóstico = criterios aplicables con puntuación / criterios aplicables del alcance × 100</Formula>
+        <Formula note={`Indica qué parte del banco de ${QUESTIONS.length} criterios entra en el alcance de la evaluación.`}>Alcance sobre el banco = criterios aplicables del alcance / {QUESTIONS.length} × 100</Formula>
+        <Formula note="Indica qué parte del banco completo tiene puntuación en la serie.">Cobertura del banco = criterios del banco con puntuación / {QUESTIONS.length} × 100</Formula>
         <dl className="grid gap-2 sm:grid-cols-4">{(Object.keys(EVIDENCE_FACTOR) as EvidenceStatus[]).map((k) => <div key={k} className="rounded-md border border-line p-3"><dt className="text-sm font-semibold">{k} · factor {n(EVIDENCE_FACTOR[k])}</dt><dd className="text-xs text-muted">{EVIDENCE_LABEL[k]}</dd></div>)}</dl>
         <Formula>Soporte de evidencias = Σ(factor × peso) / Σ(peso) × 100</Formula>
-        <Formula note="Índice orientativo; no es una medida de confianza estadística.">Solidez = {n(SOLIDITY_WEIGHTS.coverage)}·Cobertura + {n(SOLIDITY_WEIGHTS.evidence)}·Soporte de evidencias + {n(SOLIDITY_WEIGHTS.agreement)}·Acuerdo</Formula>
+        <p className="text-sm text-muted">El soporte de evidencias es un porcentaje y no tiene bandas propias: se informa con su valor, sin calificativos.</p>
+        <Formula note="Escala 0–100. Cobertura y soporte en porcentaje; el acuerdo (0–1) se multiplica por 100. Ejemplo: cobertura 91,6 %, soporte 27,2 % y acuerdo 0,52 dan 0,4·91,6 + 0,4·27,2 + 0,2·52 = 57,9. Índice orientativo; no es una medida de confianza estadística.">Solidez = {n(SOLIDITY_WEIGHTS.coverage)}·Cobertura + {n(SOLIDITY_WEIGHTS.evidence)}·Soporte de evidencias + {n(SOLIDITY_WEIGHTS.agreement)}·(Acuerdo × 100)</Formula>
       </Block>
       <Block title="Triangulación" id="triangulacion">
         <p>El motor aplica {CONTRADICTION_RULES.length} reglas de contraste entre criterios relacionados (por ejemplo, un programa de preservación evaluado como avanzado sin una política que lo respalde). Las alertas se resuelven en la mesa de validación; nunca modifican automáticamente las respuestas.</p>
         <p className="text-sm text-muted">Otras alertas: niveles iguales o superiores a {t.highScoreWithoutEvidence} sin evidencia revisada, criterios críticos sin evaluar o en niveles 0–1, «no aplica» controvertido y dimensiones con baja cobertura.</p>
       </Block>
       <Block title="Brechas, riesgos y priorización" id="priorizacion">
-        <Formula note={`Meta por defecto: nivel ${DEFAULT_TARGET}. Sin puntuación, la recomendación es evaluar la capacidad.`}>Brecha = máx(0, meta − nivel actual)</Formula>
+        <Formula note={`Meta por defecto: nivel ${DEFAULT_TARGET}. Sin puntuación, la recomendación es evaluar la capacidad.`}>Brecha del criterio = máx(0, meta − nivel actual)</Formula>
+        <Formula note="Se calcula en cada serie (percibida o validada) solo con los criterios puntuados; nunca como meta promedio menos madurez global.">Brecha frente a la meta = Σ(brecha del criterio × peso) / Σ(peso)</Formula>
         <Formula note={`Bandas: ${RISK_BANDS.map((b, i) => `${i === 0 ? 1 : RISK_BANDS[i - 1].max + 1}–${b.max} ${b.label.toLowerCase()}`).join('; ')}.`}>Riesgo = probabilidad (1–5) × impacto (1–5)</Formula>
         <Formula note="Factores en escala 0–5. Los valores no valorados se estiman y se identifican como estimaciones.">Prioridad = {n(PRIORITY_WEIGHTS.gap)}·Brecha + {n(PRIORITY_WEIGHTS.impact)}·Impacto + {n(PRIORITY_WEIGHTS.criticality)}·Criticidad + {n(PRIORITY_WEIGHTS.urgency)}·Urgencia + {n(PRIORITY_WEIGHTS.enabler)}·Habilitador</Formula>
-        <p>La matriz impacto–esfuerzo clasifica las oportunidades en victorias rápidas, proyectos estratégicos, mejoras menores y reevaluación. El esfuerzo nunca reduce la prioridad de un riesgo crítico, y las tecnologías inteligentes no se priorizan antes de los controles esenciales sin una justificación registrada.</p>
+        <p>La lista se ordena por prioridad. Cuando un criterio tiene prerrequisitos declarados en el banco que también presentan brecha, esos prerrequisitos se ubican antes que él.</p>
+        <p>La matriz impacto–esfuerzo clasifica las oportunidades con la regla impacto ≥ 3 y esfuerzo ≥ 3 (los cortes se dibujan en 2,5): victorias rápidas (impacto alto, esfuerzo bajo), proyectos estratégicos (impacto y esfuerzo altos), mejoras menores y reevaluación. El esfuerzo nunca reduce la prioridad de un riesgo crítico, y las tecnologías inteligentes no se priorizan antes de los controles esenciales sin una justificación registrada.</p>
+        <p>Los riesgos de incumplimiento normativo solo se sugieren cuando algún criterio relacionado es una posible obligación o una obligación validada para la organización; en los demás casos se sugiere una debilidad de control.</p>
       </Block>
       <Block title="Hoja de ruta" id="hoja-de-ruta">
-        <p>Las brechas se agrupan en {INITIATIVE_TEMPLATES.length} plantillas de iniciativa transversales, ordenadas según sus dependencias en cuatro fases:</p>
+        <p>Las brechas se agrupan en {INITIATIVE_TEMPLATES.length} plantillas de iniciativa transversales, ordenadas según sus dependencias en cuatro fases. Las fechas se calculan desde la fecha de inicio de la hoja de ruta, editable en cada evaluación: una iniciativa dependiente inicia cuando termina su prerrequisito y, si ese momento cae fuera de su fase, pasa a la fase siguiente.</p>
         <ol className="grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-4">{PHASES.map((p) => <li key={p.phase} className="bg-white p-4"><p className="text-xs text-muted">Fase {p.phase} · {p.horizon}</p><p className="mt-1 font-semibold">{p.name}</p></li>)}</ol>
       </Block>
       <Block title="Alcance y limitaciones">
@@ -153,13 +180,14 @@ export function ReferencesPage() {
 
 export function PrivacyPage() {
   return (
-    <Page eyebrow="Privacidad" title="Privacidad y datos locales" intro={LOCAL_DATA_NOTICE}>
+    <Page eyebrow="Privacidad" title="Privacidad y datos locales" intro={LOCAL_DATA_NOTICE.full}>
       <Block title="Qué datos se tratan">
         <p>Los datos que el evaluador registra: caracterización de organizaciones, códigos y perfiles de participantes, respuestas, notas, referencias a evidencias y, de forma opcional, adjuntos. Se recomienda identificar a los participantes con códigos y no con nombres.</p>
         <p>No se recomienda adjuntar historias clínicas, expedientes reservados, credenciales ni información personal innecesaria. Para información especialmente sensible, utilice un entorno institucional autorizado, controles del dispositivo y procedimientos de tratamiento aprobados.</p>
       </Block>
       <Block title="Dónde se almacenan">
         <p>En la base de datos IndexedDB del navegador del dispositivo. La aplicación no tiene servidor, no requiere registro, no usa analítica ni rastreadores, y no envía datos de forma automática. La política de seguridad de contenido del sitio solo permite conexiones al mismo origen.</p>
+        <p>El navegador aísla estos datos por origen (protocolo, dominio y puerto), no por ruta. En la publicación de demostración el origen es <code className="rounded bg-slate-100 px-1">web2runlof.github.io</code>, compartido con cualquier otra página publicada bajo ese mismo dominio: esas páginas podrían leer el IndexedDB y el almacenamiento local de este origen. Para trabajar con información real, publique la aplicación en un dominio propio (la guía de despliegue explica cómo) o use un perfil de navegador dedicado.</p>
         <p>Si se borran los datos del navegador, la información se pierde. Exporte copias de seguridad periódicas desde Configuración.</p>
       </Block>
       <Block title="Archivos exportados">

@@ -10,16 +10,27 @@ export interface Toast {
 }
 
 const PREF_KEY = 'docmaturity.ui';
-const readPrefs = (): { sidebarCollapsed: boolean } => {
+type Prefs = { sidebarCollapsed: boolean; activeAssessmentId: string | null };
+const readPrefs = (): Prefs => {
   try {
-    return { sidebarCollapsed: false, ...JSON.parse(localStorage.getItem(PREF_KEY) ?? '{}') };
+    return { sidebarCollapsed: false, activeAssessmentId: null, ...JSON.parse(localStorage.getItem(PREF_KEY) ?? '{}') };
   } catch {
-    return { sidebarCollapsed: false };
+    return { sidebarCollapsed: false, activeAssessmentId: null };
+  }
+};
+const writePrefs = (p: Partial<Prefs>) => {
+  try {
+    localStorage.setItem(PREF_KEY, JSON.stringify({ ...readPrefs(), ...p }));
+  } catch {
+    /* preferencia no sensible; se ignora si el almacenamiento no está disponible */
   }
 };
 
 interface UIState {
   sidebarCollapsed: boolean;
+  /** Última evaluación abierta: mantiene el bloque «Evaluación activa» en todas las rutas de la aplicación. */
+  activeAssessmentId: string | null;
+  setActiveAssessment: (id: string | null) => void;
   mobileNavOpen: boolean;
   toasts: Toast[];
   toggleSidebar: () => void;
@@ -32,15 +43,17 @@ let seq = 0;
 
 export const useUI = create<UIState>((set, get) => ({
   sidebarCollapsed: readPrefs().sidebarCollapsed,
+  activeAssessmentId: readPrefs().activeAssessmentId,
+  setActiveAssessment: (id) => {
+    if (get().activeAssessmentId === id) return;
+    writePrefs({ activeAssessmentId: id });
+    set({ activeAssessmentId: id });
+  },
   mobileNavOpen: false,
   toasts: [],
   toggleSidebar: () => {
     const next = !get().sidebarCollapsed;
-    try {
-      localStorage.setItem(PREF_KEY, JSON.stringify({ sidebarCollapsed: next }));
-    } catch {
-      /* preferencia no sensible; se ignora si el almacenamiento no está disponible */
-    }
+    writePrefs({ sidebarCollapsed: next });
     set({ sidebarCollapsed: next });
   },
   setMobileNav: (open) => set({ mobileNavOpen: open }),

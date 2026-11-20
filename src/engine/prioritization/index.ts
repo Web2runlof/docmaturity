@@ -83,7 +83,7 @@ export function computePriorities(states: QuestionState[], inputs: PriorityInput
     items.push({
       questionId: q.id, dimensionId: q.dimensionId, criterion: q.criterion, current: cur, target: s.target,
       gap, impact, criticality, urgency, enabler, effort, score, capped: false, quadrant, pending,
-      explanation: `Brecha ${fmt(gap.value)} · impacto ${imp}${impact.source === 'estimado' ? ' (estimado)' : ''} · criticidad ${critValue} · urgencia ${urgency.value}${urgency.source === 'estimado' ? ' (estimada)' : ''} · habilitador ${enabler.value}${deps ? ` (${deps} criterio(s) dependen de este)` : ''}.`,
+      explanation: `Brecha ${fmt(gap.value)} · impacto ${imp}${impact.source === 'estimado' ? ' (estimado)' : ''} · criticidad ${critValue} · urgencia ${urgency.value}${urgency.source === 'estimado' ? ' (estimada)' : ''} · habilitador ${enabler.value}${deps ? ` (${deps === 1 ? "1 criterio depende" : `${deps} criterios dependen`} de este)` : ''}.`,
     });
   }
 

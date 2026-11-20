@@ -98,8 +98,8 @@ describe('Banco maestro DIAM', () => {
     expect(templateByQuestion().size).toBe(225);
   });
 
-  it('biblioteca de 15 riesgos con disparadores válidos', () => {
-    expect(RISK_LIBRARY).toHaveLength(15);
+  it('biblioteca de 15 riesgos tipo más la variante «Debilidad de control», con disparadores válidos', () => {
+    expect(RISK_LIBRARY).toHaveLength(16);
     const ids = new Set(QUESTIONS.map((q) => q.id));
     RISK_LIBRARY.forEach((r) => r.triggers.forEach((t) => expect(ids.has(t)).toBe(true)));
   });

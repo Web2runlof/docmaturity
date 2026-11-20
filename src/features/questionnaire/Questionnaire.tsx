@@ -113,7 +113,7 @@ export function Questionnaire({ questions, responses, context, onSave, onSkipSec
           </div>
           <div className="flex items-center gap-3">
             <span className="text-xs text-muted" role="status" aria-live="polite">
-              {save.state === 'saving' ? 'Guardando…' : save.state === 'saved' ? `Guardado ${save.at?.toLocaleTimeString('es-CO')}` : save.state === 'error' ? <span className="text-lv0">Error al guardar: {save.message}</span> : 'Guardado automático'}
+              {save.state === 'saving' ? 'Guardando…' : save.state === 'saved' ? `Guardado ${save.at?.toLocaleTimeString('es-CO')}` : save.state === 'error' ? <span className="text-danger">Error al guardar: {save.message}</span> : 'Guardado automático'}
             </span>
             {extraActions}
             <Button size="sm" icon={<LogOut className="size-3.5" />} onClick={onExit}>Guardar y salir</Button>
@@ -166,7 +166,7 @@ export function Questionnaire({ questions, responses, context, onSave, onSkipSec
           </div>
           {finished && <div className="mb-4"><Callout tone="success">La entrevista está finalizada. Puede consultar las respuestas; para modificarlas, reábrala.</Callout></div>}
           <p className="eyebrow">{q.dimensionId} · {dimensionName(q.dimensionId)} · pregunta {posInDim} de {dimQuestions.length} · {index + 1} de {questions.length}</p>
-          <p className="mt-2 text-xs font-medium text-muted">{q.id} · {q.criterion}{q.isCritical && <span className="ml-2 text-lv0">· Criterio crítico</span>}</p>
+          <p className="mt-2 text-xs font-medium text-muted">{q.id} · {q.criterion}{q.isCritical && <span className="ml-2 text-danger">· Criterio crítico</span>}</p>
           <h1 ref={headingRef} tabIndex={-1} className="mt-3 max-w-3xl text-xl font-semibold leading-snug outline-none md:text-[1.4rem]">{q.question}</h1>
 
           <details className="mt-4 rounded-md border border-line bg-white p-4 lg:hidden"><summary className="cursor-pointer text-sm font-medium text-navy">Aclaraciones, ejemplos y referentes</summary><div className="mt-3">{context_}</div></details>
@@ -198,7 +198,7 @@ export function Questionnaire({ questions, responses, context, onSave, onSkipSec
               <Button size="sm" variant="ghost" icon={r?.flagged ? <BookmarkCheck className="size-3.5 text-gold" /> : <Bookmark className="size-3.5" />} onClick={() => persist({ flagged: !r?.flagged })} aria-pressed={Boolean(r?.flagged)}>{r?.flagged ? 'Marcada para revisión' : 'Marcar para revisión'}</Button>
             </div>
             {r?.special && <p className="mt-2 text-xs text-muted">Estado registrado: {SPECIAL_LABEL[r.special]}. Este estado no se contabiliza como cero.</p>}
-            {hint && <p className="mt-2 text-xs text-lv2">{hint} Puede proponer «No aplica».</p>}
+            {hint && <p className="mt-2 text-xs text-warning">{hint} Puede proponer «No aplica».</p>}
             <div className="mt-6 grid gap-4 md:grid-cols-2">
               <div>
                 <label htmlFor="q-note" className="mb-1 block text-sm font-medium">Observaciones</label>

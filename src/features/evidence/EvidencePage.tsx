@@ -107,7 +107,7 @@ export function EvidenceDialog({ evidence, questionIds, participants, onClose }:
         <div className="md:col-span-2">
           <p className="mb-1 text-sm font-medium">Adjunto local (opcional, máximo 5 MB)</p>
           {e.attachment ? <div className="flex items-center gap-3 text-sm"><Paperclip className="size-4" />{e.attachment.name} · {fmtBytes(e.attachment.size)}<Button size="sm" variant="ghost" onClick={() => set({ attachment: null })}>Quitar</Button></div> : <input type="file" aria-label="Adjuntar archivo" onChange={(x) => { const f = x.target.files?.[0]; if (f) onFile(f); }} className="text-sm" />}
-          {fileError && <p className="mt-1 text-xs text-lv0" role="alert">{fileError}</p>}
+          {fileError && <p className="mt-1 text-xs text-danger" role="alert">{fileError}</p>}
         </div>
       </div>
     </Dialog>

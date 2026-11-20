@@ -4,7 +4,8 @@ import { Database, Download, HardDrive, ShieldCheck, Trash2, Upload } from 'luci
 import { db } from '@/database/db';
 import { useSettings } from '@/hooks/useAssessment';
 import { Button, Callout, ConfirmDialog, Field, FileDrop, Input, KeyValue, PageHeader, Progress, Section, TabPanel, Tabs, Tag } from '@/components/ui';
-import { clearAllLocalData, getStorageStatus, LOCAL_DATA_NOTICE, requestPersistentStorage, type StorageStatus } from '@/services/storage';
+import { clearAllLocalData, getStorageStatus, requestPersistentStorage, type StorageStatus } from '@/services/storage';
+import { LocalDataNotice } from '../common';
 import { buildBackup, getSettings, restoreBackup, validateBackup } from '@/services/packages';
 import { decryptPackage, isEncryptedPackage } from '@/services/crypto';
 import { removeSimulatedData } from '@/services/demo';
@@ -78,7 +79,7 @@ function DataTab() {
 
   return (
     <div className="space-y-6">
-      <Callout tone="info" title="Datos locales">{LOCAL_DATA_NOTICE}</Callout>
+      <LocalDataNotice />
       <div className="grid gap-6 xl:grid-cols-2">
         <Section title="Almacenamiento del navegador" actions={<Button size="sm" onClick={refresh}>Actualizar</Button>}>
           {status ? (

@@ -14,6 +14,8 @@ export interface Condition {
 
 export interface ContradictionRule {
   id: string;
+  /** Nombre legible de la regla (se muestra en lugar del identificador interno). */
+  title: string;
   a: Condition;
   b: Condition;
   message: string;
@@ -23,36 +25,36 @@ const lo = (questionId: string, value = 1): Condition => ({ questionId, op: '<='
 const hi = (questionId: string, value = 4): Condition => ({ questionId, op: '>=', value });
 
 export const CONTRADICTION_RULES: ContradictionRule[] = [
-  { id: 'R01', a: lo('D05-Q05'), b: hi('D07-Q14'), message: 'Se reporta una aplicación avanzada de retención electrónica sin que exista una definición suficientemente desarrollada de las reglas. Revisar el alcance y las evidencias.' },
-  { id: 'R02', a: lo('D09-Q01'), b: hi('D09-Q08'), message: 'Se reporta validación avanzada de la calidad de metadatos sin un esquema de metadatos desarrollado. Verificar contra qué criterios se valida la calidad.' },
-  { id: 'R03', a: lo('D11-Q01'), b: hi('D11-Q15'), message: 'Se reporta evaluación avanzada del programa de preservación sin política o planificación de preservación. Revisar si existe realmente un programa evaluable.' },
-  { id: 'R04', a: lo('D14-Q11'), b: hi('D14-Q08'), message: 'Se reporta automatización integrada con la gestión documental sin gobierno de casos de uso de IA. Revisar controles y autorizaciones.' },
-  { id: 'R05', a: hi('D08-Q13'), b: lo('D08-Q14'), message: 'Se reporta una gestión avanzada de copias de seguridad sin pruebas de recuperación. Una copia no restaurada no garantiza la recuperación.' },
-  { id: 'R06', a: lo('D02-Q03'), b: hi('D02-Q12'), message: 'Se reporta rendición de cuentas avanzada sin roles y responsabilidades definidos. Revisar sobre qué responsabilidades se rinde cuentas.' },
-  { id: 'R07', a: lo('D05-Q03'), b: hi('D07-Q04'), message: 'Se reporta clasificación electrónica avanzada sin un cuadro de clasificación desarrollado. Verificar con qué estructura se clasifica.' },
-  { id: 'R08', a: hi('D10-Q04'), b: lo('D10-Q05'), message: 'Se reportan controles de acceso avanzados sin gestión del ciclo de vida de usuarios y permisos. Revisar cuentas de personal retirado.' },
-  { id: 'R09', a: lo('D05-Q05'), b: hi('D05-Q13'), message: 'Se reporta eliminación autorizada y trazable sin tiempos de retención definidos. Revisar con qué fundamento se autorizan las eliminaciones.' },
-  { id: 'R10', a: lo('D05-Q06'), b: hi('D05-Q13'), message: 'Se reporta eliminación controlada sin disposición final definida para las series. Verificar los instrumentos aplicados.' },
-  { id: 'R11', a: lo('D07-Q05'), b: hi('D07-Q13'), message: 'Se reporta cierre controlado de expedientes electrónicos sin conformación de expedientes. Revisar qué se está cerrando.' },
-  { id: 'R12', a: lo('D07-Q09'), b: hi('D07-Q08'), message: 'Se reporta un control avanzado de autenticidad sin controles de integridad. La autenticidad depende de poder detectar alteraciones.' },
-  { id: 'R13', a: lo('D11-Q06'), b: hi('D11-Q14'), message: 'Se reporta capacidad avanzada de reparación de objetos sin verificación de integridad. Revisar cómo se detectan los daños.' },
-  { id: 'R14', a: lo('D11-Q07'), b: hi('D11-Q08'), message: 'Se reporta separación avanzada de copias sin almacenamiento redundante. Verificar el número real de copias.' },
-  { id: 'R15', a: lo('D09-Q11'), b: hi('D09-Q15'), message: 'Se reporta un gobierno avanzado de integraciones sin integraciones entre sistemas. Revisar el alcance de la respuesta.' },
-  { id: 'R16', a: lo('D10-Q02'), b: hi('D15-Q11'), message: 'Se reporta seguimiento avanzado del riesgo residual sin evaluación de riesgos documentales. Revisar la matriz de riesgos.' },
-  { id: 'R17', a: lo('D15-Q07'), b: hi('D15-Q08'), message: 'Se reporta gestión avanzada de hallazgos sin auditorías internas de gestión documental. Verificar el origen de los hallazgos.' },
-  { id: 'R18', a: lo('D15-Q09'), b: hi('D15-Q10'), message: 'Se reporta evaluación avanzada de la efectividad de acciones sin planes de mejoramiento. Revisar qué acciones se evalúan.' },
-  { id: 'R19', a: lo('D12-Q08'), b: hi('D12-Q09'), message: 'Se reporta evaluación avanzada de la efectividad de la capacitación sin un programa periódico de capacitación.' },
-  { id: 'R20', a: lo('D08-Q01'), b: hi('D08-Q02'), message: 'Se reporta una arquitectura documentada y actualizada sin inventario de sistemas de información.' },
-  { id: 'R21', a: lo('D04-Q04'), b: hi('D14-Q03'), message: 'Se reportan flujos automatizados avanzados sin caracterización de los flujos documentales. Riesgo de automatizar prácticas no analizadas.' },
-  { id: 'R22', a: lo('D14-Q02'), b: hi('D14-Q03'), message: 'Se reporta automatización avanzada de flujos sin estandarización previa de los procesos.' },
-  { id: 'R23', a: lo('D05-Q03'), b: hi('D14-Q06'), message: 'Se reporta clasificación automatizada avanzada sin un cuadro de clasificación desarrollado. Verificar con qué instrumento clasifica el sistema.' },
-  { id: 'R24', a: lo('D10-Q03'), b: hi('D10-Q04'), message: 'Se reportan controles de acceso avanzados sin clasificación de la información por sensibilidad. Revisar con qué criterio se otorgan los accesos.' },
-  { id: 'R25', a: lo('D13-Q01'), b: hi('D13-Q02'), message: 'Se reportan responsables de activos plenamente asignados sin inventario de activos de información.' },
-  { id: 'R26', a: lo('D03-Q06'), b: hi('D11-Q15'), message: 'Se reporta un programa de preservación evaluado y sostenible sin recursos específicos de preservación digital.' },
-  { id: 'R27', a: lo('D01-Q01'), b: hi('D01-Q15'), message: 'Se reporta una actualización periódica avanzada de la estrategia documental sin política de gestión documental.' },
-  { id: 'R28', a: lo('D09-Q01'), b: hi('D09-Q02'), message: 'Se reportan metadatos obligatorios plenamente definidos sin esquema de metadatos.' },
-  { id: 'R29', a: lo('D08-Q05'), b: hi('D08-Q04'), message: 'Se reporta una evaluación avanzada de capacidades del SGDEA sin modelo de requisitos documentales. Verificar contra qué requisitos se evaluó.' },
-  { id: 'R30', a: lo('D05-Q10'), b: hi('D06-Q06'), message: 'Se reporta un inventario topográfico avanzado sin inventarios documentales actualizados.' },
+  { id: 'R01', title: 'Retención electrónica sin reglas de retención', a: lo('D05-Q05'), b: hi('D07-Q14'), message: 'Se reporta una aplicación avanzada de retención electrónica sin que exista una definición suficientemente desarrollada de las reglas. Revisar el alcance y las evidencias.' },
+  { id: 'R02', title: 'Calidad de metadatos sin esquema', a: lo('D09-Q01'), b: hi('D09-Q08'), message: 'Se reporta validación avanzada de la calidad de metadatos sin un esquema de metadatos desarrollado. Verificar contra qué criterios se valida la calidad.' },
+  { id: 'R03', title: 'Programa de preservación evaluado sin política', a: lo('D11-Q01'), b: hi('D11-Q15'), message: 'Se reporta evaluación avanzada del programa de preservación sin política o planificación de preservación. Revisar si existe realmente un programa evaluable.' },
+  { id: 'R04', title: 'Automatización integrada sin gobierno de IA', a: lo('D14-Q11'), b: hi('D14-Q08'), message: 'Se reporta automatización integrada con la gestión documental sin gobierno de casos de uso de IA. Revisar controles y autorizaciones.' },
+  { id: 'R05', title: 'Copias de seguridad sin pruebas de recuperación', a: hi('D08-Q13'), b: lo('D08-Q14'), message: 'Se reporta una gestión avanzada de copias de seguridad sin pruebas de recuperación. Una copia no restaurada no garantiza la recuperación.' },
+  { id: 'R06', title: 'Rendición de cuentas sin roles definidos', a: lo('D02-Q03'), b: hi('D02-Q12'), message: 'Se reporta rendición de cuentas avanzada sin roles y responsabilidades definidos. Revisar sobre qué responsabilidades se rinde cuentas.' },
+  { id: 'R07', title: 'Clasificación electrónica sin cuadro de clasificación', a: lo('D05-Q03'), b: hi('D07-Q04'), message: 'Se reporta clasificación electrónica avanzada sin un cuadro de clasificación desarrollado. Verificar con qué estructura se clasifica.' },
+  { id: 'R08', title: 'Accesos controlados sin ciclo de vida de usuarios', a: hi('D10-Q04'), b: lo('D10-Q05'), message: 'Se reportan controles de acceso avanzados sin gestión del ciclo de vida de usuarios y permisos. Revisar cuentas de personal retirado.' },
+  { id: 'R09', title: 'Eliminación trazable sin tiempos de retención', a: lo('D05-Q05'), b: hi('D05-Q13'), message: 'Se reporta eliminación autorizada y trazable sin tiempos de retención definidos. Revisar con qué fundamento se autorizan las eliminaciones.' },
+  { id: 'R10', title: 'Eliminación controlada sin disposición final', a: lo('D05-Q06'), b: hi('D05-Q13'), message: 'Se reporta eliminación controlada sin disposición final definida para las series. Verificar los instrumentos aplicados.' },
+  { id: 'R11', title: 'Cierre de expedientes sin conformación', a: lo('D07-Q05'), b: hi('D07-Q13'), message: 'Se reporta cierre controlado de expedientes electrónicos sin conformación de expedientes. Revisar qué se está cerrando.' },
+  { id: 'R12', title: 'Autenticidad sin controles de integridad', a: lo('D07-Q09'), b: hi('D07-Q08'), message: 'Se reporta un control avanzado de autenticidad sin controles de integridad. La autenticidad depende de poder detectar alteraciones.' },
+  { id: 'R13', title: 'Reparación de objetos sin verificación de integridad', a: lo('D11-Q06'), b: hi('D11-Q14'), message: 'Se reporta capacidad avanzada de reparación de objetos sin verificación de integridad. Revisar cómo se detectan los daños.' },
+  { id: 'R14', title: 'Copias separadas sin almacenamiento redundante', a: lo('D11-Q07'), b: hi('D11-Q08'), message: 'Se reporta separación avanzada de copias sin almacenamiento redundante. Verificar el número real de copias.' },
+  { id: 'R15', title: 'Gobierno de integraciones sin integraciones', a: lo('D09-Q11'), b: hi('D09-Q15'), message: 'Se reporta un gobierno avanzado de integraciones sin integraciones entre sistemas. Revisar el alcance de la respuesta.' },
+  { id: 'R16', title: 'Riesgo residual sin evaluación de riesgos', a: lo('D10-Q02'), b: hi('D15-Q11'), message: 'Se reporta seguimiento avanzado del riesgo residual sin evaluación de riesgos documentales. Revisar la matriz de riesgos.' },
+  { id: 'R17', title: 'Gestión de hallazgos sin auditorías internas', a: lo('D15-Q07'), b: hi('D15-Q08'), message: 'Se reporta gestión avanzada de hallazgos sin auditorías internas de gestión documental. Verificar el origen de los hallazgos.' },
+  { id: 'R18', title: 'Efectividad de acciones sin planes de mejoramiento', a: lo('D15-Q09'), b: hi('D15-Q10'), message: 'Se reporta evaluación avanzada de la efectividad de acciones sin planes de mejoramiento. Revisar qué acciones se evalúan.' },
+  { id: 'R19', title: 'Efectividad de capacitación sin programa', a: lo('D12-Q08'), b: hi('D12-Q09'), message: 'Se reporta evaluación avanzada de la efectividad de la capacitación sin un programa periódico de capacitación.' },
+  { id: 'R20', title: 'Arquitectura documentada sin inventario de sistemas', a: lo('D08-Q01'), b: hi('D08-Q02'), message: 'Se reporta una arquitectura documentada y actualizada sin inventario de sistemas de información.' },
+  { id: 'R21', title: 'Flujos automatizados sin caracterización', a: lo('D04-Q04'), b: hi('D14-Q03'), message: 'Se reportan flujos automatizados avanzados sin caracterización de los flujos documentales. Riesgo de automatizar prácticas no analizadas.' },
+  { id: 'R22', title: 'Automatización sin procesos estandarizados', a: lo('D14-Q02'), b: hi('D14-Q03'), message: 'Se reporta automatización avanzada de flujos sin estandarización previa de los procesos.' },
+  { id: 'R23', title: 'Clasificación automática sin cuadro de clasificación', a: lo('D05-Q03'), b: hi('D14-Q06'), message: 'Se reporta clasificación automatizada avanzada sin un cuadro de clasificación desarrollado. Verificar con qué instrumento clasifica el sistema.' },
+  { id: 'R24', title: 'Accesos sin clasificación por sensibilidad', a: lo('D10-Q03'), b: hi('D10-Q04'), message: 'Se reportan controles de acceso avanzados sin clasificación de la información por sensibilidad. Revisar con qué criterio se otorgan los accesos.' },
+  { id: 'R25', title: 'Responsables de activos sin inventario', a: lo('D13-Q01'), b: hi('D13-Q02'), message: 'Se reportan responsables de activos plenamente asignados sin inventario de activos de información.' },
+  { id: 'R26', title: 'Preservación sostenible sin recursos específicos', a: lo('D03-Q06'), b: hi('D11-Q15'), message: 'Se reporta un programa de preservación evaluado y sostenible sin recursos específicos de preservación digital.' },
+  { id: 'R27', title: 'Estrategia actualizada sin política documental', a: lo('D01-Q01'), b: hi('D01-Q15'), message: 'Se reporta una actualización periódica avanzada de la estrategia documental sin política de gestión documental.' },
+  { id: 'R28', title: 'Metadatos obligatorios sin esquema', a: lo('D09-Q01'), b: hi('D09-Q02'), message: 'Se reportan metadatos obligatorios plenamente definidos sin esquema de metadatos.' },
+  { id: 'R29', title: 'Evaluación del SGDEA sin modelo de requisitos', a: lo('D08-Q05'), b: hi('D08-Q04'), message: 'Se reporta una evaluación avanzada de capacidades del SGDEA sin modelo de requisitos documentales. Verificar contra qué requisitos se evaluó.' },
+  { id: 'R30', title: 'Inventario topográfico sin inventarios documentales', a: lo('D05-Q10'), b: hi('D06-Q06'), message: 'Se reporta un inventario topográfico avanzado sin inventarios documentales actualizados.' },
 ];
 
 const check = (c: Condition, score: number) => (c.op === '<=' ? score <= c.value : score >= c.value);
@@ -122,7 +124,7 @@ export function computeValidationAlerts(
     }
   }
   for (const t of evaluateContradictions(states)) {
-    alerts.push({ kind: 'contradiccion', questionId: t.rule.a.questionId, dimensionId: t.rule.a.questionId.slice(0, 3), message: `${t.rule.id}: ${t.rule.message}`, ruleId: t.rule.id });
+    alerts.push({ kind: 'contradiccion', questionId: t.rule.a.questionId, dimensionId: t.rule.a.questionId.slice(0, 3), message: `${t.rule.title}: ${t.rule.message}`, ruleId: t.rule.id });
   }
   for (const d of dimensionCoverage) {
     if (d.applicable > 0 && (d.coverage === null || d.coverage < thresholds.coverageInsufficient)) {

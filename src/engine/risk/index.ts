@@ -29,7 +29,12 @@ export const RISK_LIBRARY: RiskLibraryItem[] = [
   { id: 'RK13', title: 'Decisiones basadas en información incompleta', description: 'Decisiones tomadas con información no confiable, desactualizada o sin soporte.', triggers: ['D13-Q15', 'D13-Q05', 'D13-Q03', 'D04-Q10'] },
   { id: 'RK14', title: 'Procesos documentales ineficientes', description: 'Reprocesos, demoras y costos derivados de flujos documentales no controlados.', triggers: ['D04-Q04', 'D04-Q09', 'D04-Q15', 'D04-Q07'] },
   { id: 'RK15', title: 'Pérdida de evidencias de actuaciones automatizadas', description: 'Imposibilidad de explicar o defender decisiones apoyadas en automatización o IA.', triggers: ['D14-Q15', 'D14-Q13', 'D14-Q08'] },
+  // Variante de RK07 cuando ningún criterio vinculado es una posible obligación para la organización.
+  { id: 'RK16', title: 'Debilidad de control', description: 'Controles documentales insuficientes frente a buenas prácticas; para esta organización no se identificó una obligación jurídica vinculada.', triggers: [] },
 ];
+
+/** Estado normativo de un criterio para la organización (según la aplicabilidad jurídica). */
+export type LegalStatusOf = (questionId: string) => 'obligatoria' | 'por_validar' | 'buena_practica';
 
 export interface SuggestedRisk {
   libraryId: string;
@@ -39,8 +44,12 @@ export interface SuggestedRisk {
   reason: string;
 }
 
-/** Sugiere un riesgo si algún criterio disparador aplicable está en nivel ≤ 1, o en ≤ 2 si es crítico. */
-export function suggestRisks(states: QuestionState[]): SuggestedRisk[] {
+/**
+ * Sugiere un riesgo si algún criterio disparador aplicable está en nivel ≤ 1, o en ≤ 2 si es crítico.
+ * «Incumplimiento normativo potencial» solo se sugiere si algún criterio vinculado es una posible
+ * obligación (o una obligación validada) en la aplicabilidad jurídica; si no, se sugiere «Debilidad de control».
+ */
+export function suggestRisks(states: QuestionState[], legalOf?: LegalStatusOf): SuggestedRisk[] {
   const by = new Map(states.filter((s) => s.applicable).map((s) => [s.question.id, s]));
   const out: SuggestedRisk[] = [];
   for (const item of RISK_LIBRARY) {
@@ -52,6 +61,11 @@ export function suggestRisks(states: QuestionState[]): SuggestedRisk[] {
       return cur <= 1 || (s.question.isCritical && cur <= 2);
     });
     if (hits.length) {
+      if (item.id === 'RK07' && legalOf && !hits.some((id) => legalOf(id) === 'obligatoria')) {
+        const alt = RISK_LIBRARY.find((r) => r.id === 'RK16') as RiskLibraryItem;
+        out.push({ libraryId: alt.id, title: alt.title, description: alt.description, questionIds: hits, reason: `Brechas en ${hits.join(', ')}.` });
+        continue;
+      }
       out.push({ libraryId: item.id, title: item.title, description: item.description, questionIds: hits, reason: `Brechas en ${hits.join(', ')}.` });
     }
   }

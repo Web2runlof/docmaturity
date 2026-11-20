@@ -154,7 +154,7 @@ export default function OrganizationForm() {
           <Section title="Logo (opcional)" description="Se guarda solo en este navegador.">
             {logo ? <img src={logo} alt="Logo de la organización" className="mb-3 max-h-24 rounded border border-line bg-white p-2" /> : <p className="mb-3 text-sm text-muted">Sin logo.</p>}
             <input type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml" aria-label="Cargar logo" onChange={(e) => { const f = e.target.files?.[0]; if (f) onLogo(f); }} className="text-sm" />
-            {logoError && <p className="mt-2 text-xs text-lv0" role="alert">{logoError}</p>}
+            {logoError && <p className="mt-2 text-xs text-danger" role="alert">{logoError}</p>}
             {logo && <Button size="sm" className="mt-3" onClick={() => setLogo('')}>Quitar logo</Button>}
           </Section>
           <Callout tone="info" title="Minimización de información">No registre información personal innecesaria. Para identificar participantes se usan códigos o seudónimos.</Callout>

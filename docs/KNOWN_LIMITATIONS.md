@@ -47,6 +47,13 @@ Pendiente: confirmar versiones vigentes, URL y alcance de los referentes no veri
 - El libro XLSX no incluye gráficos nativos de Excel (ExcelJS no los genera); incluye tablas, filtros, encabezados fijos, formato condicional y fórmulas.
 - Los textos de IA aprobados se guardan en la evaluación y se exportan en el paquete JSON, pero no se insertan automáticamente en los PDF.
 
+## 6 bis. Resultados y demostración
+
+- La serie validada de la demostración se calcula solo sobre D01–D05 (24 criterios validados) y por eso se marca «Exploratorio»; es intencional para mostrar cómo se informan universos distintos.
+- El orden de prioridades respeta solo los prerrequisitos declarados en el banco; varios criterios (por ejemplo, D11-Q07) no declaran prerrequisitos y se ordenan únicamente por su prioridad.
+- El mapa de dependencias usa un canal superior para las relaciones que saltan fases; con muchas relaciones de ese tipo las líneas del canal pueden superponerse entre sí (nunca sobre las tarjetas).
+- Con el sitio en `*.github.io`, otras páginas del mismo origen podrían leer los datos locales; use un dominio propio para información real.
+
 ## 7. Accesibilidad
 
 - Se aplicaron prácticas WCAG 2.2 AA (enlace de salto, foco visible, etiquetas, tablas alternativas a cada gráfico, estados con texto además de color, movimiento reducido) y se probaron con teclado y en móvil, pero no se realizó una auditoría formal con lectores de pantalla.

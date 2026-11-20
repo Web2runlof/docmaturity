@@ -1,5 +1,5 @@
 import { Component, Suspense, lazy, type ReactNode } from 'react';
-import { HashRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { HashRouter, Link, Route, Routes, useLocation } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { PublicLayout } from '@/components/layout/PublicLayout';
@@ -64,6 +64,22 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { error: Error | 
   }
 }
 
+/** Página 404: la ruta no existe. No redirige en silencio para que el problema sea visible. */
+function NotFoundRoute({ inApp = false }: { inApp?: boolean }) {
+  const { pathname } = useLocation();
+  return (
+    <div className={inApp ? 'py-16' : 'mx-auto max-w-xl px-6 py-24'}>
+      <p className="eyebrow">Error 404</p>
+      <h1 className="mt-2 text-2xl font-semibold">Esta página no existe</h1>
+      <p className="mt-3 text-sm text-muted">La dirección <code className="rounded bg-slate-100 px-1 text-xs">{pathname}</code> no corresponde a ninguna sección de DOCMATURITY. Revise el enlace o continúe desde una de estas opciones.</p>
+      <div className="mt-6 flex flex-wrap gap-2">
+        <Link to="/app" className="inline-flex h-10 items-center rounded-md bg-navy px-4 text-sm font-medium text-white hover:bg-navy-dark">Ir al inicio de la aplicación</Link>
+        <Link to="/" className="inline-flex h-10 items-center rounded-md border border-line bg-white px-4 text-sm font-medium text-navy hover:bg-slate-50">Ir a la portada</Link>
+      </div>
+    </div>
+  );
+}
+
 export function App() {
   return (
     <TooltipProvider>
@@ -102,8 +118,11 @@ export function App() {
                 <Route path="biblioteca" element={<LibraryPage />} />
                 <Route path="academico" element={<AcademicLab />} />
                 <Route path="configuracion" element={<SettingsPage />} />
+                <Route path="*" element={<NotFoundRoute inApp />} />
               </Route>
-              <Route path="*" element={<Navigate to="/" replace />} />
+              <Route element={<PublicLayout />}>
+                <Route path="*" element={<NotFoundRoute />} />
+              </Route>
             </Routes>
           </Suspense>
         </ErrorBoundary>

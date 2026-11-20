@@ -9,7 +9,7 @@ Ejecución del 20 de noviembre de 2026 sobre la versión 1.0.0 (Node.js 22.23, C
 | Lint | `npm run lint` | Sin errores ni advertencias |
 | Tipos | `npm run typecheck` | Sin errores (TypeScript estricto) |
 | Banco | `npm run bank` | 15 dimensiones, 225 criterios, 1.350 descriptores únicos, 22 críticos |
-| Unitarias e integración | `npm run test` | **73 de 73 aprobadas** (5 archivos) |
+| Unitarias e integración | `npm run test` | **90 de 90 aprobadas** (6 archivos) |
 | Build de producción | `npm run build` | Correcto; 107 recursos precargados por el service worker (≈ 4,4 MB) |
 | End-to-end | `npm run test:e2e` | **8 de 8 aprobadas** (7 escritorio 1440 × 900 y 1 móvil Pixel 7) |
 
@@ -79,6 +79,29 @@ U = prueba unitaria o de integración (Vitest, `tests/unit`); E = prueba end-to-
 | 58 | Build de producción | `npm run build` (sección 1) |
 | 59 | Rutas en GitHub Pages | E `59/60` (11 rutas bajo `/docmaturity/#/…`, ruta inexistente) |
 | 60 | Sin envíos externos | E `59/60` y `19–24` (cero peticiones fuera del origen; CSP `connect-src 'self'`) |
+
+## 2 bis. Criterios de aceptación de la auditoría (v1.1.0)
+
+`tests/unit/demo-audit.test.ts` carga la demostración en dos modos. La **línea base** (`loadCase(..., { baseline: true })`, sin el enriquecimiento V14) verifica los valores de aceptación con las definiciones corregidas; la **demostración enriquecida** (la que abre la aplicación) verifica V14, C12 y C14.
+
+| Criterio | Resultado |
+|---|---|
+| Madurez percibida | 2,60 |
+| Madurez validada | 2,31 sobre D01–D05, marcada «Exploratorio» |
+| Cobertura del diagnóstico | 91,6 % (87/95) |
+| Alcance sobre el banco | 42,2 % |
+| Cobertura del banco | 38,7 % (87/225) |
+| Solidez | 54 (coincide con 0,4·Cobertura + 0,4·Soporte + 0,2·(Acuerdo × 100)) |
+| Prioridad de D11-Q07 | 3,85, primera de la lista |
+| Brecha frente a la meta | Igual al promedio ponderado de máx(0, meta − nivel) por criterio |
+| Lecturas organizacional y tecnológica | Reproducibles como promedio ponderado por dimensión |
+| Narrativa | Sin códigos internos, sin siglas en minúscula, sin «(simulación) (», sin mezclar series |
+| Hoja de ruta | Ninguna dependencia inicia antes de que termine su prerrequisito |
+| Riesgos | Sin «Incumplimiento normativo potencial»; «Debilidad de control» sugerida |
+| Demostración repetida | Clics repetidos o simultáneos en «Explorar demostración» no crean duplicados |
+| Demostración enriquecida | 1 entrevista importada con hash, E2/E3 en ≥ 8 dimensiones, soporte > 20 %, iniciativas valoradas y una en la fase 4 |
+
+Además, se cargó la demostración en el sitio compilado y se recorrieron todas las rutas públicas y de la aplicación (incluidas las vistas Validada y Comparación, las pestañas de la hoja de ruta y de brechas, y las páginas 404) sin errores de consola ni peticiones externas.
 
 ## 3. Casos matemáticos obligatorios
 

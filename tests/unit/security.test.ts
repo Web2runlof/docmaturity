@@ -65,7 +65,7 @@ describe('Asistente de IA opcional', () => {
     expect(prompt).not.toContain(bundle!.organization.name);
     expect(prompt).not.toContain(bundle!.organization.shortName);
     for (const p of bundle!.participants) expect(prompt).not.toContain(p.code);
-    expect(prompt).toMatch(/No afirmes certificación/);
+    expect(prompt).toMatch(/No afirme certificación/);
     const named = buildAIPrompt(a, { purpose: 'resumen_ejecutivo', anonymize: false, includeNotes: false });
     expect(named).toContain(bundle!.organization.name);
   });

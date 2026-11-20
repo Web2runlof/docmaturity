@@ -12,7 +12,7 @@ import type {
 import { DEFAULT_THRESHOLDS } from '@/engine/constants';
 
 export const DB_NAME = 'docmaturity';
-export const DB_VERSION = 2;
+export const DB_VERSION = 3;
 
 export class DocMaturityDB extends Dexie {
   organizations!: Table<Organization, string>;
@@ -67,6 +67,22 @@ export class DocMaturityDB extends Dexie {
           a.legalOverrides ??= {};
           a.thresholds = { ...DEFAULT_THRESHOLDS, ...(a.thresholds ?? {}) };
           a.excludedQuestions ??= {};
+        });
+      });
+    // Migración v3: una evaluación con criterios validados queda «En validación»; la hoja de ruta
+    // obtiene su fecha de inicio explícita (ancla de las fechas de las iniciativas).
+    this.version(3)
+      .stores({})
+      .upgrade(async (tx) => {
+        const withFindings = new Set((await tx.table('findings').toArray()).map((f: ValidatedFinding) => f.assessmentId));
+        const firstStart = new Map<string, string>();
+        for (const i of (await tx.table('initiatives').toArray()) as RoadmapInitiative[]) {
+          const prev = firstStart.get(i.assessmentId);
+          if (i.startDate && (!prev || i.startDate < prev)) firstStart.set(i.assessmentId, i.startDate);
+        }
+        await tx.table('assessments').toCollection().modify((a: Assessment) => {
+          if (withFindings.has(a.id) && ['borrador', 'planificacion', 'entrevistas', 'consolidacion'].includes(a.status)) a.status = 'validacion';
+          if (!a.roadmapStartDate && firstStart.has(a.id)) a.roadmapStartDate = firstStart.get(a.id);
         });
       });
   }

@@ -7,7 +7,7 @@ import { Button, Callout, ConfirmDialog, FileDrop, Section, Tag } from '@/compon
 import { lookupQuestion } from '@/data/bank';
 import { buildInterviewPackage, importAssignmentPackage, saveRespondentResponse } from '@/services/packages';
 import { PACKAGE_LIMITS } from '@/schemas/packages';
-import { LOCAL_DATA_NOTICE } from '@/services/storage';
+import { LOCAL_DATA_NOTICE } from '@/config/vocabulary';
 import { notify } from '@/app/store';
 import type { Question } from '@/types/bank';
 import { fmtDate, readFileText, slugify } from '@/utils/core';
@@ -43,7 +43,7 @@ export function RespondentHome() {
           <ul className="mt-1 list-disc space-y-1 pl-4">
             <li>Responda solo lo que conoce: puede marcar «No sabe».</li>
             <li>No incluya datos personales ni información reservada en las observaciones.</li>
-            <li>{LOCAL_DATA_NOTICE}</li>
+            <li>{LOCAL_DATA_NOTICE.short}</li>
           </ul>
         </Callout>
       </div>

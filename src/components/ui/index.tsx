@@ -4,7 +4,7 @@ import * as RTooltip from '@radix-ui/react-tooltip';
 import * as RTabs from '@radix-ui/react-tabs';
 import { forwardRef, useId, useState, type ButtonHTMLAttributes, type InputHTMLAttributes, type ReactNode, type SelectHTMLAttributes, type TextareaHTMLAttributes } from 'react';
 import { AlertTriangle, CheckCircle2, CircleDashed, Info, Loader2, X, XCircle } from 'lucide-react';
-import { cx } from '@/utils/core';
+import { cx, fmtScore } from '@/utils/core';
 import { LEVEL_NAMES } from '@/data/bank';
 import { levelIndex } from '@/engine/scoring';
 import { useUI } from '@/app/store';
@@ -14,7 +14,7 @@ const VARIANTS: Record<Variant, string> = {
   primary: 'bg-navy text-white hover:bg-navy-dark border border-navy',
   secondary: 'bg-white text-navy border border-line hover:border-slate-300 hover:bg-slate-50',
   ghost: 'bg-transparent text-navy border border-transparent hover:bg-slate-100',
-  danger: 'bg-white text-lv0 border border-red-200 hover:bg-red-50',
+  danger: 'bg-white text-danger border border-red-200 hover:bg-red-50',
   subtle: 'bg-teal-50 text-teal border border-teal-100 hover:bg-teal-100/70',
 };
 
@@ -50,11 +50,11 @@ export function Field({ label, hint, error, children, htmlFor, required }: { lab
     <div className="space-y-1.5">
       <label htmlFor={htmlFor} className="block text-[0.8125rem] font-medium text-ink">
         {label}
-        {required && <span className="text-lv0" aria-hidden> *</span>}
+        {required && <span className="text-danger" aria-hidden> *</span>}
       </label>
       {children}
       {hint && !error && <p className="text-xs text-muted">{hint}</p>}
-      {error && <p role="alert" className="text-xs text-lv0">{error}</p>}
+      {error && <p role="alert" className="text-xs text-danger">{error}</p>}
     </div>
   );
 }
@@ -111,13 +111,12 @@ export function EmptyState({ icon, title, description, actions }: { icon?: React
 }
 
 const LEVEL_BG = ['bg-lv0', 'bg-lv1', 'bg-lv2', 'bg-lv3', 'bg-lv4', 'bg-lv5'];
-const LEVEL_TEXT = ['text-lv0', 'text-lv1', 'text-lv2', 'text-lv3', 'text-lv4', 'text-lv5'];
 
 /** Etiqueta de nivel: forma + número + nombre (no depende solo del color). */
 export function LevelTag({ score, size = 'md', showName = true }: { score: number | null | undefined; size?: 'sm' | 'md'; showName?: boolean }) {
   if (score === null || score === undefined) {
     return (
-      <span className={cx('inline-flex items-center gap-1.5 text-nodata', size === 'sm' ? 'text-xs' : 'text-sm')}>
+      <span className={cx('inline-flex items-center gap-1.5 whitespace-nowrap text-nodata', size === 'sm' ? 'text-xs' : 'text-sm')}>
         <CircleDashed className="size-3.5" aria-hidden />
         Sin datos
       </span>
@@ -125,9 +124,9 @@ export function LevelTag({ score, size = 'md', showName = true }: { score: numbe
   }
   const li = levelIndex(score);
   return (
-    <span className={cx('inline-flex items-center gap-1.5 font-medium num', LEVEL_TEXT[li], size === 'sm' ? 'text-xs' : 'text-sm')}>
-      <span className={cx('inline-block rounded-[2px]', LEVEL_BG[li], size === 'sm' ? 'size-2' : 'size-2.5')} aria-hidden />
-      {score.toLocaleString('es-CO', { maximumFractionDigits: 2 })}
+    <span className={cx('inline-flex items-center gap-1.5 whitespace-nowrap font-medium text-ink num', size === 'sm' ? 'text-xs' : 'text-sm')} title={`${fmtScore(score)} · ${LEVEL_NAMES[li]}`}>
+      <span className={cx('inline-block rounded-[2px]', LEVEL_BG[li], size === 'sm' ? 'size-2.5' : 'size-3')} aria-hidden />
+      {fmtScore(score)}
       {showName && <span className="font-normal text-muted">· {LEVEL_NAMES[li]}</span>}
     </span>
   );
@@ -138,18 +137,18 @@ export function Tag({ children, tone = 'neutral', icon }: { children: ReactNode;
     neutral: 'text-muted border-line bg-white',
     teal: 'text-teal border-teal-200 bg-teal-50/60',
     gold: 'text-[#8a6a35] border-[#ead9bd] bg-[#fbf6ee]',
-    danger: 'text-lv0 border-red-200 bg-red-50/60',
+    danger: 'text-danger border-red-200 bg-red-50/60',
     warning: 'text-[#8a5a12] border-amber-200 bg-amber-50/60',
-    info: 'text-lv3 border-blue-200 bg-blue-50/60',
+    info: 'text-info border-blue-200 bg-blue-50/60',
   } as const;
-  return <span className={cx('inline-flex items-center gap-1 rounded-sm border px-1.5 py-0.5 text-[0.6875rem] font-medium', tones[tone])}>{icon}{children}</span>;
+  return <span className={cx('inline-flex items-center gap-1 whitespace-nowrap rounded-sm border px-1.5 py-0.5 text-[0.6875rem] font-medium', tones[tone])}>{icon}{children}</span>;
 }
 
 export function Stat({ label, value, hint, tone }: { label: string; value: ReactNode; hint?: ReactNode; tone?: 'default' | 'warning' | 'danger' }) {
   return (
     <div className="min-w-0">
       <div className="text-[0.72rem] font-medium uppercase tracking-wider text-muted">{label}</div>
-      <div className={cx('mt-1 font-display text-2xl font-semibold num', tone === 'danger' ? 'text-lv0' : tone === 'warning' ? 'text-lv2' : 'text-navy')}>{value}</div>
+      <div className={cx('mt-1 font-display text-2xl font-semibold num', tone === 'danger' ? 'text-danger' : tone === 'warning' ? 'text-warning' : 'text-navy')}>{value}</div>
       {hint && <div className="mt-0.5 text-xs text-muted">{hint}</div>}
     </div>
   );
@@ -251,9 +250,9 @@ export const TabPanel = RTabs.Content;
 
 export function Callout({ tone = 'info', title, children }: { tone?: 'info' | 'warning' | 'danger' | 'success'; title?: string; children: ReactNode }) {
   const map = {
-    info: { cls: 'border-blue-200 bg-blue-50/50', icon: <Info className="size-4 text-lv3" aria-hidden /> },
-    warning: { cls: 'border-amber-200 bg-amber-50/60', icon: <AlertTriangle className="size-4 text-lv2" aria-hidden /> },
-    danger: { cls: 'border-red-200 bg-red-50/60', icon: <XCircle className="size-4 text-lv0" aria-hidden /> },
+    info: { cls: 'border-blue-200 bg-blue-50/50', icon: <Info className="size-4 text-info" aria-hidden /> },
+    warning: { cls: 'border-amber-200 bg-amber-50/60', icon: <AlertTriangle className="size-4 text-warning" aria-hidden /> },
+    danger: { cls: 'border-red-200 bg-red-50/60', icon: <XCircle className="size-4 text-danger" aria-hidden /> },
     success: { cls: 'border-teal-200 bg-teal-50/60', icon: <CheckCircle2 className="size-4 text-petrol" aria-hidden /> },
   }[tone];
   return (
@@ -273,7 +272,7 @@ export function Toaster() {
     <div aria-live="polite" className="pointer-events-none fixed bottom-4 right-4 z-[60] flex w-[min(24rem,calc(100vw-2rem))] flex-col gap-2">
       {toasts.map((t) => (
         <div key={t.id} role={t.kind === 'error' ? 'alert' : 'status'} className="pointer-events-auto flex gap-3 rounded-md border border-line bg-white px-4 py-3 shadow-lg">
-          {t.kind === 'success' ? <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-petrol" /> : t.kind === 'error' ? <XCircle className="mt-0.5 size-4 shrink-0 text-lv0" /> : t.kind === 'warning' ? <AlertTriangle className="mt-0.5 size-4 shrink-0 text-lv2" /> : <Info className="mt-0.5 size-4 shrink-0 text-lv3" />}
+          {t.kind === 'success' ? <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-petrol" /> : t.kind === 'error' ? <XCircle className="mt-0.5 size-4 shrink-0 text-danger" /> : t.kind === 'warning' ? <AlertTriangle className="mt-0.5 size-4 shrink-0 text-warning" /> : <Info className="mt-0.5 size-4 shrink-0 text-info" />}
           <div className="min-w-0 flex-1 text-sm">
             <p className="font-medium text-ink">{t.title}</p>
             {t.message && <p className="mt-0.5 text-muted">{t.message}</p>}

@@ -7,12 +7,12 @@ import { useSettings } from '@/hooks/useAssessment';
 import { Button, Callout, Field, Input, LevelTag, PageHeader, Section, Select, Tag, Textarea } from '@/components/ui';
 import { LEVEL_NAMES, dimensionName, getSource } from '@/data/bank';
 import { ALERT_LABEL, CONTRADICTION_RULES, type ValidationAlertKind } from '@/engine/triangulation';
-import { EVIDENCE_LABEL, SPECIAL_LABEL } from '@/engine/constants';
+import { EVIDENCE_LABEL, SPECIAL_LABEL, VALIDATED_EVIDENCE_LEVEL } from '@/engine/constants';
 import { suggestNotApplicable } from '@/engine/applicability';
 import type { QuestionState } from '@/engine/scoring';
 import { deleteFinding, newEvidence, saveFinding, setApplicabilityDecision } from '@/services/repo';
-import { attempt } from '@/app/store';
-import { cx, fmtNumber, plainText, todayISO } from '@/utils/core';
+import { attempt, attemptOk, notify } from '@/app/store';
+import { cx, fmtScore, plainText, plural, todayISO } from '@/utils/core';
 import { Loading, NotFound, PROFILE_LABEL } from '../common';
 import { EvidenceDialog } from '../evidence/EvidencePage';
 import type { Evidence } from '@/types/domain';
@@ -61,14 +61,14 @@ export default function ValidationDesk() {
         <Section>
           <div className="space-y-2">
             <div className="relative"><Search className="pointer-events-none absolute left-2.5 top-2.5 size-4 text-muted" aria-hidden /><Input aria-label="Buscar criterio" placeholder="Buscar criterio" className="pl-8" value={q} onChange={(e) => setQ(e.target.value)} /></div>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid gap-2">
               <Select aria-label="Filtrar por estado o alerta" value={filter} onChange={(e) => setFilter(e.target.value as Filter)}>
                 <option value="todos">Todos</option><option value="pendientes">Pendientes de validar</option><option value="validados">Validados</option>
                 {(Object.keys(ALERT_LABEL) as ValidationAlertKind[]).filter((k) => k !== 'baja_cobertura_dimension').map((k) => <option key={k} value={k}>{ALERT_LABEL[k]}</option>)}
               </Select>
-              <Select aria-label="Filtrar por dimensión" value={dim} onChange={(e) => setDim(e.target.value)}><option value="">Todas las dimensiones</option>{analysis.dimensionIds.map((d) => <option key={d} value={d}>{d}</option>)}</Select>
+              <Select aria-label="Filtrar por dimensión" value={dim} onChange={(e) => setDim(e.target.value)}><option value="">Todas las dimensiones</option>{analysis.dimensionIds.map((d) => <option key={d} value={d}>{d} · {dimensionName(d)}</option>)}</Select>
             </div>
-            <p className="text-xs text-muted num">{list.length} criterios · {analysis.coverage.validated} validados de {analysis.coverage.applicable} aplicables</p>
+            <p className="text-xs text-muted num">{plural(list.length, 'criterio', 'criterios')} · {analysis.coverage.validated} validados de {analysis.coverage.applicable} aplicables{analysis.lenses.insufficientEvidence.length ? ` · ${analysis.lenses.insufficientEvidence.length} sin evidencia suficiente` : ''}</p>
           </div>
           <ul className="mt-3 max-h-[68vh] divide-y divide-line overflow-y-auto">
             {list.map((s) => {
@@ -76,14 +76,15 @@ export default function ValidationDesk() {
               return (
                 <li key={s.question.id}>
                   <button onClick={() => select(s.question.id)} className={cx('flex w-full items-start gap-3 px-2 py-2.5 text-left', current?.question.id === s.question.id ? 'bg-teal-50/60' : 'hover:bg-slate-50')} aria-current={current?.question.id === s.question.id}>
-                    {s.validated !== null ? <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-petrol" aria-label="Validado" /> : al.length ? <TriangleAlert className="mt-0.5 size-4 shrink-0 text-lv2" aria-label="Con alertas" /> : <CircleDashed className="mt-0.5 size-4 shrink-0 text-nodata" aria-label="Pendiente" />}
+                    {s.validated !== null ? <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-petrol" aria-label="Validado" /> : al.length ? <TriangleAlert className="mt-0.5 size-4 shrink-0 text-warning" aria-label="Con alertas" /> : <CircleDashed className="mt-0.5 size-4 shrink-0 text-nodata" aria-label="Pendiente" />}
                     <span className="min-w-0 flex-1">
                       <span className="block text-sm"><span className="font-medium text-navy">{s.question.id}</span> {s.question.criterion}</span>
                       <span className="mt-0.5 flex flex-wrap items-center gap-x-3 text-xs text-muted num">
-                        <span>Mediana {fmtNumber(s.preliminary)}</span>
+                        <span>Mediana {fmtScore(s.preliminary)}</span>
                         <span>n={s.stats?.n ?? 0}</span>
                         {s.stats && s.stats.n > 1 && <span>Rango {s.stats.range}</span>}
-                        {!s.applicable && <span className="text-lv2">No aplica (validado)</span>}
+                        {!s.applicable && <span className="text-warning">No aplica (validado)</span>}
+                        {s.insufficientEvidence && <Tag tone="warning">Validado sin evidencia suficiente</Tag>}
                       </span>
                     </span>
                   </button>
@@ -114,11 +115,12 @@ function Detail({ s, aid, alerts, participants, evidence, org, locked, contradic
   const [ev, setEv] = useState<Evidence | null>(null);
   const naSuggestion = suggestNotApplicable(q, org);
   const max = Math.max(1, ...(s.stats?.distribution ?? [0]));
+  const weakEvidence = level !== null && level >= VALIDATED_EVIDENCE_LEVEL && (s.evidenceStatus === 'E0' || s.evidenceStatus === 'E1');
 
   return (
     <div className="space-y-6">
       <Section>
-        <p className="eyebrow">{q.dimensionId} · {dimensionName(q.dimensionId)} · {q.mgdaComponent}</p>
+        <p className="eyebrow">{q.dimensionId} · {dimensionName(q.dimensionId)} · componente MGDA: {q.mgdaComponent}</p>
         <h2 className="mt-2 text-lg font-semibold">{q.id} · {q.criterion}</h2>
         <p className="mt-2 text-sm text-ink">{q.question}</p>
         <div className="mt-3 flex flex-wrap gap-1.5">
@@ -127,8 +129,8 @@ function Detail({ s, aid, alerts, participants, evidence, org, locked, contradic
           <Tag>{q.sourceRefs.map((r) => getSource(r)?.shortLabel ?? r).join(' · ')}</Tag>
         </div>
         <div className="mt-5 grid gap-6 border-t border-line pt-5 md:grid-cols-[1fr_1fr_1.2fr]">
-          <div><p className="text-xs text-muted">Nivel preliminar (mediana)</p><div className="mt-1"><LevelTag score={s.preliminary} /></div><p className="mt-1 text-xs text-muted num">Media {fmtNumber(s.stats?.mean ?? null, 2)} · DE {fmtNumber(s.stats?.sd ?? null, 2)}</p></div>
-          <div><p className="text-xs text-muted">Nivel validado</p><div className="mt-1"><LevelTag score={s.validated} /></div><p className="mt-1 text-xs text-muted">Evidencia: {s.evidenceStatus} · {EVIDENCE_LABEL[s.evidenceStatus]}</p></div>
+          <div><p className="text-xs text-muted">Nivel percibido (mediana)</p><div className="mt-1"><LevelTag score={s.preliminary} /></div><p className="mt-1 text-xs text-muted num">Media {fmtScore(s.stats?.mean ?? null)} · DE {fmtScore(s.stats?.sd ?? null)}</p></div>
+          <div><p className="text-xs text-muted">Nivel validado</p><div className="mt-1"><LevelTag score={s.validated} /></div>{s.insufficientEvidence && <div className="mt-1"><Tag tone="warning">Validado sin evidencia suficiente</Tag></div>}<p className="mt-1 text-xs text-muted">Evidencia: {s.evidenceStatus} · {EVIDENCE_LABEL[s.evidenceStatus]}</p></div>
           <div>
             <p className="mb-1 text-xs text-muted">Distribución de respuestas ({s.stats?.n ?? 0} participantes, {s.stats?.profiles ?? 0} perfiles)</p>
             <div className="flex h-14 items-end gap-1" role="img" aria-label={`Distribución: ${(s.stats?.distribution ?? [0, 0, 0, 0, 0, 0]).map((v, i) => `nivel ${i}: ${v}`).join(', ')}`}>
@@ -136,7 +138,7 @@ function Detail({ s, aid, alerts, participants, evidence, org, locked, contradic
                 <div key={i} className="flex flex-1 flex-col items-center gap-1"><div className="w-full rounded-t-sm bg-petrol/80" style={{ height: `${(v / max) * 40}px` }} /><span className="text-[0.65rem] text-muted num">{i}</span></div>
               ))}
             </div>
-            <p className="mt-1 text-xs text-muted">Acuerdo: {s.agreement === null ? 'No evaluable (menos de dos participantes)' : fmtNumber(s.agreement, 2)}</p>
+            <p className="mt-1 text-xs text-muted">Acuerdo: {s.agreement === null ? 'No evaluable (menos de dos participantes)' : fmtScore(s.agreement)}</p>
           </div>
         </div>
       </Section>
@@ -154,7 +156,7 @@ function Detail({ s, aid, alerts, participants, evidence, org, locked, contradic
 
       {contradictions.length > 0 && (
         <Section title="Contradicciones con otros criterios" description="Hipótesis que requieren revisión; ninguna respuesta se modifica automáticamente.">
-          <ul className="space-y-3 text-sm">{contradictions.map((c) => <li key={c.rule.id}><Tag tone="warning">{c.rule.id}</Tag> <span className="ml-1">{c.rule.message}</span><p className="mt-1 text-xs text-muted">{c.rule.a.questionId}: {fmtNumber(c.scoreA)} · {c.rule.b.questionId}: {fmtNumber(c.scoreB)}</p></li>)}</ul>
+          <ul className="space-y-3 text-sm">{contradictions.map((c) => <li key={c.rule.id}><p className="font-medium text-navy">{c.rule.title}</p><p className="mt-0.5">{c.rule.message}</p><p className="mt-1 text-xs text-muted">{c.rule.a.questionId}: {fmtScore(c.scoreA)} · {c.rule.b.questionId}: {fmtScore(c.scoreB)}</p></li>)}</ul>
         </Section>
       )}
 
@@ -164,8 +166,8 @@ function Detail({ s, aid, alerts, participants, evidence, org, locked, contradic
           <p className="mt-3 border-t border-line pt-3 text-xs text-muted">{q.validationGuidance}</p>
         </Section>
         <Section title="No aplicabilidad" description="Solo la no aplicabilidad validada excluye el criterio del universo aplicable.">
-          {s.proposedNA > 0 && <p className="mb-2 text-sm">{s.proposedNA} participante(s) propusieron «No aplica».</p>}
-          {naSuggestion && <p className="mb-2 text-xs text-lv2">{naSuggestion}</p>}
+          {s.proposedNA > 0 && <p className="mb-2 text-sm">{plural(s.proposedNA, 'participante propuso', 'participantes propusieron')} «No aplica».</p>}
+          {naSuggestion && <p className="mb-2 text-xs text-warning">{naSuggestion}</p>}
           {s.naDecision ? (
             <div className="space-y-2 text-sm"><Tag tone="warning">Validada por {s.naDecision.reviewer} el {s.naDecision.date}</Tag><p className="text-muted">{s.naDecision.justification}</p><Button size="sm" disabled={locked} onClick={() => attempt(() => setApplicabilityDecision({ assessmentId: aid, questionId: q.id, remove: true }), 'No aplicabilidad retirada')}>Retirar decisión</Button></div>
           ) : (
@@ -204,9 +206,9 @@ function Detail({ s, aid, alerts, participants, evidence, org, locked, contradic
                 <div className="flex flex-wrap gap-3">{evidence.map((e) => <label key={e.id} className="flex items-center gap-2 text-sm"><input type="checkbox" checked={evIds.includes(e.id)} onChange={(x) => setEvIds((ids) => (x.target.checked ? [...ids, e.id] : ids.filter((i) => i !== e.id)))} />{e.title} ({e.status})</label>)}</div>
               </fieldset>
             )}
-            {level !== null && level >= 4 && s.evidenceFactor < 0.6 && <Callout tone="warning">Nivel alto sin evidencia revisada suficiente. Considere solicitar o revisar evidencias antes de validar.</Callout>}
+            {weakEvidence && <Callout tone="warning" title="Validado sin evidencia suficiente">La evidencia actual del criterio es {s.evidenceStatus} ({EVIDENCE_LABEL[s.evidenceStatus].toLowerCase()}). Si valida en nivel {VALIDATED_EVIDENCE_LEVEL} o superior, el criterio se marcará «Validado sin evidencia suficiente» en la mesa, los resultados y el informe, y no contará en «Capacidades sustentadas con evidencia». Registre o revise evidencia E2 o E3 para sustentarlo.</Callout>}
             <div className="flex flex-wrap gap-2">
-              <Button variant="primary" disabled={locked || level === null || !just.trim() || !evaluator.trim()} onClick={() => attempt(() => saveFinding({ assessmentId: aid, questionId: q.id, preliminaryValue: s.preliminary, finalLevel: level as Level, justification: plainText(just, 3000), evidenceIds: evIds, evaluator: plainText(evaluator, 120), date, contradictionsResolved: plainText(resolved, 2000) }), 'Criterio validado')}>{s.finding ? 'Actualizar validación' : 'Validar criterio'}</Button>
+              <Button variant="primary" disabled={locked || level === null || !just.trim() || !evaluator.trim()} onClick={async () => { const ok = await attemptOk(() => saveFinding({ assessmentId: aid, questionId: q.id, preliminaryValue: s.preliminary, finalLevel: level as Level, justification: plainText(just, 3000), evidenceIds: evIds, evaluator: plainText(evaluator, 120), date, contradictionsResolved: plainText(resolved, 2000) }), weakEvidence ? undefined : 'Criterio validado'); if (ok && weakEvidence) notify('warning', 'Criterio validado sin evidencia suficiente', `${q.id} queda marcado y no cuenta en «Capacidades sustentadas con evidencia».`); }}>{s.finding ? 'Actualizar validación' : 'Validar criterio'}</Button>
               {s.finding && <Button disabled={locked} onClick={() => attempt(() => deleteFinding(aid, q.id), 'Validación retirada')}>Retirar validación</Button>}
             </div>
           </div>

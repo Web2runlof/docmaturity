@@ -8,6 +8,7 @@ import { getProfile } from '@/data/sector-profiles';
 import { useAssessmentData } from '@/hooks/useAssessment';
 import { Button, Callout, Field, Input, PageHeader, Section, TabPanel, Tabs, Tag, Textarea } from '@/components/ui';
 import { loadCase } from '@/services/demo';
+import { CONTRADICTION_RULES } from '@/engine/triangulation';
 import { buildAcademicPDF } from '@/services/exports/pdf';
 import { attempt, notify } from '@/app/store';
 import { cx, downloadBlob, fmtNumber, fmtPct, slugify } from '@/utils/core';
@@ -44,8 +45,8 @@ export default function AcademicLab() {
                 <h3 className="mt-1 font-semibold">{c.title}</h3>
                 <p className="mt-1 text-sm text-muted line-clamp-3">{c.context}</p>
                 <div className="mt-3 flex flex-wrap gap-2">
-                  {existing.map((e) => <Button key={e.id} size="sm" variant={e.id === selected ? 'primary' : 'secondary'} onClick={() => setParams({ evaluacion: e.id })}>Abrir sesión</Button>)}
-                  <Button size="sm" busy={busy === c.id} onClick={() => open(c)}>{existing.length ? 'Nueva sesión' : 'Cargar caso'}</Button>
+                  {existing.map((e, i) => <Button key={e.id} size="sm" variant={e.id === selected || (!selected && i === 0) ? 'primary' : 'secondary'} onClick={() => setParams({ evaluacion: e.id })}>{i === 0 ? 'Abrir caso' : `Abrir sesión ${i + 1}`}</Button>)}
+                  <Button size="sm" variant={existing.length ? 'ghost' : 'secondary'} busy={busy === c.id} onClick={() => open(c)}>{existing.length ? 'Nueva sesión' : 'Cargar caso'}</Button>
                 </div>
               </article>
             );
@@ -172,7 +173,7 @@ function LabSession({ aid }: { aid: string }) {
                 <ul className="mt-2 space-y-1 text-sm">{c.evidence.map((e) => <li key={e.reference}><Tag tone={e.status === 'E3' ? 'teal' : e.status === 'E2' ? 'info' : 'neutral'}>{e.status}</Tag> <span className="font-medium">{e.questionId}</span> · {e.title}</li>)}</ul>
                 <h3 className="mt-6 font-semibold">Preguntas de reflexión</h3>
                 <ol className="mt-2 list-decimal space-y-1 pl-5 text-sm">{c.reflection.map((r) => <li key={r}>{r}</li>)}</ol>
-                <details className="mt-6 rounded-md border border-line p-3 text-sm"><summary className="cursor-pointer font-medium">Guía para el docente: situaciones deliberadas del caso</summary><ul className="mt-2 list-disc pl-5 text-muted">{c.deliberateContradictions.map((x) => <li key={x}>{x}</li>)}</ul></details>
+                <details className="mt-6 rounded-md border border-line p-3 text-sm"><summary className="cursor-pointer font-medium">Guía para el docente: situaciones deliberadas del caso</summary><ul className="mt-2 list-disc pl-5 text-muted">{c.deliberateContradictions.map((x) => { const m = /^(R\d{2}):\s*(.*)$/.exec(x); const rule = m ? CONTRADICTION_RULES.find((r) => r.id === m[1]) : undefined; const text = m ? m[2] : x; return <li key={x}>{rule ? <><strong className="font-medium text-ink">{rule.title}</strong>: {text}</> : text.charAt(0).toUpperCase() + text.slice(1)}</li>; })}</ul></details>
               </Section>
             ) : <Callout tone="info">No se encontró el expediente original del caso (la organización pudo haber sido renombrada).</Callout>}
           </TabPanel>
@@ -200,7 +201,7 @@ function LabSession({ aid }: { aid: string }) {
             </Section>
           </TabPanel>
           <TabPanel value="entregable">
-            <Section title="Entregable del grupo" description="Genera un PDF con identificación del grupo, dashboard resumido, hallazgos, prioridades, hoja de ruta y conclusiones, listo para cargar en Moodle.">
+            <Section title="Entregable del grupo" description="Genera un PDF con identificación del grupo, tablero resumido, hallazgos, prioridades, hoja de ruta y conclusiones, listo para cargar en Moodle.">
               <div className="grid gap-4 md:grid-cols-2">
                 <Field label="Nombre del grupo" htmlFor="ac-g" required><Input id="ac-g" value={d.group} onChange={(e) => setD({ ...d, group: e.target.value })} /></Field>
                 <Field label="Curso o programa" htmlFor="ac-c"><Input id="ac-c" value={d.course} onChange={(e) => setD({ ...d, course: e.target.value })} /></Field>

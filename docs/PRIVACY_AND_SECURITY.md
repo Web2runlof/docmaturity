@@ -8,6 +8,7 @@
 - **Localidad**: sin servidor, sin cuentas, sin base de datos remota, sin sincronización, sin telemetría ni rastreadores.
 - **Control del usuario**: la información solo sale del dispositivo cuando el evaluador o el entrevistado exportan un archivo.
 - **Transparencia**: los límites de cada mecanismo se informan en la interfaz.
+- **Origen compartido**: el navegador aísla IndexedDB y el almacenamiento local por origen (protocolo, dominio y puerto), no por ruta. En la publicación de demostración el origen es `web2runlof.github.io`, compartido con cualquier otra página publicada bajo ese dominio, que podría leer esos datos. Para información real se recomienda publicar en un dominio propio (variable `CUSTOM_DOMAIN`, ver [DEPLOYMENT.md](DEPLOYMENT.md)) o usar un perfil de navegador dedicado. La página Privacidad de la aplicación lo explica.
 
 ## 2. Controles implementados
 

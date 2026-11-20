@@ -1,3 +1,4 @@
+import { fmtScore } from '@/utils/core';
 /**
  * Motor de calificación DIAM.
  * Independiente, determinista y sin IA. Las respuestas especiales nunca se convierten en cero.
@@ -6,7 +7,7 @@ import type { DimensionId, Question } from '@/types/bank';
 import type {
   ApplicabilityDecision, Evidence, EvidenceStatus, Participant, Response, SpecialCode, Target, Thresholds, ValidatedFinding,
 } from '@/types/domain';
-import { EVIDENCE_FACTOR } from '../constants';
+import { EVIDENCE_FACTOR, VALIDATED_EVIDENCE_LEVEL } from '../constants';
 import { mean, median, ratio, stdDev, weightedMean } from './stats';
 
 export type View = 'preliminary' | 'validated';
@@ -73,6 +74,8 @@ export interface QuestionState {
   target: number;
   targetReason: string;
   proposedNA: number;
+  /** Nivel validado ≥ 3 con evidencia E0 o E1: validado sin evidencia suficiente. */
+  insufficientEvidence: boolean;
 }
 
 /** Valor actual: el validado prevalece cuando existe; si no, el preliminar. */
@@ -165,8 +168,9 @@ export function buildQuestionStates(input: ScoringInput): QuestionState[] {
       evidenceCount: ev.length,
       agreement: stats && stats.n >= 2 ? 1 - stats.range / 5 : null,
       target: qt?.level ?? dt?.level ?? input.defaultTarget,
-      targetReason: qt?.reason ?? dt?.reason ?? 'Nivel objetivo orientativo inicial del DIAM.',
+      targetReason: qt?.reason ?? dt?.reason ?? 'Meta orientativa inicial del DIAM.',
       proposedNA: specials.NO_APLICA_PROPUESTO ?? 0,
+      insufficientEvidence: finding !== null && finding.finalLevel >= VALIDATED_EVIDENCE_LEVEL && (evidenceStatus === 'E0' || evidenceStatus === 'E1'),
     };
   });
 }
@@ -207,7 +211,12 @@ export interface CoverageResult {
   coverage: number | null;
   validationCoverage: number | null;
   weightedCoverage: number | null;
+  /** Alcance sobre el banco: criterios aplicables del alcance / criterios del banco (225). */
   scopeCoverage: number | null;
+  /** Cobertura del banco: criterios oficiales con puntuación / criterios del banco (225). */
+  bankCoverage: number | null;
+  bankScored: number;
+  bankTotal: number;
   band: CoverageBand | null;
   validationBand: CoverageBand | null;
 }
@@ -238,6 +247,9 @@ export function computeCoverage(states: QuestionState[], thresholds: Thresholds,
     validationCoverage,
     weightedCoverage: pct(wNumeric, wApplicable),
     scopeCoverage: pct(officialApplicable, bankApplicable),
+    bankCoverage: pct(numeric.filter((s) => !s.question.custom).length, bankTotal),
+    bankScored: numeric.filter((s) => !s.question.custom).length,
+    bankTotal,
     band: coverageBand(coverage, thresholds),
     validationBand: coverageBand(validationCoverage, thresholds),
   };
@@ -255,7 +267,11 @@ export interface DimensionResult {
   weightedCoverage: number | null;
   evidenceSupport: number | null;
   target: number;
+  /** Brecha con el valor actual (validado si existe, si no preliminar) de la dimensión. */
   gap: number | null;
+  /** Brecha media por criterio: promedio ponderado de máx(0, meta − nivel) en cada vista. */
+  gapPreliminary: number | null;
+  gapValidated: number | null;
   insufficient: boolean;
   band: CoverageBand | null;
 }
@@ -295,10 +311,23 @@ export function computeDimensions(
       evidenceSupport: evidenceSupport === null ? null : evidenceSupport * 100,
       target,
       gap: current === null ? null : Math.max(0, target - current),
+      gapPreliminary: computeWeightedGap(app, 'preliminary'),
+      gapValidated: computeWeightedGap(app, 'validated'),
       insufficient: prel === null,
       band: coverageBand(coveragePct, thresholds),
     };
   });
+}
+
+/**
+ * Brecha frente a la meta: promedio ponderado (pesos de criterio) de máx(0, meta − nivel)
+ * sobre los criterios aplicables con puntuación en la vista indicada.
+ */
+export function computeWeightedGap(states: QuestionState[], view: View | 'current'): number | null {
+  return weightedMean(states.filter((s) => s.applicable).map((s) => {
+    const v = currentScore(s, view);
+    return { value: v === null ? null : Math.max(0, s.target - v), weight: s.weight };
+  }));
 }
 
 export type GlobalLabel = 'preliminar_alcance' | 'validada_alcance' | 'integral_validada';
@@ -415,7 +444,7 @@ export function computeCriticalAlerts(states: QuestionState[]): CriticalAlert[] 
     if (!s.question.isCritical || !s.applicable) continue;
     const score = currentScore(s);
     if (score === null) out.push({ questionId: s.question.id, kind: 'critico_no_evaluado', score: null, message: 'Capacidad crítica no evaluada' });
-    else if (score <= 1) out.push({ questionId: s.question.id, kind: 'critico_bajo', score, message: `Capacidad crítica en nivel ${score.toLocaleString('es-CO')}: requiere atención independiente del promedio` });
+    else if (score <= 1) out.push({ questionId: s.question.id, kind: 'critico_bajo', score, message: `Capacidad crítica en nivel ${fmtScore(score)}: requiere atención independiente del promedio` });
   }
   return out;
 }

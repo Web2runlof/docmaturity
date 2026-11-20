@@ -24,7 +24,7 @@ export default function ReportsPage() {
   const { bundle, analysis: a, loading, missing } = useAssessmentData(aid);
   const [busy, setBusy] = useState<string | null>(null);
   const [exp, setExp] = useState(false);
-  const narrative = useMemo(() => (a ? buildNarrative(a) : []), [a]);
+  const narrative = useMemo(() => (a && bundle ? buildNarrative(a, { risks: bundle.risks, initiatives: bundle.initiatives }) : []), [a, bundle]);
   if (loading) return <Loading />;
   if (missing || !bundle || !a) return <NotFound />;
   const base = slugify(`${bundle.organization.shortName || bundle.organization.name}-${bundle.assessment.name}`);
@@ -39,7 +39,7 @@ export default function ReportsPage() {
       notify('error', 'No fue posible generar el informe', (e as Error).message);
     } finally { setBusy(null); }
   };
-  const preliminary = a.coverage.band === 'insuficiente' || a.coverage.band === 'exploratorio' || a.globalValidated.score === null;
+  const preliminary = a.coverage.band === 'insuficiente' || a.coverage.band === 'exploratorio' || a.globalValidated.score === null || a.views.validated.exploratory;
   const simulated = bundle.assessment.isAcademic ? 'academic' : bundle.assessment.isDemo ? 'demo' : null;
 
   return (
@@ -48,7 +48,7 @@ export default function ReportsPage() {
       <SimulationBanner kind={simulated} />
       {preliminary && (
         <div className="mb-6"><Callout tone="warning" title="Resultados de carácter preliminar">
-          Cobertura {a.coverage.band ? COVERAGE_BAND_LABEL[a.coverage.band].toLowerCase() : 'sin datos'}{a.globalValidated.score === null ? ' y sin criterios validados' : ''}. Los informes lo indican expresamente en la portada y en la sección de limitaciones.
+          Cobertura del diagnóstico: {a.coverage.band ? COVERAGE_BAND_LABEL[a.coverage.band].toLowerCase() : 'sin datos'}.{a.globalValidated.score === null ? ' No hay criterios validados.' : a.views.validated.exploratory ? ` La serie validada es exploratoria: se calcula sobre ${a.views.validated.includedLabel}.` : ''} Los informes lo indican expresamente en la portada y en la sección de limitaciones.
         </Callout></div>
       )}
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">

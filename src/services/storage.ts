@@ -1,3 +1,4 @@
+import { LOCAL_DATA_NOTICE as LOCAL_NOTICE } from '@/config/vocabulary';
 /** Gestión del almacenamiento del navegador: estimación, persistencia y borrado local. */
 import { ALL_TABLES, db } from '@/database/db';
 
@@ -39,5 +40,4 @@ export async function clearAllLocalData(): Promise<void> {
   });
 }
 
-export const LOCAL_DATA_NOTICE =
-  'Los datos de los diagnósticos se almacenan localmente en este navegador. No existe sincronización automática entre dispositivos. La protección de la información depende también de las condiciones de seguridad del dispositivo y de los canales utilizados para compartir archivos.';
+export const LOCAL_DATA_NOTICE = LOCAL_NOTICE.full;

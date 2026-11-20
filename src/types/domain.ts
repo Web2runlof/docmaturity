@@ -127,6 +127,8 @@ export interface Assessment {
   questionTargets: Record<string, Target>;
   thresholds: Thresholds;
   legalOverrides: Record<string, LegalStatus>;
+  /** Fecha de inicio de la hoja de ruta (ancla de todas las fechas de iniciativas). */
+  roadmapStartDate?: string;
   status: AssessmentStatus;
   revision: number;
   isDemo: boolean;

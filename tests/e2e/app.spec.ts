@@ -24,15 +24,15 @@ test('59/60 · rutas públicas y de la aplicación funcionan bajo la base de Git
   const external = watchExternal(page);
   const errors = watchErrors(page);
   const routes: [string, RegExp][] = [
-    ['', /Conoce la madurez documental/],
+    ['', /Conozca la madurez documental/],
     ['#/como-funciona', /Del primer dato a la hoja de ruta/],
-    ['#/metodologia', /Modelo DIAM/],
+    ['#/metodologia', /Modelo Integrado de Evaluación DocMaturity/],
     ['#/referentes', /Referentes normativos/],
     ['#/privacidad', /Privacidad y datos locales/],
     ['#/responder', /Responder una entrevista/],
     ['#/app', /Inicio|organizaci/i],
-    ['#/app/cuestionarios', /Banco de criterios DIAM/],
-    ['#/app/biblioteca', /Biblioteca de referentes/],
+    ['#/app/cuestionarios', /Cuestionarios/],
+    ['#/app/biblioteca', /Biblioteca metodológica/],
     ['#/app/academico', /Laboratorio de diagnóstico documental/],
     ['#/app/configuracion', /Configuración/],
   ];
@@ -40,9 +40,11 @@ test('59/60 · rutas públicas y de la aplicación funcionan bajo la base de Git
     await page.goto(hash);
     await expect(page.getByRole('heading', { level: 1 }).first()).toContainText(heading);
   }
-  // Una ruta inexistente no rompe la aplicación.
+  // Una ruta inexistente muestra la página 404 (pública y dentro de la aplicación).
   await page.goto('#/ruta-inexistente');
-  await expect(page.locator('body')).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Esta página no existe');
+  await page.goto('#/app/ruta-inexistente');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Esta página no existe');
   expect(external, `Peticiones externas: ${external.join(', ')}`).toEqual([]);
   expect(errors).toEqual([]);
   // La política de seguridad de contenido restringe las conexiones al mismo origen.
@@ -134,10 +136,10 @@ test('43/44/45 · demostración: resultados, informes PDF y XLSX, y respaldo', a
   await page.goto('');
   await page.getByRole('button', { name: 'Explorar demostración' }).first().click();
   await expect(page).toHaveURL(/resultados/, { timeout: 30_000 });
-  await expect(page.getByRole('heading', { name: 'Resultados del diagnóstico' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Resultados', exact: true })).toBeVisible();
   await expect(page.getByText('Demostración.').first()).toBeVisible();
   // 53: las dimensiones sin datos se informan y no se representan como cero.
-  await expect(page.getByText(/Sin datos \(omitidas del radar\)|Todas las dimensiones tienen datos/).first()).toBeVisible();
+  await expect(page.getByText(/Omitidas por falta de datos|Todas las dimensiones tienen datos/).first()).toBeVisible();
   // Alternativa textual accesible de los gráficos.
   await page.getByRole('button', { name: 'Ver tabla de datos' }).first().click();
   await expect(page.locator('table').first()).toBeVisible();
@@ -187,7 +189,7 @@ test('55 · navegación por teclado: enlace de salto, foco visible y diálogos c
   // Con HashRouter el enlace no debe cambiar la ruta: mueve el foco al contenido principal.
   await page.keyboard.press('Enter');
   await expect(page.locator('main#contenido')).toBeFocused();
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('Conoce la madurez documental');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Conozca la madurez documental');
   await page.goto('#/app/configuracion');
   await page.getByRole('button', { name: 'Exportar copia de seguridad' }).focus();
   await page.keyboard.press('Enter');
@@ -203,8 +205,8 @@ test('56 · funciona sin conexión después de la primera visita', async ({ page
   await page.waitForFunction(() => Boolean(navigator.serviceWorker.controller));
   await context.setOffline(true);
   await page.reload();
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('Conoce la madurez documental');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Conozca la madurez documental');
   await page.goto('#/app/cuestionarios');
-  await expect(page.getByRole('heading', { name: 'Banco de criterios DIAM' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Cuestionarios' })).toBeVisible();
   await context.setOffline(false);
 });

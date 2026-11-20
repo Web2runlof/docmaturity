@@ -24,6 +24,27 @@ export const getDimension = (id: string): Dimension | undefined => dimensionInde
 export const getSource = (id: string): SourceReference | undefined => sourceIndex.get(id);
 export const dimensionName = (id: string): string => getDimension(id)?.name ?? id;
 
+/**
+ * Componente MGDA predominante de una dimensión, calculado a partir del componente de cada criterio
+ * (fuente de verdad). Cada criterio conserva su propio componente.
+ */
+const familyIndex = new Map(DIMENSIONS.map((d) => {
+  const counts = new Map<string, number>();
+  QUESTIONS.filter((q) => q.dimensionId === d.id).forEach((q) => counts.set(q.mgdaComponent, (counts.get(q.mgdaComponent) ?? 0) + 1));
+  const top = [...counts.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] ?? d.mgdaComponent;
+  return [d.id, top as Question['mgdaComponent']];
+}));
+export const getDimensionFamily = (id: string): Question['mgdaComponent'] => familyIndex.get(id as DimensionId) ?? 'Estratégico';
+
+/** Conteo de criterios por dimensión y componente MGDA (para la tabla de Metodología). */
+export function componentMatrix(): { dimensionId: DimensionId; counts: Record<string, number> }[] {
+  return DIMENSIONS.map((d) => {
+    const counts: Record<string, number> = {};
+    QUESTIONS.filter((q) => q.dimensionId === d.id).forEach((q) => (counts[q.mgdaComponent] = (counts[q.mgdaComponent] ?? 0) + 1));
+    return { dimensionId: d.id, counts };
+  });
+}
+
 const TIER_RANK: Record<CoreTier, number> = { quick: 0, standard: 1, professional: 2 };
 
 /** Selección no aleatoria basada en el coreTier del banco: cada modalidad incluye a la anterior. */

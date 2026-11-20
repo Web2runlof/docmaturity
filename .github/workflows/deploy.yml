@@ -45,7 +45,11 @@ jobs:
       - name: Build de producción
         run: npm run build
         env:
-          VITE_BASE: /${{ github.event.repository.name }}/
+          # Dominio propio opcional: defina la variable del repositorio CUSTOM_DOMAIN
+          # (Settings → Secrets and variables → Actions → Variables). Con ella el build
+          # publica en la raíz del dominio y genera dist/CNAME.
+          CUSTOM_DOMAIN: ${{ vars.CUSTOM_DOMAIN }}
+          VITE_BASE: ${{ vars.CUSTOM_DOMAIN != '' && '/' || format('/{0}/', github.event.repository.name) }}
 
       - name: Empaquetar el sitio para Pages
         if: github.event_name != 'pull_request'

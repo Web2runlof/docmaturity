@@ -217,7 +217,7 @@ export const ACADEMIC_READINGS = [
     sourceId: 'A01',
     title: 'Diagnóstico de la gestión documental para la transición hacia un SGDEA en la Municipalidad de San Rafael de Heredia, Costa Rica (2025)',
     url: 'https://www.revistas.una.ac.cr/index.php/respaldo/article/view/23129',
-    note: 'El contenido de este artículo no pudo consultarse durante el desarrollo; las preguntas se formulan sobre el alcance declarado en su título y no atribuyen hallazgos al artículo.',
+    note: 'El contenido de este artículo no se ha consultado; las preguntas se formulan sobre el alcance declarado en su título y no atribuyen hallazgos al artículo.',
     questions: [
       '¿Qué condiciones previas debería verificar un diagnóstico antes de recomendar la transición a un SGDEA en un gobierno local?',
       'Compare el enfoque del caso académico de Alcaldía de Valle Sereno con un diagnóstico orientado a la transición electrónica: ¿qué dimensiones del DIAM serían determinantes?',

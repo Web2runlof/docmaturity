@@ -100,6 +100,8 @@ export interface SourceReference {
   accessLimitations: string;
   verificationStatus: VerificationStatus;
   dimensions: DimensionId[];
+  /** Agrupador: reúne varios referentes que deben verificarse por separado. */
+  isGroup?: boolean;
 }
 
 export interface GlossaryTerm {

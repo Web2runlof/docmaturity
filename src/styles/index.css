@@ -14,12 +14,17 @@
   --color-line: #e2e8f0;
   --color-ink: #182633;
 
-  --color-lv0: #b91c1c;
-  --color-lv1: #c2410c;
-  --color-lv2: #b7791f;
-  --color-lv3: #2563eb;
-  --color-lv4: #0d9488;
-  --color-lv5: #166534;
+  /* Paleta secuencial única de madurez 0 → 5 (debe coincidir con LEVEL_COLORS en src/engine/constants.ts). */
+  --color-lv0: #c98040;
+  --color-lv1: #a08735;
+  --color-lv2: #447c51;
+  --color-lv3: #00695e;
+  --color-lv4: #004f5e;
+  --color-lv5: #18324b;
+  /* Colores semánticos de estado, independientes de la escala de madurez. */
+  --color-danger: #b91c1c;
+  --color-warning: #b45309;
+  --color-info: #2563eb;
   --color-nodata: #94a3b8;
 
   --radius-sm: 3px;
@@ -101,7 +106,7 @@
     box-shadow: 0 0 0 3px rgb(13 148 136 / 0.15);
   }
   .input[aria-invalid="true"] {
-    border-color: var(--color-lv0);
+    border-color: var(--color-danger);
   }
   .table-pro {
     width: 100%;

@@ -1,6 +1,6 @@
 # Metodología DIAM v1.0
 
-**DIAM — DocMaturity Integrated Assessment Model v1.0.** Modelo original de DOCMATURITY para evaluar capacidades organizacionales de gestión documental y gobierno de la información. Es una propuesta metodológica independiente y orientativa: no está certificada ni avalada por los referentes consultados.
+**Modelo Integrado de Evaluación DocMaturity (DIAM), versión 1.0.** Modelo original de DOCMATURITY para evaluar capacidades organizacionales de gestión documental y gobierno de la información. Es una propuesta metodológica independiente y orientativa: no está certificada ni avalada por los referentes consultados.
 
 ## 1. Estructura
 
@@ -9,7 +9,7 @@
 - **1.350 descriptores** distintos y **1.350 recomendaciones** por nivel.
 - 22 criterios críticos (D05-Q03, D05-Q05, D05-Q07, D05-Q13, D05-Q14, D06-Q08, D06-Q11, D07-Q08, D07-Q09, D07-Q11, D07-Q14, D08-Q13, D08-Q14, D10-Q04, D10-Q10, D10-Q11, D10-Q13, D10-Q15, D11-Q01, D11-Q06, D11-Q07, D14-Q13).
 
-| ID | Dimensión | Componente MGDA | Peso |
+| ID | Dimensión | Familia (componente MGDA predominante) | Peso |
 |---|---|---|---|
 | D01 | Estratégica | Estratégico | 8 |
 | D02 | Gobernanza | Estratégico | 8 |
@@ -27,7 +27,7 @@
 | D14 | Automatización e inteligencia artificial | Tecnológico | 2 |
 | D15 | Desempeño y mejora continua | Estratégico | 3 |
 
-Los pesos suman 100. El bajo peso de D14 es deliberado: la automatización y la IA no compensan deficiencias en capacidades esenciales.
+La familia de cada dimensión corresponde a su componente MGDA predominante; **cada criterio conserva su propio componente**, que es la fuente de verdad para los resultados por componente (la página Metodología de la aplicación muestra la tabla de criterios por dimensión y componente). Los pesos suman 100. El bajo peso de D14 es deliberado: la automatización y la IA no compensan deficiencias en capacidades esenciales.
 
 ## 2. Escala de madurez
 
@@ -48,8 +48,8 @@ Interpretación de valores agregados: [0; 0,5) Inexistente, [0,5; 1,5) Inicial, 
 
 | Modalidad | Criterios | Selección |
 |---|---|---|
-| Rápida | 30 | 2 criterios núcleo por dimensión (`coreTier = quick`). |
-| Estándar | 90 | Los 30 rápidos + 4 por dimensión (`standard`). |
+| Rápida | 30 | 2 criterios esenciales por dimensión. |
+| Estándar | 90 | Los 30 de la modalidad Rápida + 4 por dimensión. |
 | Profesional | 225 | Banco completo. |
 | Personalizada | Variable | Dimensiones seleccionadas con base rápida, estándar o profesional, preguntas propias y exclusiones justificadas. |
 
@@ -59,8 +59,8 @@ Interpretación de valores agregados: [0; 0,5) Inexistente, [0,5; 1,5) Inicial, 
 2. **Definición del alcance**, metas y ponderaciones.
 3. **Entrevistas** a varios perfiles (dirección, gestión documental, archivo, tecnología, seguridad, jurídica, control interno, entre otros), con un núcleo compartido de 8 criterios para triangular.
 4. **Registro de evidencias** con estado E0–E3.
-5. **Triangulación y validación**: el evaluador contrasta percepciones, reglas de contradicción y evidencias y registra el nivel validado con justificación.
-6. **Análisis**: madurez por dimensión y global, cobertura, evidencias, acuerdo y solidez.
+5. **Triangulación y validación**: una respuesta por participante y mediana entre participantes; el evaluador contrasta percepciones, reglas de contradicción y evidencias y registra el nivel validado con justificación.
+6. **Análisis**: madurez percibida y validada por dimensión y global (cada vista sobre su propia serie, con la marca «Exploratorio» cuando corresponde), cobertura del diagnóstico, alcance sobre el banco, cobertura del banco, soporte de evidencias, acuerdo, solidez (0–100) y lecturas diferenciadas.
 7. **Planeación**: brechas, riesgos, prioridades y hoja de ruta.
 
 Las fórmulas se documentan en [SCORING_ENGINE.md](SCORING_ENGINE.md) y las reglas jurídicas en [APPLICABILITY_RULES.md](APPLICABILITY_RULES.md).

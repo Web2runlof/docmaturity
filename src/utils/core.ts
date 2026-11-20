@@ -2,7 +2,7 @@
 
 export const uuid = (): string => crypto.randomUUID();
 export const nowISO = (): string => new Date().toISOString();
-export const todayISO = (): string => new Date().toISOString().slice(0, 10);
+export const todayISO = (): string => localISODate(new Date());
 
 /** Serialización canónica (claves ordenadas) para calcular hashes reproducibles. */
 export function canonicalJSON(value: unknown): string {
@@ -51,8 +51,44 @@ export function plainText(value: string, max = 20000): string {
 export const fmtNumber = (v: number | null | undefined, digits = 1): string =>
   v === null || v === undefined || !Number.isFinite(v) ? '—' : v.toLocaleString('es-CO', { minimumFractionDigits: digits, maximumFractionDigits: digits });
 
-export const fmtPct = (v: number | null | undefined, digits = 1): string =>
-  v === null || v === undefined || !Number.isFinite(v) ? 'Sin datos' : `${v.toLocaleString('es-CO', { maximumFractionDigits: digits })} %`;
+/**
+ * Formatos numéricos únicos de la aplicación (coma decimal, es-CO):
+ * - madurez, brechas y prioridades: 2 decimales (2,60);
+ * - porcentajes: 1 decimal (91,6 %).
+ */
+export const SCORE_DECIMALS = 2;
+export const PCT_DECIMALS = 1;
+
+export const fmtScore = (v: number | null | undefined, fallback = '—'): string =>
+  v === null || v === undefined || !Number.isFinite(v) ? fallback : v.toLocaleString('es-CO', { minimumFractionDigits: SCORE_DECIMALS, maximumFractionDigits: SCORE_DECIMALS });
+
+export const fmtPct = (v: number | null | undefined, fallback = 'Sin datos'): string =>
+  v === null || v === undefined || !Number.isFinite(v) ? fallback : `${v.toLocaleString('es-CO', { minimumFractionDigits: PCT_DECIMALS, maximumFractionDigits: PCT_DECIMALS })} %`;
+
+/** Pluralización real: plural(2, 'regla', 'reglas') → «2 reglas». */
+export const plural = (n: number, one: string, many: string): string => `${n.toLocaleString('es-CO')} ${n === 1 ? one : many}`;
+
+/** Enumeración natural en español: «A, B y C». */
+export function listEs(items: string[]): string {
+  if (items.length <= 1) return items.join('');
+  return `${items.slice(0, -1).join(', ')} y ${items[items.length - 1]}`;
+}
+
+/**
+ * Minúscula inicial para insertar un nombre dentro de una oración, sin alterar siglas
+ * ni códigos («IA», «SGDEA», «D11-Q07»).
+ */
+export function lowerFirst(s: string): string {
+  if (!s) return s;
+  const first = s.split(/[\s,;:()]/)[0];
+  if (first.length > 1 && first === first.toUpperCase() && /[A-ZÁÉÍÓÚÑ]/.test(first)) return s;
+  return s.charAt(0).toLowerCase() + s.slice(1);
+}
+
+/** Fecha local AAAA-MM-DD (sin desplazamiento por zona horaria). */
+export function localISODate(d: Date): string {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
 
 export function fmtDate(iso: string | null | undefined, withTime = false): string {
   if (!iso) return '—';

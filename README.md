@@ -17,7 +17,7 @@ Funciona por completo en el navegador: no tiene servidor, no requiere registro, 
 | Organizaciones | 15 perfiles organizacionales, caracterización documental y tecnológica, condiciones jurídicas que determinan la aplicabilidad. |
 | Entrevistas | Entrevista dirigida y entrevista distribuida mediante archivos `.dm-assignment.json` → `.dm-interview.json` con hash SHA-256, revisiones numeradas y detección de duplicados. |
 | Validación | Mesa de validación con discrepancias, contradicciones, «no aplica» propuestos, niveles altos sin evidencia y criterios críticos; nivel validado con justificación sin alterar las respuestas originales. |
-| Analítica | Dashboard con radar, barras frente al objetivo, distribución por nivel, capacidades críticas, mapas de calor por perfil y área, comparación de participantes, discrepancias, matriz de brechas, cobertura, soporte de evidencias, matriz de riesgos, impacto–esfuerzo, línea de tiempo, componentes MGDA, evolución histórica y lectura por referente. |
+| Analítica | Tablero con radar (en sentido horario) o barras por familia, barras frente a la meta, distribución por nivel, capacidades críticas, mapas de calor por perfil y área, comparación de participantes, discrepancias, matriz de brechas, cobertura, soporte de evidencias, matriz de riesgos, impacto–esfuerzo, línea de tiempo, componentes MGDA, evolución histórica y lectura por referente. |
 | Planeación | Brechas, riesgos valorados (P × I), priorización explicada, recomendaciones por nivel, hoja de ruta en cuatro fases con dependencias, portafolio y presupuesto opcional en COP. |
 | Informes | PDF ejecutivo, PDF técnico, libro XLSX de 15 hojas, paquete JSON de evaluación, respaldo completo; cifrado opcional AES-GCM. Narrativa basada en reglas con referencias a criterios. |
 | Académico | Laboratorio de 60 minutos con cinco casos ficticios, temporizador ajustable, insignias por calidad del proceso y entregable en PDF apto para Moodle. |
@@ -48,7 +48,9 @@ El flujo `.github/workflows/deploy.yml` instala dependencias con `npm ci`, ejecu
 2. En **Build and deployment → Source**, seleccione **GitHub Actions**.
 3. Haga push a `main` o ejecute el flujo manualmente desde **Actions → Desplegar en GitHub Pages → Run workflow**.
 
-El sitio queda en `https://<usuario>.github.io/docmaturity/`. Detalles, dominio propio y actualización del banco sin perder evaluaciones: [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
+El sitio queda en `https://<usuario>.github.io/docmaturity/`. Detalles y actualización del banco sin perder evaluaciones: [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
+
+**Dominio propio.** En `*.github.io` el origen se comparte con otras páginas del mismo usuario, que podrían leer el IndexedDB de la aplicación. Para trabajar con datos reales defina la variable del repositorio `CUSTOM_DOMAIN` (por ejemplo `diagnostico.midominio.org`): el flujo publica en la raíz del dominio y genera `dist/CNAME`. Localmente: `CUSTOM_DOMAIN=diagnostico.midominio.org npm run build`. Pasos de DNS y migración de datos en [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md), sección «Rutas y base».
 
 ## Estructura
 

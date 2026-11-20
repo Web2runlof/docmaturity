@@ -12,7 +12,7 @@ import { BANK_VERSION, DIMENSIONS, DIMENSION_IDS, METHODOLOGY_VERSION, questionI
 import { DEFAULT_TARGET, DEFAULT_THRESHOLDS } from '@/engine/constants';
 import { EMPTY_LEGAL_FLAGS, getProfile } from '@/data/sector-profiles';
 import { INITIATIVE_TEMPLATES } from '@/data/recommendations/initiatives';
-import { PHASES, addMonths, type ProposedInitiative } from '@/engine/recommendations';
+import { PHASES, addDays, addMonths, daysBetween, monthsBetween, scheduleInitiatives, type ProposedInitiative, type ScheduledSlot } from '@/engine/recommendations';
 import type { SuggestedRisk } from '@/engine/risk';
 import { nowISO, todayISO, uuid } from '@/utils/core';
 
@@ -97,7 +97,7 @@ export async function deleteOrganization(id: string): Promise<void> {
     for (const aid of aids) await deleteAssessmentData(aid);
     await db.departments.where('organizationId').equals(id).delete();
     await db.organizations.delete(id);
-    await logEvent('eliminar', 'organización', id, null, `${aids.length} evaluación(es) eliminadas`);
+    await logEvent('eliminar', 'organización', id, null, `${aids.length === 1 ? "1 evaluación eliminada" : `${aids.length} evaluaciones eliminadas`}`);
   });
 }
 
@@ -392,11 +392,18 @@ export async function savePriorityInput(assessmentId: string, questionId: string
   }));
 }
 
+/** Fecha de inicio de la hoja de ruta: la guardada en la evaluación o, en su defecto, el cierre o el inicio de la evaluación. */
+export const roadmapAnchor = (a: Pick<Assessment, 'roadmapStartDate' | 'endDate' | 'startDate'>): string => a.roadmapStartDate || a.endDate || a.startDate || todayISO();
+
+const slotOf = (i: RoadmapInitiative, anchor: string): ScheduledSlot => ({
+  phase: i.phase, startMonth: monthsBetween(anchor, i.startDate), endMonth: monthsBetween(anchor, i.endDate), startDate: i.startDate, endDate: i.endDate, moved: false,
+});
+
 /** Genera o completa la hoja de ruta a partir de las iniciativas propuestas sin sobrescribir ediciones. */
 export async function generateRoadmap(assessment: Assessment, proposals: ProposedInitiative[]): Promise<number> {
   const existing = await db.initiatives.where('assessmentId').equals(assessment.id).toArray();
   const byTemplate = new Map(existing.filter((i) => i.templateId).map((i) => [i.templateId as string, i]));
-  const start = assessment.endDate || todayISO();
+  const anchor = roadmapAnchor(assessment);
   const now = nowISO();
   const created: RoadmapInitiative[] = [];
   let order = existing.length;
@@ -408,7 +415,7 @@ export async function generateRoadmap(assessment: Assessment, proposals: Propose
       name: p.template.name, description: p.template.description, objective: p.template.objective, questionIds: p.questionIds, riskIds: [],
       dimensions: [...new Set(p.questionIds.map((q) => q.slice(0, 3)))] as DimensionId[], owner: p.template.owner, areas: '',
       priority: p.priority === null ? null : Math.round(p.priority * 100) / 100, dependencies: [], phase: p.phase,
-      startDate: addMonths(start, ph.startMonth), endDate: addMonths(start, ph.endMonth), budgetCOP: null, deliverables: p.template.deliverables,
+      startDate: addMonths(anchor, ph.startMonth), endDate: addMonths(anchor, ph.endMonth), budgetCOP: null, deliverables: p.template.deliverables,
       indicators: p.template.indicators, status: 'propuesta', notes: '', impact: null, effort: null, order, createdAt: now, updatedAt: now,
     };
     created.push(ini);
@@ -419,9 +426,87 @@ export async function generateRoadmap(assessment: Assessment, proposals: Propose
     const proposal = proposals.find((p) => p.template.id === ini.templateId);
     ini.dependencies = (proposal?.dependsOn ?? []).map((t) => byTemplate.get(t)?.id).filter((x): x is string => Boolean(x));
   }
+  // Fechas: una dependiente inicia cuando termina su prerrequisito (o pasa a la fase siguiente).
+  // Las iniciativas ya guardadas conservan sus fechas.
+  const fixed = new Map(existing.map((i) => [i.id, slotOf(i, anchor)]));
+  const slots = scheduleInitiatives([...existing, ...created], anchor, fixed);
+  for (const ini of created) {
+    const s = slots.get(ini.id);
+    if (s) Object.assign(ini, { phase: s.phase, startDate: s.startDate, endDate: s.endDate });
+  }
   await guarded(() => db.initiatives.bulkAdd(created));
   if (created.length) await logEvent('generar hoja de ruta', 'iniciativa', assessment.id, assessment.id, `${created.length} iniciativas`);
   return created.length;
+}
+
+/** Reprograma todas las iniciativas desde la fecha de inicio respetando dependencias (fases como mínimo). */
+export async function rescheduleRoadmap(assessmentId: string): Promise<number> {
+  const a = await db.assessments.get(assessmentId);
+  if (!a) throw new Error('Evaluación no encontrada');
+  const items = await db.initiatives.where('assessmentId').equals(assessmentId).toArray();
+  const slots = scheduleInitiatives(items, roadmapAnchor(a));
+  let changed = 0;
+  await guarded(() => db.transaction('rw', db.initiatives, async () => {
+    for (const i of items) {
+      const s = slots.get(i.id);
+      if (!s || (s.phase === i.phase && s.startDate === i.startDate && s.endDate === i.endDate)) continue;
+      changed += 1;
+      await db.initiatives.update(i.id, { phase: s.phase, startDate: s.startDate, endDate: s.endDate, updatedAt: nowISO() });
+    }
+  }));
+  if (changed) await logEvent('reprogramar hoja de ruta', 'iniciativa', assessmentId, assessmentId, `${changed} iniciativas`);
+  return changed;
+}
+
+/** Cambia la fecha de inicio de la hoja de ruta y desplaza todas las fechas en la misma cantidad de días. */
+export async function setRoadmapStart(assessmentId: string, date: string): Promise<void> {
+  const a = await db.assessments.get(assessmentId);
+  if (!a) throw new Error('Evaluación no encontrada');
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) throw new Error('Indique una fecha válida.');
+  const prev = roadmapAnchor(a);
+  const delta = daysBetween(prev, date);
+  await guarded(() => db.transaction('rw', db.assessments, db.initiatives, async () => {
+    await db.assessments.update(assessmentId, { roadmapStartDate: date, updatedAt: nowISO() });
+    if (delta) {
+      const items = await db.initiatives.where('assessmentId').equals(assessmentId).toArray();
+      for (const i of items) await db.initiatives.update(i.id, { startDate: addDays(i.startDate, delta), endDate: addDays(i.endDate, delta), updatedAt: nowISO() });
+    }
+  }));
+  await logEvent('fecha de inicio de la hoja de ruta', 'evaluación', assessmentId, assessmentId, date);
+}
+
+/**
+ * Mueve una iniciativa a otra fase y reprograma esa iniciativa y las que dependen de ella (directa o
+ * indirectamente). Las demás conservan sus fechas. Devuelve la fase final y los códigos reprogramados.
+ */
+export async function moveInitiative(id: string, phase: 1 | 2 | 3 | 4): Promise<{ phase: number; rescheduled: string[] }> {
+  const target = await db.initiatives.get(id);
+  if (!target) throw new Error('Iniciativa no encontrada');
+  const a = await db.assessments.get(target.assessmentId);
+  if (!a) throw new Error('Evaluación no encontrada');
+  const items = await db.initiatives.where('assessmentId').equals(target.assessmentId).toArray();
+  const by = new Map(items.map((i) => [i.id, i]));
+  if (target.dependencies.some((d) => (by.get(d)?.phase ?? 1) > phase)) throw new Error('La iniciativa no puede ubicarse en una fase anterior a la de las iniciativas de las que depende.');
+  const affected = new Set<string>([id]);
+  let grew = true;
+  while (grew) {
+    grew = false;
+    for (const i of items) if (!affected.has(i.id) && i.dependencies.some((d) => affected.has(d))) { affected.add(i.id); grew = true; }
+  }
+  const anchor = roadmapAnchor(a);
+  const fixed = new Map(items.filter((i) => !affected.has(i.id)).map((i) => [i.id, slotOf(i, anchor)]));
+  const next = items.map((i) => (i.id === id ? { ...i, phase } : affected.has(i.id) ? { ...i, phase: Math.max(i.phase, phase) as 1 | 2 | 3 | 4 } : i));
+  const slots = scheduleInitiatives(next, anchor, fixed);
+  const rescheduled: string[] = [];
+  await guarded(() => db.transaction('rw', db.initiatives, async () => {
+    for (const i of items.filter((x) => affected.has(x.id))) {
+      const sl = slots.get(i.id);
+      if (!sl) continue;
+      if (i.id !== id && (sl.phase !== i.phase || sl.startDate !== i.startDate || sl.endDate !== i.endDate)) rescheduled.push(i.code);
+      await db.initiatives.update(i.id, { phase: sl.phase, startDate: sl.startDate, endDate: sl.endDate, updatedAt: nowISO() });
+    }
+  }));
+  return { phase: slots.get(id)?.phase ?? phase, rescheduled };
 }
 
 export function newInitiative(assessmentId: string, order: number): RoadmapInitiative {
@@ -436,6 +521,11 @@ export function newInitiative(assessmentId: string, order: number): RoadmapIniti
 
 export async function saveInitiative(i: RoadmapInitiative): Promise<void> {
   if (i.startDate && i.endDate && i.endDate < i.startDate) throw new Error('La fecha de finalización no puede ser anterior a la de inicio.');
+  const others = await db.initiatives.where('assessmentId').equals(i.assessmentId).toArray();
+  const late = i.dependencies.map((d) => others.find((o) => o.id === d)).filter((o): o is RoadmapInitiative => Boolean(o && o.endDate && i.startDate < o.endDate));
+  if (late.length) throw new Error(`La iniciativa no puede iniciar antes de que termine ${late.map((o) => `${o.code} (${o.endDate})`).join(', ')}.`);
+  const early = others.filter((o) => o.id !== i.id && o.dependencies.includes(i.id) && i.endDate && o.startDate < i.endDate);
+  if (early.length) throw new Error(`${early.map((o) => o.code).join(', ')} depende${early.length === 1 ? '' : 'n'} de esta iniciativa e iniciaría${early.length === 1 ? '' : 'n'} antes de que termine. Ajuste las fechas o use «Reprogramar según dependencias».`);
   if (i.budgetCOP !== null && (!Number.isFinite(i.budgetCOP) || i.budgetCOP < 0)) throw new Error('El presupuesto debe ser un valor positivo en pesos colombianos.');
   await guarded(() => db.initiatives.put({ ...i, updatedAt: nowISO() }));
 }

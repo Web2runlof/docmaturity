@@ -176,7 +176,7 @@ export async function importInterviewPackage(text: string, fileName = 'entrevist
     if (!participant || participant.code !== pkg.participantCode) throw new PackageError('El código del participante no coincide con la asignación.');
     const allowed = new Set(asg.questionIds);
     const unauthorized = pkg.responses.filter((r) => !allowed.has(r.questionId));
-    if (unauthorized.length) throw new PackageError(`El archivo contiene ${unauthorized.length} respuesta(s) a preguntas no asignadas.`);
+    if (unauthorized.length) throw new PackageError(`El archivo contiene ${unauthorized.length === 1 ? "1 respuesta" : `${unauthorized.length} respuestas`} a preguntas no asignadas.`);
     const warnings: string[] = [];
     if (pkg.bankVersion !== assessment.bankVersion) warnings.push(`Versión del banco distinta (${pkg.bankVersion} frente a ${assessment.bankVersion}).`);
 
@@ -415,6 +415,8 @@ export async function restoreBackup(pkg: BackupPackage): Promise<void> {
     }
   });
   await logEvent('restaurar', 'respaldo', 'local', null, `Respaldo del ${pkg.manifest.createdAt}`);
+  const { runMaintenance } = await import('./maintenance');
+  await runMaintenance();
 }
 
 export async function getSettings() {

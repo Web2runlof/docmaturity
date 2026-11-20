@@ -29,7 +29,7 @@ export default function LibraryPage() {
   const [tab, setTab] = useState('referentes');
   return (
     <>
-      <PageHeader eyebrow="Metodología" title="Biblioteca de referentes" description="Referentes normativos, técnicos y académicos que sustentan conceptualmente el modelo DIAM, con su estado de verificación, la trazabilidad de cada criterio y el glosario." />
+      <PageHeader eyebrow="Metodología · referentes, trazabilidad y glosario" title="Biblioteca metodológica" description="Referentes normativos, técnicos y académicos que sustentan conceptualmente el modelo DIAM, con su estado de verificación, la trazabilidad de cada criterio y el glosario." />
       <Callout tone="info" title="Uso de los referentes">
         DOCMATURITY no reproduce textos protegidos por derechos de autor ni emite certificaciones. Las asociaciones entre criterios y referentes son conceptuales y no implican correspondencia con cláusulas o artículos específicos. Verifique siempre la versión vigente en la fuente oficial.
       </Callout>
@@ -44,36 +44,43 @@ export default function LibraryPage() {
   );
 }
 
+const byCode = (a: SourceReference, b: SourceReference) => a.id.localeCompare(b.id, 'es', { numeric: true });
+
 export function Sources() {
   const [q, setQ] = useState('');
   const [status, setStatus] = useState('');
   const [group, setGroup] = useState('');
+  const [type, setType] = useState('');
   const groups = [...new Set(SOURCES.map((s) => s.group))];
-  const list = SOURCES.filter((s) => (!status || s.verificationStatus === status) && (!group || s.group === group) && (!q || `${s.id} ${s.title} ${s.shortLabel} ${s.author}`.toLowerCase().includes(q.toLowerCase())));
+  const types = (Object.keys(TYPE_LABEL) as SourceReference['type'][]).filter((t) => SOURCES.some((s) => s.type === t));
+  const list = SOURCES.filter((s) => (!status || s.verificationStatus === status) && (!group || s.group === group) && (!type || s.type === type) && (!q || `${s.id} ${s.title} ${s.shortLabel} ${s.author}`.toLowerCase().includes(q.toLowerCase()))).sort(byCode);
   const byGroup = groups.map((g) => ({ g, items: list.filter((s) => s.group === g) })).filter((x) => x.items.length);
   return (
     <div className="space-y-6">
-      <div className="panel grid gap-3 p-4 md:grid-cols-[1fr_220px_220px]">
+      <div className="panel grid gap-3 p-4 md:grid-cols-2 xl:grid-cols-[1fr_200px_220px_220px]">
         <Field label="Buscar" htmlFor="src-q"><div className="relative"><Search className="pointer-events-none absolute top-2.5 left-2.5 size-4 text-muted" aria-hidden /><Input id="src-q" className="pl-8" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Título, autor o código" /></div></Field>
         <Field label="Familia" htmlFor="src-g"><Select id="src-g" value={group} onChange={(e) => setGroup(e.target.value)}><option value="">Todas</option>{groups.map((g) => <option key={g}>{g}</option>)}</Select></Field>
+        <Field label="Tipo de referente" htmlFor="src-t"><Select id="src-t" value={type} onChange={(e) => setType(e.target.value)}><option value="">Todos los tipos ({types.length})</option>{types.map((t) => <option key={t} value={t}>{TYPE_LABEL[t]} ({SOURCES.filter((s) => s.type === t).length})</option>)}</Select></Field>
         <Field label="Estado de verificación" htmlFor="src-s"><Select id="src-s" value={status} onChange={(e) => setStatus(e.target.value)}><option value="">Todos</option>{(Object.keys(VERIFICATION_LABEL) as VerificationStatus[]).map((s) => <option key={s} value={s}>{VERIFICATION_LABEL[s]}</option>)}</Select></Field>
       </div>
+      <p className="text-xs text-muted">{list.length} de {SOURCES.length} referentes, ordenados por código.</p>
       {byGroup.map(({ g, items }) => (
         <section key={g} aria-label={g}>
           <h2 className="eyebrow mb-3">{g}</h2>
-          <div className="grid gap-4 lg:grid-cols-2">
+          <div className="grid items-start gap-4 lg:grid-cols-2">
             {items.map((s) => (
               <article key={s.id} className="panel p-5">
                 <div className="flex flex-wrap items-start justify-between gap-2">
                   <div><p className="text-xs text-muted">{s.id} · {TYPE_LABEL[s.type]}{s.year ? ` · ${s.year}` : ''}</p><h3 className="mt-1 text-base font-semibold">{s.title}</h3><p className="text-sm text-muted">{s.author}{s.version ? ` · ${s.version}` : ''}</p></div>
-                  <Tag tone={VERIFICATION_TONE[s.verificationStatus]}>{VERIFICATION_LABEL[s.verificationStatus]}</Tag>
+                  <div className="flex flex-wrap gap-1">{s.isGroup && <Tag tone="gold">Agrupador</Tag>}<Tag tone={VERIFICATION_TONE[s.verificationStatus]}>{VERIFICATION_LABEL[s.verificationStatus]}</Tag></div>
                 </div>
                 <dl className="mt-3 grid gap-2 text-sm">
                   <div><dt className="font-medium">Alcance</dt><dd className="text-muted">{s.scope}</dd></div>
                   <div><dt className="font-medium">Relación con DIAM</dt><dd className="text-muted">{s.relation}</dd></div>
-                  {s.notEvaluates && <div><dt className="font-medium">Lo que DOCMATURITY no evalúa</dt><dd className="text-muted">{s.notEvaluates}</dd></div>}
+                    {s.isGroup && <div><dt className="font-medium">Agrupador</dt><dd className="text-muted">Reúne varios referentes complementarios en una sola ficha. No es un referente único: cada uno debe consultarse y verificarse por separado.</dd></div>}
+                  {s.notEvaluates && <div><dt className="font-medium">Lo que este referente no cubre</dt><dd className="text-muted">{s.notEvaluates}</dd></div>}
                   {s.verifiedParts && <div><dt className="font-medium">Partes verificadas</dt><dd className="text-muted">{s.verifiedParts}</dd></div>}
-                  {s.accessLimitations && <div><dt className="font-medium">Limitaciones de acceso</dt><dd className="text-muted">{s.accessLimitations}</dd></div>}
+                  {s.accessLimitations && <div><dt className="font-medium">Limitaciones de la verificación</dt><dd className="text-muted">{s.accessLimitations}</dd></div>}
                 </dl>
                 <div className="mt-3 flex flex-wrap gap-1">{s.dimensions.map((d) => <Tag key={d}>{d}</Tag>)}</div>
                 {s.urls.length > 0 && (

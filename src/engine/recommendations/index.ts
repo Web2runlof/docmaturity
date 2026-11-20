@@ -3,6 +3,7 @@
  * El nivel actual determina el tipo de acción (formular, formalizar, implementar, controlar, evaluar, optimizar):
  * nunca se recomienda formular algo que ya existe cuando el problema es su implementación.
  */
+import { localISODate } from '@/utils/core';
 import type { RecommendationVerb } from '@/types/bank';
 import type { Organization } from '@/types/domain';
 import { INITIATIVE_TEMPLATES, type InitiativeTemplate } from '@/data/recommendations/initiatives';
@@ -78,7 +79,7 @@ export function recommendationFor(s: QuestionState, org: Pick<Organization, 'pro
     verb: rec?.verb ?? null,
     problem: q.maturityDescriptors[level],
     action: rec?.text ?? 'Mantener la capacidad y evaluar periódicamente su efectividad.',
-    expectedResult: gap > 0 ? q.maturityDescriptors[targetLevel] : 'Condición superada frente al nivel objetivo: mantener y verificar.',
+    expectedResult: gap > 0 ? q.maturityDescriptors[targetLevel] : 'Condición superada frente a la meta: mantener y verificar.',
     indicator: `Nivel validado de ${q.id} igual o superior a ${s.target.toLocaleString('es-CO')}; ${(q.observableChecks[0] ?? 'comprobación observable').toLowerCase()}.`,
     effort: gap === 0 ? null : gap >= 3 ? 'alto' : gap >= 2 ? 'medio' : 'bajo',
   };
@@ -165,7 +166,12 @@ export function proposeInitiatives(states: QuestionState[], priorities: Priority
     ordered.push(next);
     placed.add(next.template.id);
   }
-  return ordered.sort((a, b) => a.phase - b.phase || ordered.indexOf(a) - ordered.indexOf(b));
+  // Programación temporal: una iniciativa dependiente no inicia antes de que termine su prerrequisito;
+  // si no cabe en su fase, pasa a la siguiente (misma regla que la hoja de ruta editable).
+  const slots = scheduleInitiatives(ordered.map((p, i) => ({ id: p.template.id, phase: p.phase, dependencies: p.dependsOn, order: i })), '2000-01-01');
+  ordered.forEach((p) => (p.phase = slots.get(p.template.id)?.phase ?? p.phase));
+  const rank = new Map(ordered.map((p, i) => [p.template.id, i]));
+  return ordered.sort((a, b) => a.phase - b.phase || (slots.get(a.template.id)?.startMonth ?? 0) - (slots.get(b.template.id)?.startMonth ?? 0) || (rank.get(a.template.id) ?? 0) - (rank.get(b.template.id) ?? 0));
 }
 
 export const PHASES = [
@@ -177,8 +183,94 @@ export const PHASES = [
 
 export function addMonths(iso: string, months: number): string {
   const d = new Date(`${iso}T00:00:00`);
+  const day = d.getDate();
+  d.setDate(1);
   d.setMonth(d.getMonth() + months);
-  return d.toISOString().slice(0, 10);
+  const last = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
+  d.setDate(Math.min(day, last));
+  return localISODate(d);
+}
+
+/** Meses entre dos fechas AAAA-MM-DD (fracción por días, base 30). */
+export function monthsBetween(fromISO: string, toISO: string): number {
+  const a = new Date(`${fromISO}T00:00:00`);
+  const b = new Date(`${toISO}T00:00:00`);
+  return (b.getFullYear() - a.getFullYear()) * 12 + (b.getMonth() - a.getMonth()) + (b.getDate() - a.getDate()) / 30;
+}
+
+export interface SchedulableInitiative {
+  id: string;
+  phase: 1 | 2 | 3 | 4;
+  dependencies: string[];
+  order: number;
+}
+
+export interface ScheduledSlot {
+  phase: 1 | 2 | 3 | 4;
+  startMonth: number;
+  endMonth: number;
+  startDate: string;
+  endDate: string;
+  moved: boolean;
+}
+
+/**
+ * Programa las iniciativas a partir de la fecha de inicio de la hoja de ruta.
+ * Cada iniciativa dura lo que su fase. Una iniciativa dependiente inicia cuando termina su
+ * prerrequisito; si ese momento cae fuera de su fase, pasa a la fase siguiente.
+ */
+export function scheduleInitiatives(items: SchedulableInitiative[], anchorISO: string, fixed: Map<string, ScheduledSlot> = new Map()): Map<string, ScheduledSlot> {
+  const by = new Map(items.map((i) => [i.id, i]));
+  const out = new Map<string, ScheduledSlot>(fixed);
+  const visiting = new Set<string>();
+  const place = (i: SchedulableInitiative): ScheduledSlot => {
+    const done = out.get(i.id);
+    if (done) return done;
+    visiting.add(i.id);
+    let ready = 0;
+    for (const d of i.dependencies) {
+      const dep = by.get(d);
+      if (!dep || visiting.has(d)) continue;
+      ready = Math.max(ready, place(dep).endMonth);
+    }
+    visiting.delete(i.id);
+    let phase = i.phase;
+    let start = Math.max(PHASES[phase - 1].startMonth, ready);
+    while (phase < 4 && start >= PHASES[phase - 1].endMonth) {
+      phase = (phase + 1) as 1 | 2 | 3 | 4;
+      start = Math.max(start, PHASES[phase - 1].startMonth);
+    }
+    const ph = PHASES[phase - 1];
+    const end = start + (ph.endMonth - ph.startMonth);
+    const slot: ScheduledSlot = { phase, startMonth: start, endMonth: end, startDate: addMonths(anchorISO, start), endDate: addMonths(anchorISO, end), moved: phase !== i.phase };
+    out.set(i.id, slot);
+    return slot;
+  };
+  [...items].sort((a, b) => a.phase - b.phase || a.order - b.order).forEach(place);
+  return out;
+}
+
+/** Suma días a una fecha AAAA-MM-DD. */
+export function addDays(iso: string, days: number): string {
+  const d = new Date(`${iso}T00:00:00`);
+  d.setDate(d.getDate() + days);
+  return localISODate(d);
+}
+
+export const daysBetween = (fromISO: string, toISO: string): number =>
+  Math.round((new Date(`${toISO}T00:00:00`).getTime() - new Date(`${fromISO}T00:00:00`).getTime()) / 86400000);
+
+/** Dependencias cuyo prerrequisito termina después de que inicia la iniciativa dependiente. */
+export function dateViolations(items: { id: string; code: string; startDate: string; endDate: string; dependencies: string[] }[]) {
+  const by = new Map(items.map((i) => [i.id, i]));
+  const out: { id: string; code: string; dependsOn: string; dependsOnCode: string }[] = [];
+  for (const i of items) {
+    for (const d of i.dependencies) {
+      const dep = by.get(d);
+      if (dep && dep.endDate && i.startDate && i.startDate < dep.endDate) out.push({ id: i.id, code: i.code, dependsOn: dep.id, dependsOnCode: dep.code });
+    }
+  }
+  return out;
 }
 
 /** Valida que una iniciativa no quede antes que sus dependencias. */

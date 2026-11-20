@@ -1,20 +1,13 @@
 import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import type { AssessmentModality, AssessmentStatus } from '@/types/domain';
+import type { AssessmentModality } from '@/types/domain';
 import type { RespondentProfile } from '@/types/bank';
-import { Button, EmptyState } from '@/components/ui';
+import { Button, Callout, EmptyState } from '@/components/ui';
 import { questionIdsForTier } from '@/data/bank';
 import { Loader2 } from 'lucide-react';
+import { LOCAL_DATA_NOTICE, PROFILE_LABEL as PROFILE_LABEL_ALL } from '@/config/vocabulary';
 
-export const STATUS_LABEL: Record<AssessmentStatus, string> = {
-  borrador: 'Borrador', planificacion: 'En planificación', entrevistas: 'Entrevistas en curso', consolidacion: 'En consolidación',
-  validacion: 'En validación', finalizado: 'Finalizado', archivado: 'Archivado',
-};
-export const STATUS_ORDER: AssessmentStatus[] = ['borrador', 'planificacion', 'entrevistas', 'consolidacion', 'validacion', 'finalizado'];
-
-export const MODALITY_LABEL: Record<AssessmentModality, string> = {
-  quick: 'Diagnóstico rápido', standard: 'Diagnóstico estándar', professional: 'Diagnóstico profesional', custom: 'Diagnóstico personalizado',
-};
+export { STATUS_LABEL, STATUS_ORDER, MODALITY_LABEL, PROFILE_LABEL, modalityLabel } from '@/config/vocabulary';
 export const MODALITY_INFO: Record<AssessmentModality, { count: number | null; text: string }> = {
   quick: { count: questionIdsForTier('quick').length, text: 'Dos criterios estratégicos por dimensión. Primera aproximación, comparación de percepciones y ejercicios de clase. No es un diagnóstico integral.' },
   standard: { count: questionIdsForTier('standard').length, text: 'Seis criterios por dimensión, incluidos los del diagnóstico rápido. Lectura amplia de capacidades.' },
@@ -22,13 +15,7 @@ export const MODALITY_INFO: Record<AssessmentModality, { count: number | null; t
   custom: { count: null, text: 'Dimensiones, criterios, metas, ponderaciones y preguntas propias definidas por el equipo evaluador.' },
 };
 
-export const PROFILE_LABEL: Record<RespondentProfile, string> = {
-  direccion: 'Alta dirección', planeacion: 'Planeación', gestion_documental: 'Gestión documental', archivo: 'Administración de archivos',
-  tecnologia: 'Tecnología', seguridad: 'Seguridad de la información', juridica: 'Jurídica', control_interno: 'Control interno', financiera: 'Gestión financiera',
-  talento_humano: 'Talento humano', calidad: 'Calidad', gobierno_datos: 'Gobierno de datos', procesos: 'Responsables de procesos', usuarios: 'Usuarios finales',
-  proveedores: 'Proveedores autorizados', otros: 'Otros',
-};
-export const PROFILES = Object.keys(PROFILE_LABEL) as RespondentProfile[];
+export const PROFILES = Object.keys(PROFILE_LABEL_ALL) as RespondentProfile[];
 
 export function Loading() {
   return <div className="flex min-h-[30vh] items-center justify-center text-sm text-muted" role="status"><Loader2 className="mr-2 size-4 animate-spin" aria-hidden />Cargando…</div>;
@@ -55,4 +42,24 @@ export function SimulationBanner({ kind }: { kind: 'demo' | 'academic' | null })
 
 export function Count({ children }: { children: ReactNode }) {
   return <span className="ml-1.5 rounded-sm bg-slate-100 px-1.5 py-0.5 text-[0.68rem] font-medium text-muted num">{children}</span>;
+}
+
+/** Aviso único de almacenamiento local. La versión breve se usa en «Responder entrevista». */
+export function LocalDataNotice({ variant = 'full', extra }: { variant?: 'full' | 'short'; extra?: ReactNode }) {
+  if (variant === 'short') return <p className="text-xs text-muted">{LOCAL_DATA_NOTICE.short}</p>;
+  return <Callout tone="info" title="Datos locales">{LOCAL_DATA_NOTICE.full}{extra ? <> {extra}</> : null}</Callout>;
+}
+
+/** Pestañas de vista con contador. */
+export function ViewTabs<T extends string>({ value, onChange, options, label }: { value: T; onChange: (v: T) => void; options: { value: T; label: string; count: number }[]; label: string }) {
+  return (
+    <div role="tablist" aria-label={label} className="inline-flex flex-wrap rounded-md border border-line bg-white p-0.5">
+      {options.map((o) => (
+        <button key={o.value} type="button" role="tab" aria-selected={value === o.value} onClick={() => onChange(o.value)}
+          className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded px-3 py-1.5 text-sm transition-colors ${value === o.value ? 'bg-navy text-white' : 'text-muted hover:text-navy'}`}>
+          {o.label}<span className={`rounded-full px-1.5 text-[0.7rem] num ${value === o.value ? 'bg-white/20 text-white' : 'bg-slate-100 text-muted'}`}>{o.count}</span>
+        </button>
+      ))}
+    </div>
+  );
 }

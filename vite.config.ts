@@ -7,7 +7,13 @@ import { fileURLToPath, URL } from 'node:url';
 
 // Base pública compatible con GitHub Pages (https://<usuario>.github.io/docmaturity/).
 // Puede sobrescribirse con VITE_BASE (por ejemplo "/" para un dominio propio).
-const base = process.env.VITE_BASE ?? '/docmaturity/';
+// Con CUSTOM_DOMAIN (por ejemplo "diagnostico.midominio.org") el build escribe dist/CNAME
+// y, si no se indicó VITE_BASE, publica en la raíz del dominio.
+const customDomain = (process.env.CUSTOM_DOMAIN ?? '').trim().toLowerCase();
+if (customDomain && !/^(?=.{1,253}$)([a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$/.test(customDomain)) {
+  throw new Error(`CUSTOM_DOMAIN no es un nombre de dominio válido: «${customDomain}».`);
+}
+const base = process.env.VITE_BASE || (customDomain ? '/' : '/docmaturity/');
 
 // La política de seguridad de contenido solo se inyecta en el build de producción:
 // el servidor de desarrollo necesita scripts en línea para el recargado en caliente.
@@ -24,6 +30,17 @@ const CSP = [
   "base-uri 'self'",
   "form-action 'none'",
 ].join('; ');
+
+/** Escribe el archivo CNAME de GitHub Pages cuando se configura un dominio propio. */
+function cnamePlugin(): Plugin {
+  return {
+    name: 'docmaturity-cname',
+    apply: 'build',
+    generateBundle() {
+      if (customDomain) this.emitFile({ type: 'asset', fileName: 'CNAME', source: `${customDomain}\n` });
+    },
+  };
+}
 
 function cspPlugin(): Plugin {
   return {
@@ -44,6 +61,7 @@ export default defineConfig({
     react(),
     tailwindcss(),
     cspPlugin(),
+    cnamePlugin(),
     VitePWA({
       registerType: 'prompt',
       injectRegister: false,

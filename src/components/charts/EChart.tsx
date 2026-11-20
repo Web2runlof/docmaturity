@@ -9,6 +9,7 @@ import { GridComponent, LegendComponent, MarkAreaComponent, MarkLineComponent, R
 import { CanvasRenderer } from 'echarts/renderers';
 import type { EChartsCoreOption } from 'echarts/core';
 import { Table2 } from 'lucide-react';
+import { fmtScore } from '@/utils/core';
 
 echarts.use([BarChart, HeatmapChart, LineChart, RadarChart, ScatterChart, CustomChart, GraphChart, GridComponent, LegendComponent, MarkAreaComponent, MarkLineComponent, RadarComponent, TooltipComponent, VisualMapComponent, DataZoomComponent, CanvasRenderer]);
 
@@ -75,7 +76,7 @@ export function EChart({ option, height = 320, label, summary, table, onClick, e
             <thead><tr>{table.columns.map((c) => <th key={c} scope="col">{c}</th>)}</tr></thead>
             <tbody>
               {table.rows.map((r, i) => (
-                <tr key={i}>{r.map((v, j) => <td key={j} className="num">{v === null || v === '' ? 'Sin datos' : typeof v === 'number' ? v.toLocaleString('es-CO', { maximumFractionDigits: 2 }) : v}</td>)}</tr>
+                <tr key={i}>{r.map((v, j) => <td key={j} className="num">{v === null || v === '' ? 'Sin datos' : typeof v === 'number' ? (Number.isInteger(v) ? String(v) : fmtScore(v)) : v}</td>)}</tr>
               ))}
             </tbody>
           </table>

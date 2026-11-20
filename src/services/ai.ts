@@ -10,6 +10,7 @@
  * La interfaz AIProvider permite que una instalación propia (por ejemplo, un despliegue interno
  * con un intermediario autenticado) agregue un proveedor sin modificar la lógica de los informes.
  */
+import { fmtPct, fmtScore } from '@/utils/core';
 import type { Analysis } from '@/engine/analyze';
 import { currentScore } from '@/engine/scoring';
 import { dimensionName, LEVEL_NAMES } from '@/data/bank';
@@ -22,19 +23,19 @@ export type AIPurpose = 'resumen_ejecutivo' | 'refinar_recomendaciones' | 'pregu
 export const AI_PURPOSES: Record<AIPurpose, { label: string; instruction: string }> = {
   resumen_ejecutivo: {
     label: 'Redactar un resumen ejecutivo',
-    instruction: 'Redacta un resumen ejecutivo de máximo 400 palabras dirigido a la alta dirección, con tres prioridades de actuación.',
+    instruction: 'Redacte un resumen ejecutivo de máximo 400 palabras dirigido a la alta dirección, con tres prioridades de actuación.',
   },
   refinar_recomendaciones: {
     label: 'Mejorar la redacción de las recomendaciones',
-    instruction: 'Mejora la redacción de las recomendaciones prioritarias para que sean claras, accionables y verificables. Conserva el identificador de criterio de cada una.',
+    instruction: 'Mejore la redacción de las recomendaciones prioritarias para que sean claras, accionables y verificables. Conserve el identificador de criterio de cada una.',
   },
   preguntas_validacion: {
     label: 'Proponer preguntas de validación',
-    instruction: 'Propón preguntas de seguimiento para aclarar las discrepancias y contradicciones listadas en una sesión de validación con los responsables.',
+    instruction: 'Proponga preguntas de seguimiento para aclarar las discrepancias y contradicciones listadas en una sesión de validación con los responsables.',
   },
   plan_comunicacion: {
     label: 'Proponer un plan de comunicación de resultados',
-    instruction: 'Propón un plan breve para comunicar los resultados a directivos, responsables de procesos y personal, con mensajes clave diferenciados.',
+    instruction: 'Proponga un plan breve para comunicar los resultados a directivos, responsables de procesos y personal, con mensajes clave diferenciados.',
   },
 };
 
@@ -72,8 +73,8 @@ export interface PromptOptions {
   includeNotes: boolean;
 }
 
-const n1 = (v: number | null) => (v === null ? 'sin dato' : v.toLocaleString('es-CO', { maximumFractionDigits: 1 }));
-const lvl = (v: number | null) => (v === null ? 'sin dato' : `${n1(v)} (${LEVEL_NAMES[levelIndex(v)]})`);
+const pct = (v: number | null) => fmtPct(v, 'sin dato');
+const lvl = (v: number | null) => (v === null ? 'sin dato' : `${fmtScore(v)} (${LEVEL_NAMES[levelIndex(v)]})`);
 
 /** Construye el prompt con datos agregados. Con anonimización, no incluye nombres, NIT, sedes ni participantes. */
 export function buildAIPrompt(a: Analysis, opts: PromptOptions): string {
@@ -82,10 +83,10 @@ export function buildAIPrompt(a: Analysis, opts: PromptOptions): string {
   const orgLabel = opts.anonymize ? `la organización evaluada (${profile.label.toLowerCase()})` : `${org.name}${org.shortName ? ` (${org.shortName})` : ''}`;
   const dims = a.dimensions
     .filter((d) => d.applicable > 0)
-    .map((d) => `- ${d.dimensionId} ${dimensionName(d.dimensionId)}: actual ${lvl(d.validated ?? d.preliminary)}, objetivo ${d.target}, cobertura ${n1(d.preliminaryCoverage)} %${d.insufficient ? ' (cobertura insuficiente)' : ''}`);
-  const gaps = a.priorities.slice(0, 12).map((p) => `- ${p.questionId} ${p.criterion}: actual ${n1(p.current)}, objetivo ${p.target}, prioridad ${n1(p.score)}`);
+    .map((d) => `- ${d.dimensionId} ${dimensionName(d.dimensionId)}: percibida ${lvl(d.preliminary)}, validada ${lvl(d.validated)}, meta ${d.target}, cobertura ${pct(d.preliminaryCoverage)}${d.insufficient ? ' (cobertura insuficiente)' : ''}`);
+  const gaps = a.priorities.slice(0, 12).map((p) => `- ${p.questionId} ${p.criterion}: actual ${fmtScore(p.current, 'sin dato')}, meta ${p.target}, prioridad ${fmtScore(p.score)}`);
   const critical = a.critical.map((c) => `- ${c.questionId}: ${c.message}`);
-  const contradictions = a.contradictions.map((c) => `- ${c.rule.id}: ${c.rule.message}`);
+  const contradictions = a.contradictions.map((c) => `- ${c.rule.title} (${c.rule.a.questionId} / ${c.rule.b.questionId}): ${c.rule.message}`);
   const discrepancies = a.alerts.filter((x) => x.kind === 'discrepancia').slice(0, 10).map((x) => `- ${x.questionId}: ${x.message}`);
   const profiles = [...new Set(a.states.flatMap((s) => s.answers.map((x) => x.profile)))].map((p) => PROFILE_LABEL[p as keyof typeof PROFILE_LABEL] ?? p);
   const notes = opts.includeNotes
@@ -93,20 +94,23 @@ export function buildAIPrompt(a: Analysis, opts: PromptOptions): string {
     : [];
 
   return [
-    'Actúa como consultor en gestión documental y transformación digital en Colombia.',
+    'Actúe como consultor en gestión documental y transformación digital en Colombia.',
     AI_PURPOSES[opts.purpose].instruction,
     '',
     'Reglas obligatorias:',
-    '1. Usa exclusivamente los datos que siguen; no inventes cifras, hechos, normas ni nombres.',
-    '2. No afirmes certificación, cumplimiento normativo oficial ni equivalencia con instrumentos oficiales (MGDA, FURAG, ISO, MoReq).',
-    '3. Cita el identificador del criterio (por ejemplo, D05-Q07) cuando hagas una afirmación sobre él.',
-    '4. Indica explícitamente las limitaciones derivadas de la cobertura y del nivel de evidencia.',
-    '5. Escribe en español de Colombia, con tono profesional y frases claras.',
-    '6. No recomiendes adquirir software, digitalizar todo el archivo ni adoptar IA o blockchain sin un problema identificable.',
+    '1. Use exclusivamente los datos que siguen; no invente cifras, hechos, normas ni nombres.',
+    '2. No afirme certificación, cumplimiento normativo oficial ni equivalencia con instrumentos oficiales (MGDA, FURAG, ISO, MoReq).',
+    '3. Cite el identificador del criterio (por ejemplo, D05-Q07) cuando haga una afirmación sobre él.',
+    '4. Indique explícitamente las limitaciones derivadas de la cobertura y del nivel de evidencia.',
+    '5. Escriba en español de Colombia, con tono profesional, trato de «usted» y frases claras.',
+    '6. No recomiende adquirir software, digitalizar todo el archivo ni adoptar IA o blockchain sin un problema identificable.',
+    '7. No mezcle la serie percibida con la validada: si cita una cifra, indique a qué serie corresponde.',
     '',
     `Contexto: diagnóstico de madurez documental (modelo DIAM 1.0) de ${orgLabel}. Escala de 0 (Inexistente) a 5 (Optimizado).`,
-    `Resultado global: ${a.globalValidated.score !== null ? `${a.globalValidated.labelText} ${lvl(a.globalValidated.score)}` : `${a.globalPreliminary.labelText} ${lvl(a.globalPreliminary.score)}`}.`,
-    `Cobertura del diagnóstico: ${n1(a.coverage.coverage)} % de los criterios aplicables; cobertura de validación ${n1(a.coverage.validationCoverage)} %; soporte de evidencias ${n1(a.evidence.support)} %; índice orientativo de solidez ${n1(a.solidity.index)}.`,
+    `Madurez percibida (preliminar): ${lvl(a.views.preliminary.global.score)}, calculada sobre ${a.views.preliminary.includedLabel}.`,
+    `Madurez validada: ${a.views.validated.global.score === null ? 'sin criterios validados' : `${lvl(a.views.validated.global.score)}, calculada sobre ${a.views.validated.includedLabel}${a.views.validated.exploratory ? ' (resultado exploratorio)' : ''}`}.`,
+    `Brecha frente a la meta (percibida): ${fmtScore(a.views.preliminary.gap, 'sin dato')}.`,
+    `Cobertura del diagnóstico: ${pct(a.coverage.coverage)} de los criterios aplicables; alcance sobre el banco ${pct(a.coverage.scopeCoverage)}; cobertura del banco ${pct(a.coverage.bankCoverage)}; cobertura de validación ${pct(a.coverage.validationCoverage)}; soporte de evidencias ${pct(a.evidence.support)}; índice orientativo de solidez ${a.solidity.index === null ? 'no calculable' : Math.round(a.solidity.index)} sobre 100.`,
     `Perfiles entrevistados: ${profiles.join(', ') || 'sin entrevistas registradas'}.`,
     '',
     'Resultados por dimensión:', ...dims,

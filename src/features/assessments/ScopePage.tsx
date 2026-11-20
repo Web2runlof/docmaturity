@@ -1,3 +1,4 @@
+import { TIER_LABEL } from '@/config/vocabulary';
 import { useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Plus, Trash2 } from 'lucide-react';
@@ -60,7 +61,14 @@ function ScopeCriteria({ a, locked, save, org }: Props & { org: Parameters<typeo
       <nav aria-label="Dimensiones" className="panel h-fit p-2">
         {DIMENSIONS.map((d) => {
           const n = a.questionIds.filter((x) => x.startsWith(d.id)).length;
-          return <button key={d.id} onClick={() => setDim(d.id)} className={`flex w-full items-center justify-between rounded px-2.5 py-1.5 text-left text-sm ${dim === d.id ? 'bg-teal-50 font-medium text-navy' : 'text-ink hover:bg-slate-50'}`}><span><span className="font-medium">{d.id}</span> {d.name}</span><span className="text-xs text-muted num">{n}/15</span></button>;
+          const total = QUESTIONS.filter((q) => q.dimensionId === d.id).length;
+          const excludedDim = n === 0;
+          return (
+            <button key={d.id} onClick={() => setDim(d.id)} aria-current={dim === d.id} className={`grid w-full grid-cols-[1fr_auto] items-start gap-3 rounded px-2.5 py-1.5 text-left text-sm ${dim === d.id ? 'bg-teal-50 font-medium text-navy' : 'text-ink hover:bg-slate-50'}`}>
+              <span className="min-w-0"><span className="font-medium">{d.id}</span> <span className={excludedDim ? 'text-muted' : ''}>{d.name}</span>{excludedDim && <span className="mt-0.5 block text-[0.68rem] font-medium text-warning">Dimensión excluida</span>}</span>
+              <span className="whitespace-nowrap pt-0.5 text-xs text-muted num" title={`${n} de ${total} criterios en el alcance`}>{n} de {total}</span>
+            </button>
+          );
         })}
       </nav>
       <Section title={`${dim} · ${dimensionName(dim)}`} description="Modificar el alcance convierte la evaluación en personalizada. Las exclusiones requieren justificación; para criterios no pertinentes use la no aplicabilidad validada en la mesa de validación.">
@@ -71,9 +79,10 @@ function ScopeCriteria({ a, locked, save, org }: Props & { org: Parameters<typeo
             return (
               <li key={q.id} className="flex flex-wrap items-start justify-between gap-3 py-3">
                 <div className="min-w-0 flex-1">
-                  <p className="text-sm"><span className="font-medium text-navy">{q.id}</span> · {q.criterion}</p>
+                  <p className={`text-sm ${on ? '' : 'text-muted'}`}><span className="font-medium text-navy">{q.id}</span> · {q.criterion}</p>
                   <div className="mt-1 flex flex-wrap gap-1.5">
-                    <Tag>{q.coreTier === 'quick' ? 'Rápido' : q.coreTier === 'standard' ? 'Estándar' : 'Profesional'}</Tag>
+                    {on ? <Tag tone="teal">Incluido</Tag> : <Tag tone="warning">Excluido</Tag>}
+                    <Tag>Desde {TIER_LABEL[q.coreTier]}</Tag>
                     {q.isCritical && <Tag tone="danger">Crítico</Tag>}
                     {na && <Tag tone="warning">Posible no aplicabilidad</Tag>}
                   </div>
@@ -156,7 +165,7 @@ function Weights({ a, locked, save }: Props) {
           </div>
         ))}
       </div>
-      {mode === 'personalizada' && <p className={`mt-4 text-sm ${Math.abs(total - 100) > 0.01 ? 'text-lv2' : 'text-muted'}`}>Suma: {total.toLocaleString('es-CO')} %. El motor renormaliza las ponderaciones de las dimensiones incluidas en cada vista.</p>}
+      {mode === 'personalizada' && <p className={`mt-4 text-sm ${Math.abs(total - 100) > 0.01 ? 'text-warning' : 'text-muted'}`}>Suma: {total.toLocaleString('es-CO')} %. El motor renormaliza las ponderaciones de las dimensiones incluidas en cada vista.</p>}
       <div className="mt-5"><Callout tone="info">Una elevada madurez en automatización e IA no compensa silenciosamente una deficiencia crítica: las alertas de criterios críticos se muestran siempre, independientemente del promedio.</Callout></div>
     </Section>
   );
@@ -169,8 +178,8 @@ function Targets({ a, locked, save }: Props) {
   const [qid, setQid] = useState('');
   const missingReason = Object.values(dims).some((t) => !t.reason.trim()) || Object.values(qs).some((t) => !t.reason.trim());
   return (
-    <Section title="Metas de madurez" description="No se asume nivel 5 para todos los criterios. Nivel objetivo orientativo inicial: 3. Los ajustes deben justificarse según naturaleza, riesgos, obligaciones, capacidad presupuestal y complejidad." actions={<Button size="sm" variant="primary" disabled={locked || missingReason} onClick={() => save({ defaultTarget: def, dimensionTargets: dims, questionTargets: qs }, 'Metas guardadas')}>Guardar metas</Button>}>
-      <Field label="Nivel objetivo por defecto" htmlFor="t-def"><Select id="t-def" className="max-w-xs" value={def} onChange={(e) => setDef(Number(e.target.value))}>{[1, 2, 3, 4, 5].map((n) => <option key={n} value={n}>{n}</option>)}</Select></Field>
+    <Section title="Metas de madurez" description="No se asume nivel 5 para todos los criterios. Meta orientativa inicial: nivel 3. Los ajustes deben justificarse según naturaleza, riesgos, obligaciones, capacidad presupuestal y complejidad." actions={<Button size="sm" variant="primary" disabled={locked || missingReason} onClick={() => save({ defaultTarget: def, dimensionTargets: dims, questionTargets: qs }, 'Metas guardadas')}>Guardar metas</Button>}>
+      <Field label="Meta por defecto" htmlFor="t-def"><Select id="t-def" className="max-w-xs" value={def} onChange={(e) => setDef(Number(e.target.value))}>{[1, 2, 3, 4, 5].map((n) => <option key={n} value={n}>{n}</option>)}</Select></Field>
       <h3 className="mb-2 mt-6 text-sm font-semibold">Metas por dimensión</h3>
       <div className="divide-y divide-line">
         {DIMENSIONS.map((d) => {
@@ -244,7 +253,7 @@ function ThresholdsTab({ a, locked, save }: Props) {
         <Field label="Alerta de discrepancia con rango igual o superior a" htmlFor="th4"><Input id="th4" type="number" min={1} max={5} value={t.discrepancyRange} onChange={(e) => setT({ ...t, discrepancyRange: Number(e.target.value) })} /></Field>
         <Field label="Alerta de nivel alto sin evidencia desde el nivel" htmlFor="th5"><Input id="th5" type="number" min={1} max={5} value={t.highScoreWithoutEvidence} onChange={(e) => setT({ ...t, highScoreWithoutEvidence: Number(e.target.value) })} /></Field>
       </div>
-      {!valid && <p className="mt-3 text-sm text-lv0" role="alert">Los umbrales de cobertura deben ser crecientes y no superar 100.</p>}
+      {!valid && <p className="mt-3 text-sm text-danger" role="alert">Los umbrales de cobertura deben ser crecientes y no superar 100.</p>}
     </Section>
   );
 }

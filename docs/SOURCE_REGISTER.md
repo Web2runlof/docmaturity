@@ -21,7 +21,7 @@ Fecha de consulta de referencia: ver columna correspondiente. Las asociaciones c
 | F13 | Federal Records and Information Management Program Maturity Model | National Archives and Records Administration (NARA) | Consultar versión vigente | Modelo de madurez | No verificado — pendiente | D01, D02, D03, D04, D12, D15 | 55 |
 | F14 | DPC Rapid Assessment Model (DPC RAM) | Digital Preservation Coalition | Versión 3 | Modelo de madurez | Verificado parcialmente | D03, D11, D12, D15 | 22 |
 | F15 | NDSA Levels of Digital Preservation | National Digital Stewardship Alliance | Consultar versión vigente | Buena práctica / marco | No verificado — pendiente | D11 | 5 |
-| F16 | OAIS — Open Archival Information System (ISO 14721) | ISO / CCSDS | ISO 14721:2025 (según especificación; por confirmar) | Estándar técnico | No verificado — pendiente | D11 | 12 |
+| F16 | OAIS — Open Archival Information System (ISO 14721) | ISO / CCSDS | ISO 14721:2025 | Estándar técnico | No verificado — pendiente | D11 | 12 |
 | F17 | PREMIS Data Dictionary for Preservation Metadata | Library of Congress | Consultar versión vigente | Estándar técnico | No verificado — pendiente | D09, D11 | 9 |
 | F18 | ISO/IEC 27001:2022 Seguridad de la información — Sistemas de gestión — Requisitos | ISO/IEC JTC 1/SC 27 | 2022 | Estándar técnico | Referencia conceptual (resumen oficial) | D08, D10, D14 | 27 |
 | F19 | ISO 22301:2019 Seguridad y resiliencia — Sistemas de gestión de la continuidad del negocio | ISO/TC 292 | 2019 | Estándar técnico | Referencia conceptual (resumen oficial) | D06, D08, D10, D11 | 14 |
@@ -47,7 +47,7 @@ Fecha de consulta de referencia: ver columna correspondiente. Las asociaciones c
 - **Qué no evalúa:** No constituye una evaluación de software ni un modelo de preservación digital detallado.
 - **Relación con DIAM:** DIAM toma los cinco componentes como eje de clasificación de criterios (campo mgdaComponent). Los niveles DIAM no equivalen a los niveles oficiales del MGDA.
 - **Componentes o apartados verificados:** Cinco componentes del modelo, confirmados en documentos institucionales públicos que aplican el MGDA (2024-2026). La herramienta oficial de autodiagnóstico no se reprodujo.
-- **Limitaciones de acceso:** La página oficial del AGN no pudo consultarse directamente durante el desarrollo; la verificación se apoyó en documentos de entidades que aplican el modelo.
+- **Limitaciones de acceso:** La verificación se apoyó en documentos publicados por entidades que aplican el modelo. Confirme la versión vigente en la página oficial del AGN.
 - **Estado de verificación:** Verificado parcialmente
 
 ### F02 — Acuerdo 001 de 2024 — Acuerdo Único de la Función Archivística
@@ -70,8 +70,8 @@ Fecha de consulta de referencia: ver columna correspondiente. Las asociaciones c
 - **Qué evalúa:** Capacidades esperadas del SGDEA: captura, clasificación, metadatos, seguridad, retención, disposición y preservación.
 - **Qué no evalúa:** No mide la madurez organizacional ni la apropiación de los sistemas.
 - **Relación con DIAM:** Orienta criterios de D04, D07, D08 y D09 sobre capacidades de sistemas. DIAM diferencia capacidad del sistema y uso real.
-- **Componentes o apartados verificados:** Ninguno durante esta versión.
-- **Limitaciones de acceso:** Documento no consultado en esta versión; asociación por alcance conceptual.
+- **Componentes o apartados verificados:** Ninguno.
+- **Limitaciones de acceso:** Documento no consultado; la asociación se basa en su alcance conceptual.
 - **Estado de verificación:** No verificado — pendiente
 
 ### F04 — ISO 15489-1:2016 Información y documentación — Gestión de documentos — Parte 1: Conceptos y principios
@@ -106,7 +106,7 @@ Fecha de consulta de referencia: ver columna correspondiente. Las asociaciones c
 - **Qué evalúa:** Funcionalidades de captura, clasificación, metadatos, control de acceso, retención y disposición en aplicaciones.
 - **Qué no evalúa:** No evalúa la madurez organizacional.
 - **Relación con DIAM:** Base conceptual para D07, D08, D09 y D14 en lo relativo a capacidades de sistemas.
-- **Componentes o apartados verificados:** Ninguno durante esta versión.
+- **Componentes o apartados verificados:** Ninguno.
 - **Limitaciones de acceso:** Se requiere confirmar ediciones vigentes en el catálogo oficial.
 - **Estado de verificación:** No verificado — pendiente
 
@@ -118,7 +118,7 @@ Fecha de consulta de referencia: ver columna correspondiente. Las asociaciones c
 - **Qué evalúa:** Tipos de metadatos, entidades y relaciones, autoevaluación de metadatos.
 - **Qué no evalúa:** No prescribe un esquema nacional obligatorio.
 - **Relación con DIAM:** Fundamenta D09 y criterios de D05, D11 y D13 sobre contexto y procedencia.
-- **Componentes o apartados verificados:** Ninguno durante esta versión.
+- **Componentes o apartados verificados:** Ninguno.
 - **Limitaciones de acceso:** Ediciones vigentes por confirmar.
 - **Estado de verificación:** No verificado — pendiente
 
@@ -130,7 +130,7 @@ Fecha de consulta de referencia: ver columna correspondiente. Las asociaciones c
 - **Qué evalúa:** Fuentes de riesgo en contexto, procesos y sistemas documentales.
 - **Qué no evalúa:** No asigna probabilidades ni impactos predefinidos.
 - **Relación con DIAM:** Orienta D10 y el motor de riesgos de DIAM.
-- **Componentes o apartados verificados:** Ninguno durante esta versión.
+- **Componentes o apartados verificados:** Ninguno.
 - **Limitaciones de acceso:** Asociación por alcance conceptual.
 - **Estado de verificación:** No verificado — pendiente
 
@@ -142,7 +142,7 @@ Fecha de consulta de referencia: ver columna correspondiente. Las asociaciones c
 - **Qué evalúa:** Servicios de clasificación, disposición, metadatos, eventos, exportación e interoperabilidad entre sistemas.
 - **Qué no evalúa:** No evalúa la gestión organizacional ni la cultura.
 - **Relación con DIAM:** Orienta D07, D08 y D09. DIAM no emite 'cumplimiento oficial MoReq'.
-- **Componentes o apartados verificados:** Ninguno durante esta versión.
+- **Componentes o apartados verificados:** Ninguno.
 - **Limitaciones de acceso:** Asociación por alcance conceptual.
 - **Estado de verificación:** No verificado — pendiente
 
@@ -154,7 +154,7 @@ Fecha de consulta de referencia: ver columna correspondiente. Las asociaciones c
 - **Qué evalúa:** Investigación preliminar, análisis de actividades, requisitos documentales, evaluación de sistemas, estrategias, diseño, implementación y revisión posterior.
 - **Qué no evalúa:** No es un modelo de madurez.
 - **Relación con DIAM:** Fundamenta D04 (procesos) y la lógica de hoja de ruta.
-- **Componentes o apartados verificados:** Ninguno durante esta versión; los ocho pasos se toman de la especificación del producto.
+- **Componentes o apartados verificados:** Ninguno; los ocho pasos se presentan como síntesis conceptual del referente.
 - **Limitaciones de acceso:** Asociación por alcance conceptual.
 - **Estado de verificación:** No verificado — pendiente
 
@@ -178,7 +178,7 @@ Fecha de consulta de referencia: ver columna correspondiente. Las asociaciones c
 - **Qué evalúa:** Facilitadores, controles y articulación entre funciones de gobierno de la información.
 - **Qué no evalúa:** No reemplaza obligaciones jurídicas locales.
 - **Relación con DIAM:** Orienta D02, D12, D13 y D14.
-- **Componentes o apartados verificados:** Ninguno durante esta versión.
+- **Componentes o apartados verificados:** Ninguno.
 - **Limitaciones de acceso:** Asociación por alcance conceptual.
 - **Estado de verificación:** No verificado — pendiente
 
@@ -190,7 +190,7 @@ Fecha de consulta de referencia: ver columna correspondiente. Las asociaciones c
 - **Qué evalúa:** Gestión del programa, políticas, cumplimiento, operaciones y desempeño.
 - **Qué no evalúa:** No aplica obligaciones colombianas.
 - **Relación con DIAM:** Referente comparativo para D01–D04, D12 y D15. Sin equivalencia de niveles.
-- **Componentes o apartados verificados:** Ninguno durante esta versión.
+- **Componentes o apartados verificados:** Ninguno.
 - **Limitaciones de acceso:** Asociación por alcance conceptual.
 - **Estado de verificación:** No verificado — pendiente
 
@@ -214,7 +214,7 @@ Fecha de consulta de referencia: ver columna correspondiente. Las asociaciones c
 - **Qué evalúa:** Almacenamiento, integridad, control, metadatos y contenido.
 - **Qué no evalúa:** No evalúa gobernanza documental.
 - **Relación con DIAM:** Orienta criterios técnicos de D11.
-- **Componentes o apartados verificados:** Ninguno durante esta versión.
+- **Componentes o apartados verificados:** Ninguno.
 - **Limitaciones de acceso:** Asociación por alcance conceptual.
 - **Estado de verificación:** No verificado — pendiente
 
@@ -226,8 +226,8 @@ Fecha de consulta de referencia: ver columna correspondiente. Las asociaciones c
 - **Qué evalúa:** Entidades funcionales, paquetes de información (SIP, AIP, DIP) y responsabilidades.
 - **Qué no evalúa:** No obliga a adquirir una tecnología específica.
 - **Relación con DIAM:** Modelo conceptual de referencia para D11.
-- **Componentes o apartados verificados:** Ninguno durante esta versión.
-- **Limitaciones de acceso:** Edición vigente por confirmar.
+- **Componentes o apartados verificados:** Ninguno.
+- **Limitaciones de acceso:** Confirme la edición vigente en el catálogo de ISO antes de citarla.
 - **Estado de verificación:** No verificado — pendiente
 
 ### F17 — PREMIS Data Dictionary for Preservation Metadata
@@ -238,7 +238,7 @@ Fecha de consulta de referencia: ver columna correspondiente. Las asociaciones c
 - **Qué evalúa:** Información necesaria para sustentar procesos de preservación digital.
 - **Qué no evalúa:** No define procesos organizacionales.
 - **Relación con DIAM:** Orienta D09 y D11.
-- **Componentes o apartados verificados:** Ninguno durante esta versión.
+- **Componentes o apartados verificados:** Ninguno.
 - **Limitaciones de acceso:** Asociación por alcance conceptual.
 - **Estado de verificación:** No verificado — pendiente
 
@@ -298,7 +298,7 @@ Fecha de consulta de referencia: ver columna correspondiente. Las asociaciones c
 - **Qué evalúa:** Obligaciones de la administración pública y de privados con funciones públicas respecto a archivos.
 - **Qué no evalúa:** No define niveles de madurez.
 - **Relación con DIAM:** Posible fuente de obligación para sujetos obligados en D05 y D06. DIAM no cita artículos.
-- **Componentes o apartados verificados:** Alcance general conocido; articulado no revisado en esta versión.
+- **Componentes o apartados verificados:** Alcance general conocido; articulado no revisado.
 - **Limitaciones de acceso:** Pendiente de verificación de articulado y modificaciones.
 - **Estado de verificación:** Referencia conceptual (resumen oficial)
 
@@ -358,8 +358,8 @@ Fecha de consulta de referencia: ver columna correspondiente. Las asociaciones c
 - **Qué evalúa:** Según el referente: riesgos, interoperabilidad, gestión de datos, IA, procesos, digitalización, formatos, repositorios confiables y descripción archivística.
 - **Qué no evalúa:** Ninguno es obligatorio para todas las organizaciones.
 - **Relación con DIAM:** Complementan D05, D09, D10, D13 y D14 con carácter orientativo.
-- **Componentes o apartados verificados:** Ninguno durante esta versión.
-- **Limitaciones de acceso:** Asociación por alcance conceptual.
+- **Componentes o apartados verificados:** Ninguno de los referentes agrupados ha sido verificado de forma individual.
+- **Limitaciones de acceso:** Agrupa referentes de distinta naturaleza; cada uno debe consultarse y verificarse por separado antes de citarlo.
 - **Estado de verificación:** No verificado — pendiente
 
 ### A01 — Diagnóstico de la gestión documental para la transición hacia un SGDEA en la Municipalidad de San Rafael de Heredia, Costa Rica (2025)
@@ -370,8 +370,8 @@ Fecha de consulta de referencia: ver columna correspondiente. Las asociaciones c
 - **Qué evalúa:** Condiciones de partida de la gestión documental municipal para la transición electrónica.
 - **Qué no evalúa:** No es una metodología de madurez generalizable.
 - **Relación con DIAM:** Lectura del laboratorio académico. Las preguntas de reflexión se formulan sobre el alcance declarado del artículo.
-- **Componentes o apartados verificados:** Ninguno: el contenido no pudo consultarse durante el desarrollo.
-- **Limitaciones de acceso:** Consulta pendiente; no se atribuyen hallazgos al artículo.
+- **Componentes o apartados verificados:** Ninguno: el contenido no se ha consultado.
+- **Limitaciones de acceso:** Artículo no consultado; no se le atribuyen hallazgos.
 - **Estado de verificación:** No verificado — pendiente
 
 ### A02 — Prospectiva de los sistemas gestores de documentos: homenaje a Pedro Manuel Díaz Ortuño

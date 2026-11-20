@@ -4,7 +4,7 @@ import {
   BarChart3, BookOpen, Building2, ChevronLeft, ChevronRight, ClipboardList, FileCheck2, FileText, FolderKanban, GraduationCap, Home, Library, ListChecks,
   Map, Menu, MessagesSquare, Scale, Settings, ShieldAlert, SlidersHorizontal, X,
 } from 'lucide-react';
-import type { ReactNode } from 'react';
+import { useEffect, type ReactNode } from 'react';
 import { SkipLink } from '@/components/ui';
 import { Logo } from '@/components/brand/Logo';
 import { useUI } from '@/app/store';
@@ -99,9 +99,15 @@ function Breadcrumbs() {
 }
 
 export function AppLayout() {
-  const { aid } = useParams();
-  const { sidebarCollapsed, toggleSidebar, mobileNavOpen, setMobileNav } = useUI();
+  const { aid: routeAid } = useParams();
+  const { sidebarCollapsed, toggleSidebar, mobileNavOpen, setMobileNav, activeAssessmentId, setActiveAssessment } = useUI();
+  const aid = routeAid ?? activeAssessmentId ?? undefined;
   const assessment = useLiveQuery(() => (aid ? db.assessments.get(aid) : undefined), [aid]);
+  useEffect(() => { if (routeAid) setActiveAssessment(routeAid); }, [routeAid, setActiveAssessment]);
+  // Si la evaluación recordada ya no existe (fue eliminada), se olvida.
+  useEffect(() => {
+    if (!routeAid && activeAssessmentId) void db.assessments.get(activeAssessmentId).then((x) => { if (!x) setActiveAssessment(null); });
+  }, [routeAid, activeAssessmentId, setActiveAssessment]);
   const org = useLiveQuery(() => (assessment ? db.organizations.get(assessment.organizationId) : undefined), [assessment?.organizationId]);
 
   const sidebar = (collapsed: boolean, onNavigate?: () => void) => (

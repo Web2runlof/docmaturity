@@ -42,7 +42,7 @@ Premian la calidad del proceso diagnóstico, **no** el nivel de madurez de la or
 
 ## 4. Entregable
 
-La pestaña **Entregable** genera un PDF apto para cargar en Moodle u otra plataforma con: identificación del grupo, organización evaluada, dashboard resumido (indicadores y radar), cinco brechas principales, tres riesgos relevantes, dos contradicciones identificadas, tres iniciativas prioritarias, hoja de ruta, conclusiones argumentadas y referentes utilizados. No hay integración directa con Moodle: el archivo se carga manualmente.
+La pestaña **Entregable** genera un PDF apto para cargar en Moodle u otra plataforma con: identificación del grupo, organización evaluada, tablero resumido (indicadores y radar), cinco brechas principales, tres riesgos relevantes, dos contradicciones identificadas, tres iniciativas prioritarias, hoja de ruta, conclusiones argumentadas y referentes utilizados. No hay integración directa con Moodle: el archivo se carga manualmente.
 
 Recomendación: pida a los integrantes que registren solo nombres, sin documentos de identidad.
 

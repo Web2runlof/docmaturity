@@ -11,7 +11,7 @@
     "notEvaluates": "No constituye una evaluación de software ni un modelo de preservación digital detallado.",
     "relation": "DIAM toma los cinco componentes como eje de clasificación de criterios (campo mgdaComponent). Los niveles DIAM no equivalen a los niveles oficiales del MGDA.",
     "verifiedParts": "Cinco componentes del modelo, confirmados en documentos institucionales públicos que aplican el MGDA (2024-2026). La herramienta oficial de autodiagnóstico no se reprodujo.",
-    "accessLimitations": "La página oficial del AGN no pudo consultarse directamente durante el desarrollo; la verificación se apoyó en documentos de entidades que aplican el modelo.",
+    "accessLimitations": "La verificación se apoyó en documentos publicados por entidades que aplican el modelo. Confirme la versión vigente en la página oficial del AGN.",
     "verificationStatus": "verificado_parcial",
     "dimensions": ["D01", "D02", "D03", "D04", "D05", "D06", "D11", "D12", "D15"]
   },
@@ -42,8 +42,8 @@
     "evaluates": "Capacidades esperadas del SGDEA: captura, clasificación, metadatos, seguridad, retención, disposición y preservación.",
     "notEvaluates": "No mide la madurez organizacional ni la apropiación de los sistemas.",
     "relation": "Orienta criterios de D04, D07, D08 y D09 sobre capacidades de sistemas. DIAM diferencia capacidad del sistema y uso real.",
-    "verifiedParts": "Ninguno durante esta versión.",
-    "accessLimitations": "Documento no consultado en esta versión; asociación por alcance conceptual.",
+    "verifiedParts": "Ninguno.",
+    "accessLimitations": "Documento no consultado; la asociación se basa en su alcance conceptual.",
     "verificationStatus": "no_verificado",
     "dimensions": ["D04", "D07", "D08", "D09"]
   },
@@ -90,7 +90,7 @@
     "evaluates": "Funcionalidades de captura, clasificación, metadatos, control de acceso, retención y disposición en aplicaciones.",
     "notEvaluates": "No evalúa la madurez organizacional.",
     "relation": "Base conceptual para D07, D08, D09 y D14 en lo relativo a capacidades de sistemas.",
-    "verifiedParts": "Ninguno durante esta versión.",
+    "verifiedParts": "Ninguno.",
     "accessLimitations": "Se requiere confirmar ediciones vigentes en el catálogo oficial.",
     "verificationStatus": "no_verificado",
     "dimensions": ["D07", "D08", "D09", "D14"]
@@ -106,7 +106,7 @@
     "evaluates": "Tipos de metadatos, entidades y relaciones, autoevaluación de metadatos.",
     "notEvaluates": "No prescribe un esquema nacional obligatorio.",
     "relation": "Fundamenta D09 y criterios de D05, D11 y D13 sobre contexto y procedencia.",
-    "verifiedParts": "Ninguno durante esta versión.",
+    "verifiedParts": "Ninguno.",
     "accessLimitations": "Ediciones vigentes por confirmar.",
     "verificationStatus": "no_verificado",
     "dimensions": ["D05", "D09", "D13"]
@@ -122,7 +122,7 @@
     "evaluates": "Fuentes de riesgo en contexto, procesos y sistemas documentales.",
     "notEvaluates": "No asigna probabilidades ni impactos predefinidos.",
     "relation": "Orienta D10 y el motor de riesgos de DIAM.",
-    "verifiedParts": "Ninguno durante esta versión.",
+    "verifiedParts": "Ninguno.",
     "accessLimitations": "Asociación por alcance conceptual.",
     "verificationStatus": "no_verificado",
     "dimensions": ["D10"]
@@ -138,7 +138,7 @@
     "evaluates": "Servicios de clasificación, disposición, metadatos, eventos, exportación e interoperabilidad entre sistemas.",
     "notEvaluates": "No evalúa la gestión organizacional ni la cultura.",
     "relation": "Orienta D07, D08 y D09. DIAM no emite 'cumplimiento oficial MoReq'.",
-    "verifiedParts": "Ninguno durante esta versión.",
+    "verifiedParts": "Ninguno.",
     "accessLimitations": "Asociación por alcance conceptual.",
     "verificationStatus": "no_verificado",
     "dimensions": ["D07", "D08", "D09"]
@@ -154,7 +154,7 @@
     "evaluates": "Investigación preliminar, análisis de actividades, requisitos documentales, evaluación de sistemas, estrategias, diseño, implementación y revisión posterior.",
     "notEvaluates": "No es un modelo de madurez.",
     "relation": "Fundamenta D04 (procesos) y la lógica de hoja de ruta.",
-    "verifiedParts": "Ninguno durante esta versión; los ocho pasos se toman de la especificación del producto.",
+    "verifiedParts": "Ninguno; los ocho pasos se presentan como síntesis conceptual del referente.",
     "accessLimitations": "Asociación por alcance conceptual.",
     "verificationStatus": "no_verificado",
     "dimensions": ["D04"]
@@ -186,7 +186,7 @@
     "evaluates": "Facilitadores, controles y articulación entre funciones de gobierno de la información.",
     "notEvaluates": "No reemplaza obligaciones jurídicas locales.",
     "relation": "Orienta D02, D12, D13 y D14.",
-    "verifiedParts": "Ninguno durante esta versión.",
+    "verifiedParts": "Ninguno.",
     "accessLimitations": "Asociación por alcance conceptual.",
     "verificationStatus": "no_verificado",
     "dimensions": ["D02", "D12", "D13", "D14"]
@@ -202,7 +202,7 @@
     "evaluates": "Gestión del programa, políticas, cumplimiento, operaciones y desempeño.",
     "notEvaluates": "No aplica obligaciones colombianas.",
     "relation": "Referente comparativo para D01–D04, D12 y D15. Sin equivalencia de niveles.",
-    "verifiedParts": "Ninguno durante esta versión.",
+    "verifiedParts": "Ninguno.",
     "accessLimitations": "Asociación por alcance conceptual.",
     "verificationStatus": "no_verificado",
     "dimensions": ["D01", "D02", "D03", "D04", "D12", "D15"]
@@ -234,7 +234,7 @@
     "evaluates": "Almacenamiento, integridad, control, metadatos y contenido.",
     "notEvaluates": "No evalúa gobernanza documental.",
     "relation": "Orienta criterios técnicos de D11.",
-    "verifiedParts": "Ninguno durante esta versión.",
+    "verifiedParts": "Ninguno.",
     "accessLimitations": "Asociación por alcance conceptual.",
     "verificationStatus": "no_verificado",
     "dimensions": ["D11"]
@@ -242,7 +242,7 @@
   {
     "id": "F16", "shortLabel": "OAIS", "group": "Otros",
     "title": "OAIS — Open Archival Information System (ISO 14721)",
-    "author": "ISO / CCSDS", "version": "ISO 14721:2025 (según especificación; por confirmar)", "year": 2025,
+    "author": "ISO / CCSDS", "version": "ISO 14721:2025", "year": 2025,
     "type": "estandar_tecnico",
     "urls": ["https://www.iso.org/standard/87471.html"],
     "consultedAt": "—",
@@ -250,8 +250,8 @@
     "evaluates": "Entidades funcionales, paquetes de información (SIP, AIP, DIP) y responsabilidades.",
     "notEvaluates": "No obliga a adquirir una tecnología específica.",
     "relation": "Modelo conceptual de referencia para D11.",
-    "verifiedParts": "Ninguno durante esta versión.",
-    "accessLimitations": "Edición vigente por confirmar.",
+    "verifiedParts": "Ninguno.",
+    "accessLimitations": "Confirme la edición vigente en el catálogo de ISO antes de citarla.",
     "verificationStatus": "no_verificado",
     "dimensions": ["D11"]
   },
@@ -266,7 +266,7 @@
     "evaluates": "Información necesaria para sustentar procesos de preservación digital.",
     "notEvaluates": "No define procesos organizacionales.",
     "relation": "Orienta D09 y D11.",
-    "verifiedParts": "Ninguno durante esta versión.",
+    "verifiedParts": "Ninguno.",
     "accessLimitations": "Asociación por alcance conceptual.",
     "verificationStatus": "no_verificado",
     "dimensions": ["D09", "D11"]
@@ -346,7 +346,7 @@
     "evaluates": "Obligaciones de la administración pública y de privados con funciones públicas respecto a archivos.",
     "notEvaluates": "No define niveles de madurez.",
     "relation": "Posible fuente de obligación para sujetos obligados en D05 y D06. DIAM no cita artículos.",
-    "verifiedParts": "Alcance general conocido; articulado no revisado en esta versión.",
+    "verifiedParts": "Alcance general conocido; articulado no revisado.",
     "accessLimitations": "Pendiente de verificación de articulado y modificaciones.",
     "verificationStatus": "referencia_conceptual",
     "dimensions": ["D05", "D06"]
@@ -416,7 +416,7 @@
     "dimensions": ["D10"]
   },
   {
-    "id": "F27", "shortLabel": "Complementarios", "group": "Otros",
+    "id": "F27", "isGroup": true, "shortLabel": "Complementarios", "group": "Otros",
     "title": "Referentes técnicos y académicos complementarios",
     "author": "Varios (ISO, MinTIC, DAMA, NIST, ICA, OMG, CoreTrustSeal)", "version": "Varios",  "year": null,
     "type": "buena_practica",
@@ -426,8 +426,8 @@
     "evaluates": "Según el referente: riesgos, interoperabilidad, gestión de datos, IA, procesos, digitalización, formatos, repositorios confiables y descripción archivística.",
     "notEvaluates": "Ninguno es obligatorio para todas las organizaciones.",
     "relation": "Complementan D05, D09, D10, D13 y D14 con carácter orientativo.",
-    "verifiedParts": "Ninguno durante esta versión.",
-    "accessLimitations": "Asociación por alcance conceptual.",
+    "verifiedParts": "Ninguno de los referentes agrupados ha sido verificado de forma individual.",
+    "accessLimitations": "Agrupa referentes de distinta naturaleza; cada uno debe consultarse y verificarse por separado antes de citarlo.",
     "verificationStatus": "no_verificado",
     "dimensions": ["D05", "D09", "D10", "D13", "D14"]
   },
@@ -442,8 +442,8 @@
     "evaluates": "Condiciones de partida de la gestión documental municipal para la transición electrónica.",
     "notEvaluates": "No es una metodología de madurez generalizable.",
     "relation": "Lectura del laboratorio académico. Las preguntas de reflexión se formulan sobre el alcance declarado del artículo.",
-    "verifiedParts": "Ninguno: el contenido no pudo consultarse durante el desarrollo.",
-    "accessLimitations": "Consulta pendiente; no se atribuyen hallazgos al artículo.",
+    "verifiedParts": "Ninguno: el contenido no se ha consultado.",
+    "accessLimitations": "Artículo no consultado; no se le atribuyen hallazgos.",
     "verificationStatus": "no_verificado",
     "dimensions": ["D04", "D07", "D08"]
   },

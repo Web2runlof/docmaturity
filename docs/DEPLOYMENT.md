@@ -23,7 +23,7 @@ Archivo: `.github/workflows/deploy.yml`.
 | Lint | `npm run lint` |
 | Tipos | `npm run typecheck` |
 | Pruebas | `npm run test` |
-| Build | `npm run build` con `VITE_BASE=/<nombre-del-repositorio>/` |
+| Build | `npm run build` con `VITE_BASE=/<nombre-del-repositorio>/` (o `/` y `dist/CNAME` si se define `CUSTOM_DOMAIN`) |
 | Publicación | `actions/upload-pages-artifact` + `actions/deploy-pages` |
 
 Permisos: `contents: read` a nivel global; `pages: write` e `id-token: write` solo en el job de publicación. Las *pull requests* ejecutan las verificaciones y el build, pero no publican.
@@ -38,7 +38,11 @@ https://<usuario>.github.io/<repositorio>/
 
 - `HashRouter`: todas las rutas viven después de `#/` (por ejemplo, `…/docmaturity/#/app/evaluaciones`). GitHub Pages no necesita reescrituras ni un `404.html`.
 - La base de Vite es `/docmaturity/` por defecto. Para otro nombre de repositorio el flujo la ajusta automáticamente; localmente use `VITE_BASE=/otro-nombre/ npm run build`.
-- Para un dominio propio en la raíz: configure el dominio en Settings → Pages, agregue `public/CNAME` con el dominio y compile con `VITE_BASE=/`.
+- **Dominio propio (recomendado para datos reales).** En GitHub Pages todas las páginas de `https://<usuario>.github.io/` comparten el mismo origen; el IndexedDB y el almacenamiento local de DOCMATURITY quedan al alcance de cualquier otra página publicada bajo ese dominio. Para aislar los datos:
+  1. Defina la variable del repositorio `CUSTOM_DOMAIN` (Settings → Secrets and variables → Actions → Variables) con el dominio, por ejemplo `diagnostico.midominio.org`.
+  2. Cree el registro DNS `CNAME` del dominio hacia `<usuario>.github.io` y configure el mismo dominio en Settings → Pages (active «Enforce HTTPS»).
+  3. Ejecute el flujo: con `CUSTOM_DOMAIN` el build publica en la raíz (`VITE_BASE=/`) y genera `dist/CNAME`. Localmente: `CUSTOM_DOMAIN=diagnostico.midominio.org npm run build`.
+  El build rechaza valores que no sean un nombre de dominio válido. Los datos guardados en el origen anterior no se trasladan solos: exporte una copia de seguridad antes del cambio y restáurela en el nuevo dominio.
 
 ## 5. Publicar una nueva versión
 

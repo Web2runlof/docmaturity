@@ -84,12 +84,12 @@ export default function InterviewsPage() {
                         <td><span className="font-medium text-navy">{p.code}</span>{p.area && <div className="text-xs text-muted">{p.area}</div>}</td>
                         <td className="text-muted">{PROFILE_LABEL[p.profile]}</td>
                         <td>{asg ? <span className="text-sm num">{asg.questionIds.length} preguntas{asg.exportedAt && <span className="block text-xs text-muted">Exportada {fmtDate(asg.exportedAt)}</span>}</span> : <span className="text-xs text-muted">Sin asignación</span>}</td>
-                        <td className="space-y-1">{ivs.length ? ivs.map((i) => <div key={i.id}><Tag tone={i.status === 'finalizada' ? 'teal' : 'neutral'}>{i.mode === 'dirigida' ? 'Dirigida' : 'Autoadministrada'} · {i.status === 'finalizada' ? 'finalizada' : 'en curso'}{i.source === 'importada' ? ` · rev. ${i.revision}` : ''}</Tag></div>) : <span className="text-xs text-muted">—</span>}</td>
+                        <td className="space-y-1">{ivs.length ? ivs.map((i) => <div key={i.id}><Tag tone={i.status === 'finalizada' ? 'teal' : 'neutral'}>{i.mode === 'dirigida' ? 'Entrevista dirigida' : 'Autoadministrada'} · {i.status === 'finalizada' ? 'finalizada' : 'en curso'}{i.source === 'importada' ? ` · rev. ${i.revision}` : ''}</Tag></div>) : <span className="text-xs text-muted">—</span>}</td>
                         <td>
-                          <div className="flex flex-wrap justify-end gap-1.5">
+                          <div className="flex flex-nowrap justify-end gap-1.5 whitespace-nowrap">
                             <Button size="sm" disabled={locked} onClick={() => setAsgFor(p)}>{asg ? 'Editar asignación' : 'Asignar preguntas'}</Button>
                             {asg && <Button size="sm" icon={<Download className="size-3.5" />} onClick={() => exportAssignment(asg, p)}>Paquete</Button>}
-                            <Button size="sm" variant="subtle" disabled={locked} icon={<MessageSquarePlus className="size-3.5" />} onClick={async () => { const i = await attempt(() => startDirectedInterview(aid, p.id, asg?.id ?? null)); if (i) nav(`/app/evaluaciones/${aid}/entrevistas/${i.id}`); }}>Dirigida</Button>
+                            <Button size="sm" variant="subtle" disabled={locked} icon={<MessageSquarePlus className="size-3.5" />} title="Entrevista dirigida por la persona evaluadora" onClick={async () => { const i = await attempt(() => startDirectedInterview(aid, p.id, asg?.id ?? null)); if (i) nav(`/app/evaluaciones/${aid}/entrevistas/${i.id}`); }}>Abrir entrevista</Button>
                             <Button size="sm" variant="ghost" disabled={locked} icon={<Trash2 className="size-3.5" />} aria-label={`Eliminar ${p.code}`} onClick={() => setDelP(p)} />
                           </div>
                         </td>

@@ -100,7 +100,7 @@ export default function NewAssessment() {
               <Select id="org" value={orgId} onChange={(e) => setOrgId(e.target.value)}><option value="">Seleccione…</option>{orgs?.map((o) => <option key={o.id} value={o.id}>{o.name}</option>)}</Select>
             </Field>
             <Field label="Nombre" htmlFor="name" required error={touched && name.trim().length < 3 ? 'Indique un nombre de al menos 3 caracteres' : undefined}><Input id="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Diagnóstico inicial 2026" /></Field>
-            <Field label="Objetivo" htmlFor="obj"><Textarea id="obj" value={objective} onChange={(e) => setObjective(e.target.value)} /></Field>
+            <Field label="Objetivo del diagnóstico" htmlFor="obj"><Textarea id="obj" value={objective} onChange={(e) => setObjective(e.target.value)} /></Field>
             <Field label="Descripción" htmlFor="desc"><Textarea id="desc" value={description} onChange={(e) => setDescription(e.target.value)} /></Field>
             <Field label="Alcance" htmlFor="scope" hint="Por ejemplo: toda la organización, una dependencia o un proceso."><Textarea id="scope" value={scope} onChange={(e) => setScope(e.target.value)} /></Field>
             <div className="grid gap-4">
