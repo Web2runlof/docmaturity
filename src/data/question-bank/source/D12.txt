@@ -1,0 +1,321 @@
+@dimension D12
+@name Cultura y talento humano
+@weight 5
+@sources F01,F05,F12,F13,F14
+@mgda CUL
+@summary Evalúa las capacidades de las personas y la cultura documental: competencias, profesionales especializados, alfabetización digital, inducción, capacitación, conciencia, gestión del cambio, participación, soporte, apropiación y transferencia de conocimiento.
+
+# Q01 Identificación de competencias requeridas
+@ crit=m tier=s mgda=CUL roles=th,gd src=F05,F13
+P: ¿Se han identificado las competencias documentales que requieren los distintos cargos de la organización?
+A: Incluye competencias de producción, organización, uso de sistemas, protección y conservación de documentos.
+W: Sin competencias identificadas, la formación se diseña sin foco y no cierra brechas reales.
+0: No se han identificado competencias documentales.
+1: Se asume que cualquier persona puede gestionar documentos.
+2: Se han identificado competencias para el personal de archivo, no para otros cargos.
+3: Las competencias documentales están identificadas por tipo de cargo.
+4: Las competencias se incorporan en perfiles de cargo y en procesos de selección.
+5: El modelo de competencias se actualiza con cambios tecnológicos y normativos.
+C: Competencias por tipo de cargo | Inclusión en perfiles | Uso en selección
+X: Los perfiles de cargo de una empresa incluyen competencias de gestión de expedientes electrónicos para analistas.
+E: Matriz de competencias | Perfiles de cargo | Procesos de selección
+R0: Identificar los cargos con mayor intervención en documentos.
+R1: Definir competencias documentales básicas para esos cargos.
+R2: Extender la identificación de competencias a todos los tipos de cargo.
+R3: Incorporar las competencias en perfiles y procesos de selección.
+R4: Actualizar el modelo de competencias ante cambios tecnológicos.
+R5: Evaluar el modelo de competencias con base en el desempeño documental.
+
+# Q02 Disponibilidad de profesionales especializados
+@ crit=a tier=p mgda=CUL roles=th,gd,dir src=F01,F13,F14 rel=D03-Q08
+P: ¿La organización cuenta con profesionales con formación en archivística, gestión documental o preservación digital para liderar sus procesos?
+A: Puede tratarse de personal propio o de servicios especializados con supervisión interna.
+W: Los procesos archivísticos complejos requieren conocimiento especializado que no se improvisa.
+0: No hay profesionales especializados disponibles.
+1: Se recurre a especialistas solo de forma esporádica.
+2: Hay profesionales especializados con dedicación parcial o insuficiente.
+3: La organización cuenta con profesionales especializados para liderar los procesos principales.
+4: Los profesionales especializados participan en decisiones estratégicas y tecnológicas.
+5: La organización desarrolla y retiene capacidades especializadas de forma planificada.
+C: Profesionales con formación especializada | Dedicación suficiente | Participación en decisiones
+X: Una entidad territorial vincula un profesional en archivística para liderar la implementación del SGDEA.
+E: Planta de personal | Hojas de vida o perfiles | Actas de participación en decisiones
+R0: Identificar qué procesos requieren conocimiento especializado.
+R1: Contratar asesoría especializada para los procesos críticos.
+R2: Vincular profesionales especializados para liderar los procesos principales.
+R3: Integrar a los especialistas en decisiones estratégicas y tecnológicas.
+R4: Desarrollar y retener capacidades especializadas.
+R5: Planificar la sucesión de los perfiles especializados.
+
+# Q03 Competencias en gestión documental electrónica
+@ crit=a tier=q mgda=CUL roles=gd,tec,th src=F01,F05,F14 cond=electronico min=3
+P: ¿El personal que produce y gestiona documentos electrónicos tiene las competencias para capturarlos, clasificarlos, describirlos y protegerlos correctamente?
+A: Se evalúa la competencia demostrada en la práctica, no solo la asistencia a capacitaciones.
+W: Las herramientas electrónicas no garantizan buenos resultados si las personas no saben usarlas con criterio documental.
+0: El personal no tiene competencias en gestión documental electrónica.
+1: Algunas personas tienen conocimientos por iniciativa propia.
+2: El personal de archivo tiene competencias, pero no el de las áreas productoras.
+3: El personal de las áreas principales demuestra competencias en gestión documental electrónica.
+4: Las competencias se evalúan y se refuerzan donde se detectan brechas.
+5: Las competencias se actualizan de forma continua ante cambios tecnológicos.
+C: Evaluación práctica de competencias | Cobertura de áreas productoras | Refuerzo de brechas
+X: En una revisión de muestras, el 90 % de los expedientes electrónicos de un área está correctamente clasificado.
+E: Resultados de evaluaciones de competencias | Muestras de expedientes | Planes de refuerzo
+R0: Evaluar las competencias electrónicas de una muestra de personas.
+R1: Formar al personal de las áreas con mayor producción electrónica.
+R2: Extender la formación práctica a las áreas productoras principales.
+R3: Evaluar competencias y reforzar las brechas detectadas.
+R4: Actualizar las competencias de forma continua.
+R5: Medir el efecto de las competencias en la calidad documental.
+
+# Q04 Competencias en seguridad de la información
+@ crit=m tier=p mgda=CUL roles=seg,th src=F18,F13
+P: ¿El personal conoce y aplica prácticas de seguridad de la información relacionadas con documentos, como clasificación, envío seguro y manejo de credenciales?
+A: Se evalúa mediante pruebas, simulaciones o resultados de incidentes.
+W: La mayoría de incidentes de seguridad documental tienen origen en errores humanos.
+0: El personal desconoce las prácticas de seguridad.
+1: Se difunden recomendaciones generales sin verificar su aplicación.
+2: Hay formación en seguridad sin relación con los documentos.
+3: El personal recibe formación en seguridad aplicada a documentos y la aplica.
+4: Se miden las prácticas mediante pruebas o simulaciones.
+5: La cultura de seguridad se refuerza con base en resultados y se evalúa periódicamente.
+C: Formación aplicada a documentos | Pruebas o simulaciones | Resultados medidos
+X: Una simulación de correo fraudulento muestra que el 15 % del personal compartiría un expediente con un remitente externo.
+E: Programa de concienciación | Resultados de simulaciones | Registros de incidentes
+R0: Identificar las prácticas inseguras más frecuentes con documentos.
+R1: Difundir prácticas básicas de seguridad documental.
+R2: Formar al personal en seguridad aplicada a documentos.
+R3: Medir las prácticas mediante pruebas o simulaciones.
+R4: Reforzar la cultura de seguridad con base en resultados.
+R5: Evaluar periódicamente la cultura de seguridad documental.
+
+# Q05 Competencias en preservación digital
+@ crit=m tier=p mgda=CUL roles=gd,tec src=F14,F16 cond=electronico rel=D11-Q01
+P: ¿Las personas responsables de la preservación digital tienen formación y experiencia específicas en la materia?
+A: Se evalúa al equipo responsable, que puede incluir personal de archivo y de tecnología.
+W: La preservación digital requiere conocimientos que combinan archivística y tecnología.
+0: Nadie tiene formación en preservación digital.
+1: Las tareas de preservación se asignan sin formación específica.
+2: Algunas personas tienen formación básica en preservación digital.
+3: El equipo responsable tiene formación y experiencia en preservación digital.
+4: El equipo actualiza sus conocimientos y participa en redes profesionales.
+5: El equipo transfiere conocimiento y contribuye a la mejora del programa.
+C: Formación específica del equipo | Experiencia demostrada | Actualización continua
+X: El equipo de preservación de una biblioteca universitaria participa en una red de práctica profesional.
+E: Certificados de formación | Planes de desarrollo del equipo | Participación en redes
+R0: Identificar quién realizaría las tareas de preservación digital.
+R1: Formar al equipo en conceptos básicos de preservación digital.
+R2: Desarrollar formación y experiencia específicas en el equipo responsable.
+R3: Promover la actualización continua del equipo.
+R4: Favorecer la transferencia de conocimiento dentro de la organización.
+R5: Evaluar la suficiencia de las competencias frente al programa.
+
+# Q06 Alfabetización digital de usuarios
+@ crit=m tier=p mgda=CUL roles=th,usu,tec src=F05,F12
+P: ¿Los usuarios tienen las habilidades digitales necesarias para usar las herramientas documentales disponibles?
+A: Incluye uso de sistemas, búsqueda, firma, colaboración y manejo de versiones.
+W: Sin alfabetización digital, las personas recurren a prácticas informales que eluden los controles.
+0: Los usuarios carecen de habilidades digitales básicas.
+1: Las habilidades digitales varían mucho y no se atienden las brechas.
+2: Se han identificado brechas digitales sin acciones de formación.
+3: Existen acciones de alfabetización digital para usuarios de herramientas documentales.
+4: Se mide el nivel de habilidades digitales y se atienden las brechas.
+5: La alfabetización digital se actualiza con cada cambio de herramientas.
+C: Diagnóstico de habilidades | Acciones de formación | Medición de resultados
+X: Antes de implementar el nuevo sistema, la entidad ofrece talleres de búsqueda y firma a usuarios con menos experiencia.
+E: Diagnóstico de habilidades digitales | Registros de formación | Resultados de evaluación
+R0: Identificar las brechas de habilidades digitales.
+R1: Ofrecer formación básica a los usuarios con mayores brechas.
+R2: Establecer acciones de alfabetización digital continuas.
+R3: Medir las habilidades y atender las brechas.
+R4: Actualizar la alfabetización con cada cambio de herramientas.
+R5: Evaluar el efecto de la alfabetización en el uso de las herramientas.
+
+# Q07 Inducción en políticas documentales
+@ crit=m tier=p mgda=CUL roles=th,gd src=F05,F13 rel=D01-Q01
+P: ¿El personal nuevo recibe, al vincularse, inducción sobre las políticas, responsabilidades y herramientas documentales de la organización?
+A: Incluye servidores, empleados, contratistas y practicantes.
+W: La inducción establece desde el inicio las reglas documentales y evita malas prácticas.
+0: La inducción no incluye temas documentales.
+1: Los temas documentales se mencionan de manera informal.
+2: Algunos grupos de personal nuevo reciben inducción documental.
+3: Todo el personal nuevo recibe inducción documental estructurada.
+4: Se verifica la comprensión de la inducción y se ajusta su contenido.
+5: La inducción se actualiza con cambios de políticas y herramientas y se evalúa su efecto.
+C: Contenido documental en la inducción | Cobertura de contratistas | Verificación de comprensión
+X: El programa de inducción de una IPS incluye un módulo sobre manejo de historias clínicas y datos personales.
+E: Programa de inducción | Registros de asistencia | Evaluaciones de comprensión
+R0: Incluir temas documentales en el programa de inducción.
+R1: Estructurar un módulo documental para la inducción.
+R2: Extender la inducción documental a contratistas y practicantes.
+R3: Verificar la comprensión y ajustar el contenido.
+R4: Actualizar la inducción con cambios de políticas y herramientas.
+R5: Evaluar el efecto de la inducción en las prácticas documentales.
+
+# Q08 Capacitación periódica
+@ crit=m tier=s mgda=CUL roles=th,gd src=F05,F13 rel=D03-Q07
+P: ¿Existe un programa de capacitación documental periódico que responde a necesidades identificadas?
+A: Se diferencia de capacitaciones aisladas o reactivas.
+W: La capacitación periódica mantiene las competencias ante rotación de personal y cambios de herramientas.
+0: No se realizan capacitaciones documentales.
+1: Se realizan capacitaciones aisladas ante problemas.
+2: Hay capacitaciones periódicas sin relación con necesidades identificadas.
+3: El programa de capacitación documental es periódico y responde a necesidades identificadas.
+4: El programa se ajusta con base en evaluaciones y resultados.
+5: El programa se integra en el desarrollo del talento y se evalúa su contribución.
+C: Programa periódico | Necesidades identificadas | Ajustes por resultados
+X: Cada semestre, una entidad capacita a las dependencias con más errores en transferencias documentales.
+E: Plan de capacitación | Diagnóstico de necesidades | Registros de ejecución
+R0: Identificar necesidades de capacitación documental.
+R1: Programar capacitaciones sobre los temas más urgentes.
+R2: Establecer un programa periódico basado en necesidades.
+R3: Ajustar el programa con base en evaluaciones.
+R4: Integrar el programa en el desarrollo del talento.
+R5: Evaluar la contribución del programa a los resultados documentales.
+
+# Q09 Evaluación de efectividad de la capacitación
+@ crit=b tier=p mgda=CUL roles=th,gd src=F05,F13 pre=D12-Q08
+P: ¿Se evalúa si las capacitaciones documentales producen cambios en las prácticas y en la calidad de los documentos?
+A: Se espera ir más allá de la asistencia o de la satisfacción con el evento.
+W: Sin evaluación de efectividad, se puede invertir en capacitaciones que no cambian nada.
+0: No se evalúan las capacitaciones.
+1: Solo se registra la asistencia.
+2: Se mide la satisfacción de los asistentes.
+3: Se evalúa el aprendizaje y el cambio en las prácticas tras las capacitaciones.
+4: Los resultados de efectividad orientan el diseño de nuevas capacitaciones.
+5: La efectividad se relaciona con indicadores de calidad documental.
+C: Evaluación de aprendizaje | Cambio en prácticas | Relación con indicadores de calidad
+X: Tras una capacitación sobre radicación, los errores de radicación disminuyen un 40 % en tres meses.
+E: Evaluaciones de aprendizaje | Indicadores antes y después | Informes de efectividad
+R0: Registrar la asistencia y los temas de las capacitaciones.
+R1: Evaluar el aprendizaje al final de las capacitaciones.
+R2: Medir el cambio en prácticas tras las capacitaciones.
+R3: Usar los resultados para diseñar nuevas capacitaciones.
+R4: Relacionar la efectividad con indicadores de calidad documental.
+R5: Revisar periódicamente el modelo de evaluación de la capacitación.
+
+# Q10 Conciencia sobre responsabilidad documental
+@ crit=a tier=q mgda=CUL roles=usu,gd,th src=F01,F05,F12
+P: ¿Las personas reconocen que los documentos que producen son evidencia institucional y que tienen responsabilidades sobre ellos?
+A: Se evalúa la percepción y la práctica cotidiana, por ejemplo mediante encuestas o entrevistas a usuarios.
+W: La cultura documental determina si las reglas se cumplen cuando nadie supervisa.
+0: Las personas consideran los documentos como propios o irrelevantes.
+1: Se reconoce la importancia de los documentos solo ante auditorías.
+2: Algunas áreas muestran conciencia documental; otras no.
+3: La mayoría de las personas reconoce su responsabilidad sobre los documentos que produce.
+4: La conciencia documental se mide y se refuerza con acciones específicas.
+5: La responsabilidad documental es parte de la cultura organizacional y se sostiene en el tiempo.
+C: Resultados de encuestas o entrevistas | Prácticas observadas | Acciones de refuerzo
+X: Al retirarse, los empleados entregan sus documentos de archivo sin necesidad de requerimientos adicionales.
+E: Encuestas de cultura documental | Resultados de entrevistas | Campañas de sensibilización
+R0: Explorar la percepción de las personas sobre los documentos que producen.
+R1: Sensibilizar sobre el valor de los documentos como evidencia.
+R2: Reforzar la responsabilidad documental en las áreas con menor conciencia.
+R3: Medir la conciencia documental y reforzarla con acciones específicas.
+R4: Integrar la responsabilidad documental en la cultura organizacional.
+R5: Sostener la cultura documental mediante liderazgo y reconocimiento.
+
+# Q11 Gestión de resistencia al cambio
+@ crit=m tier=s mgda=CUL roles=gd,th,dir src=F12,F13
+P: ¿Los proyectos documentales incluyen acciones de gestión del cambio para anticipar y atender la resistencia de las personas?
+A: Incluye comunicación, participación, acompañamiento y atención de inquietudes.
+W: Muchos proyectos documentales fracasan por resistencia de las personas, no por fallas técnicas.
+0: Los proyectos no consideran la gestión del cambio.
+1: La resistencia se atiende cuando ya bloquea el proyecto.
+2: Algunos proyectos incluyen acciones de comunicación.
+3: Los proyectos documentales tienen un plan de gestión del cambio con acciones específicas.
+4: Se mide la adopción y se ajustan las acciones de cambio.
+5: La gestión del cambio se integra en la metodología de proyectos y se evalúa.
+C: Plan de gestión del cambio | Medición de adopción | Ajustes realizados
+X: Antes de eliminar las planillas de papel, la entidad identifica a líderes de cambio en cada dependencia.
+E: Planes de gestión del cambio | Encuestas de adopción | Informes de seguimiento
+R0: Identificar las resistencias que han enfrentado proyectos anteriores.
+R1: Incluir acciones de comunicación en los proyectos documentales.
+R2: Elaborar planes de gestión del cambio con acciones específicas.
+R3: Medir la adopción y ajustar las acciones de cambio.
+R4: Integrar la gestión del cambio en la metodología de proyectos.
+R5: Evaluar la gestión del cambio al cierre de cada proyecto.
+
+# Q12 Participación de usuarios en proyectos tecnológicos
+@ crit=m tier=p mgda=CUL roles=usu,tec,gd src=F12,F13 rel=D02-Q07
+P: ¿Los usuarios de las áreas participan en el diseño, las pruebas y la evaluación de los sistemas documentales?
+A: Se evalúa la participación efectiva en decisiones, no solo la asistencia a presentaciones.
+W: Los sistemas diseñados sin usuarios no responden a la forma real de trabajar.
+0: Los usuarios no participan en los proyectos tecnológicos.
+1: Los usuarios conocen el sistema cuando ya está implementado.
+2: Algunos usuarios participan en pruebas finales.
+3: Los usuarios participan en diseño, pruebas y evaluación de los sistemas documentales.
+4: La retroalimentación de los usuarios genera cambios documentados en los sistemas.
+5: La participación de usuarios es una práctica sistemática y se evalúa.
+C: Usuarios en etapas de diseño | Pruebas con usuarios | Cambios derivados de su retroalimentación
+X: Funcionarios de ventanilla prueban el nuevo flujo de radicación y proponen eliminar dos pasos.
+E: Actas de talleres con usuarios | Resultados de pruebas | Registros de cambios
+R0: Identificar a los usuarios clave de cada sistema documental.
+R1: Invitar a los usuarios a las pruebas de los sistemas.
+R2: Incorporar a los usuarios en diseño, pruebas y evaluación.
+R3: Documentar los cambios derivados de su retroalimentación.
+R4: Sistematizar la participación de usuarios en los proyectos.
+R5: Evaluar la calidad de la participación de los usuarios.
+
+# Q13 Disponibilidad de apoyo y soporte
+@ crit=m tier=p mgda=CUL roles=usu,gd,tec src=F05,F13
+P: ¿Los usuarios disponen de canales de apoyo para resolver dudas documentales y problemas con las herramientas?
+A: Incluye mesa de ayuda, guías, preguntas frecuentes y personas de referencia en las áreas.
+W: Sin apoyo oportuno, las personas improvisan soluciones que eluden los controles documentales.
+0: No existen canales de apoyo.
+1: El apoyo depende de la disponibilidad de personas específicas.
+2: Hay canales de apoyo técnico sin cubrir dudas documentales.
+3: Existen canales de apoyo para dudas documentales y técnicas con tiempos de respuesta.
+4: Se analizan las consultas para mejorar guías, formación y herramientas.
+5: El apoyo se anticipa mediante recursos de autoservicio y se evalúa su calidad.
+C: Canales de apoyo documentados | Tiempos de respuesta | Análisis de consultas
+X: Cada dependencia tiene un referente documental y existe una guía en línea sobre clasificación.
+E: Catálogo de servicios de apoyo | Registros de consultas | Guías y preguntas frecuentes
+R0: Identificar a quién acuden hoy las personas con dudas documentales.
+R1: Designar referentes documentales en las áreas.
+R2: Establecer canales de apoyo con tiempos de respuesta.
+R3: Analizar las consultas para mejorar guías y formación.
+R4: Desarrollar recursos de autoservicio.
+R5: Evaluar la calidad del apoyo con los usuarios.
+
+# Q14 Apropiación efectiva de herramientas documentales
+@ crit=a tier=s mgda=CUL roles=usu,gd,tec src=F05,F13 rel=D15-Q06
+P: ¿Las herramientas documentales disponibles se usan efectivamente en las actividades diarias, en lugar de mantenerse prácticas paralelas?
+A: Se diferencia la disponibilidad de una herramienta de su uso real y consistente.
+W: Una herramienta no apropiada genera costos sin beneficios y duplica la gestión documental.
+0: Las herramientas documentales no se usan.
+1: Las herramientas se usan de forma marginal y predominan prácticas paralelas.
+2: Algunas áreas usan las herramientas; otras mantienen prácticas paralelas.
+3: Las herramientas se usan en las actividades diarias de las áreas principales.
+4: Se mide el uso y se atienden las causas de las prácticas paralelas.
+5: Las herramientas se apropian plenamente y se mejoran a partir del uso.
+C: Indicadores de uso | Prácticas paralelas identificadas | Acciones sobre sus causas
+X: Aunque el SGDEA está disponible, la mitad de las áreas sigue enviando oficios por correo personal.
+E: Reportes de uso de sistemas | Encuestas de adopción | Muestras de prácticas paralelas
+R0: Identificar las prácticas paralelas al uso de las herramientas.
+R1: Analizar las causas de la baja adopción.
+R2: Promover el uso en las áreas principales con acompañamiento.
+R3: Medir el uso y atender las causas de las prácticas paralelas.
+R4: Mejorar las herramientas a partir de los datos de uso.
+R5: Evaluar periódicamente la apropiación de las herramientas.
+
+# Q15 Transferencia de conocimiento y continuidad de capacidades
+@ crit=m tier=p mgda=CUL roles=th,gd src=F05,F12,F13 rel=D13-Q12
+P: ¿La organización asegura que el conocimiento documental crítico no se pierda cuando las personas se retiran o rotan?
+A: Incluye documentación de procedimientos, entregas de cargo, acompañamiento y planes de sucesión.
+W: La dependencia de personas clave pone en riesgo la continuidad de la gestión documental.
+0: El conocimiento documental depende de personas específicas sin respaldo.
+1: El conocimiento se transfiere de manera informal y parcial.
+2: Existen entregas de cargo sin contenido documental suficiente.
+3: Las entregas de cargo y la documentación aseguran la transferencia del conocimiento documental crítico.
+4: Se identifican roles críticos y se aplican planes de sucesión.
+5: La transferencia de conocimiento se evalúa y se mejora tras cada rotación.
+C: Entregas de cargo documentadas | Roles críticos identificados | Planes de sucesión
+X: Antes de la jubilación del coordinador del archivo histórico, se documentan sus criterios de descripción.
+E: Actas de entrega de cargo | Inventario de roles críticos | Planes de sucesión
+R0: Identificar las personas con conocimiento documental crítico.
+R1: Documentar el conocimiento de las personas clave.
+R2: Fortalecer el contenido documental de las entregas de cargo.
+R3: Aplicar planes de sucesión para roles críticos.
+R4: Evaluar la transferencia de conocimiento tras cada rotación.
+R5: Integrar la transferencia de conocimiento en la gestión del talento.

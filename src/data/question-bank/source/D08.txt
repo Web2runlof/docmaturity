@@ -1,0 +1,322 @@
+@dimension D08
+@name Tecnología y arquitectura
+@weight 8
+@sources F03,F06,F09,F18,F19
+@mgda TEC
+@summary Evalúa la base tecnológica que soporta los documentos: inventario y arquitectura de sistemas, repositorios, capacidades del SGDEA o equivalentes, capacidad, disponibilidad, entornos, cambios, portabilidad, copias de seguridad y recuperación.
+@note Se distingue la capacidad de un sistema de su utilización real.
+
+# Q01 Inventario de sistemas de información
+@ crit=a tier=q mgda=TEC roles=tec,gd src=F03,F18 min=3 rel=D08-Q03
+P: ¿Existe un inventario actualizado de los sistemas de información que producen, reciben o almacenan documentos, con su responsable y propósito?
+A: Incluye sistemas misionales, ERP, CRM, correo, herramientas colaborativas, aplicaciones a la medida y servicios en la nube.
+W: No es posible gobernar documentos que residen en sistemas desconocidos.
+0: No existe un inventario de sistemas de información.
+1: El área de tecnología conoce los sistemas, sin un inventario documentado.
+2: Hay un inventario parcial que omite herramientas colaborativas o servicios en la nube.
+3: El inventario está actualizado e identifica responsable, propósito y documentos que gestiona cada sistema.
+4: El inventario se actualiza con cada alta o baja de sistemas y se usa en decisiones documentales.
+5: El inventario se integra con la arquitectura empresarial y con el inventario de activos de información.
+C: Inventario con responsable y propósito | Inclusión de servicios en la nube | Actualización ante altas y bajas
+X: El inventario de una universidad revela 14 aplicaciones que producen documentos de archivo, tres de ellas sin responsable.
+E: Inventario de sistemas | Catálogo de servicios de TI | Registro de altas y bajas
+R0: Levantar un inventario inicial de sistemas que gestionan documentos.
+R1: Documentar el inventario con responsable y propósito.
+R2: Completar el inventario con herramientas colaborativas y nube.
+R3: Actualizar el inventario con cada alta o baja de sistemas.
+R4: Integrar el inventario con la arquitectura y los activos de información.
+R5: Revisar periódicamente el inventario como base de decisiones de arquitectura.
+
+# Q02 Documentación de la arquitectura tecnológica
+@ crit=m tier=p mgda=TEC roles=tec src=F03,F09 pre=D08-Q01 rel=D01-Q07
+P: ¿Está documentada la arquitectura que muestra cómo se relacionan los sistemas, repositorios e integraciones que gestionan documentos?
+A: Puede expresarse en diagramas de contexto, flujos de datos o modelos de arquitectura empresarial.
+W: La arquitectura documentada permite anticipar el efecto de cambios y detectar puntos de pérdida de información.
+0: No existe documentación de arquitectura.
+1: La arquitectura se conoce de forma tácita por algunas personas.
+2: Existen diagramas desactualizados o parciales.
+3: La arquitectura documental está documentada y actualizada para los sistemas principales.
+4: La documentación se actualiza con cada cambio relevante y se usa en el análisis de impacto.
+5: La arquitectura se gestiona como un activo con versiones y revisiones periódicas.
+C: Diagramas vigentes | Integraciones representadas | Uso en análisis de impacto
+X: Un diagrama muestra que los documentos del CRM llegan al repositorio mediante una exportación nocturna.
+E: Diagramas de arquitectura | Documentación de integraciones | Registros de actualización
+R0: Representar en un diagrama inicial los sistemas que gestionan documentos.
+R1: Documentar la arquitectura conocida con sus integraciones.
+R2: Actualizar la arquitectura para todos los sistemas principales.
+R3: Usar la arquitectura en el análisis de impacto de cambios.
+R4: Gestionar la arquitectura con versiones y revisiones.
+R5: Integrar la arquitectura documental en la arquitectura empresarial.
+
+# Q03 Identificación de repositorios documentales
+@ crit=a tier=s mgda=TEC roles=tec,gd,seg src=F03,F18 pre=D08-Q01
+P: ¿Se conocen todos los repositorios donde se almacenan documentos electrónicos, incluidas carpetas compartidas, nubes, buzones y unidades locales?
+A: Se busca identificar también los repositorios no oficiales con documentos de archivo.
+W: Los repositorios desconocidos concentran riesgos de pérdida, exposición y retención indebida.
+0: No se conocen los repositorios documentales.
+1: Se conocen los repositorios oficiales, sin identificar los no oficiales.
+2: Se han identificado algunos repositorios no oficiales.
+3: Todos los repositorios relevantes están identificados con su propietario y contenido.
+4: Se monitorean los repositorios y se migran los documentos de archivo a repositorios controlados.
+5: La creación de repositorios se controla y su uso se evalúa periódicamente.
+C: Listado de repositorios | Identificación de no oficiales | Plan de migración a repositorios controlados
+X: Un barrido revela 300 GB de documentos contractuales en carpetas personales sincronizadas con nubes externas.
+E: Inventario de repositorios | Reportes de barrido o análisis de almacenamiento | Plan de migración
+R0: Realizar un barrido para identificar repositorios con documentos.
+R1: Listar los repositorios oficiales y sus responsables.
+R2: Identificar repositorios no oficiales con documentos de archivo.
+R3: Migrar los documentos de archivo a repositorios controlados.
+R4: Controlar la creación de nuevos repositorios.
+R5: Evaluar periódicamente el uso de los repositorios.
+
+# Q04 Evaluación de capacidades del SGDEA o sistemas equivalentes
+@ crit=a tier=s mgda=TEC roles=tec,gd src=F03,F06,F09 cond=electronico pre=D08-Q05 rel=D07-Q14
+P: ¿La organización ha evaluado si su SGDEA o los sistemas equivalentes cumplen los requisitos funcionales de gestión documental que necesita?
+A: Se evalúa la existencia de una verificación frente a requisitos, no la marca o el costo del sistema. La capacidad no equivale a su uso real.
+W: Adquirir o mantener un sistema sin evaluar sus capacidades conduce a brechas que se descubren tarde.
+0: No se han evaluado las capacidades documentales de los sistemas.
+1: Se asume que el sistema cumple porque así lo indicó el proveedor.
+2: Se han revisado algunas funciones, sin una lista de requisitos completa.
+3: Las capacidades se evaluaron frente a una lista de requisitos y se documentaron las brechas.
+4: Las brechas identificadas se gestionan con planes de configuración o desarrollo.
+5: La evaluación se repite tras cada actualización mayor y se contrasta con el uso real.
+C: Lista de requisitos usada | Resultado de la evaluación | Plan de cierre de brechas
+X: Una entidad evalúa su gestor documental frente a requisitos de retención y descubre que no registra la disposición.
+E: Matriz de requisitos evaluada | Informes de pruebas | Plan de cierre de brechas
+R0: Recopilar los requisitos documentales que debe cumplir el sistema.
+R1: Reemplazar la confianza en el proveedor por una verificación propia.
+R2: Evaluar el sistema frente a la lista completa de requisitos.
+R3: Gestionar las brechas con planes de configuración o desarrollo.
+R4: Repetir la evaluación tras cada actualización mayor.
+R5: Contrastar periódicamente las capacidades con el uso real del sistema.
+
+# Q05 Existencia de un modelo de requisitos documentales
+@ crit=a tier=p mgda=TEC roles=gd,tec src=F03,F06,F09 cond=electronico
+P: ¿La organización cuenta con un modelo de requisitos documentales propio para evaluar, adquirir o desarrollar sistemas que gestionan documentos?
+A: Puede basarse en modelos de requisitos reconocidos adaptados al contexto institucional.
+W: Un modelo de requisitos propio evita que cada proyecto redefina lo que un sistema documental debe hacer.
+0: No existe un modelo de requisitos documentales.
+1: Los requisitos se definen ad hoc en cada proyecto.
+2: Existe un listado de requisitos genérico sin adaptar al contexto.
+3: Existe un modelo de requisitos adaptado, aprobado y utilizado en adquisiciones y desarrollos.
+4: El modelo se actualiza con lecciones de proyectos y cambios normativos.
+5: El modelo se aplica a todos los sistemas que gestionan documentos y se audita su uso.
+C: Modelo de requisitos aprobado | Adaptación al contexto | Uso en adquisiciones recientes
+X: Una empresa exige en todos sus pliegos el cumplimiento de su modelo de requisitos documentales.
+E: Modelo de requisitos | Pliegos o especificaciones que lo usan | Historial de versiones
+R0: Identificar los requisitos documentales que deberían exigirse a los sistemas.
+R1: Recopilar los requisitos usados en proyectos anteriores.
+R2: Adaptar un modelo de requisitos de referencia al contexto institucional.
+R3: Usar el modelo en todas las adquisiciones y desarrollos.
+R4: Actualizar el modelo con lecciones de proyectos.
+R5: Auditar el uso del modelo en el ecosistema tecnológico.
+
+# Q06 Gestión de almacenamiento y capacidad
+@ crit=m tier=p mgda=TEC roles=tec src=F18,F19 rel=D03-Q05
+P: ¿Se monitorea la capacidad de almacenamiento de los sistemas documentales y se planifica su crecimiento?
+A: Incluye almacenamiento primario, copias y réplicas en infraestructura propia o en la nube.
+W: La saturación del almacenamiento interrumpe servicios y fuerza eliminaciones no controladas.
+0: No se monitorea la capacidad de almacenamiento.
+1: La capacidad se revisa cuando ocurren fallas por falta de espacio.
+2: Se monitorea la capacidad de algunos sistemas sin planificación.
+3: La capacidad se monitorea y su crecimiento se planifica para los sistemas principales.
+4: Las proyecciones de capacidad consideran la aplicación de retención y disposición.
+5: La capacidad se optimiza de manera continua con datos de uso y costos.
+C: Monitoreo de capacidad | Proyecciones de crecimiento | Consideración de la retención
+X: El área de TI proyecta el crecimiento del repositorio con base en los expedientes que se abren cada mes.
+E: Reportes de capacidad | Planes de crecimiento | Alertas configuradas
+R0: Identificar el uso actual de almacenamiento de los sistemas documentales.
+R1: Configurar alertas ante umbrales de capacidad.
+R2: Planificar el crecimiento de los sistemas principales.
+R3: Incorporar la retención y disposición en las proyecciones.
+R4: Optimizar la capacidad con datos de uso y costos.
+R5: Revisar periódicamente la estrategia de almacenamiento.
+
+# Q07 Escalabilidad tecnológica
+@ crit=b tier=p mgda=TEC roles=tec src=F09,F18
+P: ¿Los sistemas documentales pueden atender aumentos de usuarios, volumen y transacciones sin degradar su desempeño?
+A: Se evalúa con pruebas o datos de operación, no con afirmaciones del proveedor.
+W: Un sistema que no escala obliga a soluciones paralelas que fragmentan la gestión documental.
+0: Se desconoce la capacidad de los sistemas para crecer.
+1: Los sistemas presentan degradación frecuente ante aumentos de carga.
+2: Se han atendido picos de carga con soluciones temporales.
+3: La escalabilidad se ha verificado con pruebas o datos de operación.
+4: Se planifica la escalabilidad según las proyecciones de crecimiento.
+5: La arquitectura permite escalar de forma controlada y se evalúa periódicamente.
+C: Pruebas de carga o datos de desempeño | Plan de escalabilidad | Incidentes por degradación
+X: Antes de habilitar la radicación en línea a toda la ciudadanía, la entidad hace pruebas de carga del sistema.
+E: Informes de pruebas de carga | Reportes de desempeño | Plan de escalabilidad
+R0: Identificar los sistemas con problemas de desempeño.
+R1: Registrar incidentes de degradación y sus causas.
+R2: Verificar la escalabilidad mediante pruebas o datos de operación.
+R3: Planificar la escalabilidad según proyecciones de crecimiento.
+R4: Ajustar la arquitectura para escalar de forma controlada.
+R5: Evaluar periódicamente el desempeño frente a la demanda.
+
+# Q08 Disponibilidad de servicios
+@ crit=a tier=p mgda=TEC roles=tec,usu src=F18,F19
+P: ¿Los sistemas documentales tienen objetivos de disponibilidad definidos y se mide su cumplimiento?
+A: Se evalúan acuerdos de nivel de servicio internos o contractuales, y su medición real.
+W: La indisponibilidad de los sistemas detiene trámites y puede generar incumplimientos de términos.
+0: No se han definido objetivos de disponibilidad.
+1: La disponibilidad se percibe a partir de quejas de usuarios.
+2: Hay objetivos de disponibilidad sin medición sistemática.
+3: Los sistemas principales tienen objetivos de disponibilidad medidos.
+4: Los incumplimientos se analizan y generan acciones correctivas.
+5: La disponibilidad se gestiona con base en la criticidad de los procesos y se mejora continuamente.
+C: Objetivos de disponibilidad definidos | Medición real | Análisis de incumplimientos
+X: La entidad mide que su sistema de correspondencia estuvo disponible el 99,5 % del horario hábil del trimestre.
+E: Acuerdos de nivel de servicio | Reportes de disponibilidad | Análisis de incidentes
+R0: Identificar los sistemas documentales críticos para la operación.
+R1: Registrar las interrupciones y su duración.
+R2: Definir objetivos de disponibilidad para los sistemas principales.
+R3: Analizar los incumplimientos y aplicar correctivos.
+R4: Ajustar los objetivos según la criticidad de los procesos.
+R5: Mejorar continuamente la disponibilidad con datos de operación.
+
+# Q09 Gestión de infraestructura local y nube
+@ crit=m tier=p mgda=TEC roles=tec,seg,jur src=F18,F19 cond=nube rel=D10-Q14
+P: ¿Las decisiones de alojar documentos en infraestructura local o en la nube consideran requisitos documentales, de seguridad, jurídicos y de salida?
+A: Incluye ubicación de los datos, acceso del proveedor, retención, exportación y terminación del servicio.
+W: Migrar a la nube sin requisitos documentales puede generar pérdida de control y dependencia.
+0: Las decisiones de alojamiento no consideran requisitos documentales.
+1: Se adoptan servicios en la nube por iniciativa de las áreas, sin evaluación.
+2: Algunas decisiones consideran seguridad, sin requisitos documentales ni de salida.
+3: Las decisiones de alojamiento evalúan requisitos documentales, de seguridad, jurídicos y de salida.
+4: Los servicios contratados se verifican periódicamente frente a esos requisitos.
+5: La estrategia de alojamiento se revisa con base en riesgos, costos y desempeño.
+C: Evaluación previa de requisitos | Cláusulas de salida | Verificación periódica de servicios
+X: Antes de contratar almacenamiento en la nube, una empresa verifica la exportación de documentos con metadatos.
+E: Evaluaciones de servicios en la nube | Contratos | Informes de verificación
+R0: Identificar los servicios en la nube que almacenan documentos.
+R1: Evaluar los servicios adoptados sin revisión previa.
+R2: Incorporar requisitos documentales, jurídicos y de salida en las decisiones.
+R3: Verificar periódicamente los servicios contratados.
+R4: Revisar la estrategia de alojamiento con base en riesgos y costos.
+R5: Mantener un marco de decisión de alojamiento actualizado.
+
+# Q10 Control de entornos de desarrollo, pruebas y producción
+@ crit=m tier=p mgda=TEC roles=tec,seg src=F18
+P: ¿Los sistemas documentales separan los entornos de desarrollo, pruebas y producción, y controlan el uso de datos reales fuera de producción?
+A: Incluye el uso de datos anonimizados o sintéticos en pruebas cuando contienen información sensible.
+W: Probar con datos reales o modificar producción directamente expone información y pone en riesgo su integridad.
+0: No existen entornos separados.
+1: Se prueba directamente en producción con frecuencia.
+2: Hay entornos separados, con uso frecuente de datos reales en pruebas.
+3: Los entornos están separados y el uso de datos reales en pruebas está controlado.
+4: Los pasos a producción siguen un procedimiento y se verifican.
+5: La gestión de entornos se audita y mejora con base en incidentes.
+C: Entornos separados | Control de datos en pruebas | Procedimiento de paso a producción
+X: Para probar un nuevo flujo, el equipo usa expedientes sintéticos en lugar de expedientes reales con datos personales.
+E: Documentación de entornos | Procedimiento de paso a producción | Registros de anonimización
+R0: Identificar los sistemas sin separación de entornos.
+R1: Dejar de probar cambios directamente en producción.
+R2: Separar entornos y controlar el uso de datos reales en pruebas.
+R3: Formalizar y verificar los pasos a producción.
+R4: Auditar la gestión de entornos.
+R5: Mejorar la gestión de entornos con base en incidentes.
+
+# Q11 Gestión de actualizaciones y cambios tecnológicos
+@ crit=m tier=p mgda=TEC roles=tec,gd src=F09,F18 rel=D02-Q09
+P: ¿Las actualizaciones y cambios en los sistemas documentales se planifican, se prueban y evalúan su efecto sobre los documentos y metadatos?
+A: Se evalúa si gestión documental participa en la evaluación de cambios que afectan documentos.
+W: Un cambio tecnológico mal gestionado puede alterar metadatos, romper integraciones o perder documentos.
+0: Los cambios se aplican sin planificación ni pruebas.
+1: Los cambios se prueban de manera informal.
+2: Hay un procedimiento de cambios técnico, sin evaluar efectos documentales.
+3: Los cambios se planifican, se prueban y se evalúa su efecto sobre documentos y metadatos.
+4: Se verifica después del cambio que los documentos y metadatos se mantuvieron.
+5: La gestión de cambios se mejora con base en incidentes y lecciones aprendidas.
+C: Procedimiento de cambios | Evaluación de efecto documental | Verificación posterior
+X: Antes de actualizar el SGDEA, el equipo verifica en pruebas que los metadatos de retención se conserven.
+E: Procedimiento de gestión de cambios | Planes de prueba | Informes posteriores al cambio
+R0: Identificar los cambios recientes y sus efectos sobre documentos.
+R1: Exigir pruebas antes de aplicar cambios.
+R2: Incorporar la evaluación de efectos documentales en el procedimiento.
+R3: Verificar después de cada cambio documentos y metadatos.
+R4: Mejorar la gestión de cambios con lecciones aprendidas.
+R5: Integrar la gestión de cambios tecnológicos con el gobierno de cambios documentales.
+
+# Q12 Portabilidad de información y dependencia de proveedores
+@ crit=a tier=s mgda=TEC roles=tec,jur,gd src=F09,F03 rel=D07-Q15,D03-Q09
+P: ¿La organización puede cambiar de sistema o proveedor sin perder documentos, metadatos ni su valor probatorio?
+A: Se evalúan cláusulas de salida, formatos abiertos, exportaciones probadas y conocimiento interno de los datos.
+W: La dependencia de un proveedor puede convertirse en un riesgo para la continuidad de la información.
+0: No es posible extraer los documentos sin el proveedor.
+1: La extracción es posible, pero sin metadatos ni pruebas.
+2: Hay mecanismos de exportación parcial, sin cláusulas de salida.
+3: Existen cláusulas de salida y exportaciones con metadatos en formatos documentados.
+4: La portabilidad se ha probado y se mantiene conocimiento interno de los datos.
+5: La arquitectura privilegia la portabilidad y el riesgo de dependencia se evalúa periódicamente.
+C: Cláusulas de salida | Formatos documentados | Prueba de portabilidad
+X: Una entidad incluye en su contrato la entrega de todos los expedientes con metadatos en un formato abierto al terminar.
+E: Contratos con cláusulas de salida | Pruebas de exportación | Documentación del modelo de datos
+R0: Identificar los sistemas con mayor dependencia de proveedor.
+R1: Solicitar al proveedor información sobre mecanismos de exportación.
+R2: Incluir cláusulas de salida y formatos documentados en los contratos.
+R3: Probar la portabilidad y mantener conocimiento interno de los datos.
+R4: Privilegiar la portabilidad en decisiones de arquitectura.
+R5: Evaluar periódicamente el riesgo de dependencia.
+
+# Q13 Gestión de copias de seguridad
+@ crit=a critical tier=q mgda=TEC roles=tec,seg src=F18,F19 min=3 rel=D08-Q14
+P: ¿Los sistemas y repositorios documentales cuentan con copias de seguridad programadas, protegidas y con cobertura conocida?
+A: Las copias de seguridad no equivalen a preservación digital; se evalúa su cobertura, frecuencia y protección.
+W: Sin copias de seguridad, un fallo o un ataque puede causar la pérdida definitiva de documentos.
+0: No se realizan copias de seguridad.
+1: Las copias se hacen de manera manual y ocasional.
+2: Hay copias programadas de algunos sistemas, sin cobertura completa.
+3: Los sistemas y repositorios documentales tienen copias programadas, protegidas y con cobertura conocida.
+4: Se monitorea la ejecución de las copias y se corrigen las fallas.
+5: La política de copias se ajusta con base en riesgos, pruebas de recuperación e incidentes.
+C: Política de copias | Cobertura de repositorios | Monitoreo de ejecución
+X: Las copias diarias del repositorio se almacenan cifradas en una ubicación separada de la infraestructura principal.
+E: Política de copias de seguridad | Reportes de ejecución | Inventario de cobertura
+R0: Programar copias de seguridad de los repositorios más críticos.
+R1: Reemplazar las copias manuales por copias programadas.
+R2: Extender la cobertura a todos los sistemas y repositorios documentales.
+R3: Monitorear la ejecución y corregir fallas.
+R4: Ajustar la política con base en riesgos y pruebas.
+R5: Evaluar periódicamente la estrategia de copias frente a nuevas amenazas.
+
+# Q14 Pruebas de recuperación tecnológica
+@ crit=a critical tier=s mgda=TEC roles=tec,seg src=F18,F19 min=3 pre=D08-Q13
+P: ¿Se prueba periódicamente que los documentos y sistemas pueden restaurarse a partir de las copias de seguridad dentro de tiempos aceptables?
+A: Una copia que nunca se ha restaurado no garantiza la recuperación.
+W: Las pruebas de recuperación revelan fallas que solo se descubrirían durante una crisis.
+0: Nunca se ha probado la restauración de copias.
+1: Se han hecho restauraciones solo ante incidentes reales.
+2: Se prueban restauraciones de algunos sistemas de manera ocasional.
+3: Se prueban periódicamente las restauraciones de los sistemas documentales principales.
+4: Las pruebas miden tiempos de recuperación y sus resultados generan mejoras.
+5: Las pruebas cubren escenarios completos de desastre y se integran en la continuidad del negocio.
+C: Calendario de pruebas | Resultados documentados | Tiempos de recuperación medidos
+X: Cada semestre, TI restaura una muestra de expedientes en un entorno aislado y verifica su legibilidad.
+E: Informes de pruebas de restauración | Planes de recuperación | Actas de mejoras derivadas
+R0: Realizar una primera prueba de restauración de un sistema crítico.
+R1: Documentar las restauraciones realizadas ante incidentes.
+R2: Programar pruebas periódicas de restauración.
+R3: Medir tiempos de recuperación y aplicar mejoras.
+R4: Probar escenarios completos de desastre.
+R5: Integrar las pruebas en la gestión de continuidad del negocio.
+
+# Q15 Seguimiento de niveles de servicio y desempeño técnico
+@ crit=b tier=p mgda=TEC roles=tec,prv src=F18,F19 rel=D08-Q08
+P: ¿Se hace seguimiento al desempeño técnico de los sistemas y servicios documentales frente a niveles de servicio acordados?
+A: Incluye tiempos de respuesta, incidentes, atención de soporte y cumplimiento de proveedores.
+W: El seguimiento del desempeño permite exigir calidad y anticipar problemas.
+0: No se hace seguimiento al desempeño técnico.
+1: El desempeño se evalúa solo ante quejas.
+2: Se recopilan algunos indicadores técnicos sin análisis.
+3: Se hace seguimiento periódico al desempeño frente a niveles acordados.
+4: Los incumplimientos generan acciones con el proveedor o el equipo interno.
+5: El seguimiento orienta decisiones de renovación, inversión y arquitectura.
+C: Indicadores de desempeño | Niveles acordados | Acciones ante incumplimientos
+X: El comité de TI revisa cada mes los tiempos de atención de incidentes del proveedor del SGDEA.
+E: Reportes de desempeño | Acuerdos de nivel de servicio | Actas de seguimiento
+R0: Identificar qué aspectos del desempeño técnico afectan la gestión documental.
+R1: Recopilar indicadores técnicos básicos.
+R2: Acordar niveles de servicio y hacer seguimiento periódico.
+R3: Gestionar los incumplimientos con acciones documentadas.
+R4: Usar el seguimiento en decisiones de renovación e inversión.
+R5: Evaluar el modelo de seguimiento y ajustarlo.

@@ -1,0 +1,321 @@
+@dimension D04
+@name Operativa y procesos
+@weight 8
+@sources F01,F04,F10,F03,F13
+@mgda DOC
+@summary Evalúa cómo los documentos nacen, circulan y se controlan dentro de los procesos: inventario de procesos, flujos, radicación, aprobaciones, comunicaciones electrónicas y mejora basada en evidencia.
+
+# Q01 Inventario de procesos organizacionales
+@ crit=m tier=s mgda=DOC roles=pro,cal,gd src=F04,F10,F13
+P: ¿La organización mantiene un inventario actualizado de sus procesos misionales, estratégicos, de apoyo y de evaluación?
+A: El inventario es la base para identificar qué documentos produce cada proceso; puede ser el mapa de procesos del sistema de gestión.
+W: Sin conocer los procesos no es posible clasificar ni valorar los documentos que producen.
+0: No existe un inventario de procesos.
+1: Los procesos se conocen de forma tácita y no están documentados.
+2: Existe un mapa de procesos desactualizado o incompleto.
+3: El inventario de procesos está actualizado y cubre todos los tipos de proceso.
+4: El inventario se actualiza ante cambios y se usa para revisar instrumentos documentales.
+5: El inventario se integra con la arquitectura empresarial y con los instrumentos de clasificación.
+C: Mapa de procesos vigente | Fecha de última actualización | Uso en instrumentos documentales
+X: Una entidad territorial actualiza su mapa de procesos tras una reestructuración y revisa con él su cuadro de clasificación.
+E: Mapa o inventario de procesos | Caracterizaciones de procesos | Actas de actualización
+R0: Levantar un inventario inicial de los procesos de la organización.
+R1: Documentar los procesos tácitos en un mapa de procesos.
+R2: Completar y actualizar el inventario para todos los tipos de proceso.
+R3: Usar el inventario para revisar los instrumentos documentales.
+R4: Mantener el inventario sincronizado con cambios organizacionales.
+R5: Integrar el inventario con la arquitectura empresarial y la clasificación.
+
+# Q02 Identificación de actividades generadoras de documentos
+@ crit=m tier=p mgda=DOC roles=pro,gd src=F04,F10 pre=D04-Q01
+P: ¿Para cada proceso se han identificado las actividades que generan o reciben documentos con valor de evidencia?
+A: Se trata de un análisis de actividades al estilo DIRKS: qué hace cada proceso y qué evidencia deja.
+W: Las actividades no identificadas producen documentos que quedan fuera de los controles.
+0: No se han identificado actividades generadoras de documentos.
+1: Se conocen los documentos más visibles, sin relacionarlos con actividades.
+2: Algunas actividades de ciertos procesos están identificadas.
+3: Las actividades generadoras de documentos están identificadas para todos los procesos relevantes.
+4: El análisis de actividades se actualiza cuando cambian los procesos.
+5: El análisis de actividades orienta el diseño de nuevos procesos y sistemas.
+C: Análisis de actividades por proceso | Relación actividad-documento | Fecha de actualización
+X: El análisis del proceso de cartera de una empresa revela que los acuerdos de pago telefónicos no se documentan.
+E: Análisis de actividades | Formatos de identificación documental | Caracterizaciones de procesos
+R0: Seleccionar los procesos prioritarios para analizar sus actividades.
+R1: Relacionar los documentos conocidos con las actividades que los generan.
+R2: Completar el análisis de actividades para todos los procesos relevantes.
+R3: Actualizar el análisis cuando cambian los procesos.
+R4: Usar el análisis en el diseño de nuevos procesos y sistemas.
+R5: Revisar periódicamente el análisis con base en hallazgos de auditoría.
+
+# Q03 Documentación de procedimientos
+@ crit=m tier=s mgda=DOC roles=pro,cal,gd src=F04,F05,F13
+P: ¿Los procedimientos de los procesos están documentados e indican qué documentos se producen, en qué momento y quién los controla?
+A: Se diferencia un procedimiento que menciona formatos de uno que establece controles documentales.
+W: Los procedimientos documentados permiten que los controles documentales se apliquen de forma consistente.
+0: Los procedimientos no están documentados.
+1: Algunos procedimientos existen de forma informal o desactualizada.
+2: Los procedimientos están documentados, sin indicar los controles documentales.
+3: Los procedimientos indican documentos producidos, momento y responsable de su control.
+4: Se verifica en la práctica que los procedimientos se cumplen en lo documental.
+5: Los procedimientos se mejoran con base en verificaciones y cambios del proceso.
+C: Procedimientos vigentes | Puntos de control documental | Verificación en la práctica
+X: El procedimiento de contratación de una universidad indica en qué etapa se incorpora cada documento al expediente.
+E: Manual de procedimientos | Listado maestro de documentos | Informes de verificación
+R0: Identificar los procedimientos críticos que carecen de documentación.
+R1: Documentar los procedimientos informales prioritarios.
+R2: Incorporar los controles documentales en los procedimientos existentes.
+R3: Verificar en la práctica el cumplimiento documental de los procedimientos.
+R4: Mejorar los procedimientos con base en las verificaciones.
+R5: Revisar sistemáticamente los procedimientos ante cambios de procesos y sistemas.
+
+# Q04 Caracterización de flujos documentales
+@ crit=a tier=q mgda=DOC roles=pro,gd,tec src=F03,F04,F10 min=3 rel=D14-Q02
+P: ¿Están caracterizados los flujos de los documentos dentro de los procesos, incluidos puntos de entrada, revisiones, aprobaciones y salida?
+A: Puede representarse con diagramas BPMN u otra notación; lo importante es que refleje la realidad del trámite.
+W: Los flujos caracterizados son la base para automatizar sin replicar ineficiencias ni perder controles.
+0: No se conoce el recorrido de los documentos en los procesos.
+1: El recorrido se conoce solo por quienes participan en el trámite.
+2: Algunos flujos están diagramados, sin reflejar excepciones ni controles.
+3: Los flujos documentales principales están caracterizados con controles y responsables.
+4: Los flujos caracterizados se contrastan con la operación real y se actualizan.
+5: La caracterización de flujos se usa sistemáticamente para rediseñar y automatizar.
+C: Diagramas de flujo vigentes | Puntos de aprobación identificados | Contraste con la operación
+X: Una IPS caracteriza el flujo de autorizaciones de servicios y detecta tres copias impresas innecesarias.
+E: Diagramas BPMN o equivalentes | Caracterizaciones de trámites | Registros de validación con usuarios
+R0: Seleccionar los trámites de mayor volumen para caracterizar sus flujos.
+R1: Diagramar los flujos conocidos con los participantes del trámite.
+R2: Incorporar controles, excepciones y responsables en los flujos.
+R3: Contrastar los flujos con la operación real y actualizarlos.
+R4: Usar los flujos para rediseñar trámites antes de automatizarlos.
+R5: Mantener un repositorio vivo de flujos integrado con la gestión de procesos.
+
+# Q05 Identificación de documentos de entrada y salida
+@ crit=m tier=p mgda=DOC roles=pro,gd src=F04,F10 pre=D04-Q02
+P: ¿Cada proceso identifica los documentos que recibe de otros procesos o de terceros y los que entrega como resultado?
+A: Permite detectar documentos que se pierden en las interfaces entre procesos.
+W: Las interfaces entre procesos son el lugar donde más se extravían o duplican documentos.
+0: No se identifican documentos de entrada y salida.
+1: Se conocen algunos documentos de entrada y salida de forma informal.
+2: Algunos procesos identifican sus entradas y salidas documentales.
+3: Todos los procesos relevantes identifican sus documentos de entrada y salida.
+4: Las interfaces documentales entre procesos se controlan y verifican.
+5: Las interfaces se optimizan para eliminar duplicidades y pérdidas.
+C: Entradas y salidas en caracterizaciones | Controles en interfaces | Duplicidades identificadas
+X: El proceso de nómina recibe las novedades de talento humano y entrega soportes contables a financiera.
+E: Caracterizaciones con entradas y salidas | Matrices de interfaces | Registros de control
+R0: Identificar las interfaces críticas entre procesos.
+R1: Documentar las entradas y salidas de los procesos prioritarios.
+R2: Extender la identificación a todos los procesos relevantes.
+R3: Establecer controles en las interfaces documentales.
+R4: Optimizar las interfaces para eliminar pérdidas y duplicidades.
+R5: Monitorear las interfaces con indicadores de calidad documental.
+
+# Q06 Control de producción documental
+@ crit=m tier=p mgda=DOC roles=gd,pro,cal src=F02,F04
+P: ¿La producción de documentos sigue lineamientos sobre formatos, plantillas, soportes, versiones y medios de firma?
+A: Incluye la definición de qué documentos se producen en electrónico y cuáles en papel.
+W: Controlar la producción reduce documentos innecesarios y asegura que nazcan con los elementos de evidencia requeridos.
+0: Cada persona produce documentos sin lineamientos.
+1: Existen algunas plantillas, sin control de su uso.
+2: Hay lineamientos de producción para ciertos tipos documentales.
+3: Los lineamientos de producción cubren los tipos documentales principales y su soporte.
+4: Se verifica el cumplimiento de los lineamientos y se retiran formatos obsoletos.
+5: Los lineamientos se optimizan para reducir producción innecesaria y fortalecer la evidencia.
+C: Lineamientos de producción | Plantillas controladas | Retiro de formatos obsoletos
+X: Una entidad define que los oficios se producen solo en electrónico con firma y plantilla institucional.
+E: Guía de producción documental | Listado maestro de formatos | Informes de verificación
+R0: Identificar los tipos documentales producidos con mayor frecuencia.
+R1: Establecer plantillas institucionales para los tipos más frecuentes.
+R2: Definir lineamientos de producción, soporte y firma para los tipos principales.
+R3: Verificar el uso de lineamientos y retirar formatos obsoletos.
+R4: Reducir la producción innecesaria con base en el análisis de uso.
+R5: Integrar los lineamientos en las herramientas de producción documental.
+
+# Q07 Control de recepción y radicación
+@ crit=a tier=q mgda=DOC roles=gd,arc,usu src=F02,F03,F04 legal=pub min=3
+P: ¿Las comunicaciones oficiales recibidas se registran o radican con un identificador único, fecha y responsable, por cualquier canal de entrada?
+A: Incluye ventanilla, correo electrónico, formularios web, redes y otros canales habilitados.
+W: La radicación garantiza la trazabilidad y el cumplimiento de términos de respuesta.
+0: Las comunicaciones recibidas no se registran.
+1: Se registran algunas comunicaciones en planillas o libros sin control.
+2: Se radica en ventanilla, pero no las comunicaciones recibidas por canales electrónicos.
+3: Todas las comunicaciones oficiales se radican con identificador, fecha y responsable, por todos los canales.
+4: Se controlan los tiempos de distribución y respuesta a partir de la radicación.
+5: La radicación se integra con los sistemas de gestión y se optimiza con datos de uso.
+C: Registro de todos los canales | Identificador único | Control de términos
+X: Una empresa de servicios públicos radica automáticamente los correos recibidos en su buzón institucional de peticiones.
+E: Procedimiento de radicación | Reportes del sistema de correspondencia | Muestra de radicados por canal
+R0: Identificar todos los canales por los que se reciben comunicaciones oficiales.
+R1: Reemplazar los registros informales por una radicación controlada.
+R2: Extender la radicación a los canales electrónicos de entrada.
+R3: Controlar los tiempos de distribución y respuesta desde la radicación.
+R4: Integrar la radicación con los sistemas de gestión documental y de trámites.
+R5: Optimizar la radicación con datos de volumen, canal y tiempos.
+
+# Q08 Distribución interna y externa de documentos
+@ crit=m tier=p mgda=DOC roles=gd,arc src=F02,F04
+P: ¿La distribución de documentos a destinatarios internos y externos deja constancia de entrega y permite su seguimiento?
+A: Se evalúa la trazabilidad de la entrega en soportes físicos y electrónicos.
+W: Sin constancia de entrega no es posible demostrar notificaciones ni responder por documentos extraviados.
+0: La distribución no deja ningún registro.
+1: La entrega se registra ocasionalmente con firmas en planillas.
+2: Existe constancia de entrega para documentos físicos, no para electrónicos.
+3: La distribución deja constancia de entrega en todos los soportes y canales.
+4: Se monitorean las entregas fallidas o tardías y se corrigen sus causas.
+5: La distribución se optimiza con base en tiempos y tasas de entrega.
+C: Constancias de entrega | Trazabilidad electrónica | Monitoreo de entregas fallidas
+X: Una entidad usa correo certificado electrónico para notificar actos administrativos y conserva el acuse.
+E: Planillas o acuses de entrega | Reportes del sistema de correspondencia | Registros de devoluciones
+R0: Identificar cómo se distribuyen hoy los documentos y qué registro queda.
+R1: Exigir constancia de entrega para los documentos de mayor importancia.
+R2: Extender la constancia de entrega a los canales electrónicos.
+R3: Monitorear entregas fallidas o tardías y corregir sus causas.
+R4: Optimizar la distribución con base en tiempos y tasas de entrega.
+R5: Integrar la trazabilidad de distribución con los expedientes.
+
+# Q09 Seguimiento a tiempos de trámite
+@ crit=m tier=p mgda=DOC roles=pro,gd,ci src=F04,F13 pre=D04-Q07
+P: ¿Se mide el tiempo que tardan los trámites documentales y se generan alertas antes del vencimiento de términos?
+A: Aplica a peticiones, solicitudes, aprobaciones internas y obligaciones de respuesta.
+W: El seguimiento de tiempos previene incumplimientos y revela cuellos de botella.
+0: No se miden los tiempos de trámite.
+1: Los vencimientos se detectan cuando ya ocurrieron.
+2: Se miden tiempos en algunos trámites, sin alertas preventivas.
+3: Los trámites principales tienen medición de tiempos y alertas antes del vencimiento.
+4: Los tiempos se analizan para identificar cuellos de botella y corregirlos.
+5: Los tiempos se optimizan sistemáticamente y se reportan a la dirección.
+C: Medición de tiempos por trámite | Alertas preventivas | Análisis de cuellos de botella
+X: El sistema de PQRS de una entidad alerta al responsable cinco días antes del vencimiento del término.
+E: Reportes de tiempos | Configuración de alertas | Informes de análisis
+R0: Identificar los trámites con términos de respuesta obligatorios.
+R1: Registrar fechas de inicio y respuesta de los trámites prioritarios.
+R2: Configurar alertas antes del vencimiento de términos.
+R3: Analizar los tiempos para identificar cuellos de botella.
+R4: Corregir cuellos de botella y medir el efecto.
+R5: Reportar y optimizar sistemáticamente los tiempos de trámite.
+
+# Q10 Control de aprobaciones y decisiones
+@ crit=a tier=s mgda=DOC roles=pro,jur,gd src=F04,F09 rel=D07-Q12
+P: ¿Las aprobaciones y decisiones relevantes quedan registradas en documentos que identifican quién decidió, cuándo y sobre qué?
+A: Incluye aprobaciones en sistemas, firmas, actas y decisiones por correo o mensajería.
+W: Las decisiones sin registro no pueden demostrarse ante auditorías, litigios o cambios de personal.
+0: Las decisiones relevantes no quedan registradas.
+1: Algunas decisiones se registran en correos o chats no gestionados.
+2: Las decisiones formales se documentan, pero las aprobaciones operativas no.
+3: Las aprobaciones y decisiones relevantes quedan registradas con autor, fecha y objeto.
+4: Se verifica la completitud de los registros de decisión en muestras de expedientes.
+5: El registro de decisiones se integra en los flujos y se mejora con base en auditorías.
+C: Registro de autor y fecha de la decisión | Captura de aprobaciones electrónicas | Muestreo de expedientes
+X: Una aprobación de pago en el ERP queda vinculada al expediente del proveedor con el usuario que la autorizó.
+E: Actas y registros de aprobación | Pistas de auditoría de sistemas | Muestras de expedientes
+R0: Identificar las decisiones que hoy no dejan registro.
+R1: Exigir que las decisiones relevantes se documenten en canales oficiales.
+R2: Incluir las aprobaciones operativas en sistemas o registros controlados.
+R3: Verificar la completitud de los registros de decisión mediante muestreo.
+R4: Integrar el registro de decisiones en los flujos de trabajo.
+R5: Mejorar el registro con base en hallazgos de auditoría.
+
+# Q11 Identificación de duplicidades y reprocesos
+@ crit=b tier=p mgda=DOC roles=pro,gd,cal src=F04,F10
+P: ¿La organización identifica documentos duplicados, copias innecesarias y reprocesos en sus trámites documentales?
+A: Se evalúa si existen análisis que detecten estas situaciones y no solo su percepción.
+W: Las duplicidades aumentan costos, confusión sobre versiones y riesgos de exposición de información.
+0: No se identifican duplicidades ni reprocesos.
+1: Las duplicidades se perciben, pero no se analizan.
+2: Se han identificado duplicidades en algunos trámites.
+3: Existe un análisis documentado de duplicidades y reprocesos en los trámites principales.
+4: Se ejecutan acciones para eliminar duplicidades y se mide su efecto.
+5: El análisis de duplicidades se integra en la mejora continua de procesos.
+C: Análisis de duplicidades | Acciones ejecutadas | Medición del efecto
+X: Una empresa detecta que la misma factura se archiva en papel, en el correo y en una carpeta compartida.
+E: Análisis de trámites | Planes de simplificación | Indicadores de reducción
+R0: Seleccionar trámites con sospecha de duplicidad para analizarlos.
+R1: Documentar las duplicidades y reprocesos percibidos.
+R2: Analizar sistemáticamente las duplicidades en los trámites principales.
+R3: Ejecutar acciones de eliminación de duplicidades y medir su efecto.
+R4: Integrar el análisis de duplicidades en la mejora de procesos.
+R5: Prevenir duplicidades desde el diseño de nuevos trámites.
+
+# Q12 Control de comunicaciones electrónicas
+@ crit=a tier=s mgda=DOC roles=gd,tec,jur src=F02,F04,F06 cond=electronico
+P: ¿Los correos electrónicos y otras comunicaciones electrónicas con valor de evidencia se identifican y se incorporan a los expedientes?
+A: No todos los correos son documentos de archivo; se evalúa la capacidad de identificar y capturar los que sí lo son.
+W: Gran parte de las decisiones actuales ocurre por correo; si no se captura, la evidencia queda fuera de control.
+0: Los correos se gestionan solo en los buzones personales.
+1: Algunas personas imprimen o guardan correos importantes por iniciativa propia.
+2: Hay lineamientos para conservar ciertos correos, con aplicación irregular.
+3: Existen reglas para identificar correos de archivo y capturarlos en los expedientes.
+4: Se verifica la captura de correos de archivo y se controlan los buzones de personal retirado.
+5: La captura se apoya en herramientas integradas y se evalúa su efectividad.
+C: Reglas de identificación de correos de archivo | Mecanismo de captura | Control de buzones de retirados
+X: Una entidad exige incorporar al expediente contractual los correos de aclaración con los oferentes.
+E: Lineamientos de correo electrónico | Muestras de expedientes con correos | Procedimiento de retiro de personal
+R0: Identificar qué tipos de correo contienen decisiones o evidencia.
+R1: Emitir lineamientos básicos para conservar correos de archivo.
+R2: Establecer reglas y mecanismos para capturar correos en los expedientes.
+R3: Verificar la captura y controlar los buzones del personal retirado.
+R4: Apoyar la captura con herramientas integradas al correo.
+R5: Evaluar la efectividad de la captura y ajustar las reglas.
+
+# Q13 Gestión de documentos producidos fuera de canales oficiales
+@ crit=m tier=p mgda=DOC roles=gd,seg,usu src=F04,F11 rel=D04-Q12
+P: ¿La organización controla los documentos con valor de evidencia producidos en canales no oficiales, como mensajería personal o almacenamiento no autorizado?
+A: Incluye aplicaciones de mensajería, cuentas personales de nube y dispositivos propios.
+W: La información de archivo que circula por canales no oficiales escapa a la retención, la seguridad y el acceso.
+0: No se reconoce el uso de canales no oficiales.
+1: Se sabe que se usan canales no oficiales, sin ningún control.
+2: Hay restricciones generales, sin mecanismos para capturar documentos ya producidos.
+3: Existen reglas sobre canales autorizados y mecanismos para capturar documentos producidos fuera de ellos.
+4: Se monitorea el uso de canales no oficiales y se toman acciones ante su uso indebido.
+5: Los canales oficiales se mejoran para reducir la necesidad de usar canales no autorizados.
+C: Listado de canales autorizados | Procedimiento de captura | Acciones ante uso indebido
+X: Un equipo de campo envía fotos de inspección por mensajería; la empresa define su carga diaria al repositorio oficial.
+E: Política de uso de canales | Procedimiento de captura | Reportes de monitoreo
+R0: Identificar los canales no oficiales que se usan para producir o enviar documentos.
+R1: Definir los canales autorizados para documentos con valor de evidencia.
+R2: Establecer mecanismos para capturar documentos producidos fuera de canales oficiales.
+R3: Monitorear el uso de canales no oficiales y actuar ante su uso indebido.
+R4: Mejorar los canales oficiales para reducir el uso de alternativas no autorizadas.
+R5: Evaluar periódicamente el ecosistema de canales y sus riesgos.
+
+# Q14 Gestión de solicitudes y servicios documentales
+@ crit=m tier=p mgda=ADM roles=arc,usu,gd src=F01,F04 rel=D06-Q15
+P: ¿Las solicitudes de consulta, préstamo o copia de documentos se atienden mediante un servicio definido con registro y tiempos de respuesta?
+A: Aplica a usuarios internos y externos, en soportes físicos y electrónicos.
+W: Un servicio documental definido facilita el acceso y permite conocer la demanda real de información.
+0: Las solicitudes se atienden sin ningún procedimiento.
+1: Las solicitudes se atienden según disponibilidad, sin registro.
+2: Se registran algunas solicitudes, sin tiempos de respuesta definidos.
+3: Existe un servicio documental con registro de solicitudes y tiempos de respuesta.
+4: Se miden la demanda, los tiempos y la satisfacción del servicio.
+5: El servicio se mejora con base en la medición y en las necesidades de los usuarios.
+C: Procedimiento de servicio | Registro de solicitudes | Medición de tiempos
+X: El archivo central de una universidad atiende solicitudes de certificados con un tiempo máximo de tres días.
+E: Procedimiento de consulta y préstamo | Registro de solicitudes | Indicadores del servicio
+R0: Identificar quiénes solicitan documentos y con qué frecuencia.
+R1: Registrar todas las solicitudes de consulta, préstamo y copia.
+R2: Definir tiempos de respuesta para cada tipo de solicitud.
+R3: Medir demanda, tiempos y satisfacción del servicio.
+R4: Mejorar el servicio con base en la medición.
+R5: Ofrecer canales de autoservicio cuando la demanda lo justifique.
+
+# Q15 Rediseño y optimización de procesos basado en evidencia
+@ crit=m tier=p mgda=DOC roles=pro,cal,gd src=F10,F13 pre=D04-Q04 rel=D14-Q02
+P: ¿Los procesos con componentes documentales se rediseñan a partir de datos y análisis, y no solo por cambios de tecnología o de personal?
+A: Se valora el uso de mediciones, análisis de flujos y evaluaciones como insumos del rediseño.
+W: Rediseñar con evidencia evita trasladar ineficiencias al entorno digital.
+0: Los procesos no se rediseñan.
+1: Los cambios de proceso surgen por la llegada de una herramienta nueva.
+2: Algunos rediseños consideran datos, sin método definido.
+3: Los rediseños se basan en análisis documentados de flujos, tiempos y problemas.
+4: Se mide el efecto de los rediseños y se comparan con la situación previa.
+5: El rediseño basado en evidencia es una práctica sistemática de mejora.
+C: Análisis previos al rediseño | Medición antes y después | Método documentado
+X: Antes de digitalizar el trámite de licencias, una entidad elimina dos aprobaciones que no aportaban control.
+E: Estudios de rediseño | Mediciones antes y después | Actas de aprobación de cambios
+R0: Identificar procesos documentales con problemas recurrentes.
+R1: Recopilar datos básicos de tiempos y problemas antes de cambiar un proceso.
+R2: Fundamentar los rediseños en análisis documentados.
+R3: Medir el efecto de los rediseños frente a la situación previa.
+R4: Sistematizar el método de rediseño basado en evidencia.
+R5: Integrar el rediseño basado en evidencia en la gestión de la transformación digital.

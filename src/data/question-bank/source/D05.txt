@@ -1,0 +1,322 @@
+@dimension D05
+@name Archivística y documental
+@weight 11
+@sources F01,F02,F04,F07,F22,F23,F27
+@mgda DOC
+@summary Evalúa los instrumentos y procesos archivísticos: identificación de funciones, clasificación, valoración, retención, disposición, organización, descripción y control de cambios.
+@note En organizaciones privadas no sujetas a los instrumentos formales del AGN se evalúan instrumentos equivalentes (por ejemplo, planes de clasificación o calendarios de conservación) y las obligaciones se presentan como buenas prácticas.
+
+# Q01 Identificación de funciones productoras de documentos
+@ crit=m tier=p mgda=DOC roles=gd,pro,jur src=F02,F04,F22 legal=pub
+P: ¿La organización ha identificado las funciones, competencias o líneas de negocio que dan origen a sus documentos, a partir de su normativa y estructura?
+A: Es el paso previo a la clasificación: relaciona estructura, normas o estatutos y funciones con la producción documental.
+W: Clasificar sin conocer las funciones produce instrumentos que no reflejan lo que la organización realmente hace.
+0: No se han identificado las funciones productoras de documentos.
+1: Se conocen las dependencias, sin analizar sus funciones.
+2: Se han identificado funciones de algunas dependencias a partir de su normativa.
+3: Las funciones productoras están identificadas y sustentadas en normas, estatutos o manuales.
+4: La identificación de funciones se actualiza ante reestructuraciones o nuevas competencias.
+5: El análisis funcional se integra con la gestión de procesos y orienta la clasificación.
+C: Análisis de funciones sustentado | Fuentes normativas o estatutarias citadas | Actualización tras reestructuraciones
+X: Una empresa privada identifica sus líneas de negocio y las actividades reguladas que generan obligaciones de conservación.
+E: Estudio de funciones o compilación normativa | Organigramas históricos | Manuales de funciones
+R0: Recopilar las normas, estatutos y manuales que definen las funciones de la organización.
+R1: Analizar las funciones de cada dependencia a partir de sus fuentes.
+R2: Completar la identificación de funciones para toda la organización.
+R3: Actualizar el análisis funcional ante reestructuraciones.
+R4: Integrar el análisis funcional con la gestión de procesos.
+R5: Revisar periódicamente el análisis funcional como base de la clasificación.
+
+# Q02 Clasificación documental basada en funciones y procesos
+@ crit=a tier=s mgda=DOC roles=gd,pro src=F02,F04,F23 legal=pub pre=D05-Q01 rel=D05-Q03
+P: ¿Los documentos se clasifican según las funciones y procesos que los originan y no según criterios temáticos o personales?
+A: Se evalúa el criterio aplicado en la práctica al agrupar documentos, más allá de la existencia de un instrumento.
+W: La clasificación funcional mantiene el contexto de producción y permite aplicar reglas de retención coherentes.
+0: Los documentos se agrupan sin ningún criterio de clasificación.
+1: Cada persona agrupa los documentos según temas o preferencias propias.
+2: Algunas dependencias clasifican por funciones; otras, por temas o por tipo de documento.
+3: La clasificación se basa en funciones y procesos y se aplica en las dependencias principales.
+4: Se verifica en muestras que la clasificación aplicada corresponde a las funciones.
+5: La clasificación funcional se aplica de forma consistente en todos los soportes y sistemas.
+C: Criterio funcional en carpetas o sistemas | Muestras de clasificación aplicada | Consistencia entre dependencias
+X: Una alcaldía deja de agrupar documentos por "correspondencia varios" y los clasifica por la serie del trámite que los originó.
+E: Instructivo de clasificación | Muestras de archivos de gestión | Estructura de carpetas en sistemas
+R0: Identificar cómo se agrupan hoy los documentos en cada dependencia.
+R1: Reemplazar las agrupaciones personales por criterios funcionales básicos.
+R2: Extender la clasificación funcional a todas las dependencias.
+R3: Verificar mediante muestras la correcta aplicación de la clasificación.
+R4: Aplicar la misma clasificación en soportes físicos y electrónicos.
+R5: Revisar la clasificación ante cambios de funciones y procesos.
+
+# Q03 Existencia y actualización del cuadro de clasificación documental
+@ crit=a critical tier=q mgda=DOC roles=gd,jur src=F02,F04,F23 legal=pub min=3 pre=D05-Q01 rel=D07-Q04
+P: ¿Existe un cuadro de clasificación documental o instrumento equivalente aprobado y actualizado según la estructura y funciones vigentes?
+A: En el sector privado puede corresponder a un plan de clasificación corporativo. Se evalúa su vigencia, no solo su existencia.
+W: El cuadro de clasificación es la estructura común que permite organizar, recuperar y aplicar reglas a los documentos.
+0: No existe un cuadro de clasificación ni un instrumento equivalente.
+1: Existen listados de series elaborados por algunas dependencias, sin aprobación.
+2: El cuadro existe, pero no está actualizado frente a la estructura o funciones vigentes.
+3: El cuadro está aprobado y actualizado según la estructura y las funciones vigentes.
+4: Las actualizaciones del cuadro se gestionan de forma controlada y se comunican oportunamente.
+5: El cuadro se revisa sistemáticamente y se mantiene alineado con sistemas y procesos.
+C: Cuadro aprobado | Correspondencia con la estructura vigente | Fecha de última actualización
+X: Tras una fusión, una empresa actualiza su plan de clasificación y lo parametriza en el repositorio documental.
+E: Cuadro de clasificación aprobado | Acta de aprobación | Comparación con el organigrama vigente
+R0: Elaborar un cuadro de clasificación a partir del análisis de funciones.
+R1: Consolidar los listados de series de las dependencias en un único instrumento.
+R2: Actualizar el cuadro frente a la estructura y funciones vigentes y aprobarlo.
+R3: Gestionar las actualizaciones del cuadro de forma controlada.
+R4: Mantener el cuadro alineado con los sistemas y procesos.
+R5: Revisar sistemáticamente el cuadro ante cambios organizacionales.
+
+# Q04 Identificación y valoración de series documentales
+@ crit=a tier=p mgda=DOC roles=gd,jur,pro src=F02,F04,F23 legal=pub pre=D05-Q03
+P: ¿Las series documentales se han valorado considerando sus valores administrativos, legales, fiscales, técnicos e históricos?
+A: La valoración debe estar sustentada en fichas o estudios, no solo en la experiencia de quien elabora los instrumentos.
+W: Una valoración sustentada evita eliminar documentos que deben conservarse o conservar indefinidamente lo que no aporta.
+0: No se han identificado ni valorado series documentales.
+1: Las series se identifican sin análisis de sus valores.
+2: Algunas series cuentan con valoración sustentada.
+3: Las series se han valorado con sustento documentado de sus valores primarios y secundarios.
+4: La valoración se revisa cuando cambian normas, funciones o usos de la información.
+5: La valoración incorpora análisis de riesgos y se actualiza de manera sistemática.
+C: Fichas de valoración por serie | Sustento normativo de plazos | Revisión ante cambios
+X: Una IPS sustenta la retención de las historias clínicas con la normativa sectorial aplicable.
+E: Fichas de valoración documental | Memoria descriptiva de instrumentos | Conceptos jurídicos
+R0: Identificar las series documentales de la organización.
+R1: Elaborar fichas de valoración para las series de mayor riesgo.
+R2: Valorar todas las series con sustento documentado.
+R3: Revisar la valoración ante cambios normativos o funcionales.
+R4: Incorporar análisis de riesgos en la valoración.
+R5: Mantener un proceso sistemático de revisión de la valoración.
+
+# Q05 Definición de tiempos de retención documental
+@ crit=a critical tier=s mgda=DOC roles=gd,jur src=F02,F04,F22,F23 legal=pub min=3 pre=D05-Q04 rel=D05-Q07,D07-Q14
+P: ¿Están definidos y aprobados los tiempos de retención de las series documentales en un instrumento formal o equivalente?
+A: Puede tratarse de tablas de retención documental o de un calendario de conservación corporativo. Este criterio evalúa la definición, no la aplicación.
+W: Los tiempos de retención definidos son el fundamento para conservar, transferir o eliminar con respaldo.
+0: No se han definido tiempos de retención.
+1: Los tiempos de retención se conocen por costumbre, sin documento que los establezca.
+2: Hay tiempos definidos para algunas series o en un instrumento sin aprobar.
+3: Los tiempos de retención de las series están definidos y aprobados en un instrumento formal.
+4: Los tiempos se revisan cuando cambian normas, funciones o necesidades de conservación.
+5: Los tiempos se mantienen actualizados mediante vigilancia normativa y revisión sistemática.
+C: Instrumento de retención aprobado | Cobertura de todas las series | Fecha de aprobación o actualización
+X: Una empresa privada adopta un calendario de conservación que fija diez años para los soportes contables.
+E: Tablas de retención o calendario de conservación | Acto o acta de aprobación | Registro o convalidación cuando aplique
+R0: Identificar las obligaciones de conservación que aplican a cada serie.
+R1: Documentar los tiempos de retención que hoy se aplican por costumbre.
+R2: Definir tiempos para todas las series y aprobar el instrumento.
+R3: Revisar los tiempos ante cambios normativos y funcionales.
+R4: Mantener una vigilancia normativa sobre obligaciones de conservación.
+R5: Evaluar periódicamente la pertinencia de los tiempos con base en el uso y los riesgos.
+
+# Q06 Definición de disposición final
+@ crit=a tier=s mgda=DOC roles=gd,jur src=F02,F04,F23 legal=pub pre=D05-Q04 rel=D05-Q13,D05-Q14
+P: ¿Para cada serie está definida la disposición final, es decir, conservación total, selección, eliminación o cambio de soporte, con su justificación?
+A: Se evalúa la decisión documentada sobre el destino de los documentos al cumplir su retención.
+W: Sin disposición definida, los documentos se acumulan indefinidamente o se eliminan sin criterio.
+0: No se ha definido la disposición final de las series.
+1: El destino de los documentos se decide caso a caso.
+2: La disposición está definida para algunas series, sin justificación documentada.
+3: La disposición final de todas las series está definida y justificada en el instrumento aprobado.
+4: Los procedimientos de selección, eliminación y cambio de soporte están documentados.
+5: La disposición se revisa con base en su aplicación y en el valor secundario de los documentos.
+C: Disposición por serie | Justificación documentada | Procedimientos de cada tipo de disposición
+X: Una universidad define conservación total para las actas del consejo superior y selección para los exámenes de admisión.
+E: Instrumento de retención con disposición final | Procedimientos de selección y eliminación | Fichas de valoración
+R0: Identificar qué ocurre hoy con los documentos al cumplir su retención.
+R1: Definir criterios de disposición final para las series principales.
+R2: Justificar y aprobar la disposición final de todas las series.
+R3: Documentar los procedimientos de selección, eliminación y cambio de soporte.
+R4: Revisar la disposición con base en su aplicación real.
+R5: Evaluar sistemáticamente la disposición frente al valor secundario de los documentos.
+
+# Q07 Implementación efectiva de reglas de retención
+@ crit=a critical tier=q mgda=DOC roles=gd,jur,tec src=F01,F02,F04,F09 legal=pub min=3 pre=D05-Q05 rel=D07-Q14
+P: ¿La organización aplica y controla los tiempos de retención documental durante el ciclo de vida de sus documentos, independientemente del soporte o sistema en que se encuentren?
+A: No basta con disponer de una tabla de retención documental aprobada. Se busca establecer si los tiempos y decisiones de retención se aplican efectivamente a los documentos.
+W: Una regla aprobada y no aplicada produce acumulación, costos crecientes y eliminaciones sin control.
+0: No se han definido reglas de retención ni se controla el tiempo de conservación.
+1: Algunas áreas conservan o eliminan documentos según criterios informales.
+2: Existen tiempos de retención definidos para parte de la documentación, pero su aplicación es limitada o predominantemente manual.
+3: Las reglas de retención están formalizadas y se aplican a los documentos dentro del alcance establecido.
+4: La organización monitorea el cumplimiento de las reglas, registra excepciones y realiza verificaciones periódicas.
+5: Las reglas se mantienen actualizadas, cuentan con controles efectivos y se revisan sistemáticamente a partir de cambios organizacionales, riesgos y resultados.
+C: Registros de aplicación de retención | Excepciones registradas | Verificaciones periódicas
+X: Una entidad verifica cada año que los expedientes con retención cumplida en gestión hayan sido transferidos o dispuestos.
+E: Tabla de retención o instrumento equivalente | Procedimiento de disposición documental | Registros de transferencias | Reportes de aplicación de reglas | Actas de eliminación | Configuración de sistemas | Muestras de expedientes
+R0: Identificar las obligaciones de conservación y elaborar reglas de retención por categorías documentales.
+R1: Formalizar criterios uniformes y eliminar las prácticas de disposición discrecional.
+R2: Extender la aplicación de reglas a procesos, soportes y repositorios pendientes.
+R3: Incorporar seguimiento, indicadores, muestreo y controles de excepción.
+R4: Evaluar automatización apropiada y fortalecer la gestión de cambios.
+R5: Mantener la capacidad y evaluar periódicamente su efectividad.
+
+# Q08 Ordenación documental
+@ crit=m tier=p mgda=DOC roles=arc,gd src=F02,F04 cond=fisico rel=D05-Q09
+P: ¿Los documentos dentro de cada expediente se ordenan según criterios definidos que reflejan la secuencia del trámite?
+A: Aplica principalmente a expedientes físicos e híbridos; en electrónicos se valora mediante el índice o el orden en el sistema.
+W: La ordenación respeta el orden original, facilita la consulta y evidencia la secuencia de las actuaciones.
+0: Los documentos de los expedientes no siguen ningún orden.
+1: Cada persona ordena los documentos según su criterio.
+2: Existen criterios de ordenación aplicados en algunas dependencias.
+3: La ordenación sigue criterios definidos y se aplica en las dependencias principales.
+4: Se verifica la ordenación en muestras antes de las transferencias.
+5: Los criterios de ordenación se aplican de forma consistente y se ajustan según los hallazgos.
+C: Instructivo de ordenación | Muestras de expedientes ordenados | Verificación previa a transferencias
+X: En los expedientes laborales de una empresa, los documentos se ordenan cronológicamente desde la vinculación.
+E: Instructivo de organización de archivos | Muestras de expedientes | Listas de verificación de transferencias
+R0: Definir criterios de ordenación para los tipos de expediente principales.
+R1: Reemplazar las prácticas personales por criterios comunes de ordenación.
+R2: Aplicar los criterios en todas las dependencias.
+R3: Verificar la ordenación en muestras antes de cada transferencia.
+R4: Ajustar los criterios según los hallazgos de verificación.
+R5: Integrar la ordenación en el índice de los expedientes electrónicos e híbridos.
+
+# Q09 Descripción archivística
+@ crit=m tier=p mgda=DOC roles=arc,gd src=F04,F07,F27 rel=D09-Q03
+P: ¿Los documentos y agrupaciones documentales se describen con elementos normalizados que permiten identificarlos, contextualizarlos y recuperarlos?
+A: Puede apoyarse en normas como ISAD(G) o en modelos como Records in Contexts para niveles de fondo, serie y expediente.
+W: Una descripción normalizada hace posible encontrar y comprender los documentos fuera de su contexto original.
+0: Los documentos no se describen.
+1: La descripción se limita a rótulos o títulos libres.
+2: Algunos fondos o series tienen descripción con elementos normalizados.
+3: La descripción normalizada cubre los niveles y agrupaciones principales.
+4: Se controla la calidad de la descripción y se completa de manera planificada.
+5: La descripción se enriquece con relaciones de contexto y se publica para su consulta cuando corresponde.
+C: Elementos normalizados utilizados | Niveles cubiertos | Control de calidad de la descripción
+X: Un archivo histórico universitario describe sus fondos con elementos normalizados y los publica en un catálogo en línea.
+E: Instrumentos de descripción | Catálogos o guías | Muestras de registros descriptivos
+R0: Identificar qué fondos y series carecen de descripción.
+R1: Definir los elementos mínimos de descripción para cada nivel.
+R2: Describir con elementos normalizados los niveles principales.
+R3: Controlar la calidad de la descripción y planificar su ampliación.
+R4: Enriquecer la descripción con relaciones de contexto.
+R5: Publicar la descripción para consulta cuando corresponda y evaluar su uso.
+
+# Q10 Elaboración y actualización de inventarios documentales
+@ crit=a tier=p mgda=DOC roles=arc,gd src=F02,F22,F23 legal=pub
+P: ¿Las dependencias y el archivo central mantienen inventarios documentales actualizados de los documentos bajo su custodia?
+A: Incluye inventarios de archivos de gestión, central e histórico, en formato único cuando aplique.
+W: El inventario es el instrumento que permite demostrar qué documentos existen, controlar entregas y responder por ellos.
+0: No existen inventarios documentales.
+1: Hay inventarios parciales elaborados en formatos diferentes.
+2: Algunas dependencias tienen inventarios actualizados en un formato común.
+3: Todas las dependencias y el archivo central tienen inventarios actualizados en formato común.
+4: Los inventarios se exigen en entregas de cargo y se verifican contra los documentos.
+5: Los inventarios se integran en sistemas y se mantienen actualizados de forma continua.
+C: Inventarios en formato común | Cobertura por dependencia | Uso en entregas de cargo
+X: Al retirarse un funcionario, el paz y salvo exige la entrega del inventario del archivo de gestión a su cargo.
+E: Inventarios documentales | Actas de entrega de cargo | Informes de verificación de inventarios
+R0: Elaborar inventarios de los documentos de mayor riesgo.
+R1: Unificar el formato de los inventarios existentes.
+R2: Extender los inventarios actualizados a todas las dependencias.
+R3: Exigir inventarios en las entregas de cargo y verificarlos.
+R4: Integrar los inventarios en sistemas de información.
+R5: Mantener los inventarios actualizados de forma continua y auditarlos.
+
+# Q11 Control de versiones y documentos definitivos
+@ crit=m tier=p mgda=DOC roles=gd,pro,tec src=F04,F06
+P: ¿La organización distingue entre borradores, versiones de trabajo y documentos definitivos, y conserva como evidencia la versión que corresponde?
+A: Aplica especialmente a documentos colaborativos y a los que pasan por varias revisiones antes de aprobarse.
+W: Confundir versiones de trabajo con documentos definitivos debilita la evidencia y genera errores en decisiones.
+0: No se distingue entre borradores y documentos definitivos.
+1: Cada autor decide de manera personal cuándo un borrador se considera definitivo.
+2: Hay convenciones de nombres o carpetas para versiones, aplicadas de manera irregular.
+3: Existen reglas para identificar versiones y declarar documentos definitivos.
+4: Los sistemas controlan las versiones y la declaración de definitivos se verifica.
+5: El control de versiones se integra en los flujos de aprobación y se revisa su efectividad.
+C: Reglas de versionamiento | Declaración de definitivo | Control en sistemas colaborativos
+X: Un contrato pasa por cinco versiones en una herramienta colaborativa; solo la versión firmada se declara documento de archivo.
+E: Lineamientos de versionamiento | Configuración de sistemas | Muestras de expedientes
+R0: Identificar dónde se generan múltiples versiones de documentos.
+R1: Definir convenciones básicas para identificar versiones.
+R2: Establecer reglas para declarar documentos definitivos.
+R3: Configurar los sistemas para controlar versiones y declaración de definitivos.
+R4: Integrar el control de versiones en los flujos de aprobación.
+R5: Revisar la efectividad del control de versiones con base en incidentes.
+
+# Q12 Transferencias documentales
+@ crit=m tier=p mgda=DOC roles=arc,gd src=F02,F22,F23 legal=pub pre=D05-Q05
+P: ¿Las transferencias de documentos entre archivos de gestión, central e histórico se realizan según un cronograma, con inventario y verificación?
+A: En organizaciones privadas puede corresponder al traslado a archivo inactivo o a custodia externa.
+W: Las transferencias controladas liberan espacio en las dependencias y aseguran la custodia en la fase correcta.
+0: No se realizan transferencias documentales.
+1: Las transferencias se realizan cuando falta espacio, sin control.
+2: Existe un cronograma de transferencias con cumplimiento parcial.
+3: Las transferencias siguen un cronograma, con inventario y verificación de recibo.
+4: Se mide el cumplimiento del cronograma y se corrigen las causas de incumplimiento.
+5: Las transferencias incluyen documentos electrónicos con sus metadatos y se optimizan con datos de uso.
+C: Cronograma de transferencias | Inventarios de transferencia | Actas de recibo verificado
+X: Cada año las dependencias de una gobernación transfieren al archivo central los expedientes con retención cumplida en gestión.
+E: Cronograma de transferencias | Inventarios de transferencia | Actas de recibo
+R0: Identificar los documentos que deberían haberse transferido.
+R1: Establecer un cronograma anual de transferencias.
+R2: Exigir inventario y verificación en cada transferencia.
+R3: Medir el cumplimiento del cronograma y corregir sus causas.
+R4: Incluir documentos electrónicos con sus metadatos en las transferencias.
+R5: Optimizar las transferencias con base en datos de uso y ocupación.
+
+# Q13 Eliminación documental autorizada y trazable
+@ crit=a critical tier=s mgda=DOC roles=gd,jur,ci src=F02,F04,F11 legal=pub min=3 pre=D05-Q06 rel=D10-Q13
+P: ¿Las eliminaciones de documentos se realizan solo con autorización formal, conforme a los instrumentos aprobados y con registro que permita reconstruirlas?
+A: Incluye documentos físicos y electrónicos; la eliminación electrónica también requiere autorización y registro.
+W: Una eliminación sin autorización ni registro puede destruir evidencia necesaria y generar responsabilidades.
+0: Los documentos se eliminan sin autorización ni registro.
+1: Se eliminan documentos con autorización verbal o por decisión del área.
+2: Las eliminaciones físicas se autorizan, pero las electrónicas no se controlan.
+3: Todas las eliminaciones se autorizan formalmente según los instrumentos y quedan registradas.
+4: Se verifica la ausencia de suspensiones de disposición antes de eliminar y se publican los inventarios cuando corresponde.
+5: El proceso de eliminación se audita y se ajusta para mantener su trazabilidad completa.
+C: Actas de eliminación aprobadas | Inventarios de documentos eliminados | Verificación previa de suspensiones
+X: Antes de eliminar historias laborales con retención cumplida, una empresa confirma con jurídica que no existen litigios asociados.
+E: Actas del comité que aprueban eliminaciones | Inventarios de eliminación | Registros de eliminación electrónica
+R0: Suspender las eliminaciones no autorizadas y establecer una regla de autorización.
+R1: Formalizar la aprobación de eliminaciones conforme a los instrumentos.
+R2: Extender la autorización y el registro a la eliminación de documentos electrónicos.
+R3: Verificar suspensiones de disposición antes de cada eliminación.
+R4: Auditar periódicamente el proceso de eliminación.
+R5: Mantener la trazabilidad completa de las eliminaciones en sistemas y registros.
+
+# Q14 Valoración secundaria y conservación permanente
+@ crit=a critical tier=p mgda=DOC roles=gd,arc src=F02,F04,F22 legal=pub cond=hist pre=D05-Q04 rel=D11-Q02
+P: ¿Se identifican los documentos con valor histórico, científico o cultural y se asegura su conservación permanente en condiciones adecuadas?
+A: Aplica a los documentos de conservación total en cualquier soporte, incluidos los nativos digitales.
+W: Los documentos de valor permanente constituyen la memoria institucional y, en entidades públicas, parte del patrimonio documental.
+0: No se identifican documentos de valor permanente.
+1: Algunos documentos antiguos se guardan sin criterios de valoración.
+2: Se identifican series de conservación permanente, sin condiciones adecuadas de custodia.
+3: Las series de conservación permanente están identificadas y se custodian en condiciones adecuadas.
+4: Se verifica periódicamente el estado de los documentos permanentes y se priorizan intervenciones.
+5: La conservación permanente se planifica a largo plazo para todos los soportes, incluido el digital.
+C: Series de conservación total identificadas | Condiciones de custodia | Plan para soportes digitales
+X: Una alcaldía identifica sus acuerdos del concejo como permanentes y los custodia en el archivo histórico con control ambiental.
+E: Fichas de valoración secundaria | Inventario del archivo histórico | Informes de estado de conservación
+R0: Identificar los documentos con posible valor permanente.
+R1: Valorar formalmente las series candidatas a conservación permanente.
+R2: Asegurar condiciones adecuadas de custodia para las series permanentes.
+R3: Verificar periódicamente su estado y priorizar intervenciones.
+R4: Incorporar los documentos permanentes nativos digitales en la preservación digital.
+R5: Planificar a largo plazo la conservación permanente en todos los soportes.
+
+# Q15 Control de cambios sobre instrumentos archivísticos
+@ crit=m tier=p mgda=DOC roles=gd,jur src=F02,F05 legal=pub pre=D05-Q03 rel=D02-Q09
+P: ¿Las actualizaciones de instrumentos archivísticos se documentan con su justificación, aprobación y efectos sobre los documentos existentes?
+A: Se evalúa la trazabilidad de versiones del cuadro de clasificación, de las reglas de retención y de otros instrumentos.
+W: Sin control de cambios no es posible saber qué regla aplicaba a un documento en un momento determinado.
+0: Los instrumentos se modifican sin registro de cambios.
+1: Se conserva la última versión, sin trazabilidad de versiones anteriores.
+2: Se conservan las versiones, sin justificación ni análisis de efectos.
+3: Cada actualización documenta su justificación, aprobación y vigencia.
+4: Se analizan los efectos de cada cambio sobre los documentos y sistemas existentes.
+5: El control de cambios es sistemático e integrado con la configuración de los sistemas.
+C: Historial de versiones | Justificación de cada cambio | Análisis de efectos sobre documentos existentes
+X: Al cambiar la retención de una serie, una entidad documenta qué hacer con los expedientes producidos con la regla anterior.
+E: Historial de versiones de instrumentos | Actas de aprobación | Análisis de impacto
+R0: Recuperar y conservar las versiones anteriores de los instrumentos.
+R1: Registrar la fecha de vigencia de cada versión.
+R2: Documentar justificación y aprobación de cada actualización.
+R3: Analizar los efectos de cada cambio sobre documentos y sistemas.
+R4: Integrar el control de cambios con la configuración de los sistemas.
+R5: Auditar periódicamente la trazabilidad de los instrumentos.

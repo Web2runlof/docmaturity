@@ -1,0 +1,322 @@
+@dimension D09
+@name Interoperabilidad y metadatos
+@weight 7
+@sources F03,F06,F07,F09,F17,F27
+@mgda TEC
+@summary Evalúa la capacidad de describir, relacionar e intercambiar documentos con su contexto: esquemas de metadatos, captura y calidad de metadatos, vocabularios, identificadores, integraciones e intercambio entre sistemas.
+@note No se exige un tipo particular de interfaz (por ejemplo, APIs REST): se evalúa la adecuación de los mecanismos de integración al contexto organizacional.
+
+# Q01 Existencia de un esquema de metadatos
+@ crit=a tier=q mgda=TEC roles=gd,tec src=F03,F07,F09 cond=electronico min=3 rel=D09-Q08
+P: ¿La organización ha definido un esquema de metadatos para sus documentos electrónicos de archivo, con elementos, definiciones y reglas de uso?
+A: Puede basarse en referentes nacionales o internacionales adaptados; se evalúa que esté documentado y aprobado.
+W: Sin un esquema común, cada sistema describe los documentos a su manera y la información no puede integrarse.
+0: No existe un esquema de metadatos.
+1: Cada sistema usa los campos que trae por defecto.
+2: Hay un esquema en elaboración o aplicado solo a un sistema.
+3: Existe un esquema aprobado con elementos, definiciones y reglas, aplicado en los sistemas principales.
+4: El esquema se mantiene con control de versiones y se verifica su aplicación.
+5: El esquema se revisa con base en necesidades de interoperabilidad y preservación.
+C: Esquema aprobado | Definiciones y reglas por elemento | Aplicación en sistemas principales
+X: Una entidad aprueba un esquema de metadatos que exige serie, expediente, productor, fecha y nivel de acceso.
+E: Esquema de metadatos aprobado | Matriz de aplicación por sistema | Historial de versiones
+R0: Identificar qué metadatos registran hoy los sistemas principales.
+R1: Definir un conjunto mínimo de metadatos comunes.
+R2: Documentar y aprobar un esquema con elementos, definiciones y reglas.
+R3: Mantener el esquema con control de versiones y verificar su aplicación.
+R4: Revisar el esquema según necesidades de interoperabilidad y preservación.
+R5: Extender el esquema a todo el ecosistema documental.
+
+# Q02 Identificación de metadatos obligatorios
+@ crit=a tier=s mgda=TEC roles=gd,tec src=F03,F07 cond=electronico pre=D09-Q01
+P: ¿Están definidos los metadatos obligatorios que todo documento o expediente debe tener según su tipo y su fase del ciclo de vida?
+A: Se diferencia entre metadatos obligatorios, condicionales y opcionales.
+W: Los metadatos obligatorios aseguran un mínimo de contexto y control en todos los documentos.
+0: No se han definido metadatos obligatorios.
+1: Se considera obligatorio lo que el sistema exige por defecto.
+2: Algunos metadatos están definidos como obligatorios, sin diferenciar por tipo o fase.
+3: Los metadatos obligatorios están definidos por tipo documental y fase del ciclo de vida.
+4: Los sistemas impiden guardar documentos sin sus metadatos obligatorios.
+5: La definición de obligatoriedad se revisa con base en la calidad y el uso de los metadatos.
+C: Metadatos obligatorios por tipo | Diferenciación por fase | Validación en sistemas
+X: El sistema no permite declarar un contrato como documento de archivo sin número de contrato y serie asignada.
+E: Matriz de obligatoriedad | Configuración de validaciones | Reportes de completitud
+R0: Identificar los metadatos indispensables para los documentos críticos.
+R1: Definir un conjunto mínimo obligatorio para todos los documentos.
+R2: Diferenciar la obligatoriedad por tipo documental y fase.
+R3: Configurar los sistemas para exigir los metadatos obligatorios.
+R4: Revisar la obligatoriedad con base en la calidad y el uso.
+R5: Mantener actualizada la matriz de obligatoriedad ante nuevos tipos documentales.
+
+# Q03 Captura de metadatos descriptivos
+@ crit=m tier=p mgda=TEC roles=gd,usu src=F07,F27 cond=electronico rel=D05-Q09
+P: ¿Los documentos electrónicos registran metadatos descriptivos que permiten identificarlos y recuperarlos, como título, asunto, partes y fechas?
+A: Se evalúa la captura real en los sistemas y su utilidad para la búsqueda.
+W: Los metadatos descriptivos son la base de la búsqueda y la recuperación.
+0: No se registran metadatos descriptivos.
+1: La descripción se limita al nombre del archivo.
+2: Algunos documentos tienen metadatos descriptivos incompletos.
+3: Los documentos de los sistemas principales registran metadatos descriptivos útiles para su recuperación.
+4: Se mide la completitud y utilidad de los metadatos descriptivos.
+5: La captura descriptiva se asiste o automatiza con control de calidad.
+C: Metadatos descriptivos registrados | Completitud medida | Utilidad para búsqueda
+X: Los oficios recibidos registran remitente, asunto, fecha y número de radicado para su búsqueda.
+E: Configuración de campos descriptivos | Reportes de completitud | Pruebas de búsqueda
+R0: Definir qué metadatos descriptivos son útiles para la recuperación.
+R1: Reemplazar la descripción por nombre de archivo por campos estructurados.
+R2: Capturar metadatos descriptivos en los sistemas principales.
+R3: Medir la completitud y la utilidad de los metadatos descriptivos.
+R4: Asistir la captura descriptiva con controles de calidad.
+R5: Ajustar los metadatos descriptivos según los patrones de búsqueda.
+
+# Q04 Captura de metadatos administrativos
+@ crit=m tier=p mgda=TEC roles=gd,tec src=F07,F09 cond=electronico
+P: ¿Se registran metadatos administrativos como clasificación, retención, nivel de acceso y responsable para cada documento o expediente?
+A: Estos metadatos permiten aplicar reglas de gestión sobre los documentos.
+W: Sin metadatos administrativos, los sistemas no pueden aplicar retención ni controlar accesos.
+0: No se registran metadatos administrativos.
+1: La información administrativa se conserva fuera de los sistemas.
+2: Algunos metadatos administrativos se registran de forma incompleta.
+3: Los documentos registran clasificación, retención, acceso y responsable en los sistemas principales.
+4: Los metadatos administrativos se usan para aplicar reglas y se verifica su exactitud.
+5: Los metadatos administrativos se heredan y actualizan automáticamente con controles.
+C: Campos de clasificación y retención | Nivel de acceso registrado | Uso en reglas automáticas
+X: Al crear un expediente, el sistema hereda la serie, la retención y el nivel de acceso de la serie.
+E: Configuración de metadatos administrativos | Reportes de exactitud | Reglas configuradas
+R0: Identificar la información administrativa necesaria para gestionar los documentos.
+R1: Trasladar la información administrativa a los sistemas.
+R2: Registrar clasificación, retención, acceso y responsable en los sistemas principales.
+R3: Usar los metadatos para aplicar reglas y verificar su exactitud.
+R4: Configurar la herencia automática de metadatos administrativos.
+R5: Auditar periódicamente la exactitud de los metadatos administrativos.
+
+# Q05 Captura de metadatos técnicos y tecnológicos
+@ crit=m tier=p mgda=TEC roles=tec src=F07,F17 cond=electronico rel=D11-Q03
+P: ¿Se registran metadatos técnicos como formato, versión, tamaño, aplicación de origen y suma de verificación?
+A: Estos metadatos son necesarios para la preservación y para detectar alteraciones.
+W: Sin metadatos técnicos, es difícil evaluar riesgos de obsolescencia o verificar la integridad.
+0: No se registran metadatos técnicos.
+1: Los metadatos técnicos existen solo en el sistema de archivos.
+2: Algunos sistemas registran formato y tamaño.
+3: Los sistemas principales registran formato, versión, tamaño, origen y suma de verificación.
+4: Los metadatos técnicos se validan al ingresar documentos al sistema.
+5: Los metadatos técnicos se extraen automáticamente y alimentan la preservación.
+C: Formato y versión registrados | Suma de verificación | Validación al ingreso
+X: Al cargar un documento, el repositorio identifica su formato y calcula una suma de verificación.
+E: Configuración de extracción técnica | Reportes de formatos | Registros de sumas de verificación
+R0: Identificar qué información técnica conservan hoy los sistemas.
+R1: Registrar formato y tamaño de los documentos.
+R2: Incorporar versión, origen y suma de verificación.
+R3: Validar los metadatos técnicos al ingreso.
+R4: Automatizar la extracción técnica y vincularla con la preservación.
+R5: Revisar los metadatos técnicos frente a nuevos formatos.
+
+# Q06 Captura de metadatos de contexto y procedencia
+@ crit=a tier=s mgda=TEC roles=gd,tec src=F07,F09 cond=electronico rel=D07-Q03
+P: ¿Los metadatos registran el productor, la función, el proceso y las relaciones de cada documento con otros documentos y expedientes?
+A: El contexto y la procedencia permiten entender por qué existe un documento y cómo se relaciona con otros.
+W: Los documentos sin procedencia pierden su valor como evidencia al salir del sistema que los produjo.
+0: No se registran metadatos de contexto o procedencia.
+1: El contexto se deduce de la ubicación del documento.
+2: Se registra el productor, sin función, proceso ni relaciones.
+3: Se registran productor, función, proceso y relaciones en los sistemas principales.
+4: Los metadatos de contexto se conservan en exportaciones y transferencias.
+5: El contexto se modela como red de relaciones y se mantiene a largo plazo.
+C: Productor y función registrados | Relaciones entre documentos | Conservación en exportaciones
+X: Un documento de pago registra la orden de compra y el contrato con los que se relaciona.
+E: Esquema de metadatos de contexto | Muestras de documentos | Paquetes de exportación
+R0: Identificar qué relaciones entre documentos son importantes para los procesos.
+R1: Registrar el productor de cada documento.
+R2: Incorporar función, proceso y relaciones en los metadatos.
+R3: Conservar el contexto en exportaciones y transferencias.
+R4: Modelar el contexto como una red de relaciones.
+R5: Evaluar la conservación del contexto a largo plazo.
+
+# Q07 Registro de eventos del ciclo de vida
+@ crit=a tier=p mgda=TEC roles=tec,gd,seg src=F07,F09,F17 cond=electronico rel=D10-Q08
+P: ¿Los sistemas registran los eventos relevantes del ciclo de vida de los documentos, como captura, consulta, modificación, transferencia y eliminación?
+A: El registro debe identificar el evento, el agente, la fecha y el documento afectado.
+W: El registro de eventos sustenta la autenticidad y permite reconstruir lo ocurrido con cada documento.
+0: Los sistemas no registran eventos.
+1: Se registran algunos eventos técnicos, no asociados a documentos.
+2: Se registran eventos de creación y modificación en algunos sistemas.
+3: Los sistemas principales registran los eventos relevantes del ciclo de vida.
+4: El registro de eventos está protegido y se consulta en investigaciones o auditorías.
+5: El registro de eventos se conserva junto con los documentos durante su retención.
+C: Eventos registrados por tipo | Identificación del agente | Protección del registro
+X: El historial de un expediente muestra quién lo consultó, quién incorporó documentos y cuándo se transfirió.
+E: Configuración de registro de eventos | Muestras de historiales | Procedimientos de consulta del registro
+R0: Identificar qué eventos registran hoy los sistemas.
+R1: Habilitar el registro de creación y modificación de documentos.
+R2: Extender el registro a todos los eventos relevantes del ciclo de vida.
+R3: Proteger el registro de eventos y usarlo en auditorías.
+R4: Conservar el registro de eventos junto con los documentos.
+R5: Evaluar la suficiencia del registro frente a necesidades probatorias.
+
+# Q08 Validación de calidad de metadatos
+@ crit=m tier=s mgda=TEC roles=gd,dat src=F07,F27 cond=electronico pre=D09-Q01
+P: ¿Se verifica periódicamente la calidad de los metadatos, como su completitud, exactitud y consistencia?
+A: Se evalúa la existencia de controles de calidad sobre metadatos ya registrados.
+W: Los metadatos incorrectos producen búsquedas fallidas y aplicación errónea de reglas.
+0: No se verifica la calidad de los metadatos.
+1: Los errores se corrigen cuando un usuario los detecta.
+2: Se hacen revisiones ocasionales de calidad sin criterios definidos.
+3: Se verifica periódicamente la calidad con criterios de completitud, exactitud y consistencia.
+4: Los resultados de calidad se miden con indicadores y generan correcciones.
+5: La calidad de metadatos se controla de forma continua y se previenen errores en origen.
+C: Criterios de calidad | Revisiones periódicas | Indicadores de calidad
+X: Un informe mensual muestra que el 8 % de los expedientes no tiene la serie documental asignada.
+E: Informes de calidad de metadatos | Indicadores | Registros de corrección
+R0: Identificar los errores de metadatos más frecuentes.
+R1: Corregir sistemáticamente los errores detectados por usuarios.
+R2: Definir criterios de calidad y revisarlos periódicamente.
+R3: Medir la calidad con indicadores y corregir desviaciones.
+R4: Prevenir errores en origen mediante validaciones.
+R5: Controlar la calidad de metadatos de forma continua.
+
+# Q09 Uso de vocabularios controlados
+@ crit=m tier=p mgda=TEC roles=gd,dat src=F07,F27 rel=D13-Q08
+P: ¿Los metadatos que lo requieren usan vocabularios controlados, listas de valores o tesauros mantenidos por la organización?
+A: Por ejemplo, listas de series, tipos documentales, dependencias, lugares o temas.
+W: Los vocabularios controlados evitan variantes y mejoran la búsqueda y el análisis.
+0: Todos los metadatos se registran como texto libre.
+1: Se usan algunas listas no mantenidas.
+2: Algunos metadatos usan listas controladas mantenidas por los sistemas.
+3: Los metadatos que lo requieren usan vocabularios controlados con responsable de mantenimiento.
+4: Los vocabularios se actualizan de forma controlada y se sincronizan entre sistemas.
+5: Los vocabularios se gestionan como activos compartidos y se evalúa su uso.
+C: Listas controladas en campos clave | Responsable de mantenimiento | Sincronización entre sistemas
+X: La lista de dependencias se mantiene en un único lugar y la consumen el SGDEA y el sistema de correspondencia.
+E: Vocabularios o listas de valores | Procedimiento de mantenimiento | Configuración de sistemas
+R0: Identificar los metadatos con más variantes de texto libre.
+R1: Crear listas de valores para los campos más críticos.
+R2: Asignar responsables al mantenimiento de los vocabularios.
+R3: Sincronizar los vocabularios entre sistemas.
+R4: Gestionar los vocabularios como activos compartidos.
+R5: Evaluar el uso de los vocabularios y ajustarlos.
+
+# Q10 Gestión de identificadores persistentes o estables
+@ crit=m tier=p mgda=TEC roles=tec,gd src=F09,F17 rel=D07-Q06
+P: ¿Los identificadores de documentos, expedientes y entidades relacionadas se mantienen estables entre sistemas y a lo largo del tiempo?
+A: Puede tratarse de identificadores internos estables o de identificadores persistentes públicos cuando sea pertinente.
+W: Los identificadores estables permiten citar, vincular e integrar información sin ambigüedad.
+0: No hay identificadores estables.
+1: Cada sistema asigna sus propios identificadores sin correspondencia.
+2: Existen tablas de correspondencia manuales entre identificadores.
+3: Los identificadores se mantienen estables entre los sistemas principales.
+4: La gestión de identificadores tiene reglas y responsables documentados.
+5: Los identificadores persistentes se usan cuando corresponde y se garantiza su resolución.
+C: Reglas de identificadores | Correspondencia entre sistemas | Estabilidad en el tiempo
+X: Una universidad usa identificadores persistentes para sus documentos de acceso público en el repositorio institucional.
+E: Política de identificadores | Tablas de correspondencia | Configuración de integraciones
+R0: Identificar los identificadores que usa cada sistema.
+R1: Crear tablas de correspondencia entre identificadores.
+R2: Mantener identificadores estables entre los sistemas principales.
+R3: Documentar reglas y responsables de identificadores.
+R4: Evaluar el uso de identificadores persistentes cuando corresponda.
+R5: Auditar la estabilidad y resolución de los identificadores.
+
+# Q11 Integración entre sistemas de información
+@ crit=a tier=q mgda=TEC roles=tec,gd,pro src=F03,F06,F09,F27 rel=D09-Q12
+P: ¿Los sistemas que producen documentos están integrados con los sistemas de gestión documental, de forma que los documentos y metadatos fluyen sin intervención manual innecesaria?
+A: La integración puede hacerse mediante distintos mecanismos (servicios, colas, archivos, conectores); se evalúa su adecuación al contexto.
+W: La falta de integración obliga a cargar documentos manualmente, con errores y pérdidas.
+0: Los sistemas no están integrados.
+1: Los documentos se trasladan manualmente entre sistemas.
+2: Algunos sistemas tienen integraciones parciales o sin metadatos.
+3: Los sistemas principales están integrados con la gestión documental, incluidos documentos y metadatos.
+4: Las integraciones se monitorean y sus fallas se detectan y corrigen.
+5: La arquitectura de integración se gestiona de forma coherente y se evalúa periódicamente.
+C: Integraciones documentadas | Transferencia de metadatos | Monitoreo de fallas
+X: El ERP envía automáticamente las facturas aprobadas al SGDEA con proveedor, valor y número de orden.
+E: Documentación de integraciones | Reportes de monitoreo | Registros de incidentes de integración
+R0: Identificar los traslados manuales de documentos entre sistemas.
+R1: Priorizar integraciones para los flujos documentales de mayor volumen.
+R2: Integrar los sistemas principales incluyendo documentos y metadatos.
+R3: Monitorear las integraciones y corregir sus fallas.
+R4: Gestionar la arquitectura de integración de forma coherente.
+R5: Evaluar periódicamente la integración frente a nuevos sistemas.
+
+# Q12 Disponibilidad de interfaces de intercambio
+@ crit=m tier=p mgda=TEC roles=tec src=F06,F09,F27 rel=D09-Q11
+P: ¿Los sistemas documentales disponen de interfaces o mecanismos documentados para intercambiar información con otros sistemas internos o externos?
+A: No se exige un tipo de interfaz particular; se evalúa que exista, esté documentada y sea adecuada al uso.
+W: Sin interfaces documentadas, cada integración depende del proveedor o de desarrollos ad hoc.
+0: Los sistemas no ofrecen mecanismos de intercambio.
+1: El intercambio solo es posible mediante desarrollos a la medida del proveedor.
+2: Existen mecanismos de intercambio sin documentación suficiente.
+3: Los sistemas principales ofrecen mecanismos de intercambio documentados y probados.
+4: Los mecanismos se versionan y se controlan sus cambios.
+5: Los mecanismos de intercambio se evalúan frente a estándares y necesidades futuras.
+C: Documentación de interfaces | Pruebas de intercambio | Control de versiones
+X: El sistema de correspondencia ofrece un servicio documentado para que el portal ciudadano consulte radicados.
+E: Documentación técnica de interfaces | Resultados de pruebas | Registro de versiones
+R0: Identificar qué mecanismos de intercambio ofrecen los sistemas actuales.
+R1: Solicitar documentación de los mecanismos existentes.
+R2: Documentar y probar los mecanismos de los sistemas principales.
+R3: Versionar los mecanismos y controlar sus cambios.
+R4: Evaluar los mecanismos frente a estándares y necesidades futuras.
+R5: Exigir mecanismos documentados en nuevas adquisiciones.
+
+# Q13 Correspondencia semántica entre esquemas de metadatos
+@ crit=b tier=p mgda=TEC roles=gd,dat,tec src=F07,F27 pre=D09-Q01
+P: ¿Existen tablas de correspondencia que relacionen los metadatos de cada sistema con el esquema institucional?
+A: Permiten que un mismo concepto, registrado con nombres distintos, se interprete de forma consistente.
+W: Sin correspondencia semántica, la información intercambiada pierde significado o se interpreta mal.
+0: No existe correspondencia entre esquemas.
+1: Las equivalencias se conocen solo por quienes administran los sistemas.
+2: Hay correspondencias para algunos sistemas sin documentar.
+3: Existen tablas de correspondencia documentadas para los sistemas principales.
+4: Las correspondencias se actualizan con cambios en los esquemas.
+5: La correspondencia semántica se gestiona de forma centralizada y se verifica en los intercambios.
+C: Tablas de correspondencia | Cobertura de sistemas | Actualización ante cambios
+X: El campo "tercero" del ERP se corresponde con "remitente o destinatario" del esquema institucional.
+E: Tablas de correspondencia | Documentación de esquemas | Registros de actualización
+R0: Identificar diferencias de nomenclatura entre sistemas.
+R1: Documentar las equivalencias conocidas.
+R2: Elaborar tablas de correspondencia para los sistemas principales.
+R3: Actualizar las correspondencias con cada cambio de esquema.
+R4: Centralizar la gestión de la correspondencia semántica.
+R5: Verificar la correspondencia en cada intercambio relevante.
+
+# Q14 Intercambio de documentos y metadatos asociados
+@ crit=a tier=s mgda=TEC roles=tec,gd src=F09,F16,F17 rel=D07-Q15
+P: ¿Cuando se intercambian documentos con otros sistemas u organizaciones, se envían también sus metadatos y se verifica su integridad al recibirlos?
+A: Incluye intercambios con otras entidades, proveedores, órganos de control y repositorios de preservación.
+W: Un documento intercambiado sin metadatos llega descontextualizado y su autenticidad no puede verificarse.
+0: Los documentos se intercambian sin metadatos.
+1: Los metadatos se envían en documentos aparte sin vínculo.
+2: Algunos intercambios incluyen metadatos, sin verificación de integridad.
+3: Los intercambios principales incluyen metadatos y verificación de integridad.
+4: Los intercambios usan formatos acordados y se registran como eventos.
+5: El intercambio se apoya en formatos interoperables y se evalúa su calidad.
+C: Metadatos incluidos en el intercambio | Verificación de integridad | Registro del intercambio
+X: Una entidad envía expedientes a un órgano de control con un paquete que incluye índice y sumas de verificación.
+E: Especificaciones de intercambio | Paquetes enviados | Registros de verificación
+R0: Identificar los intercambios documentales con terceros.
+R1: Incluir metadatos básicos en los intercambios principales.
+R2: Verificar la integridad de los documentos intercambiados.
+R3: Acordar formatos y registrar los intercambios como eventos.
+R4: Adoptar formatos interoperables para el intercambio.
+R5: Evaluar la calidad de los intercambios y ajustar los acuerdos.
+
+# Q15 Gobierno de cambios e integridad de las integraciones
+@ crit=m tier=p mgda=TEC roles=tec,gd src=F09,F18 pre=D09-Q11 rel=D08-Q11
+P: ¿Los cambios en integraciones se controlan para evitar pérdida, duplicación o alteración de documentos y metadatos?
+A: Incluye versiones de interfaces, pruebas de regresión y monitoreo de los flujos integrados.
+W: Una integración que falla en silencio puede dejar de transferir documentos durante semanas.
+0: Las integraciones se modifican sin control.
+1: Las fallas de integración se detectan cuando los usuarios las reportan.
+2: Hay controles de cambio en algunas integraciones.
+3: Los cambios en integraciones se controlan con pruebas y verificación de integridad.
+4: Los flujos integrados se monitorean y se concilian periódicamente.
+5: El gobierno de integraciones se evalúa y mejora con base en incidentes.
+C: Control de cambios de integraciones | Pruebas de regresión | Conciliaciones periódicas
+X: Una conciliación semanal compara las facturas aprobadas en el ERP con las recibidas en el SGDEA.
+E: Procedimiento de cambios de integraciones | Reportes de conciliación | Registros de incidentes
+R0: Identificar las integraciones críticas y sus responsables.
+R1: Registrar las fallas de integración reportadas.
+R2: Controlar los cambios en integraciones con pruebas.
+R3: Monitorear y conciliar periódicamente los flujos integrados.
+R4: Mejorar el gobierno de integraciones con base en incidentes.
+R5: Automatizar alertas de desviación en los flujos integrados.

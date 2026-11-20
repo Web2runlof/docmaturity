@@ -1,0 +1,322 @@
+@dimension D07
+@name Documentos y expedientes electrónicos
+@weight 11
+@sources F02,F03,F04,F06,F09,F24
+@mgda DOC
+@summary Evalúa la gestión de documentos electrónicos de archivo y expedientes electrónicos: identificación, captura, contexto, clasificación, conformación, autenticidad, integridad, fiabilidad, disponibilidad, firmas, cierre, retención y exportación.
+@note Una carpeta de archivos no equivale a un expediente electrónico de archivo, y no toda firma electrónica es una firma digital.
+
+# Q01 Identificación de documentos electrónicos de archivo
+@ crit=a tier=p mgda=DOC roles=gd,pro,tec src=F02,F03,F04 cond=electronico
+P: ¿La organización distingue qué documentos electrónicos son documentos de archivo y cuáles son información de apoyo o copias de trabajo?
+A: Se evalúa si existen criterios para identificar los documentos electrónicos que constituyen evidencia y deben gestionarse como tales.
+W: Sin esta distinción, se gestionan como archivo copias irrelevantes o se pierden documentos que sí son evidencia.
+0: No se distingue entre documentos electrónicos de archivo y otra información digital.
+1: Cada persona decide qué archivo digital tiene valor de evidencia, sin criterios comunes.
+2: Hay criterios para algunos tipos documentales electrónicos.
+3: Existen criterios documentados para identificar los documentos electrónicos de archivo en los procesos principales.
+4: La identificación se verifica en sistemas y repositorios mediante muestras.
+5: Los criterios se integran en los sistemas y se revisan ante nuevos canales y formatos.
+C: Criterios de identificación documentados | Aplicación en procesos principales | Verificación en repositorios
+X: Una entidad define que las respuestas a peticiones enviadas por correo son documentos de archivo y los borradores no.
+E: Lineamientos de documento electrónico | Tipologías por proceso | Muestras de repositorios
+R0: Identificar los tipos de información digital que producen los procesos.
+R1: Definir criterios básicos para reconocer documentos electrónicos de archivo.
+R2: Documentar los criterios para los procesos principales.
+R3: Verificar la identificación en sistemas y repositorios.
+R4: Integrar los criterios en la configuración de los sistemas.
+R5: Revisar los criterios ante nuevos canales y formatos.
+
+# Q02 Captura y declaración de documentos de archivo
+@ crit=a tier=q mgda=DOC roles=gd,tec,pro src=F03,F04,F06,F09 cond=electronico min=3 rel=D07-Q01
+P: ¿Los documentos electrónicos de archivo se capturan en un sistema o repositorio controlado en el momento en que se producen o reciben?
+A: Capturar significa incorporar el documento a un entorno que lo protege y registra; no equivale a guardarlo en una carpeta personal.
+W: Un documento no capturado puede modificarse, perderse o eliminarse sin dejar rastro.
+0: Los documentos electrónicos permanecen en equipos personales o buzones.
+1: Algunos documentos se copian a carpetas compartidas sin control.
+2: Ciertos procesos capturan sus documentos en sistemas controlados.
+3: Los procesos principales capturan sus documentos de archivo en sistemas controlados al producirlos o recibirlos.
+4: Se mide la captura y se identifican documentos que quedan fuera de los sistemas.
+5: La captura es automática o integrada en los flujos y su cobertura se evalúa.
+C: Sistemas de captura por proceso | Momento de captura | Medición de documentos fuera de sistema
+X: Las facturas recibidas por correo se capturan automáticamente en el repositorio con su mensaje original.
+E: Configuración de sistemas de captura | Reportes de documentos capturados | Muestras de expedientes
+R0: Identificar dónde se almacenan hoy los documentos electrónicos de archivo.
+R1: Habilitar un repositorio controlado para los documentos de mayor riesgo.
+R2: Extender la captura controlada a los procesos principales.
+R3: Medir la captura e identificar documentos fuera de los sistemas.
+R4: Integrar la captura en los flujos de trabajo y sistemas de negocio.
+R5: Evaluar periódicamente la cobertura de la captura.
+
+# Q03 Asociación de documentos con su contexto de producción
+@ crit=a tier=p mgda=DOC roles=gd,tec src=F04,F07,F09 cond=electronico rel=D09-Q06
+P: ¿Los documentos electrónicos conservan información sobre el proceso, el trámite, el autor y la fecha en que se produjeron?
+A: El contexto puede registrarse mediante metadatos o mediante la vinculación con el expediente y el proceso.
+W: Un documento sin contexto pierde su capacidad de demostrar qué ocurrió y por qué.
+0: Los documentos electrónicos no conservan información de contexto.
+1: El contexto se infiere del nombre del archivo o de la carpeta.
+2: Algunos sistemas registran contexto básico como autor y fecha.
+3: Los documentos conservan proceso, trámite, autor y fecha en los sistemas principales.
+4: Se verifica la completitud del contexto en muestras de documentos.
+5: El contexto se captura de forma automática y se mantiene a lo largo del ciclo de vida.
+C: Metadatos de contexto registrados | Vínculo con trámite o expediente | Verificación de completitud
+X: Un acta generada en el sistema de comités conserva el comité, la sesión, los firmantes y la fecha de aprobación.
+E: Esquema de metadatos de contexto | Configuración de sistemas | Muestras de documentos
+R0: Identificar qué información de contexto se pierde hoy.
+R1: Definir la información mínima de contexto para cada documento.
+R2: Configurar los sistemas principales para registrar el contexto.
+R3: Verificar la completitud del contexto mediante muestras.
+R4: Automatizar la captura del contexto en los flujos.
+R5: Mantener el contexto a lo largo de migraciones y transferencias.
+
+# Q04 Clasificación de documentos electrónicos
+@ crit=a tier=p mgda=DOC roles=gd,tec src=F02,F03,F09 cond=electronico pre=D05-Q03 rel=D05-Q03
+P: ¿Los documentos electrónicos se clasifican según el cuadro de clasificación o el instrumento equivalente de la organización?
+A: Se evalúa si los sistemas y repositorios aplican la misma estructura de clasificación que los documentos físicos.
+W: Clasificar en electrónico con estructuras propias rompe la coherencia y dificulta aplicar retención.
+0: Los documentos electrónicos no se clasifican.
+1: Se organizan en carpetas con estructuras definidas por cada usuario.
+2: Algunos sistemas aplican la clasificación institucional.
+3: Los sistemas principales clasifican los documentos según el instrumento institucional.
+4: Se verifica la clasificación electrónica y se corrigen errores.
+5: La clasificación se asigna de forma asistida o automática con control de calidad.
+C: Estructura de clasificación en sistemas | Correspondencia con el instrumento | Corrección de errores
+X: El repositorio de una empresa replica su plan de clasificación y no permite crear carpetas fuera de él.
+E: Configuración de la clasificación en sistemas | Reportes de clasificación | Muestras de documentos
+R0: Comparar las estructuras de carpetas actuales con la clasificación institucional.
+R1: Definir una estructura electrónica basada en el instrumento institucional.
+R2: Configurar la clasificación institucional en los sistemas principales.
+R3: Verificar la clasificación y corregir errores.
+R4: Evaluar mecanismos de clasificación asistida con control de calidad.
+R5: Mantener sincronizados el instrumento y la configuración de los sistemas.
+
+# Q05 Conformación de expedientes electrónicos
+@ crit=a tier=s mgda=DOC roles=gd,tec,pro src=F02,F03,F09 cond=electronico rel=D06-Q13
+P: ¿Los documentos electrónicos de un mismo trámite se agrupan en expedientes electrónicos con controles que mantienen su unidad e integridad?
+A: Una carpeta compartida con archivos no constituye por sí misma un expediente electrónico de archivo.
+W: El expediente electrónico permite demostrar la secuencia completa de un trámite.
+0: No se conforman expedientes electrónicos.
+1: Los documentos de un trámite se reúnen en carpetas sin control.
+2: Algunos sistemas agrupan documentos por trámite, sin controles de integridad.
+3: Los expedientes electrónicos se conforman con metadatos y controles en los trámites principales.
+4: Se verifica la completitud de los expedientes electrónicos mediante muestreo.
+5: La conformación es automática desde los sistemas de trámite y se evalúa su calidad.
+C: Expedientes con metadatos propios | Controles de integridad | Muestreo de completitud
+X: Un trámite de licencia crea un expediente electrónico al radicarse la solicitud y agrega cada actuación.
+E: Configuración de expedientes en el sistema | Muestras de expedientes electrónicos | Lineamientos de conformación
+R0: Identificar los trámites que deberían tener expediente electrónico.
+R1: Reemplazar las carpetas sin control por expedientes con estructura definida.
+R2: Conformar expedientes con metadatos y controles en los trámites principales.
+R3: Verificar la completitud de los expedientes mediante muestreo.
+R4: Automatizar la conformación desde los sistemas de trámite.
+R5: Evaluar la calidad de los expedientes y ajustar las reglas.
+
+# Q06 Identificación única de documentos y expedientes
+@ crit=m tier=p mgda=TEC roles=tec,gd src=F03,F09 cond=electronico rel=D09-Q10
+P: ¿Cada documento y expediente electrónico tiene un identificador único que no cambia aunque se mueva o se migre?
+A: El identificador debe ser estable y distinto del nombre del archivo o de su ubicación.
+W: Sin identificadores estables, las referencias entre documentos y sistemas se rompen.
+0: Los documentos se identifican solo por su nombre de archivo.
+1: Los identificadores cambian cuando se mueven o renombran los documentos.
+2: Algunos sistemas asignan identificadores únicos.
+3: Los documentos y expedientes de los sistemas principales tienen identificadores únicos y estables.
+4: Los identificadores se mantienen en integraciones, exportaciones y migraciones.
+5: La política de identificadores se aplica en todo el ecosistema y se audita.
+C: Identificador independiente del nombre | Estabilidad tras movimientos | Conservación en migraciones
+X: Un radicado conserva su número en el sistema de correspondencia, en el SGDEA y en el expediente.
+E: Política de identificadores | Configuración de sistemas | Pruebas de migración
+R0: Identificar cómo se identifican hoy los documentos y expedientes.
+R1: Asignar identificadores únicos a los documentos de mayor criticidad.
+R2: Habilitar identificadores únicos y estables en los sistemas principales.
+R3: Mantener los identificadores en integraciones y exportaciones.
+R4: Definir una política de identificadores para todo el ecosistema.
+R5: Auditar periódicamente la estabilidad de los identificadores.
+
+# Q07 Control del índice electrónico del expediente cuando corresponda
+@ crit=m tier=p mgda=DOC roles=gd,tec src=F02,F03 cond=electronico legal=pub pre=D07-Q05
+P: ¿Los expedientes electrónicos cuentan, cuando la normativa o la práctica lo requiere, con un índice que relaciona sus documentos y permite verificar su integridad?
+A: El índice registra los documentos, su orden y datos de verificación. En el sector privado puede adoptarse como buena práctica.
+W: El índice permite demostrar que el expediente está completo y no ha sido alterado.
+0: Los expedientes electrónicos no tienen índice.
+1: Se elaboran listados manuales sin datos de verificación.
+2: Algunos expedientes tienen índice, sin actualización automática.
+3: Los expedientes que lo requieren tienen índice con orden y datos de verificación.
+4: El índice se actualiza con cada incorporación y se verifica su correspondencia.
+5: El índice se protege con firma o sellado y se valida en exportaciones y transferencias.
+C: Índice por expediente | Datos de verificación por documento | Actualización con cada incorporación
+X: El índice de un expediente contractual registra cada documento con su fecha, orden y valor de verificación.
+E: Muestras de índices electrónicos | Configuración del sistema | Procedimiento de cierre de expedientes
+R0: Identificar los expedientes que requieren índice electrónico.
+R1: Elaborar índices básicos para los expedientes prioritarios.
+R2: Incorporar orden y datos de verificación en los índices.
+R3: Actualizar el índice de forma automática con cada incorporación.
+R4: Proteger el índice y validarlo en exportaciones y transferencias.
+R5: Auditar periódicamente la correspondencia entre índices y expedientes.
+
+# Q08 Control de autenticidad
+@ crit=a critical tier=q mgda=DOC roles=gd,tec,jur src=F04,F09,F24 cond=electronico min=3 rel=D07-Q12
+P: ¿La organización puede demostrar que sus documentos electrónicos fueron producidos por quien dice haberlos producido y en el momento indicado?
+A: Se evalúa la combinación de controles de autoría, firmas, registros de eventos y custodia, no un único mecanismo.
+W: Un documento cuya autenticidad no puede demostrarse pierde valor probatorio.
+0: No existen controles que permitan demostrar la autenticidad de los documentos electrónicos.
+1: La autenticidad se presume por el origen del documento, sin controles.
+2: Algunos documentos tienen controles de autoría, sin registros de eventos.
+3: Los documentos principales cuentan con controles de autoría, firma y registro de eventos.
+4: Se verifica periódicamente la capacidad de demostrar autenticidad en muestras.
+5: Los controles de autenticidad se mantienen en migraciones y se evalúan frente a nuevos riesgos.
+C: Controles de autoría | Registro de eventos | Prueba de demostración de autenticidad
+X: Ante una reclamación, la empresa demuestra con el registro de eventos quién aprobó una orden de compra y cuándo.
+E: Configuración de firmas y autenticación | Registros de eventos | Informes de verificación
+R0: Identificar los documentos cuya autenticidad podría ser cuestionada.
+R1: Habilitar controles básicos de autoría en los sistemas principales.
+R2: Combinar autoría, firma y registro de eventos en los documentos principales.
+R3: Verificar periódicamente la capacidad de demostrar autenticidad.
+R4: Mantener los controles de autenticidad en migraciones y transferencias.
+R5: Evaluar los controles frente a nuevos riesgos tecnológicos.
+
+# Q09 Control de integridad
+@ crit=a critical tier=s mgda=DOC roles=tec,gd,seg src=F04,F09,F24 cond=electronico min=3 rel=D11-Q06
+P: ¿Los documentos electrónicos de archivo están protegidos contra modificaciones no autorizadas y es posible detectar cualquier alteración?
+A: Puede apoyarse en restricciones de edición, sumas de verificación, firmas o registros de eventos.
+W: La integridad es condición para que un documento sirva como evidencia.
+0: Los documentos electrónicos pueden modificarse sin control ni registro.
+1: Algunas restricciones de edición dependen de permisos de carpeta.
+2: Ciertos sistemas impiden modificar documentos declarados, sin detección de alteraciones.
+3: Los documentos de archivo están protegidos contra modificación y las alteraciones son detectables.
+4: La integridad se verifica periódicamente y se investigan las anomalías.
+5: Los controles de integridad se mantienen en todo el ciclo de vida y se evalúan.
+C: Bloqueo de edición de documentos declarados | Mecanismo de detección de alteraciones | Verificaciones periódicas
+X: El SGDEA calcula una suma de verificación al declarar cada documento y alerta si cambia.
+E: Configuración de bloqueo y verificación | Reportes de verificación de integridad | Registros de anomalías
+R0: Identificar dónde pueden modificarse documentos de archivo sin control.
+R1: Restringir la edición de los documentos de archivo de mayor criticidad.
+R2: Implementar mecanismos para detectar alteraciones.
+R3: Verificar periódicamente la integridad e investigar anomalías.
+R4: Mantener los controles de integridad en todo el ciclo de vida.
+R5: Evaluar la efectividad de los controles frente a incidentes.
+
+# Q10 Control de fiabilidad
+@ crit=a tier=p mgda=DOC roles=pro,gd src=F04,F09 cond=electronico
+P: ¿Los documentos electrónicos se producen mediante procedimientos y sistemas que aseguran que su contenido representa fielmente la actuación que registran?
+A: La fiabilidad depende de quién produce el documento, en qué momento y con qué controles, no solo de la tecnología.
+W: Un documento que no refleja con exactitud los hechos genera decisiones equivocadas y riesgos legales.
+0: No se controla la fiabilidad de los documentos producidos.
+1: La fiabilidad depende del cuidado individual de quien produce el documento.
+2: Algunos procesos tienen controles de revisión antes de emitir documentos.
+3: Los procesos principales producen documentos con controles de revisión, autoría y oportunidad.
+4: Se verifican errores de contenido y se corrigen sus causas.
+5: La fiabilidad se mejora sistemáticamente con base en el análisis de errores.
+C: Controles de revisión | Producción cercana al hecho | Análisis de errores
+X: Un informe de inspección se genera en campo, en el momento de la visita, con datos validados por el sistema.
+E: Procedimientos de producción | Registros de revisión | Análisis de errores
+R0: Identificar documentos con errores frecuentes de contenido.
+R1: Introducir revisiones antes de emitir documentos críticos.
+R2: Establecer controles de autoría y oportunidad en los procesos principales.
+R3: Analizar errores de contenido y corregir sus causas.
+R4: Mejorar sistemáticamente la fiabilidad con base en el análisis.
+R5: Integrar validaciones automáticas de contenido cuando sea pertinente.
+
+# Q11 Disponibilidad y recuperación durante el ciclo de vida
+@ crit=a critical tier=s mgda=TEC roles=tec,gd,usu src=F04,F06,F09 cond=electronico min=3
+P: ¿Los documentos electrónicos pueden localizarse, recuperarse y presentarse de forma legible durante todo su tiempo de retención?
+A: Incluye documentos en sistemas actuales, sistemas antiguos y repositorios de respaldo.
+W: Un documento que existe pero no puede recuperarse equivale, en la práctica, a un documento perdido.
+0: No es posible recuperar de forma confiable documentos electrónicos antiguos.
+1: La recuperación depende de personas que conocen la ubicación de los archivos.
+2: Los documentos recientes se recuperan bien; los antiguos con dificultad.
+3: Los documentos pueden localizarse y presentarse durante su retención en los sistemas principales.
+4: Se prueban periódicamente recuperaciones de documentos antiguos.
+5: La disponibilidad se asegura a largo plazo y se evalúa frente a cambios tecnológicos.
+C: Búsqueda por metadatos | Recuperación de documentos antiguos | Pruebas periódicas
+X: La organización recupera en minutos un contrato de hace ocho años con todos sus anexos.
+E: Pruebas de recuperación documentadas | Reportes de búsqueda | Inventario de sistemas antiguos
+R0: Identificar documentos electrónicos que hoy no pueden recuperarse.
+R1: Documentar dónde se encuentran los documentos electrónicos antiguos.
+R2: Asegurar la recuperación de documentos en los sistemas principales.
+R3: Probar periódicamente la recuperación de documentos antiguos.
+R4: Planificar la disponibilidad frente a cambios tecnológicos.
+R5: Evaluar la disponibilidad como parte de la preservación digital.
+
+# Q12 Gestión de firmas electrónicas y digitales
+@ crit=a tier=p mgda=DOC roles=jur,tec,gd src=F24,F03 cond=firma rel=D07-Q08
+P: ¿La organización define qué mecanismos de firma utiliza para cada tipo documental y gestiona su validez a lo largo del tiempo?
+A: Debe distinguirse entre firma electrónica, firma digital y otros mecanismos; no toda firma electrónica es una firma digital.
+W: Usar un mecanismo de firma inadecuado o no conservar su validación debilita el valor jurídico del documento.
+0: No existen criterios sobre mecanismos de firma.
+1: Se usan imágenes de firma o mecanismos variados sin criterio.
+2: Hay criterios para algunos tipos documentales, sin gestionar la validación.
+3: Cada tipo documental tiene definido su mecanismo de firma y se aplica.
+4: Se conserva la información de validación de firmas y se verifica en muestras.
+5: La validez de las firmas se mantiene a largo plazo y se revisa ante cambios normativos o técnicos.
+C: Matriz de tipos documentales y mecanismos de firma | Conservación de validaciones | Verificación en muestras
+X: Una entidad usa firma digital para actos administrativos y firma electrónica simple para comunicaciones internas.
+E: Política de firmas | Certificados o servicios de firma contratados | Muestras de documentos firmados
+R0: Identificar los mecanismos de firma que se usan hoy.
+R1: Eliminar el uso de imágenes de firma como mecanismo de autenticación.
+R2: Definir el mecanismo de firma para cada tipo documental.
+R3: Conservar la información de validación de las firmas.
+R4: Mantener la validez de las firmas a largo plazo.
+R5: Revisar los mecanismos de firma ante cambios normativos y técnicos.
+
+# Q13 Cierre y control de modificaciones de expedientes
+@ crit=a tier=p mgda=DOC roles=gd,tec src=F02,F03,F09 cond=electronico pre=D07-Q05
+P: ¿Los expedientes electrónicos se cierran al finalizar el trámite y se impide incorporar o retirar documentos después del cierre?
+A: El cierre debe quedar registrado y cualquier reapertura justificada debe dejar rastro.
+W: Sin cierre controlado, un expediente puede modificarse después de que sus decisiones produjeron efectos.
+0: Los expedientes electrónicos no se cierran.
+1: El cierre se registra de forma manual, sin bloqueo en el sistema.
+2: Algunos sistemas permiten cerrar expedientes, sin aplicarlo de manera sistemática.
+3: Los expedientes se cierran al finalizar el trámite y el sistema impide modificarlos.
+4: Las reaperturas se justifican, se registran y se revisan.
+5: El cierre activa automáticamente la aplicación de retención y se audita.
+C: Fecha de cierre registrada | Bloqueo tras el cierre | Registro de reaperturas
+X: Al ejecutoriarse un acto, el sistema cierra el expediente y solo permite reabrirlo con autorización registrada.
+E: Configuración de cierre | Registros de cierre y reapertura | Muestras de expedientes cerrados
+R0: Definir cuándo debe cerrarse cada tipo de expediente.
+R1: Registrar el cierre de los expedientes de mayor criticidad.
+R2: Configurar el bloqueo de modificaciones tras el cierre.
+R3: Justificar, registrar y revisar las reaperturas.
+R4: Vincular el cierre con el inicio del cómputo de retención.
+R5: Auditar periódicamente los cierres y reaperturas.
+
+# Q14 Aplicación de retención y disposición en sistemas electrónicos
+@ crit=a critical tier=s mgda=DOC roles=gd,tec,jur src=F03,F06,F09 cond=electronico min=3 pre=D05-Q05 rel=D05-Q07
+P: ¿Los sistemas electrónicos aplican los tiempos de retención y las decisiones de disposición a los documentos y expedientes que gestionan?
+A: Se evalúa la aplicación real en los sistemas, no la existencia de la funcionalidad ni de la tabla de retención.
+W: Sin retención aplicada en los sistemas, la información digital se acumula o se elimina sin control.
+0: Los sistemas no aplican retención ni disposición.
+1: La disposición electrónica se hace manualmente y sin registro.
+2: Algunos sistemas tienen reglas de retención configuradas, sin aplicarlas efectivamente.
+3: Los sistemas principales aplican la retención y registran la disposición con autorización.
+4: Se monitorea la aplicación de la retención y se verifican las disposiciones ejecutadas.
+5: La retención se aplica de forma consistente en todo el ecosistema y se evalúa su efectividad.
+C: Reglas configuradas por serie | Disposiciones ejecutadas con autorización | Monitoreo de aplicación
+X: El SGDEA alerta sobre expedientes con retención cumplida y exige aprobación antes de eliminarlos.
+E: Configuración de reglas de retención | Reportes de disposición | Actas de aprobación de disposición electrónica
+R0: Identificar los sistemas que conservan documentos con retención definida.
+R1: Registrar y autorizar las disposiciones electrónicas que hoy se hacen manualmente.
+R2: Configurar y activar reglas de retención en los sistemas principales.
+R3: Monitorear la aplicación y verificar las disposiciones ejecutadas.
+R4: Extender la aplicación de retención a todo el ecosistema.
+R5: Evaluar la efectividad de la retención electrónica y ajustar reglas.
+
+# Q15 Exportación y transferencia de expedientes con documentos y metadatos
+@ crit=a tier=p mgda=TEC roles=tec,gd src=F03,F09,F16 cond=electronico rel=D08-Q12,D09-Q14
+P: ¿La organización puede exportar o transferir expedientes electrónicos completos, con sus documentos, metadatos e historial, a otro sistema o repositorio?
+A: Incluye transferencias secundarias, migraciones y cambios de proveedor.
+W: Sin capacidad de exportación completa, la información queda atrapada en un sistema o pierde su contexto al salir.
+0: No es posible exportar expedientes electrónicos.
+1: Solo pueden exportarse archivos sueltos, sin metadatos.
+2: Se exportan documentos con algunos metadatos, sin historial.
+3: Se exportan expedientes con documentos, metadatos e historial en formatos documentados.
+4: Las exportaciones se prueban periódicamente y se valida su integridad al recibirlas.
+5: Las exportaciones siguen formatos interoperables y se usan en transferencias rutinarias.
+C: Formato de exportación documentado | Inclusión de metadatos e historial | Pruebas de exportación
+X: Una entidad prueba anualmente la exportación de una muestra de expedientes hacia su repositorio de preservación.
+E: Especificación de exportación | Resultados de pruebas | Paquetes de transferencia
+R0: Verificar qué capacidades de exportación tienen los sistemas actuales.
+R1: Exigir la exportación de metadatos junto con los documentos.
+R2: Documentar formatos de exportación con metadatos e historial.
+R3: Probar periódicamente las exportaciones y validar su integridad.
+R4: Adoptar formatos interoperables para transferencias.
+R5: Usar las exportaciones como parte rutinaria de transferencias y migraciones.

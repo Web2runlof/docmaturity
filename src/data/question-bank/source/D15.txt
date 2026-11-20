@@ -1,0 +1,321 @@
+@dimension D15
+@name Desempeño y mejora continua
+@weight 3
+@sources F01,F05,F11,F13,F14,F21
+@mgda EST
+@summary Evalúa la capacidad de medir, auditar y mejorar la gestión documental: indicadores, tiempos, calidad, disponibilidad, satisfacción, adopción, auditorías, hallazgos, planes de mejora, efectividad, riesgos residuales, comparación histórica, beneficios y aprendizaje.
+
+# Q01 Definición de indicadores de gestión documental
+@ crit=m tier=q mgda=EST roles=gd,cal,pla src=F05,F13,F21 min=3 rel=D01-Q09
+P: ¿La gestión documental cuenta con un conjunto de indicadores definidos con fórmula, fuente, periodicidad y responsable?
+A: Se evalúa la calidad de la definición de los indicadores, no solo su número.
+W: Sin indicadores definidos, el desempeño documental no puede demostrarse ni compararse.
+0: No existen indicadores de gestión documental.
+1: Se reportan cifras sueltas sin definición.
+2: Existen algunos indicadores con definición incompleta.
+3: Hay un conjunto de indicadores con fórmula, fuente, periodicidad y responsable.
+4: Los indicadores se reportan oportunamente y se usan en decisiones.
+5: El conjunto de indicadores se revisa para asegurar su pertinencia y utilidad.
+C: Fichas de indicadores | Fuente de datos identificada | Uso en decisiones
+X: El indicador de cumplimiento de transferencias define fórmula, fuente en el sistema y reporte semestral.
+E: Fichas técnicas de indicadores | Reportes de medición | Actas de análisis
+R0: Identificar qué aspectos del desempeño documental deben medirse.
+R1: Documentar las cifras que hoy se reportan como indicadores.
+R2: Definir fórmula, fuente, periodicidad y responsable de cada indicador.
+R3: Reportar oportunamente los indicadores y usarlos en decisiones.
+R4: Revisar periódicamente la pertinencia del conjunto de indicadores.
+R5: Integrar los indicadores documentales en el tablero institucional.
+
+# Q02 Medición de tiempos de respuesta
+@ crit=m tier=p mgda=EST roles=gd,usu src=F13,F21 rel=D04-Q09
+P: ¿Se miden los tiempos de respuesta de los servicios documentales y de los trámites con obligaciones de respuesta?
+A: Incluye consultas, préstamos, certificaciones, peticiones y solicitudes de acceso a información.
+W: Los tiempos de respuesta son uno de los efectos más visibles de la gestión documental para los usuarios.
+0: No se miden los tiempos de respuesta.
+1: Los tiempos se estiman sin datos.
+2: Se miden tiempos de algunos servicios o trámites.
+3: Se miden los tiempos de los servicios y trámites principales.
+4: Los tiempos se comparan con metas y se corrigen las desviaciones.
+5: Los tiempos se optimizan sistemáticamente con base en el análisis de causas.
+C: Medición por servicio o trámite | Comparación con metas | Acciones ante desviaciones
+X: La entidad reporta que el 92 % de las solicitudes de copias se atendió dentro del término.
+E: Reportes de tiempos | Metas de servicio | Planes de corrección
+R0: Identificar los servicios y trámites con tiempos críticos.
+R1: Registrar fechas de solicitud y respuesta.
+R2: Medir los tiempos de los servicios y trámites principales.
+R3: Comparar con metas y corregir desviaciones.
+R4: Analizar causas de demoras y optimizar.
+R5: Reportar los tiempos a la dirección y a los usuarios.
+
+# Q03 Evaluación de calidad de documentos y expedientes
+@ crit=a tier=p mgda=DOC roles=gd,ci,cal src=F01,F13
+P: ¿Se evalúa periódicamente la calidad de los documentos y expedientes mediante muestreos con criterios definidos?
+A: Los criterios pueden incluir completitud, clasificación, ordenación, metadatos y firmas.
+W: La calidad documental real solo se conoce observando muestras, no a partir de declaraciones.
+0: No se evalúa la calidad de documentos y expedientes.
+1: La calidad se revisa solo ante quejas o auditorías externas.
+2: Se hacen revisiones ocasionales sin criterios definidos.
+3: Se evalúa la calidad mediante muestreos periódicos con criterios definidos.
+4: Los resultados se analizan por área y generan acciones de mejora.
+5: La evaluación de calidad se integra en los procesos y se compara en el tiempo.
+C: Criterios de calidad | Muestreos periódicos | Resultados por área
+X: Cada trimestre se revisa una muestra de 30 expedientes contractuales con una lista de verificación.
+E: Listas de verificación | Informes de muestreo | Planes de mejora
+R0: Definir criterios básicos de calidad documental.
+R1: Revisar una muestra inicial de expedientes.
+R2: Establecer muestreos periódicos con criterios definidos.
+R3: Analizar los resultados por área y generar acciones.
+R4: Integrar la evaluación de calidad en los procesos.
+R5: Comparar la calidad en el tiempo y ajustar criterios.
+
+# Q04 Medición de disponibilidad de información
+@ crit=m tier=s mgda=TEC roles=gd,tec,usu src=F13,F14
+P: ¿Se mide la capacidad de encontrar y entregar la información solicitada, por ejemplo la proporción de solicitudes atendidas con documentos localizados?
+A: Se diferencia de la disponibilidad técnica de los sistemas.
+W: Medir si la información se encuentra revela problemas de organización y de recuperación.
+0: No se mide la disponibilidad de la información.
+1: Los documentos no encontrados se registran de manera informal.
+2: Se registran algunos casos de documentos no localizados.
+3: Se mide la proporción de solicitudes atendidas con documentos localizados.
+4: Los casos de no localización se analizan y generan acciones.
+5: La disponibilidad de la información se monitorea de forma continua y se mejora.
+C: Indicador de localización | Registro de no localizados | Análisis de causas
+X: El archivo reporta que el 3 % de los expedientes solicitados no se localizó en el primer intento.
+E: Registros de solicitudes | Indicador de localización | Informes de análisis
+R0: Registrar las solicitudes en las que no se localizaron documentos.
+R1: Calcular la proporción de solicitudes atendidas con éxito.
+R2: Medir la disponibilidad de manera periódica.
+R3: Analizar los casos de no localización y generar acciones.
+R4: Monitorear la disponibilidad de forma continua.
+R5: Relacionar la disponibilidad con la calidad de organización documental.
+
+# Q05 Evaluación de satisfacción de usuarios
+@ crit=b tier=p mgda=CUL roles=usu,gd src=F13 rel=D06-Q15
+P: ¿Se consulta periódicamente a los usuarios internos y externos sobre su satisfacción con los servicios y herramientas documentales?
+A: Puede hacerse mediante encuestas, entrevistas o análisis de quejas.
+W: La percepción de los usuarios revela problemas que los indicadores técnicos no muestran.
+0: No se consulta a los usuarios.
+1: Se reciben quejas sin análisis.
+2: Se aplican encuestas ocasionales.
+3: Se consulta periódicamente la satisfacción de los usuarios.
+4: Los resultados de las consultas generan acciones de mejora con responsables y seguimiento.
+5: La satisfacción se compara en el tiempo y orienta la estrategia documental.
+C: Encuestas periódicas | Acciones derivadas | Comparación en el tiempo
+X: La encuesta anual muestra baja satisfacción con el buscador del repositorio y motiva su mejora.
+E: Resultados de encuestas | Planes de acción | Informes comparativos
+R0: Identificar a los usuarios de los servicios documentales.
+R1: Analizar las quejas recibidas.
+R2: Aplicar consultas periódicas de satisfacción.
+R3: Generar acciones de mejora con seguimiento.
+R4: Comparar la satisfacción en el tiempo.
+R5: Usar la satisfacción para orientar la estrategia documental.
+
+# Q06 Medición de adopción tecnológica
+@ crit=m tier=p mgda=TEC roles=tec,gd src=F13 rel=D12-Q14
+P: ¿Se mide el grado de uso real de las herramientas documentales frente al uso esperado?
+A: Por ejemplo, proporción de documentos producidos en el sistema frente a los producidos por otros medios.
+W: La adopción medida permite distinguir entre herramientas disponibles y herramientas efectivamente usadas.
+0: No se mide la adopción de herramientas.
+1: La adopción se percibe sin datos.
+2: Se cuentan usuarios activos sin relación con el uso esperado.
+3: Se mide el uso real frente al uso esperado en las herramientas principales.
+4: Los datos de adopción orientan acciones de acompañamiento y mejora.
+5: La adopción se monitorea de forma continua y se relaciona con beneficios.
+C: Indicadores de uso frente a lo esperado | Acciones derivadas | Relación con beneficios
+X: El tablero muestra que solo el 60 % de los oficios salientes se produce en el sistema.
+E: Reportes de uso | Indicadores de adopción | Planes de acompañamiento
+R0: Definir qué uso se espera de cada herramienta documental.
+R1: Recopilar datos básicos de uso.
+R2: Medir el uso real frente al esperado.
+R3: Orientar acciones de acompañamiento con los datos.
+R4: Monitorear la adopción de forma continua.
+R5: Relacionar la adopción con los beneficios obtenidos.
+
+# Q07 Auditorías internas
+@ crit=a tier=s mgda=EST roles=ci,gd src=F05,F11,F13 min=3
+P: ¿La gestión documental se incluye en el programa de auditorías internas con criterios y auditores competentes?
+A: Puede tratarse de auditorías de control interno, de calidad o específicas de gestión documental.
+W: Las auditorías ofrecen una mirada independiente sobre el cumplimiento y la efectividad de los controles.
+0: La gestión documental no se audita.
+1: Se audita solo ante requerimientos externos.
+2: Se audita ocasionalmente sin criterios específicos.
+3: La gestión documental está en el programa de auditorías con criterios y auditores competentes.
+4: Las auditorías cubren procesos, sistemas y áreas según riesgos.
+5: El programa de auditorías documentales se evalúa y se ajusta.
+C: Inclusión en el programa de auditorías | Criterios de auditoría | Competencia de auditores
+X: Control interno audita cada año la aplicación de retención en una muestra de dependencias.
+E: Programa anual de auditorías | Informes de auditoría | Perfiles de auditores
+R0: Solicitar la inclusión de la gestión documental en el programa de auditorías.
+R1: Definir criterios de auditoría documental.
+R2: Asegurar auditores competentes en gestión documental.
+R3: Cubrir procesos, sistemas y áreas según riesgos.
+R4: Evaluar y ajustar el programa de auditorías documentales.
+R5: Integrar las auditorías documentales con otras auditorías.
+
+# Q08 Gestión de hallazgos de auditoría
+@ crit=a tier=s mgda=EST roles=ci,gd,dir src=F05,F13 pre=D15-Q07
+P: ¿Los hallazgos de auditoría sobre gestión documental se registran, se analizan sus causas y se atienden con acciones y plazos?
+A: Incluye hallazgos de auditorías internas, de órganos de control y de clientes o reguladores.
+W: Los hallazgos no atendidos se repiten y pueden derivar en sanciones.
+0: Los hallazgos no se registran ni se atienden.
+1: Se atienden los hallazgos más urgentes sin registro.
+2: Los hallazgos se registran sin análisis de causas.
+3: Los hallazgos se registran, se analizan sus causas y se atienden con acciones y plazos.
+4: Se hace seguimiento al cierre de los hallazgos y se verifica su efectividad.
+5: El análisis de hallazgos genera mejoras preventivas en toda la organización.
+C: Registro de hallazgos | Análisis de causas | Seguimiento al cierre
+X: Un hallazgo sobre expedientes incompletos se atiende con una lista de verificación y su cierre se verifica.
+E: Registro de hallazgos | Planes de acción | Informes de seguimiento
+R0: Recopilar los hallazgos documentales de auditorías recientes.
+R1: Registrar todos los hallazgos con su responsable.
+R2: Analizar las causas y definir acciones con plazos.
+R3: Hacer seguimiento al cierre y verificar la efectividad.
+R4: Generar mejoras preventivas a partir de los hallazgos.
+R5: Analizar tendencias de hallazgos en el tiempo.
+
+# Q09 Planes de mejoramiento
+@ crit=m tier=q mgda=EST roles=gd,ci,pla src=F01,F05,F21
+P: ¿Existen planes de mejoramiento de la gestión documental con acciones, responsables, plazos y seguimiento?
+A: Pueden derivarse de diagnósticos, auditorías, evaluaciones o autoevaluaciones.
+W: Los planes de mejoramiento convierten los diagnósticos en cambios concretos.
+0: No existen planes de mejoramiento.
+1: Las mejoras se proponen sin plan ni responsables.
+2: Existen planes sin seguimiento sistemático.
+3: Los planes de mejoramiento tienen acciones, responsables, plazos y seguimiento.
+4: El avance de los planes se reporta y las acciones vencidas se escalan.
+5: Los planes se priorizan por riesgo e impacto y se evalúan sus resultados.
+C: Plan con responsables y plazos | Seguimiento periódico | Escalamiento de vencidas
+X: El plan de mejoramiento derivado del diagnóstico integral se revisa trimestralmente en el comité.
+E: Planes de mejoramiento | Informes de avance | Actas de seguimiento
+R0: Convertir los hallazgos del diagnóstico en acciones concretas.
+R1: Asignar responsables y plazos a las acciones de mejora.
+R2: Establecer un seguimiento sistemático de los planes.
+R3: Reportar el avance y escalar las acciones vencidas.
+R4: Priorizar los planes por riesgo e impacto.
+R5: Evaluar los resultados de los planes de mejoramiento.
+
+# Q10 Evaluación de efectividad de acciones correctivas
+@ crit=m tier=p mgda=EST roles=ci,gd src=F05,F13 pre=D15-Q09
+P: ¿Después de implementar acciones correctivas se verifica si eliminaron las causas de los problemas?
+A: Se diferencia el cierre administrativo de una acción de la verificación de su efecto.
+W: Una acción cerrada que no eliminó la causa deja el problema latente.
+0: No se verifica la efectividad de las acciones.
+1: Las acciones se cierran al ejecutarse, sin verificación.
+2: Se verifica la efectividad de algunas acciones.
+3: La efectividad de las acciones correctivas se verifica con criterios definidos.
+4: Las acciones no efectivas se replantean y se analizan sus causas.
+5: La verificación de efectividad se usa para mejorar el método de análisis de causas.
+C: Criterios de efectividad | Verificación posterior | Replanteamiento de acciones no efectivas
+X: Tres meses después de capacitar a un área, se revisan nuevamente sus expedientes para comprobar la mejora.
+E: Registros de verificación | Informes de efectividad | Acciones replanteadas
+R0: Identificar las acciones correctivas cerradas recientemente.
+R1: Verificar el efecto de las acciones más relevantes.
+R2: Definir criterios para verificar la efectividad.
+R3: Replantear las acciones no efectivas.
+R4: Mejorar el método de análisis de causas.
+R5: Reportar la efectividad de las acciones a la dirección.
+
+# Q11 Seguimiento de riesgos residuales
+@ crit=m tier=p mgda=EST roles=ci,gd,seg src=F08,F13 rel=D10-Q02
+P: ¿Después de aplicar controles, se valora y monitorea el riesgo documental residual?
+A: El riesgo residual es el que permanece tras aplicar los controles.
+W: Sin seguimiento del riesgo residual, no se sabe si los controles son suficientes.
+0: No se valora el riesgo residual.
+1: Se asume que los controles eliminan el riesgo.
+2: Se valora el riesgo residual de algunos riesgos.
+3: Se valora y monitorea el riesgo residual de los riesgos documentales principales.
+4: El riesgo residual se compara con el nivel aceptable y genera decisiones.
+5: El seguimiento del riesgo residual se integra en la gestión de riesgos institucional.
+C: Valoración del riesgo residual | Comparación con el nivel aceptable | Decisiones derivadas
+X: Tras implementar copias redundantes, el riesgo de pérdida de información pasa de alto a moderado.
+E: Matriz de riesgos con valoración residual | Informes de monitoreo | Actas de decisión
+R0: Identificar los riesgos documentales con controles aplicados.
+R1: Valorar el riesgo residual de los riesgos principales.
+R2: Monitorear periódicamente el riesgo residual.
+R3: Comparar el riesgo residual con el nivel aceptable.
+R4: Integrar el seguimiento en la gestión de riesgos institucional.
+R5: Revisar los niveles aceptables con la dirección.
+
+# Q12 Comparación histórica de resultados
+@ crit=m tier=s mgda=EST roles=gd,pla src=F13,F14
+P: ¿La organización compara sus resultados documentales a lo largo del tiempo con criterios y métodos comparables?
+A: Incluye diagnósticos de madurez, indicadores y auditorías; las comparaciones requieren métodos equivalentes.
+W: La comparación histórica muestra si la organización avanza, se estanca o retrocede.
+0: No se comparan resultados en el tiempo.
+1: Se comparan cifras sin verificar que sean comparables.
+2: Algunas comparaciones usan métodos equivalentes.
+3: Los resultados se comparan en el tiempo con métodos comparables y se documentan las limitaciones.
+4: Las comparaciones orientan ajustes de estrategia y prioridades.
+5: La serie histórica se mantiene de forma sistemática y se usa en la planeación.
+C: Comparaciones documentadas | Métodos equivalentes | Limitaciones explícitas
+X: La entidad compara su diagnóstico de 2024 con el de 2026 solo en los criterios evaluados de la misma forma.
+E: Informes comparativos | Series históricas de indicadores | Notas metodológicas
+R0: Recopilar los resultados de diagnósticos y mediciones anteriores.
+R1: Verificar si los resultados anteriores son comparables.
+R2: Comparar con métodos equivalentes y documentar limitaciones.
+R3: Usar las comparaciones para ajustar estrategia y prioridades.
+R4: Mantener la serie histórica de forma sistemática.
+R5: Integrar la serie histórica en la planeación.
+
+# Q13 Evaluación de beneficios de transformación digital
+@ crit=m tier=p mgda=EST roles=dir,tec,gd src=F13,F21 rel=D01-Q14,D03-Q15
+P: ¿Se evalúan los beneficios documentales obtenidos con las iniciativas de transformación digital?
+A: Incluye reducción de papel y tiempos, mejora de acceso, trazabilidad y calidad de la evidencia.
+W: Evaluar beneficios evita confundir la adopción de tecnología con la mejora real.
+0: No se evalúan los beneficios de la transformación digital.
+1: Los beneficios se suponen sin medición.
+2: Se miden algunos beneficios cuantitativos aislados.
+3: Los beneficios documentales de las iniciativas digitales se evalúan con indicadores.
+4: Los resultados orientan ajustes en las iniciativas digitales.
+5: La evaluación de beneficios se integra en la gestión del portafolio digital.
+C: Indicadores de beneficio | Evaluación por iniciativa | Ajustes derivados
+X: Tras implementar firma digital, la entidad mide la reducción del tiempo de expedición de certificados.
+E: Informes de beneficios | Líneas base | Actas de ajustes
+R0: Identificar las iniciativas digitales con efectos documentales.
+R1: Establecer líneas base antes de nuevas iniciativas.
+R2: Evaluar los beneficios documentales con indicadores.
+R3: Ajustar las iniciativas según los resultados.
+R4: Integrar la evaluación en la gestión del portafolio digital.
+R5: Comunicar los beneficios obtenidos a la dirección.
+
+# Q14 Aprendizaje institucional a partir de errores
+@ crit=m tier=p mgda=CUL roles=gd,ci,dir src=F05,F11
+P: ¿Los incidentes y errores documentales se analizan para aprender y prevenir su repetición, sin enfocarse solo en buscar culpables?
+A: Se evalúa la existencia de prácticas de análisis y difusión de lecciones aprendidas.
+W: Una cultura que oculta errores impide corregir sus causas.
+0: Los errores se ocultan o no se analizan.
+1: Los errores se tratan solo como faltas individuales.
+2: Algunos errores se analizan sin difundir lecciones.
+3: Los incidentes y errores se analizan y sus lecciones se difunden.
+4: Las lecciones aprendidas generan cambios en procesos y controles.
+5: El aprendizaje a partir de errores es una práctica institucional valorada.
+C: Análisis de incidentes | Difusión de lecciones | Cambios derivados
+X: Tras la pérdida de un expediente, se analiza el proceso de préstamo y se ajusta el control de devoluciones.
+E: Informes de análisis de incidentes | Comunicaciones de lecciones aprendidas | Registros de cambios
+R0: Identificar incidentes y errores documentales recientes.
+R1: Analizar los incidentes más relevantes con foco en causas.
+R2: Difundir las lecciones aprendidas.
+R3: Convertir las lecciones en cambios de procesos y controles.
+R4: Promover una práctica institucional de aprendizaje.
+R5: Evaluar si las lecciones aprendidas reducen la repetición de errores.
+
+# Q15 Revisión y actualización periódica del modelo de gestión documental
+@ crit=m tier=p mgda=EST roles=gd,dir,ci src=F01,F05,F14 rel=D01-Q15
+P: ¿La organización revisa periódicamente su modelo de gestión documental en conjunto, incluidos política, instrumentos, sistemas y capacidades?
+A: Se diferencia de la revisión de la estrategia: aquí se evalúa el modelo operativo completo.
+W: Un modelo que no se revisa pierde coherencia ante cambios acumulados.
+0: El modelo de gestión documental no se revisa.
+1: Se revisan componentes aislados cuando fallan.
+2: Hay revisiones parciales sin visión integral.
+3: El modelo se revisa periódicamente de forma integral.
+4: Las revisiones usan diagnósticos, indicadores y auditorías como insumos.
+5: La revisión integral es sistemática y orienta la evolución del modelo.
+C: Revisiones integrales | Insumos utilizados | Cambios derivados
+X: Cada dos años, el comité revisa el modelo completo a partir del diagnóstico de madurez y las auditorías.
+E: Informes de revisión del modelo | Actas del comité | Planes de ajuste
+R0: Identificar los componentes del modelo de gestión documental.
+R1: Revisar los componentes que presentan fallas.
+R2: Programar revisiones integrales del modelo.
+R3: Usar diagnósticos, indicadores y auditorías como insumos.
+R4: Sistematizar la revisión integral.
+R5: Orientar la evolución del modelo con base en las revisiones.

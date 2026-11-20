@@ -1,0 +1,321 @@
+@dimension D02
+@name Gobernanza
+@weight 8
+@sources F01,F05,F11,F12,F13,F21
+@mgda EST
+@summary Evalúa quién decide, quién responde y cómo se coordinan las áreas sobre los documentos y la información: autoridad, instancias, roles, rendición de cuentas y gestión de excepciones.
+
+# Q01 Asignación formal de autoridad sobre la gestión documental
+@ crit=a tier=q mgda=EST roles=dir,gd,jur src=F01,F05,F11,F13 min=3 rel=D01-Q01,D02-Q03
+P: ¿Está formalmente asignada a un cargo o dependencia la autoridad para dirigir la gestión documental y tomar decisiones sobre ella en toda la organización?
+A: Se busca una asignación expresa en un acto, manual o estatuto, con alcance transversal y no limitado al archivo central.
+W: Sin autoridad formal, las decisiones documentales dependen de la voluntad de cada área y no se pueden exigir.
+0: Nadie tiene asignada la autoridad sobre la gestión documental.
+1: Una persona asume el tema por iniciativa propia, sin respaldo formal.
+2: La autoridad está asignada, pero su alcance se limita a ciertas áreas o al archivo físico.
+3: Un acto formal asigna autoridad transversal sobre la gestión documental en todos los soportes.
+4: La autoridad se ejerce de forma verificable mediante decisiones y seguimiento en toda la organización.
+5: La asignación de autoridad se revisa ante cambios estructurales y se evalúa su efectividad.
+C: Acto o manual que asigna la autoridad | Alcance transversal explícito | Decisiones emitidas en ejercicio de la autoridad
+X: Un acto interno designa a la secretaría general como responsable de la política documental en todas las sedes.
+E: Acto administrativo, estatuto o manual de funciones | Organigrama | Comunicaciones emitidas por la autoridad
+R0: Proponer a la dirección la asignación formal de autoridad documental.
+R1: Formalizar mediante acto interno la autoridad que hoy se ejerce de hecho.
+R2: Ampliar el alcance de la autoridad a todas las áreas y soportes.
+R3: Documentar las decisiones tomadas en ejercicio de la autoridad y su seguimiento.
+R4: Evaluar la efectividad de la autoridad y ajustarla ante cambios estructurales.
+R5: Integrar la autoridad documental en el modelo de gobierno corporativo.
+
+# Q02 Instancias de coordinación y toma de decisiones
+@ crit=m tier=s mgda=EST roles=dir,gd,ci src=F01,F02,F05,F21 legal=pub
+P: ¿Existe una instancia colegiada, como un comité de archivo o de gestión documental, que sesiona periódicamente y toma decisiones registradas?
+A: En entidades públicas suele corresponder al comité interno de archivo; en otras organizaciones, a un comité equivalente.
+W: Una instancia colegiada facilita decisiones transversales y legitima los instrumentos documentales.
+0: No existe ninguna instancia de coordinación sobre gestión documental.
+1: Las decisiones se toman en reuniones informales, sin actas.
+2: La instancia existe formalmente, pero sesiona de manera irregular o sin quórum.
+3: La instancia sesiona con periodicidad definida y sus decisiones quedan en actas.
+4: Se hace seguimiento al cumplimiento de las decisiones de la instancia.
+5: El funcionamiento de la instancia se evalúa y ajusta para mejorar su incidencia.
+C: Acto de creación de la instancia | Actas de sesiones recientes | Seguimiento de compromisos
+X: El comité de gestión documental de una IPS aprueba las actualizaciones de las tablas de retención y revisa su aplicación.
+E: Acto de creación o reglamento | Actas firmadas | Matriz de compromisos
+R0: Crear una instancia de coordinación con integrantes y funciones definidas.
+R1: Formalizar las reuniones existentes y registrar sus decisiones en actas.
+R2: Establecer un calendario de sesiones y reglas de quórum.
+R3: Implementar seguimiento a los compromisos derivados de las sesiones.
+R4: Evaluar la incidencia de la instancia en la gestión documental.
+R5: Ajustar la composición y el funcionamiento según los resultados de la evaluación.
+
+# Q03 Definición de roles y responsabilidades
+@ crit=a tier=q mgda=EST roles=gd,th,dir src=F01,F05,F11,F13 min=3 rel=D02-Q04,D02-Q12
+P: ¿Están definidas y documentadas las responsabilidades documentales de directivos, servidores o empleados, contratistas y áreas de apoyo?
+A: Incluye responsabilidades de producción, organización, custodia, acceso, transferencia y eliminación de documentos.
+W: Las responsabilidades claras son la base para exigir cumplimiento y para rendir cuentas sobre los documentos.
+0: No se han definido responsabilidades documentales.
+1: Las responsabilidades se entienden de manera informal y varían entre áreas.
+2: Algunas responsabilidades están documentadas para ciertos cargos o procesos.
+3: Las responsabilidades documentales están definidas para todos los roles relevantes y se comunican.
+4: El cumplimiento de las responsabilidades se verifica en evaluaciones o auditorías.
+5: Las responsabilidades se actualizan ante cambios organizacionales y se mide su apropiación.
+C: Responsabilidades en manuales o procedimientos | Inclusión de contratistas | Comunicación verificable
+X: Una universidad incluye obligaciones de entrega documental en los contratos de prestación de servicios y en el paz y salvo de retiro.
+E: Manual de funciones o perfiles de cargo | Procedimientos con responsables | Cláusulas contractuales
+R0: Identificar qué roles intervienen en la producción y custodia de documentos.
+R1: Documentar responsabilidades básicas para los roles identificados.
+R2: Extender las responsabilidades a contratistas, áreas de apoyo y terceros.
+R3: Verificar el cumplimiento de responsabilidades en evaluaciones y auditorías.
+R4: Medir la apropiación de responsabilidades y corregir vacíos.
+R5: Actualizar las responsabilidades ante cambios organizacionales.
+
+# Q04 Matriz de responsabilidades organizacionales
+@ crit=m tier=p mgda=EST roles=gd,pro,cal src=F05,F12,F13 pre=D02-Q03
+P: ¿Existe una matriz que asigne, para cada proceso documental, quién es responsable, quién aprueba, a quién se consulta y a quién se informa?
+A: Puede adoptar la forma de una matriz RACI u otra equivalente que evite vacíos y superposiciones.
+W: Una matriz explícita evita que tareas críticas queden sin responsable o con responsables duplicados.
+0: No existe una matriz de responsabilidades documentales.
+1: Las asignaciones se conocen de forma oral y cambian según las personas.
+2: Hay una matriz parcial que cubre algunos procesos documentales.
+3: Una matriz completa cubre los procesos documentales y es conocida por las áreas.
+4: La matriz se usa para resolver conflictos de competencia y se verifica su cumplimiento.
+5: La matriz se revisa periódicamente con base en incidentes, auditorías y cambios.
+C: Matriz vigente por proceso | Roles de aprobación definidos | Uso documentado en la resolución de conflictos
+X: Una empresa define que el área jurídica aprueba la suspensión de eliminación ante litigios y gestión documental la ejecuta.
+E: Matriz RACI o equivalente | Procedimientos que la referencian | Registros de resolución de conflictos
+R0: Listar los procesos documentales que requieren responsables definidos.
+R1: Construir una matriz inicial con los responsables conocidos.
+R2: Completar la matriz para todos los procesos documentales.
+R3: Usar la matriz para resolver conflictos y verificar su cumplimiento.
+R4: Revisar la matriz con base en incidentes y auditorías.
+R5: Integrar la matriz en los sistemas de gestión y en los flujos automatizados.
+
+# Q05 Responsabilidad de los propietarios de procesos
+@ crit=m tier=p mgda=EST roles=pro,gd,cal src=F04,F05,F12
+P: ¿Los responsables de los procesos misionales y de apoyo asumen los requisitos documentales de sus procesos como parte de su gestión?
+A: Se evalúa si quienes lideran los procesos responden por los documentos que estos generan, y no solo el área de archivo.
+W: Los documentos se producen en los procesos; sin el compromiso de sus responsables, los controles llegan tarde.
+0: Los propietarios de procesos consideran que los documentos son responsabilidad exclusiva del archivo.
+1: Algunos propietarios atienden requisitos documentales solo cuando se les exige.
+2: Ciertos procesos incluyen requisitos documentales en su caracterización.
+3: Todos los procesos relevantes definen requisitos documentales y sus propietarios responden por ellos.
+4: Los propietarios reportan indicadores documentales de sus procesos.
+5: Los propietarios proponen mejoras documentales a partir de los resultados de sus procesos.
+C: Requisitos documentales en caracterizaciones de procesos | Indicadores reportados por los propietarios | Actas de revisión
+X: El líder de contratación de una entidad responde por la completitud de los expedientes contractuales de su proceso.
+E: Caracterizaciones de procesos | Informes de desempeño de procesos | Planes de mejora de procesos
+R0: Sensibilizar a los propietarios de procesos sobre su responsabilidad documental.
+R1: Identificar requisitos documentales en los procesos de mayor riesgo.
+R2: Incorporar requisitos documentales en todas las caracterizaciones de procesos.
+R3: Asignar indicadores documentales a los propietarios de procesos.
+R4: Evaluar el desempeño documental de los procesos en sus revisiones periódicas.
+R5: Promover mejoras documentales propuestas por los propios procesos.
+
+# Q06 Responsabilidad de los propietarios de información
+@ crit=m tier=p mgda=EST roles=dat,gd,seg src=F11,F12,F18
+P: ¿Cada conjunto relevante de información o serie documental tiene un responsable que decide sobre su acceso, calidad, uso y conservación?
+A: Se diferencia el propietario de la información (decide) del custodio técnico (opera los sistemas).
+W: Sin propietarios definidos, nadie autoriza accesos ni responde por la calidad y conservación de la información.
+0: No se han identificado propietarios de información.
+1: Los propietarios se asumen por costumbre, sin asignación documentada.
+2: Algunos activos o series tienen propietarios asignados.
+3: Los activos de información y series relevantes tienen propietarios documentados y conocidos.
+4: Los propietarios autorizan accesos y revisan periódicamente la información a su cargo.
+5: El modelo de propiedad se evalúa y ajusta según incidentes y cambios organizacionales.
+C: Inventario con propietario asignado | Autorizaciones firmadas por propietarios | Revisiones periódicas
+X: El director financiero es propietario de la información contable y autoriza los perfiles de acceso al sistema.
+E: Inventario de activos de información | Registros de autorización de accesos | Actas de revisión de propietarios
+R0: Identificar los conjuntos de información que requieren propietario.
+R1: Asignar propietarios a los activos y series de mayor criticidad.
+R2: Completar la asignación de propietarios para todos los activos relevantes.
+R3: Implementar revisiones periódicas a cargo de los propietarios.
+R4: Evaluar el desempeño del modelo de propiedad ante incidentes.
+R5: Ajustar el modelo de propiedad con base en resultados y cambios.
+
+# Q07 Coordinación entre archivo, tecnología y áreas misionales
+@ crit=a tier=s mgda=EST roles=gd,tec,pro src=F01,F12,F13 rel=D01-Q07
+P: ¿Gestión documental, tecnología y las áreas misionales trabajan de forma coordinada en decisiones que afectan documentos y sistemas?
+A: Se valora la existencia de mecanismos permanentes de coordinación, no solo la colaboración en proyectos puntuales.
+W: La falta de coordinación produce sistemas sin controles documentales e instrumentos archivísticos sin soporte tecnológico.
+0: Las áreas actúan de manera independiente y no se consultan.
+1: La coordinación ocurre solo cuando surge un problema.
+2: Existe coordinación en algunos proyectos, sin mecanismos permanentes.
+3: Hay mecanismos formales de coordinación con participación de las tres partes en decisiones relevantes.
+4: La coordinación se mide mediante compromisos cumplidos y proyectos conjuntos.
+5: La coordinación se evalúa y genera mejoras en la forma de trabajo entre áreas.
+C: Mesa o equipo interdisciplinario | Participación de gestión documental en proyectos de TI | Compromisos cumplidos
+X: Antes de contratar un nuevo sistema de PQRS, la entidad conforma un equipo con TI, gestión documental y atención al ciudadano.
+E: Actas de mesas de trabajo | Fichas de proyectos con participantes | Matriz de compromisos
+R0: Promover un primer espacio de trabajo entre archivo, tecnología y áreas misionales.
+R1: Establecer un mecanismo formal de coordinación con agenda definida.
+R2: Extender la coordinación a todos los proyectos que afectan documentos.
+R3: Medir el cumplimiento de compromisos de coordinación.
+R4: Evaluar la calidad de la coordinación y ajustar sus mecanismos.
+R5: Consolidar equipos interdisciplinarios permanentes para la gestión de información.
+
+# Q08 Gobierno del ciclo de vida documental
+@ crit=a tier=s mgda=DOC roles=gd,jur,tec src=F04,F05,F11 rel=D05-Q07
+P: ¿Las decisiones sobre creación, conservación, transferencia y disposición de documentos se toman bajo reglas comunes para todo el ciclo de vida?
+A: Se evalúa si existe un marco de decisión unificado, independientemente del soporte o del sistema.
+W: El gobierno del ciclo de vida evita conservar indefinidamente o eliminar sin control.
+0: No hay reglas sobre el ciclo de vida de los documentos.
+1: Cada área decide qué conservar y qué eliminar según su criterio.
+2: Existen reglas para algunas fases o soportes, sin un marco común.
+3: Un marco común gobierna las decisiones de todo el ciclo de vida en todos los soportes.
+4: Se verifica que las decisiones del ciclo de vida sigan el marco común.
+5: El marco se ajusta con base en riesgos, cambios tecnológicos y resultados de verificación.
+C: Reglas que cubren todas las fases | Aplicación a soportes electrónicos | Verificación de decisiones
+X: Una organización aplica las mismas reglas de retención al correo electrónico institucional y a los expedientes en papel.
+E: Política o manual de ciclo de vida | Instrumentos de retención | Informes de verificación
+R0: Identificar las fases del ciclo de vida y quién decide en cada una.
+R1: Reemplazar las decisiones discrecionales por reglas comunes básicas.
+R2: Extender las reglas a todas las fases y soportes.
+R3: Verificar periódicamente la aplicación de las reglas del ciclo de vida.
+R4: Ajustar el marco con base en riesgos y resultados de verificación.
+R5: Revisar sistemáticamente el marco ante cambios tecnológicos y normativos.
+
+# Q09 Gobierno de cambios sobre instrumentos y sistemas
+@ crit=m tier=p mgda=EST roles=gd,tec,cal src=F05,F09,F12 rel=D05-Q15,D08-Q11
+P: ¿Los cambios en instrumentos archivísticos y en sistemas que gestionan documentos se evalúan y aprueban antes de aplicarse?
+A: Incluye cambios en clasificación, retención, metadatos, flujos y configuraciones de sistemas.
+W: Los cambios no controlados rompen la coherencia entre instrumentos y sistemas y pueden causar pérdida de información.
+0: Los cambios se aplican sin evaluación ni aprobación.
+1: Algunos cambios se consultan informalmente antes de aplicarse.
+2: Existe un procedimiento de cambios para sistemas, sin incluir instrumentos documentales.
+3: Los cambios en instrumentos y sistemas se evalúan y aprueban mediante un procedimiento formal.
+4: Se registran los cambios, sus impactos y su verificación posterior.
+5: El gobierno de cambios se evalúa y mejora a partir de incidentes asociados.
+C: Procedimiento de control de cambios | Registro de cambios aprobados | Análisis de impacto documental
+X: Antes de modificar el cuadro de clasificación, una entidad evalúa el efecto sobre los expedientes abiertos en el SGDEA.
+E: Procedimiento de cambios | Solicitudes de cambio aprobadas | Registro de cambios con impacto
+R0: Identificar los cambios recientes que afectaron documentos o sistemas.
+R1: Exigir consulta previa a gestión documental para cambios relevantes.
+R2: Incluir los instrumentos documentales en el procedimiento de cambios.
+R3: Registrar impactos y verificar los cambios después de aplicarlos.
+R4: Analizar incidentes asociados a cambios para mejorar el procedimiento.
+R5: Optimizar el gobierno de cambios con criterios de riesgo proporcionales.
+
+# Q10 Gestión de responsabilidades de terceros
+@ crit=a tier=p mgda=EST roles=jur,gd,prv src=F05,F11,F18 cond=terceros rel=D10-Q14
+P: ¿Los contratos con proveedores y aliados que producen, custodian o procesan documentos establecen obligaciones documentales verificables?
+A: Incluye custodia, digitalización, nube, mensajería, desarrollo de software y outsourcing de procesos.
+W: Los terceros pueden convertirse en el punto más débil de la cadena de custodia documental.
+0: Los contratos con terceros no contemplan obligaciones documentales.
+1: Algunas obligaciones se acuerdan verbalmente o en anexos no vinculantes.
+2: Ciertos contratos incluyen cláusulas documentales sin mecanismos de verificación.
+3: Los contratos relevantes incluyen obligaciones documentales, de devolución y de confidencialidad verificables.
+4: Se verifica periódicamente el cumplimiento de las obligaciones documentales de los terceros.
+5: Las cláusulas se actualizan con base en incidentes, riesgos y desempeño de proveedores.
+C: Cláusulas documentales en contratos | Obligación de devolución al finalizar | Informes de verificación
+X: Un contrato de nube incluye la exportación de documentos con metadatos al terminar el servicio.
+E: Contratos y anexos técnicos | Informes de supervisión | Actas de devolución de información
+R0: Identificar los terceros que producen, custodian o procesan documentos.
+R1: Incorporar cláusulas documentales mínimas en los contratos nuevos.
+R2: Incluir mecanismos de verificación y devolución en los contratos relevantes.
+R3: Verificar periódicamente el cumplimiento de las obligaciones de terceros.
+R4: Ajustar las cláusulas según incidentes y desempeño de proveedores.
+R5: Estandarizar un modelo contractual documental basado en riesgos.
+
+# Q11 Escalamiento de problemas documentales
+@ crit=m tier=p mgda=EST roles=gd,ci,dir src=F05,F11,F13
+P: ¿Existe un mecanismo definido para escalar problemas documentales que no pueden resolverse en el área donde se originan?
+A: Por ejemplo, pérdida de expedientes, negativas a transferir, incumplimientos reiterados o conflictos de acceso.
+W: Sin escalamiento, los problemas documentales se normalizan y se convierten en riesgos acumulados.
+0: No existe un mecanismo para escalar problemas documentales.
+1: Los problemas se escalan informalmente y dependen de relaciones personales.
+2: Existe una ruta de escalamiento para algunos tipos de problema.
+3: Hay una ruta de escalamiento documentada con niveles, plazos y responsables.
+4: Los casos escalados se registran y se hace seguimiento hasta su cierre.
+5: El análisis de casos escalados genera cambios preventivos en procesos y controles.
+C: Ruta de escalamiento documentada | Registro de casos escalados | Tiempos de cierre
+X: La pérdida de un expediente disciplinario se escala del archivo de gestión al comité y a control interno en 48 horas.
+E: Procedimiento de escalamiento | Registro de casos | Informes de cierre
+R0: Identificar los problemas documentales recurrentes que no se resuelven.
+R1: Definir a quién se escalan los problemas documentales y en qué plazo.
+R2: Documentar la ruta de escalamiento para todos los tipos de problema.
+R3: Registrar y hacer seguimiento a cada caso escalado.
+R4: Analizar tendencias de casos para prevenir problemas recurrentes.
+R5: Integrar el escalamiento documental con la gestión de incidentes institucional.
+
+# Q12 Mecanismos de rendición de cuentas
+@ crit=m tier=s mgda=EST roles=dir,ci,gd src=F05,F11,F13,F21 pre=D02-Q03
+P: ¿Las personas y áreas rinden cuentas periódicamente sobre el cumplimiento de sus responsabilidades documentales?
+A: Puede darse mediante informes de gestión, auditorías, evaluaciones de desempeño o revisiones por la dirección.
+W: La rendición de cuentas convierte las responsabilidades escritas en compromisos exigibles.
+0: Nadie rinde cuentas sobre responsabilidades documentales.
+1: Se piden explicaciones solo cuando ocurre un incidente grave.
+2: Algunas áreas reportan aspectos documentales de manera ocasional.
+3: Existe un mecanismo periódico de rendición de cuentas documental para las áreas responsables.
+4: Los resultados de la rendición de cuentas generan acciones correctivas o reconocimientos.
+5: El mecanismo se evalúa y se ajusta para mejorar su efecto sobre el desempeño documental.
+C: Informes periódicos por área | Acciones derivadas | Inclusión en evaluaciones de desempeño
+X: Cada dependencia presenta semestralmente el estado de sus transferencias y del inventario de su archivo de gestión.
+E: Informes de rendición de cuentas | Actas de revisión | Planes de mejora derivados
+R0: Definir sobre qué responsabilidades documentales deben rendir cuentas las áreas.
+R1: Establecer un reporte periódico mínimo por área.
+R2: Formalizar el mecanismo de rendición de cuentas para todas las áreas responsables.
+R3: Vincular los resultados con acciones correctivas y reconocimientos.
+R4: Evaluar el efecto del mecanismo sobre el desempeño documental.
+R5: Integrar la rendición de cuentas documental en la evaluación institucional.
+
+# Q13 Control de excepciones a las políticas
+@ crit=m tier=p mgda=EST roles=gd,jur,ci src=F05,F11
+P: ¿Las excepciones a las políticas y reglas documentales se solicitan, justifican, aprueban y registran?
+A: Por ejemplo, conservar documentos más allá de su retención o usar repositorios no autorizados.
+W: Las excepciones no controladas erosionan las reglas y ocultan riesgos.
+0: No se reconoce la existencia de excepciones; simplemente ocurren.
+1: Las excepciones se aprueban de palabra y no se registran.
+2: Algunas excepciones se documentan, sin criterios de aprobación.
+3: Existe un procedimiento para solicitar, justificar, aprobar y registrar excepciones.
+4: Las excepciones vigentes se revisan periódicamente y se cierran al cumplir su propósito.
+5: El análisis de excepciones genera ajustes a las políticas y reglas.
+C: Registro de excepciones | Criterios de aprobación | Fecha de vencimiento de cada excepción
+X: Un área solicita conservar contratos más allá de su retención por un proceso de auditoría y la excepción vence al cerrarlo.
+E: Procedimiento de excepciones | Registro de solicitudes | Actas de revisión
+R0: Identificar prácticas que se apartan de las políticas documentales.
+R1: Exigir que las excepciones se soliciten y registren por escrito.
+R2: Definir criterios y responsables para aprobar excepciones.
+R3: Revisar periódicamente las excepciones vigentes y cerrar las vencidas.
+R4: Usar el análisis de excepciones para ajustar políticas y reglas.
+R5: Automatizar el seguimiento de excepciones cuando el volumen lo justifique.
+
+# Q14 Coordinación entre sedes y unidades de negocio
+@ crit=m tier=p mgda=ADM roles=gd,dir,arc src=F01,F13
+P: ¿Las sedes, regionales o unidades de negocio aplican criterios documentales comunes bajo una coordinación central?
+A: Si la organización tiene una sola sede, puede proponerse como no aplicable con justificación.
+W: Las diferencias entre sedes fragmentan los expedientes y dificultan la recuperación y el control.
+0: Cada sede gestiona sus documentos sin criterios comunes.
+1: La coordinación entre sedes es ocasional y depende de iniciativas individuales.
+2: Algunas sedes adoptan los criterios centrales, otras mantienen prácticas propias.
+3: Todas las sedes aplican criterios documentales comunes con un responsable local identificado.
+4: La coordinación central verifica periódicamente la aplicación de criterios en cada sede.
+5: Las buenas prácticas de las sedes se identifican y se incorporan al modelo común.
+C: Criterios comunes adoptados por sede | Responsable local designado | Verificaciones periódicas
+X: Una caja de compensación con oficinas regionales usa el mismo cuadro de clasificación y reporta inventarios a la sede central.
+E: Lineamientos para sedes | Designaciones de responsables locales | Informes de visitas o verificaciones
+R0: Identificar diferencias de prácticas documentales entre sedes.
+R1: Designar un responsable documental en cada sede.
+R2: Extender los criterios centrales a todas las sedes.
+R3: Verificar periódicamente la aplicación de criterios en cada sede.
+R4: Incorporar buenas prácticas locales al modelo común.
+R5: Optimizar la coordinación mediante indicadores comparables por sede.
+
+# Q15 Gestión de conflictos entre necesidades operativas y requisitos documentales
+@ crit=m tier=p mgda=EST roles=gd,pro,dir src=F05,F11,F12
+P: ¿Cuando una necesidad operativa entra en conflicto con un requisito documental, existe un mecanismo para analizarlo y decidir de forma documentada?
+A: Por ejemplo, la urgencia de un trámite frente a la exigencia de radicación o de firma.
+W: Resolver los conflictos de forma explícita evita que los requisitos documentales se omitan de manera silenciosa.
+0: Los conflictos se resuelven omitiendo el requisito documental sin registro.
+1: Los conflictos se resuelven caso a caso, sin criterio ni registro.
+2: Algunos conflictos se discuten con gestión documental antes de decidir.
+3: Existe un mecanismo para analizar conflictos y decidir con criterios documentados.
+4: Las decisiones sobre conflictos se registran y se revisan sus consecuencias.
+5: Los conflictos recurrentes generan rediseños de procesos o de requisitos.
+C: Mecanismo de análisis de conflictos | Registro de decisiones | Rediseños derivados
+X: Para atender una emergencia sanitaria, una IPS habilita un formulario temporal con radicación posterior controlada.
+E: Procedimiento o criterio de decisión | Registro de casos | Planes de rediseño
+R0: Identificar situaciones en las que se omiten requisitos documentales por urgencia.
+R1: Exigir que los conflictos se consulten con gestión documental.
+R2: Definir criterios para decidir conflictos entre operación y requisitos.
+R3: Registrar las decisiones y revisar sus consecuencias.
+R4: Rediseñar procesos o requisitos ante conflictos recurrentes.
+R5: Anticipar conflictos en el diseño de nuevos procesos y servicios.

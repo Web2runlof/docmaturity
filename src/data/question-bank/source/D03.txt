@@ -1,0 +1,321 @@
+@dimension D03
+@name Administración y presupuesto
+@weight 5
+@sources F01,F05,F13,F14
+@mgda ADM
+@summary Evalúa la sostenibilidad económica y administrativa de la gestión documental: presupuesto, costos, talento disponible, contratación de servicios y relación entre inversión y beneficios.
+
+# Q01 Presupuesto específico para gestión documental
+@ crit=a tier=q mgda=ADM roles=fin,gd,dir src=F01,F05,F13 min=3
+P: ¿La organización asigna un presupuesto identificable para la gestión documental en cada vigencia?
+A: Se busca un rubro, centro de costo o partida que permita conocer cuánto se destina, aunque se ejecute desde varias áreas.
+W: Sin presupuesto identificable, la gestión documental depende de recursos residuales y no puede planificarse.
+0: No se asignan recursos para la gestión documental.
+1: Los gastos documentales se cubren con recursos residuales de otras áreas.
+2: Se asignan recursos a actividades puntuales, sin un presupuesto identificable.
+3: Existe un presupuesto identificable para la gestión documental en cada vigencia.
+4: La ejecución del presupuesto documental se controla y se reporta periódicamente.
+5: El presupuesto se define a partir de prioridades del plan documental y de resultados anteriores.
+C: Rubro o centro de costo identificable | Reportes de ejecución | Vínculo con el plan documental
+X: Una gobernación identifica en su presupuesto los recursos del PINAR para organización de fondos y SGDEA.
+E: Presupuesto aprobado | Informes de ejecución presupuestal | Plan de adquisiciones
+R0: Estimar las necesidades de recursos de la gestión documental para la próxima vigencia.
+R1: Identificar los gastos documentales que hoy se cubren desde otras áreas.
+R2: Solicitar un presupuesto identificable vinculado al plan documental.
+R3: Controlar y reportar periódicamente la ejecución del presupuesto documental.
+R4: Definir el presupuesto con base en prioridades y resultados anteriores.
+R5: Evaluar la eficiencia del gasto documental y ajustar la asignación.
+
+# Q02 Planeación financiera plurianual
+@ crit=m tier=s mgda=ADM roles=fin,pla,gd src=F05,F13,F14 pre=D01-Q03
+P: ¿Los proyectos documentales de varios años cuentan con una proyección financiera que asegure su continuidad?
+A: Aplica a proyectos como SGDEA, organización de fondos acumulados, digitalización o preservación digital.
+W: Los proyectos plurianuales sin respaldo financiero se interrumpen y pierden la inversión realizada.
+0: No se proyectan recursos más allá de la vigencia actual.
+1: Se asume la continuidad de los proyectos sin proyección financiera.
+2: Algunos proyectos tienen estimaciones plurianuales informales.
+3: Los proyectos plurianuales cuentan con una proyección financiera aprobada.
+4: La proyección se actualiza con la ejecución real y los cambios de alcance.
+5: La planeación plurianual se evalúa y orienta la priorización de nuevas inversiones.
+C: Proyección financiera por proyecto | Aprobación formal | Actualización con ejecución real
+X: Una universidad aprueba una proyección a tres años para licencias, soporte y migración de su repositorio documental.
+E: Marco de gasto de mediano plazo o equivalente | Fichas de inversión | Actas de aprobación
+R0: Identificar los proyectos documentales que requieren recursos de varias vigencias.
+R1: Estimar los costos plurianuales de los proyectos identificados.
+R2: Aprobar formalmente la proyección financiera de los proyectos plurianuales.
+R3: Actualizar la proyección con la ejecución real y los cambios de alcance.
+R4: Usar la planeación plurianual para priorizar nuevas inversiones.
+R5: Evaluar la continuidad lograda y ajustar el modelo de financiación.
+
+# Q03 Identificación de costos operativos documentales
+@ crit=b tier=p mgda=ADM roles=fin,gd src=F05,F13
+P: ¿La organización conoce los costos recurrentes de operar la gestión documental, como personal, insumos, almacenamiento y servicios?
+A: Se evalúa la existencia de una estimación sustentada, aunque no sea un sistema de costeo detallado.
+W: Conocer los costos operativos permite comparar alternativas y justificar mejoras.
+0: Los costos operativos documentales son desconocidos.
+1: Se conocen algunos costos aislados, como compras de cajas o servicios de mensajería.
+2: Existe una estimación parcial de costos que no cubre todos los componentes.
+3: Hay una estimación documentada de los costos operativos principales.
+4: Los costos operativos se monitorean y se comparan entre periodos.
+5: El análisis de costos orienta decisiones de eficiencia y de modelo de operación.
+C: Estimación documentada de costos | Componentes cubiertos | Comparación entre periodos
+X: Una organización estima el costo anual por metro lineal custodiado y lo compara con la opción de custodia externa.
+E: Análisis de costos | Reportes contables o de centros de costo | Comparativos de periodos
+R0: Listar los componentes de costo de la gestión documental.
+R1: Recopilar los costos conocidos en una estimación inicial.
+R2: Completar la estimación con todos los componentes principales.
+R3: Monitorear los costos operativos y compararlos entre periodos.
+R4: Usar el análisis de costos para decisiones de eficiencia.
+R5: Revisar periódicamente el modelo de operación con base en costos y resultados.
+
+# Q04 Evaluación de costos de almacenamiento físico
+@ crit=b tier=p mgda=ADM roles=arc,fin,gd src=F01,F13 cond=fisico rel=D06-Q02
+P: ¿Se han evaluado los costos de almacenar documentos físicos, incluidos espacio, mobiliario, condiciones ambientales y custodia?
+A: Si la organización no conserva documentos físicos, puede proponerse como no aplicable.
+W: El almacenamiento físico tiene costos crecientes que deben contrastarse con la aplicación de retención y disposición.
+0: No se conocen los costos de almacenamiento físico.
+1: Se conocen algunos costos, como el arriendo de bodegas, sin análisis integral.
+2: Existe una estimación parcial del costo de almacenamiento físico.
+3: Los costos de almacenamiento físico están estimados por volumen y ubicación.
+4: Los costos se monitorean y se proyectan según el crecimiento documental.
+5: Las decisiones de retención, disposición y custodia consideran el análisis de costos.
+C: Costo por volumen o ubicación | Proyección de crecimiento | Uso en decisiones de disposición
+X: Una entidad calcula cuánto ahorraría al eliminar series con retención cumplida en su bodega externa.
+E: Contratos de arriendo o custodia | Estimaciones de costo | Proyecciones de ocupación
+R0: Identificar dónde y en qué condiciones se almacenan los documentos físicos.
+R1: Recopilar los costos directos de los espacios de almacenamiento.
+R2: Estimar los costos totales de almacenamiento por volumen y ubicación.
+R3: Proyectar los costos con base en el crecimiento documental.
+R4: Considerar los costos en decisiones de retención, disposición y custodia.
+R5: Optimizar el modelo de almacenamiento con base en el análisis de costos.
+
+# Q05 Evaluación de costos de almacenamiento digital
+@ crit=b tier=p mgda=TEC roles=tec,fin,gd src=F13,F14 cond=electronico
+P: ¿Se conocen y proyectan los costos de almacenar documentos digitales, incluidas copias, nube, licencias y crecimiento?
+A: Se consideran almacenamiento primario, copias de seguridad, réplicas y servicios en la nube.
+W: El almacenamiento digital parece gratuito, pero crece sin control cuando no se aplica retención.
+0: No se conocen los costos de almacenamiento digital.
+1: Se conocen algunos cargos, como suscripciones, sin relación con el volumen documental.
+2: Existe una estimación parcial del costo de almacenamiento digital.
+3: Los costos de almacenamiento digital están estimados por repositorio y tipo de copia.
+4: Los costos se monitorean y se proyectan según el crecimiento y la retención aplicada.
+5: Las decisiones de arquitectura y retención digital consideran el análisis de costos.
+C: Costo por repositorio | Inclusión de copias y réplicas | Proyección de crecimiento
+X: Una empresa detecta que el 40 % de su almacenamiento en nube corresponde a duplicados sin valor de retención.
+E: Facturas de servicios en nube | Reportes de capacidad | Proyecciones de crecimiento
+R0: Identificar los repositorios digitales y sus responsables.
+R1: Recopilar los costos directos de almacenamiento digital.
+R2: Estimar los costos por repositorio incluyendo copias y réplicas.
+R3: Proyectar los costos según crecimiento y retención aplicada.
+R4: Incorporar el análisis de costos en decisiones de arquitectura y retención.
+R5: Optimizar el almacenamiento digital eliminando duplicados y aplicando disposición.
+
+# Q06 Recursos destinados a preservación digital
+@ crit=a tier=s mgda=ADM roles=fin,gd,tec src=F14,F16 cond=electronico rel=D11-Q01
+P: ¿La organización destina recursos específicos y sostenidos para preservar a largo plazo los documentos digitales que lo requieren?
+A: Se diferencia de los recursos para copias de seguridad o infraestructura general de TI.
+W: La preservación digital requiere inversión continua; sin ella, los documentos permanentes se vuelven ilegibles.
+0: No se destinan recursos a preservación digital.
+1: La preservación se asume cubierta por los recursos generales de TI.
+2: Se asignan recursos puntuales a actividades de preservación.
+3: Existen recursos específicos para preservación digital en el presupuesto.
+4: Los recursos se asignan según un plan de preservación y se controla su ejecución.
+5: La suficiencia de los recursos se evalúa frente a los riesgos y volúmenes que deben preservarse.
+C: Partida específica de preservación | Vínculo con el plan de preservación | Evaluación de suficiencia
+X: Un archivo territorial asigna recursos anuales para verificación de integridad y migración de formatos.
+E: Presupuesto con partida de preservación | Plan de preservación digital | Informes de ejecución
+R0: Identificar los documentos digitales que requieren preservación a largo plazo.
+R1: Diferenciar las necesidades de preservación de las de copias de seguridad.
+R2: Asignar una partida específica para preservación digital.
+R3: Vincular la asignación con un plan de preservación y controlar su ejecución.
+R4: Evaluar la suficiencia de los recursos frente a riesgos y volúmenes.
+R5: Ajustar sistemáticamente los recursos según la evolución del programa.
+
+# Q07 Recursos destinados a capacitación
+@ crit=m tier=p mgda=CUL roles=th,fin,gd src=F05,F13 rel=D12-Q08
+P: ¿Se asignan recursos para formar al personal en gestión documental, documento electrónico y temas relacionados?
+A: Incluye tiempo de dedicación, cursos, materiales y formadores internos o externos.
+W: La formación es necesaria para que las reglas documentales se apliquen de manera consistente.
+0: No se asignan recursos a formación documental.
+1: La formación documental depende de ofertas gratuitas ocasionales.
+2: Se asignan recursos a algunas actividades de formación, sin plan.
+3: El plan institucional de capacitación incluye recursos para formación documental.
+4: Los recursos se asignan según necesidades identificadas y se mide su ejecución.
+5: La asignación se ajusta según la efectividad de la formación medida.
+C: Formación documental en el plan de capacitación | Recursos asignados | Ejecución medida
+X: Una empresa destina horas anuales obligatorias de formación documental para cargos que gestionan expedientes.
+E: Plan institucional de capacitación | Presupuesto de formación | Registros de asistencia
+R0: Identificar las necesidades de formación documental.
+R1: Incluir la formación documental en el plan institucional de capacitación.
+R2: Asignar recursos específicos según las necesidades identificadas.
+R3: Medir la ejecución de los recursos de formación documental.
+R4: Ajustar la asignación según la efectividad de la formación.
+R5: Sostener la formación documental como componente permanente del desarrollo del talento.
+
+# Q08 Disponibilidad y suficiencia de talento humano
+@ crit=a tier=q mgda=ADM roles=th,gd,dir src=F01,F05,F13,F14 min=3 rel=D12-Q02
+P: ¿La organización cuenta con personal suficiente y con perfiles adecuados para ejecutar los procesos de gestión documental?
+A: Se evalúa la relación entre cargas de trabajo, volúmenes documentales y personal disponible, no solo su existencia.
+W: La falta de personal especializado es una de las causas más frecuentes del rezago documental.
+0: No hay personal asignado a la gestión documental.
+1: La gestión documental recae en personal sin perfil específico y con otras funciones.
+2: Hay personal asignado, insuficiente para los volúmenes y procesos existentes.
+3: El personal es suficiente para los procesos principales y cuenta con perfiles adecuados.
+4: Las cargas de trabajo se miden y se ajusta la planta o los servicios según la demanda.
+5: La organización planifica el talento documental según la evolución de sus necesidades.
+C: Personal asignado por proceso | Perfiles con formación archivística | Análisis de cargas
+X: Una alcaldía con dos personas para 3.000 metros lineales identifica la insuficiencia en su estudio de cargas.
+E: Planta de personal o estructura del área | Estudio de cargas de trabajo | Perfiles de cargo
+R0: Identificar las tareas documentales y quién las ejecuta hoy.
+R1: Asignar formalmente personal con perfil adecuado a la gestión documental.
+R2: Analizar las cargas de trabajo frente a volúmenes y procesos.
+R3: Ajustar la planta o los servicios según el análisis de cargas.
+R4: Planificar el talento documental según las necesidades futuras.
+R5: Evaluar periódicamente la suficiencia del talento frente a los resultados.
+
+# Q09 Evaluación del costo total de propiedad tecnológica
+@ crit=m tier=p mgda=TEC roles=tec,fin,gd src=F09,F13 rel=D08-Q12
+P: ¿Al evaluar soluciones tecnológicas documentales se considera el costo total de propiedad durante su ciclo de vida?
+A: Incluye licencias, implementación, soporte, almacenamiento, actualizaciones, capacitación, migración y salida.
+W: Evaluar solo el costo inicial lleva a soluciones que luego resultan insostenibles o imposibles de abandonar.
+0: Las soluciones se evalúan sin considerar costos más allá de la compra.
+1: Se consideran algunos costos recurrentes de manera informal.
+2: Se estiman costos recurrentes, sin incluir migración ni salida.
+3: Las evaluaciones incluyen el costo total de propiedad con migración y salida.
+4: El costo total de propiedad estimado se contrasta con el costo real durante la operación.
+5: Las lecciones del contraste se incorporan en nuevas evaluaciones tecnológicas.
+C: Análisis de costo total de propiedad | Inclusión de costos de salida | Contraste con costo real
+X: Antes de renovar su gestor documental, una entidad estima el costo de migrar 2 TB con metadatos a otra plataforma.
+E: Estudios previos o análisis de alternativas | Modelos de costo | Informes de seguimiento de costos
+R0: Identificar las soluciones tecnológicas documentales vigentes y sus costos conocidos.
+R1: Incluir costos recurrentes en la evaluación de nuevas soluciones.
+R2: Estimar el costo total de propiedad incluyendo migración y salida.
+R3: Contrastar el costo estimado con el costo real de operación.
+R4: Incorporar lecciones del contraste en nuevas evaluaciones.
+R5: Estandarizar un modelo de evaluación de costo total de propiedad.
+
+# Q10 Elaboración de casos de negocio para inversiones
+@ crit=b tier=p mgda=ADM roles=fin,gd,pla src=F05,F13 rel=D01-Q14
+P: ¿Las inversiones documentales significativas se sustentan en casos de negocio con alternativas, costos, beneficios y riesgos?
+A: Se espera proporcionalidad: inversiones menores pueden requerir análisis simplificados.
+W: Un caso de negocio permite decidir con información y facilita la aprobación de recursos.
+0: Las inversiones se deciden sin análisis documentado.
+1: Las inversiones se justifican con argumentos generales de necesidad.
+2: Algunas inversiones cuentan con análisis de costos, sin comparar alternativas.
+3: Las inversiones significativas se sustentan en casos de negocio con alternativas y riesgos.
+4: Los casos de negocio se revisan al cierre para comparar lo previsto con lo obtenido.
+5: La organización mejora su método de casos de negocio a partir de las revisiones.
+C: Caso de negocio con alternativas | Análisis de riesgos | Revisión posterior
+X: Un caso de negocio compara custodia externa, ampliación de depósito y aplicación de disposición final.
+E: Casos de negocio | Estudios de conveniencia | Informes de cierre
+R0: Definir qué inversiones documentales requieren un análisis previo.
+R1: Documentar la justificación de las inversiones con costos y beneficios.
+R2: Comparar alternativas y riesgos en los casos de negocio.
+R3: Revisar los casos de negocio al cierre de las inversiones.
+R4: Mejorar el método de casos de negocio con base en las revisiones.
+R5: Integrar los casos de negocio documentales en la gestión del portafolio institucional.
+
+# Q11 Priorización presupuestal basada en riesgos y beneficios
+@ crit=m tier=s mgda=ADM roles=fin,dir,gd src=F05,F13,F14 rel=D01-Q11
+P: ¿La asignación de recursos documentales prioriza explícitamente los riesgos más altos y los beneficios más relevantes?
+A: Se evalúa si existen criterios de priorización aplicados a las decisiones de presupuesto.
+W: Con recursos limitados, priorizar por riesgo evita gastar en lo visible mientras se descuida lo crítico.
+0: Los recursos se asignan sin criterios de priorización.
+1: Los recursos se asignan por inercia histórica o por presión de áreas.
+2: Algunas decisiones presupuestales consideran riesgos de forma implícita.
+3: La asignación de recursos aplica criterios explícitos de riesgo y beneficio.
+4: Se verifica que los recursos priorizados reduzcan los riesgos identificados.
+5: Los criterios de priorización se ajustan con base en resultados obtenidos.
+C: Criterios documentados de priorización | Relación entre riesgos y asignaciones | Seguimiento de resultados
+X: Una entidad prioriza el control de humedad de un depósito con documentos de conservación permanente sobre la compra de mobiliario nuevo.
+E: Matriz de priorización presupuestal | Mapa de riesgos | Actas de aprobación
+R0: Identificar los riesgos documentales más relevantes para orientar el gasto.
+R1: Reemplazar la asignación inercial por criterios básicos de prioridad.
+R2: Aplicar criterios explícitos de riesgo y beneficio en la asignación.
+R3: Verificar que los recursos asignados reduzcan los riesgos identificados.
+R4: Ajustar los criterios con base en los resultados obtenidos.
+R5: Integrar la priorización documental en la priorización presupuestal institucional.
+
+# Q12 Planeación de contratación de servicios archivísticos
+@ crit=m tier=p mgda=ADM roles=jur,gd,fin src=F01,F05 cond=terceros rel=D02-Q10
+P: ¿La contratación de servicios archivísticos se planifica con especificaciones técnicas, perfiles requeridos y productos verificables?
+A: Incluye organización de fondos, digitalización, custodia, elaboración de instrumentos y consultoría.
+W: Servicios mal especificados producen entregables que no cumplen requisitos y deben rehacerse.
+0: No se contratan servicios archivísticos o se contratan sin especificaciones.
+1: Las especificaciones son genéricas y se copian de contratos anteriores.
+2: Algunas contrataciones incluyen especificaciones técnicas, sin productos verificables.
+3: Las contrataciones definen especificaciones, perfiles y productos verificables.
+4: Los productos contratados se verifican con criterios técnicos antes de su recibo.
+5: Las lecciones de cada contratación se incorporan en las siguientes.
+C: Especificaciones técnicas | Productos con criterios de aceptación | Informes de verificación
+X: Un contrato de organización de archivo exige inventarios en formato definido y muestreo de calidad antes del pago.
+E: Estudios previos y anexos técnicos | Informes de supervisión | Actas de recibo
+R0: Identificar las necesidades de servicios archivísticos externos.
+R1: Elaborar especificaciones técnicas propias para cada servicio.
+R2: Definir productos verificables y perfiles requeridos.
+R3: Verificar los productos con criterios técnicos antes de su recibo.
+R4: Incorporar las lecciones de cada contratación en las siguientes.
+R5: Estandarizar fichas técnicas de contratación archivística.
+
+# Q13 Control financiero y contractual de proveedores
+@ crit=m tier=s mgda=ADM roles=fin,jur,gd src=F05,F13 cond=terceros
+P: ¿La organización supervisa la ejecución financiera y técnica de los contratos de servicios documentales?
+A: Se valora la supervisión con informes y verificación técnica, no solo el trámite de pagos.
+W: La supervisión evita pagar por servicios incompletos y protege la calidad del trabajo documental.
+0: Los contratos documentales no tienen supervisión.
+1: La supervisión se limita a tramitar pagos.
+2: Hay supervisión técnica ocasional, sin informes estructurados.
+3: Los contratos tienen supervisión financiera y técnica con informes periódicos.
+4: Los incumplimientos detectados generan acciones contractuales documentadas.
+5: El desempeño de proveedores se evalúa y orienta futuras contrataciones.
+C: Supervisor designado | Informes técnicos periódicos | Acciones ante incumplimiento
+X: El supervisor de un contrato de digitalización revisa muestras de calidad de imagen antes de aprobar cada pago.
+E: Designación de supervisor | Informes de supervisión | Evaluaciones de proveedores
+R0: Designar supervisores para los contratos documentales vigentes.
+R1: Exigir informes de supervisión que incluyan aspectos técnicos.
+R2: Estructurar la supervisión técnica con criterios y periodicidad.
+R3: Documentar las acciones ante incumplimientos detectados.
+R4: Evaluar el desempeño de los proveedores al cierre de cada contrato.
+R5: Usar la evaluación de proveedores en la planeación de nuevas contrataciones.
+
+# Q14 Sostenibilidad económica de los sistemas de información
+@ crit=m tier=p mgda=TEC roles=tec,fin,dir src=F13,F14 rel=D08-Q12
+P: ¿Los sistemas que gestionan documentos tienen asegurados los recursos para su operación, soporte y actualización en el tiempo?
+A: Se evalúa si existen recursos recurrentes y no solo el costo de implementación inicial.
+W: Un sistema sin soporte ni actualizaciones se vuelve inseguro y pone en riesgo la información que contiene.
+0: Los sistemas documentales operan sin recursos asignados para su sostenimiento.
+1: El sostenimiento depende de recursos ocasionales o de garantías vencidas.
+2: Algunos sistemas tienen soporte asegurado, otros no.
+3: Todos los sistemas documentales relevantes tienen recursos recurrentes asignados.
+4: Se monitorea el estado de soporte y obsolescencia de cada sistema.
+5: Las decisiones de renovación se planifican con anticipación según el ciclo de vida de los sistemas.
+C: Contratos de soporte vigentes | Recursos recurrentes asignados | Monitoreo de obsolescencia
+X: Una empresa detecta que su sistema de correspondencia funciona sobre una versión sin soporte del fabricante.
+E: Contratos de soporte y licenciamiento | Inventario de versiones | Plan de renovación tecnológica
+R0: Inventariar los sistemas documentales y su estado de soporte.
+R1: Identificar los sistemas sin recursos de sostenimiento.
+R2: Asignar recursos recurrentes a todos los sistemas documentales relevantes.
+R3: Monitorear el soporte y la obsolescencia de cada sistema.
+R4: Planificar renovaciones según el ciclo de vida de los sistemas.
+R5: Evaluar la sostenibilidad del portafolio tecnológico documental en su conjunto.
+
+# Q15 Evaluación de beneficios frente a inversiones realizadas
+@ crit=b tier=p mgda=ADM roles=fin,dir,gd src=F05,F13,F14 rel=D01-Q14,D15-Q13
+P: ¿La organización evalúa si las inversiones documentales realizadas produjeron los beneficios esperados?
+A: Se valora la comparación entre lo invertido y lo obtenido con datos, no solo la ejecución del gasto.
+W: Evaluar beneficios permite aprender, corregir y defender futuras inversiones.
+0: No se evalúan los resultados de las inversiones documentales.
+1: Los resultados se comentan de manera informal.
+2: Algunas inversiones se evalúan, sin compararlas con beneficios previstos.
+3: Las inversiones significativas se evalúan frente a los beneficios esperados.
+4: Los resultados de la evaluación generan ajustes en proyectos o en su operación.
+5: Las evaluaciones se consolidan y orientan la estrategia de inversión documental.
+C: Informes de evaluación de inversiones | Comparación con lo previsto | Ajustes derivados
+X: Tras implementar radicación electrónica, una entidad mide la reducción de costos de mensajería y papel.
+E: Informes de evaluación ex post | Indicadores de beneficio | Actas de decisión
+R0: Identificar las inversiones documentales realizadas en los últimos años.
+R1: Recopilar información sobre los resultados de esas inversiones.
+R2: Comparar los resultados obtenidos con los beneficios esperados.
+R3: Usar las evaluaciones para ajustar proyectos y operación.
+R4: Consolidar las evaluaciones para orientar la estrategia de inversión.
+R5: Institucionalizar la evaluación ex post de inversiones documentales.

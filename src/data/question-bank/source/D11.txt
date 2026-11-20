@@ -1,0 +1,322 @@
+@dimension D11
+@name Preservación digital
+@weight 8
+@sources F01,F02,F14,F15,F16,F17,F19
+@mgda TEC
+@summary Evalúa la capacidad de mantener documentos digitales accesibles, auténticos y comprensibles a largo plazo: política, identificación de objetos, formatos, obsolescencia, estrategias, integridad, redundancia, metadatos, ingreso, migración, acceso, reparación y evaluación del programa.
+@note Se distinguen explícitamente copia de seguridad, recuperación ante desastres, conservación digital y preservación digital a largo plazo. OAIS se usa como modelo conceptual, no como obligación de adquirir una tecnología.
+
+# Q01 Política y planificación de preservación digital
+@ crit=a critical tier=q mgda=EST roles=gd,tec,dir src=F02,F14,F16 cond=electronico min=3 rel=D03-Q06
+P: ¿La organización tiene una política o plan de preservación digital aprobado que define alcance, responsabilidades, estrategias y recursos?
+A: En entidades públicas suele integrarse en el Sistema Integrado de Conservación. Se diferencia de la política de copias de seguridad.
+W: Sin una política de preservación, la conservación a largo plazo depende de decisiones técnicas aisladas.
+0: No existe política ni plan de preservación digital.
+1: La preservación se asume cubierta por las copias de seguridad.
+2: Existe un plan en elaboración o aprobado sin recursos ni responsables.
+3: La política o plan está aprobado, define alcance, responsables y estrategias, y cuenta con recursos.
+4: El plan se ejecuta con seguimiento y se actualiza con base en riesgos.
+5: El programa de preservación se revisa sistemáticamente con evaluaciones de madurez.
+C: Plan aprobado | Diferenciación frente a copias de seguridad | Recursos y responsables asignados
+X: Un archivo territorial aprueba su plan de preservación digital con metas a cinco años dentro del SIC.
+E: Plan de preservación digital o SIC | Acta de aprobación | Informes de ejecución
+R0: Diferenciar la preservación digital de las copias de seguridad ante la dirección.
+R1: Formular un plan de preservación con alcance y responsables.
+R2: Aprobar el plan y asignarle recursos.
+R3: Ejecutar el plan con seguimiento y actualizarlo según riesgos.
+R4: Evaluar periódicamente la madurez del programa.
+R5: Ajustar sistemáticamente el programa con base en las evaluaciones.
+
+# Q02 Identificación de documentos digitales que deben preservarse
+@ crit=a tier=s mgda=DOC roles=gd,tec src=F02,F14 cond=electronico pre=D05-Q04 rel=D05-Q14
+P: ¿Se han identificado los documentos digitales que requieren preservación a largo plazo según su retención y su valor permanente?
+A: Se busca un inventario o criterio que delimite el universo a preservar, no preservarlo todo.
+W: Preservar todo es insostenible; preservar sin criterio deja fuera lo que importa.
+0: No se han identificado documentos digitales a preservar.
+1: Se considera que todo lo digital debe preservarse sin diferenciar.
+2: Se han identificado algunos conjuntos de documentos digitales a preservar.
+3: Los documentos a preservar se identifican a partir de la retención y del valor permanente.
+4: El universo a preservar se actualiza con nuevos sistemas y series.
+5: La identificación orienta la priorización de recursos y estrategias de preservación.
+C: Inventario de objetos a preservar | Criterio basado en retención y valor | Actualización con nuevos sistemas
+X: Una universidad identifica sus actas digitales del consejo y sus tesis como objetos de preservación permanente.
+E: Inventario de objetos digitales a preservar | Instrumentos de retención | Fichas de valoración
+R0: Revisar qué series tienen retención larga o conservación total en soporte digital.
+R1: Reemplazar el criterio de preservar todo por un criterio basado en valor.
+R2: Identificar los documentos digitales a preservar a partir de la retención y el valor.
+R3: Actualizar el universo a preservar con nuevos sistemas y series.
+R4: Priorizar recursos y estrategias según la identificación.
+R5: Revisar periódicamente el universo a preservar.
+
+# Q03 Identificación de formatos y características técnicas
+@ crit=m tier=p mgda=TEC roles=tec,gd src=F14,F15,F17 cond=electronico rel=D09-Q05
+P: ¿Se conocen los formatos y características técnicas de los documentos digitales que deben preservarse?
+A: Incluye identificación de formatos, versiones, dependencias de software y documentos con contenido dinámico.
+W: No se puede evaluar el riesgo de obsolescencia de formatos que no se conocen.
+0: Se desconocen los formatos de los documentos a preservar.
+1: Se conocen los formatos más comunes sin inventario.
+2: Existe un inventario parcial de formatos.
+3: Los formatos de los documentos a preservar están identificados con sus características técnicas.
+4: La identificación de formatos se realiza de forma sistemática al ingreso.
+5: El perfil de formatos se monitorea y orienta las políticas de formatos admitidos.
+C: Inventario de formatos | Herramienta o método de identificación | Política de formatos admitidos
+X: Un análisis revela documentos en formatos de un software descontinuado sin visor disponible.
+E: Perfil de formatos | Reportes de identificación | Política de formatos
+R0: Identificar los formatos de una muestra de documentos a preservar.
+R1: Elaborar un inventario básico de formatos.
+R2: Identificar las características técnicas de todos los documentos a preservar.
+R3: Sistematizar la identificación de formatos al ingreso.
+R4: Monitorear el perfil de formatos y definir formatos admitidos.
+R5: Revisar la política de formatos ante cambios tecnológicos.
+
+# Q04 Evaluación de riesgos de obsolescencia tecnológica
+@ crit=a tier=s mgda=TEC roles=tec,gd src=F14,F16 cond=electronico pre=D11-Q03
+P: ¿Se evalúa periódicamente el riesgo de que formatos, soportes o sistemas se vuelvan obsoletos e impidan acceder a los documentos?
+A: Se evalúa la existencia de un análisis de riesgos de obsolescencia, no solo la renovación de equipos.
+W: La obsolescencia avanza silenciosamente y suele descubrirse cuando ya no hay forma de leer los documentos.
+0: No se evalúan riesgos de obsolescencia.
+1: Los problemas de obsolescencia se descubren al intentar abrir documentos.
+2: Se identifican riesgos de obsolescencia de manera ocasional.
+3: Existe una evaluación periódica de riesgos de obsolescencia para los documentos a preservar.
+4: Los riesgos identificados generan acciones planificadas.
+5: La vigilancia tecnológica anticipa riesgos y orienta decisiones de formatos y sistemas.
+C: Evaluación de obsolescencia documentada | Acciones derivadas | Vigilancia tecnológica
+X: El equipo detecta que una colección de videos depende de un códec sin soporte y planifica su migración.
+E: Informes de riesgos de obsolescencia | Planes de acción | Registros de vigilancia tecnológica
+R0: Identificar documentos en formatos o soportes potencialmente obsoletos.
+R1: Registrar los problemas de acceso detectados.
+R2: Evaluar periódicamente los riesgos de obsolescencia.
+R3: Planificar acciones ante los riesgos identificados.
+R4: Establecer vigilancia tecnológica sobre formatos y sistemas.
+R5: Integrar la vigilancia en las decisiones de arquitectura.
+
+# Q05 Selección de estrategias de preservación
+@ crit=m tier=p mgda=TEC roles=gd,tec src=F14,F16 cond=electronico pre=D11-Q04
+P: ¿Para cada tipo de objeto digital se ha definido una estrategia de preservación, como normalización, migración o emulación, con su justificación?
+A: La estrategia debe ser proporcional al valor y al riesgo del objeto; no existe una única estrategia universal.
+W: Sin estrategias definidas, las acciones de preservación se improvisan y pueden dañar la autenticidad.
+0: No se han definido estrategias de preservación.
+1: Se aplican acciones aisladas, como convertir a PDF, sin criterio.
+2: Hay estrategias definidas para algunos tipos de objeto.
+3: Cada tipo de objeto a preservar tiene una estrategia definida y justificada.
+4: Las estrategias se aplican y se registran sus resultados.
+5: Las estrategias se revisan con base en resultados y en la evolución tecnológica.
+C: Estrategias por tipo de objeto | Justificación documentada | Registro de aplicación
+X: Una entidad normaliza documentos de oficina a PDF/A y conserva los originales para objetos con contenido dinámico.
+E: Documento de estrategias de preservación | Registros de acciones | Informes de resultados
+R0: Identificar los tipos de objetos digitales a preservar.
+R1: Revisar las conversiones que se hacen hoy sin criterio.
+R2: Definir y justificar una estrategia por tipo de objeto.
+R3: Aplicar las estrategias y registrar sus resultados.
+R4: Revisar las estrategias con base en resultados.
+R5: Actualizar las estrategias según la evolución tecnológica.
+
+# Q06 Verificación de integridad mediante checksums u otros mecanismos apropiados
+@ crit=a critical tier=q mgda=TEC roles=tec,gd src=F15,F17 cond=electronico min=3 rel=D07-Q09
+P: ¿Se calculan y verifican periódicamente sumas de verificación u otros mecanismos para detectar corrupción o alteración de los objetos digitales preservados?
+A: Una suma de verificación detecta cambios o corrupción, pero no prueba por sí sola autoría ni autenticidad.
+W: La corrupción silenciosa de datos puede pasar inadvertida durante años si no se verifica.
+0: No se verifica la integridad de los objetos digitales.
+1: La integridad se revisa solo cuando un archivo no abre.
+2: Se calculan sumas de verificación al ingreso, sin verificación periódica.
+3: Las sumas de verificación se calculan al ingreso y se verifican periódicamente.
+4: Las fallas de integridad detectadas se reparan desde copias íntegras y se registran.
+5: La verificación es automática, cubre todas las copias y se evalúa su efectividad.
+C: Sumas al ingreso | Verificación periódica | Registro de fallas y reparaciones
+X: El repositorio verifica cada trimestre las sumas de todos los objetos y reporta discrepancias.
+E: Configuración de verificación de integridad | Reportes de verificación | Registros de reparación
+R0: Calcular sumas de verificación para los objetos más críticos.
+R1: Registrar las fallas de apertura de archivos y sus causas.
+R2: Calcular sumas al ingreso de todos los objetos a preservar.
+R3: Verificar periódicamente la integridad y reparar desde copias íntegras.
+R4: Automatizar la verificación en todas las copias.
+R5: Evaluar la efectividad de la verificación de integridad.
+
+# Q07 Almacenamiento redundante de objetos digitales
+@ crit=a critical tier=s mgda=TEC roles=tec src=F15,F19 cond=electronico min=3
+P: ¿Los objetos digitales a preservar se mantienen en varias copias completas, gestionadas y verificables?
+A: Se diferencia la redundancia para preservación de la copia de seguridad operativa de los sistemas.
+W: Una sola copia, por confiable que parezca, es un punto único de falla.
+0: Los objetos a preservar existen en una sola copia.
+1: Hay copias no gestionadas en medios diversos.
+2: Existen varias copias, sin verificación ni inventario.
+3: Los objetos a preservar se mantienen en varias copias completas y gestionadas.
+4: Las copias se verifican periódicamente y se sincronizan.
+5: La estrategia de redundancia se evalúa con base en riesgos y costos.
+C: Número de copias | Inventario de copias | Verificación y sincronización
+X: Los objetos de conservación permanente se mantienen en tres copias, una de ellas fuera de la sede principal.
+E: Política de copias de preservación | Inventario de copias | Reportes de verificación
+R0: Identificar cuántas copias existen de los objetos a preservar.
+R1: Inventariar las copias existentes y su ubicación.
+R2: Mantener varias copias completas y gestionadas.
+R3: Verificar y sincronizar periódicamente las copias.
+R4: Evaluar la estrategia de redundancia según riesgos y costos.
+R5: Revisar la redundancia ante cambios de infraestructura.
+
+# Q08 Separación de copias frente a amenazas comunes
+@ crit=a tier=p mgda=TEC roles=tec,seg src=F15,F19 cond=electronico pre=D11-Q07
+P: ¿Las copias de los objetos digitales están separadas geográfica, tecnológica o administrativamente para que una misma amenaza no las afecte a todas?
+A: Incluye separación ante desastres, ransomware, fallas de proveedor y errores administrativos.
+W: Copias que comparten la misma ubicación o credenciales pueden perderse en un solo evento.
+0: Todas las copias comparten ubicación y tecnología.
+1: Las copias están en ubicaciones distintas dentro de la misma sede.
+2: Existe una copia externa, sin aislamiento frente a ataques.
+3: Las copias están separadas ante desastres y ataques comunes.
+4: La separación se verifica y se prueban escenarios de pérdida de una ubicación.
+5: La separación se revisa ante nuevas amenazas y cambios de proveedores.
+C: Ubicaciones distintas | Aislamiento frente a ataques | Pruebas de pérdida de ubicación
+X: Una copia de preservación se mantiene aislada de la red con credenciales independientes.
+E: Arquitectura de copias | Informes de pruebas | Análisis de amenazas
+R0: Identificar amenazas que podrían afectar todas las copias.
+R1: Ubicar al menos una copia fuera de la sede principal.
+R2: Aislar las copias frente a ataques y errores administrativos.
+R3: Verificar la separación y probar escenarios de pérdida.
+R4: Revisar la separación ante nuevas amenazas.
+R5: Evaluar la separación al cambiar de proveedores.
+
+# Q09 Gestión de metadatos de preservación
+@ crit=m tier=p mgda=TEC roles=gd,tec src=F17,F16 cond=electronico rel=D09-Q05
+P: ¿Los objetos preservados cuentan con metadatos de preservación que documentan su formato, integridad, procedencia y acciones aplicadas?
+A: Puede tomarse como referencia el diccionario PREMIS, adaptado al contexto.
+W: Los metadatos de preservación permiten demostrar la autenticidad de un objeto después de décadas.
+0: No se registran metadatos de preservación.
+1: Se conservan algunos datos técnicos sin estructura.
+2: Hay metadatos de preservación para algunos objetos.
+3: Los objetos preservados tienen metadatos de preservación estructurados.
+4: Los metadatos de preservación se actualizan con cada acción.
+5: Los metadatos de preservación se validan y se mantienen interoperables.
+C: Metadatos estructurados | Actualización con cada acción | Validación
+X: Cada objeto preservado registra su formato, suma de verificación, origen y migraciones aplicadas.
+E: Esquema de metadatos de preservación | Muestras de registros | Reportes de validación
+R0: Definir qué información de preservación debe registrarse.
+R1: Estructurar los datos técnicos existentes.
+R2: Registrar metadatos de preservación para todos los objetos preservados.
+R3: Actualizar los metadatos con cada acción de preservación.
+R4: Validar los metadatos y mantenerlos interoperables.
+R5: Revisar el esquema de metadatos de preservación periódicamente.
+
+# Q10 Registro de eventos, agentes y derechos de preservación
+@ crit=m tier=p mgda=TEC roles=gd,tec,jur src=F17 cond=electronico pre=D11-Q09
+P: ¿Se registran los eventos de preservación, los agentes que los ejecutan y los derechos que permiten preservar y dar acceso a los objetos?
+A: Los derechos incluyen autorizaciones de reproducción, conversión y acceso sobre los objetos.
+W: Sin registro de eventos y derechos, no se puede justificar ni repetir lo que se hizo con un objeto.
+0: No se registran eventos ni derechos de preservación.
+1: Las acciones se recuerdan, pero no se registran.
+2: Se registran algunos eventos sin agentes ni derechos.
+3: Se registran eventos, agentes y derechos para los objetos preservados.
+4: Los registros se consultan para planificar acciones y atender accesos.
+5: Los registros se auditan y se mantienen durante toda la vida del objeto.
+C: Registro de eventos | Agentes identificados | Derechos documentados
+X: Al migrar una colección, el sistema registra la herramienta usada, la persona responsable y la autorización.
+E: Registros de eventos de preservación | Documentación de derechos | Informes de auditoría
+R0: Identificar las acciones de preservación que se han realizado.
+R1: Registrar las acciones de preservación que se ejecuten.
+R2: Incluir agentes y derechos en los registros.
+R3: Usar los registros para planificar acciones y atender accesos.
+R4: Auditar los registros periódicamente.
+R5: Mantener los registros durante toda la vida de los objetos.
+
+# Q11 Procesos de ingreso y validación de objetos digitales
+@ crit=a tier=p mgda=TEC roles=gd,tec src=F16,F17 cond=electronico rel=D07-Q15
+P: ¿Los objetos digitales que ingresan al ambiente de preservación se validan en formato, integridad, metadatos y completitud antes de aceptarlos?
+A: Corresponde a la función de ingreso del modelo OAIS, implementada de forma proporcional.
+W: Aceptar objetos sin validar traslada errores al repositorio y compromete su preservación.
+0: No existe un proceso de ingreso a preservación.
+1: Los objetos se copian al repositorio sin validación.
+2: Se validan algunos aspectos, como el formato.
+3: El ingreso valida formato, integridad, metadatos y completitud.
+4: Los rechazos se documentan y se resuelven con los productores.
+5: El proceso de ingreso se mide y se optimiza.
+C: Procedimiento de ingreso | Validaciones aplicadas | Registro de rechazos
+X: Una transferencia secundaria es rechazada porque tres expedientes no tienen índice electrónico.
+E: Procedimiento de ingreso | Reportes de validación | Registros de rechazos
+R0: Definir qué objetos ingresan al ambiente de preservación.
+R1: Validar al menos el formato de los objetos que ingresan.
+R2: Validar formato, integridad, metadatos y completitud.
+R3: Documentar y resolver los rechazos con los productores.
+R4: Medir y optimizar el proceso de ingreso.
+R5: Alinear el ingreso con las transferencias documentales.
+
+# Q12 Migración controlada de formatos o soportes
+@ crit=a tier=p mgda=TEC roles=tec,gd src=F14,F16 cond=electronico pre=D11-Q05
+P: ¿Las migraciones de formatos o soportes se planifican, se prueban y se verifican para conservar contenido, contexto y autenticidad?
+A: Incluye migraciones entre sistemas, conversiones de formato y cambios de soporte de almacenamiento.
+W: Una migración no controlada puede perder información o alterar documentos sin que se note.
+0: Las migraciones se hacen sin planificación ni verificación.
+1: Las migraciones se verifican por muestreo informal.
+2: Las migraciones se planifican, sin verificación sistemática del resultado.
+3: Las migraciones se planifican, se prueban y se verifican con criterios definidos.
+4: Las migraciones se registran como eventos y se conservan las evidencias de verificación.
+5: El método de migración se mejora con base en lecciones de migraciones anteriores.
+C: Plan de migración | Pruebas previas | Verificación de resultados
+X: Antes de migrar 10.000 expedientes, la entidad prueba con una muestra y compara metadatos y sumas.
+E: Planes de migración | Informes de pruebas | Actas de verificación
+R0: Identificar migraciones realizadas o previstas.
+R1: Verificar el resultado de las migraciones recientes.
+R2: Planificar y probar las migraciones antes de ejecutarlas.
+R3: Registrar las migraciones y conservar sus evidencias.
+R4: Mejorar el método con lecciones aprendidas.
+R5: Anticipar migraciones mediante la vigilancia tecnológica.
+
+# Q13 Acceso sostenible a documentos preservados
+@ crit=m tier=p mgda=TEC roles=gd,usu,tec src=F16,F14 cond=electronico
+P: ¿Los usuarios autorizados pueden consultar los documentos preservados en formatos legibles y con su contexto, sin poner en riesgo los originales?
+A: Corresponde a la función de acceso del modelo OAIS: entregar copias de consulta y proteger las copias de preservación.
+W: Preservar sin permitir el acceso no cumple el propósito de conservar la información.
+0: Los documentos preservados no pueden consultarse.
+1: La consulta requiere intervención técnica caso a caso.
+2: Se puede consultar parte de los documentos preservados.
+3: Los usuarios autorizados consultan documentos preservados con copias de acceso y contexto.
+4: El acceso se mide y se ajusta según la demanda y las restricciones.
+5: El acceso se planifica a largo plazo y se evalúa con los usuarios.
+C: Copias de consulta | Contexto disponible | Protección de originales
+X: Los investigadores consultan versiones de acceso de las actas históricas sin manipular las copias maestras.
+E: Procedimiento de acceso | Registros de consulta | Configuración de copias de acceso
+R0: Identificar quién necesita consultar los documentos preservados.
+R1: Habilitar consultas controladas caso a caso.
+R2: Generar copias de acceso con contexto para los usuarios autorizados.
+R3: Medir el acceso y ajustarlo a la demanda y las restricciones.
+R4: Planificar el acceso a largo plazo.
+R5: Evaluar el acceso con los usuarios.
+
+# Q14 Capacidad de recuperación y reparación de objetos
+@ crit=a tier=p mgda=TEC roles=tec src=F15,F19 cond=electronico pre=D11-Q06
+P: ¿La organización puede recuperar o reparar objetos digitales dañados a partir de copias íntegras y dejar registro de la reparación?
+A: Se evalúa la capacidad demostrada, no solo la existencia de copias.
+W: Detectar un daño sin poder repararlo no protege la información.
+0: No existe capacidad de reparación de objetos dañados.
+1: La reparación se intenta de forma improvisada.
+2: Se han reparado objetos ocasionalmente, sin procedimiento.
+3: Existe un procedimiento de reparación desde copias íntegras y se aplica.
+4: Las reparaciones se registran y se analizan sus causas.
+5: La capacidad de reparación se prueba periódicamente y se mejora.
+C: Procedimiento de reparación | Registros de reparaciones | Pruebas periódicas
+X: Al detectar un archivo corrupto, el sistema lo reemplaza desde otra copia y registra el evento.
+E: Procedimiento de reparación | Registros de eventos | Informes de pruebas
+R0: Identificar cómo se repararía hoy un objeto dañado.
+R1: Documentar las reparaciones realizadas.
+R2: Establecer un procedimiento de reparación desde copias íntegras.
+R3: Registrar las reparaciones y analizar sus causas.
+R4: Probar periódicamente la capacidad de reparación.
+R5: Mejorar la capacidad de reparación con base en las pruebas.
+
+# Q15 Monitoreo, sostenibilidad y evaluación del programa de preservación
+@ crit=m tier=s mgda=EST roles=gd,dir,tec src=F14,F16 cond=electronico pre=D11-Q01
+P: ¿El programa de preservación digital se monitorea con indicadores y se evalúa periódicamente su sostenibilidad y madurez?
+A: Puede apoyarse en modelos como DPC RAM sin asumir equivalencia con los niveles DIAM.
+W: La evaluación periódica asegura que el programa siga siendo suficiente frente a riesgos y volúmenes crecientes.
+0: El programa de preservación no se monitorea ni evalúa.
+1: Se conoce el estado del programa de manera informal.
+2: Existen algunos indicadores sin evaluación integral.
+3: El programa tiene indicadores y se evalúa periódicamente.
+4: Las evaluaciones generan planes de mejora con seguimiento.
+5: La sostenibilidad del programa se asegura con base en evaluaciones sistemáticas.
+C: Indicadores del programa | Evaluaciones periódicas | Planes de mejora
+X: Una entidad evalúa cada dos años su programa de preservación y ajusta su plan de trabajo.
+E: Indicadores de preservación | Informes de evaluación | Planes de mejora
+R0: Definir qué aspectos del programa deben monitorearse.
+R1: Recopilar indicadores básicos del programa.
+R2: Evaluar periódicamente el programa de forma integral.
+R3: Generar planes de mejora con seguimiento.
+R4: Asegurar la sostenibilidad con base en evaluaciones.
+R5: Comparar la evolución del programa en el tiempo.

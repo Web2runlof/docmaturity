@@ -1,0 +1,321 @@
+@dimension D13
+@name Gobierno de datos y conocimiento
+@weight 3
+@sources F04,F07,F11,F12,F21,F27
+@mgda EST
+@summary Evalúa la articulación entre documentos, datos y conocimiento: inventario de activos, responsables, calidad, fuentes autorizadas, linaje, taxonomías, búsqueda, reutilización, analítica, conocimiento explícito, memoria institucional y valor de la información.
+
+# Q01 Inventario de activos de información y datos
+@ crit=m tier=q mgda=EST roles=dat,seg,gd src=F11,F12,F21,F27
+P: ¿La organización mantiene un inventario de sus activos de información y datos que incluye conjuntos de datos, documentos, sistemas y su clasificación?
+A: Puede corresponder al registro de activos de información o a un catálogo de datos.
+W: El inventario de activos es la base para asignar responsables, proteger y aprovechar la información.
+0: No existe un inventario de activos de información.
+1: Hay listados parciales elaborados para fines específicos.
+2: Existe un inventario desactualizado o limitado a ciertos sistemas.
+3: El inventario de activos está actualizado e incluye documentos, datos y sistemas con su clasificación.
+4: El inventario se actualiza de forma periódica y se usa para gestionar riesgos y accesos.
+5: El inventario se integra con catálogos de datos y orienta decisiones de valor y riesgo.
+C: Inventario actualizado | Inclusión de documentos y datos | Uso en gestión de riesgos
+X: Un catálogo de datos de una empresa registra las bases de clientes, su responsable y su nivel de sensibilidad.
+E: Registro de activos de información | Catálogo de datos | Registros de actualización
+R0: Identificar los principales activos de información de la organización.
+R1: Consolidar los listados parciales en un inventario único.
+R2: Completar y actualizar el inventario con documentos, datos y sistemas.
+R3: Actualizar periódicamente el inventario y usarlo en riesgos y accesos.
+R4: Integrar el inventario con catálogos de datos.
+R5: Usar el inventario para orientar decisiones de valor y riesgo.
+
+# Q02 Identificación de responsables de activos
+@ crit=m tier=s mgda=EST roles=dat,dir src=F12,F27 pre=D13-Q01 rel=D02-Q06
+P: ¿Cada activo de información relevante tiene asignados un responsable de negocio y un custodio técnico?
+A: Se diferencian el responsable que decide sobre el activo y el custodio que lo administra técnicamente.
+W: Sin responsables, las decisiones sobre calidad, acceso y conservación de los datos no se toman.
+0: No hay responsables asignados a los activos de información.
+1: Se asume que tecnología es responsable de todos los datos.
+2: Algunos activos tienen responsables asignados.
+3: Los activos relevantes tienen responsable de negocio y custodio técnico asignados.
+4: Los responsables ejercen sus funciones de forma verificable.
+5: El modelo de responsabilidad se evalúa y se ajusta.
+C: Responsable de negocio por activo | Custodio técnico | Ejercicio verificable de funciones
+X: El responsable de los datos de afiliados aprueba los cambios en su estructura y los accesos.
+E: Inventario con responsables | Actas o registros de decisiones | Roles de gobierno de datos
+R0: Identificar quién toma hoy decisiones sobre cada activo relevante.
+R1: Diferenciar responsables de negocio y custodios técnicos.
+R2: Asignar responsables a todos los activos relevantes.
+R3: Verificar el ejercicio de las funciones de los responsables.
+R4: Evaluar y ajustar el modelo de responsabilidad.
+R5: Integrar el modelo con el gobierno de la información.
+
+# Q03 Definición de criterios de calidad de información
+@ crit=m tier=p mgda=EST roles=dat,pro src=F27,F12
+P: ¿Se han definido criterios de calidad, como exactitud, completitud, oportunidad y consistencia, para la información crítica?
+A: Los criterios pueden variar según el activo y su uso.
+W: Sin criterios de calidad, no se puede saber si la información es apta para decidir.
+0: No se han definido criterios de calidad.
+1: La calidad se evalúa de forma subjetiva.
+2: Hay criterios de calidad para algunos conjuntos de datos.
+3: La información crítica tiene criterios de calidad definidos y comunicados.
+4: La calidad se mide frente a los criterios y se reporta.
+5: Los criterios se ajustan según los usos de la información.
+C: Criterios por activo crítico | Medición frente a criterios | Reporte de calidad
+X: La base de proveedores define que el NIT y la cuenta bancaria deben estar completos y validados.
+E: Criterios de calidad documentados | Informes de calidad | Reglas de validación
+R0: Identificar la información crítica para la operación y las decisiones.
+R1: Definir criterios básicos de calidad para la información crítica.
+R2: Documentar y comunicar los criterios de calidad.
+R3: Medir la calidad frente a los criterios y reportarla.
+R4: Ajustar los criterios según los usos.
+R5: Integrar la calidad en el gobierno de datos.
+
+# Q04 Control de duplicidades e inconsistencias
+@ crit=m tier=p mgda=TEC roles=dat,tec src=F27 rel=D04-Q11
+P: ¿Se identifican y corrigen registros duplicados o inconsistentes entre sistemas y repositorios?
+A: Incluye datos maestros (personas, proveedores, predios) y documentos duplicados.
+W: Las duplicidades producen errores de decisión, costos y dificultades para aplicar retención.
+0: No se controlan duplicidades.
+1: Las duplicidades se corrigen cuando generan problemas.
+2: Se hacen depuraciones ocasionales.
+3: Existen controles periódicos de duplicidades e inconsistencias para datos críticos.
+4: Se previenen duplicidades mediante validaciones en origen.
+5: La gestión de datos maestros reduce de forma sostenida las duplicidades.
+C: Controles periódicos | Validaciones en origen | Indicadores de duplicidad
+X: Una depuración revela que un mismo proveedor aparece con cuatro registros diferentes en el ERP.
+E: Reportes de depuración | Reglas de validación | Indicadores de duplicidad
+R0: Identificar los datos críticos con duplicidades conocidas.
+R1: Depurar los duplicados más problemáticos.
+R2: Establecer controles periódicos de duplicidades.
+R3: Prevenir duplicidades mediante validaciones en origen.
+R4: Gestionar datos maestros de forma centralizada.
+R5: Medir de forma sostenida la reducción de duplicidades.
+
+# Q05 Identificación de fuentes autorizadas
+@ crit=a tier=s mgda=EST roles=dat,pro src=F27,F12
+P: ¿Para cada dato o documento crítico está definida la fuente oficial o autorizada que prevalece sobre copias y versiones?
+A: Por ejemplo, qué sistema es la fuente oficial de los datos de un afiliado o de un contrato.
+W: Sin fuente autorizada, distintas áreas trabajan con versiones contradictorias de la información.
+0: No se han definido fuentes autorizadas.
+1: Cada área usa su propia fuente de información.
+2: Algunas fuentes autorizadas se conocen informalmente.
+3: Las fuentes autorizadas de los datos y documentos críticos están definidas y comunicadas.
+4: Los sistemas consumen información de las fuentes autorizadas.
+5: La gestión de fuentes autorizadas se evalúa y se ajusta.
+C: Fuentes autorizadas definidas | Comunicación a las áreas | Consumo desde fuentes autorizadas
+X: El sistema de nómina es la fuente oficial de la vinculación laboral; las hojas de cálculo de las áreas no lo son.
+E: Matriz de fuentes autorizadas | Documentación de integraciones | Comunicaciones a las áreas
+R0: Identificar las fuentes que hoy usan las áreas para datos críticos.
+R1: Definir las fuentes autorizadas de los datos más críticos.
+R2: Comunicar las fuentes autorizadas a todas las áreas.
+R3: Hacer que los sistemas consuman de las fuentes autorizadas.
+R4: Evaluar y ajustar la gestión de fuentes autorizadas.
+R5: Eliminar progresivamente las fuentes paralelas no autorizadas.
+
+# Q06 Trazabilidad y procedencia de datos
+@ crit=m tier=p mgda=TEC roles=dat,tec src=F27,F07
+P: ¿Es posible conocer el origen de los datos críticos y las transformaciones que han tenido entre sistemas?
+A: Se conoce también como linaje de datos.
+W: Sin trazabilidad, no es posible explicar ni corregir los errores en informes y decisiones.
+0: Se desconoce el origen de los datos.
+1: El origen se reconstruye manualmente cuando hay errores.
+2: Se documenta el origen de algunos datos.
+3: El origen y las transformaciones de los datos críticos están documentados.
+4: El linaje se mantiene actualizado ante cambios en sistemas e integraciones.
+5: El linaje se gestiona con herramientas y se usa en auditorías.
+C: Documentación de origen | Transformaciones registradas | Actualización ante cambios
+X: Un indicador del tablero directivo puede rastrearse hasta las tablas del sistema misional que lo alimentan.
+E: Diagramas de linaje | Documentación de integraciones | Registros de cambios
+R0: Identificar los datos críticos cuya procedencia se desconoce.
+R1: Documentar el origen de los datos más críticos.
+R2: Documentar origen y transformaciones de los datos críticos.
+R3: Mantener el linaje actualizado ante cambios.
+R4: Gestionar el linaje con herramientas.
+R5: Usar el linaje en auditorías y en la resolución de errores.
+
+# Q07 Integración entre datos y evidencia documental
+@ crit=a tier=s mgda=TEC roles=dat,gd,tec src=F04,F07,F27
+P: ¿Los datos registrados en los sistemas se vinculan con los documentos que los sustentan como evidencia?
+A: Por ejemplo, un registro de pago vinculado con la factura y la orden que lo respaldan.
+W: Un dato sin documento de soporte no puede demostrarse; un documento sin datos vinculados es difícil de encontrar.
+0: Datos y documentos se gestionan de forma totalmente separada.
+1: Los soportes se buscan manualmente cuando se requieren.
+2: Algunos sistemas vinculan datos con documentos.
+3: Los datos críticos se vinculan con los documentos que los sustentan.
+4: La vinculación se verifica y se mantiene en migraciones.
+5: La integración entre datos y evidencia se diseña desde la creación de nuevos sistemas.
+C: Vínculos entre registros y documentos | Verificación de vínculos | Conservación en migraciones
+X: Desde la ficha de un afiliado se accede a los documentos de su expediente en el SGDEA.
+E: Configuración de vínculos | Muestras de registros vinculados | Pruebas de migración
+R0: Identificar los datos críticos que requieren soporte documental.
+R1: Establecer vínculos manuales entre datos y documentos críticos.
+R2: Vincular automáticamente los datos críticos con sus soportes.
+R3: Verificar los vínculos y mantenerlos en migraciones.
+R4: Diseñar la integración datos-evidencia desde nuevos sistemas.
+R5: Evaluar la integridad de los vínculos de forma periódica.
+
+# Q08 Gestión de taxonomías corporativas
+@ crit=b tier=p mgda=EST roles=gd,dat src=F27,F07 rel=D09-Q09
+P: ¿La organización mantiene taxonomías o esquemas de categorización compartidos para organizar información más allá de los instrumentos archivísticos?
+A: Puede incluir temas, productos, servicios, territorios u otras categorías corporativas.
+W: Las taxonomías compartidas mejoran la búsqueda y la analítica entre sistemas.
+0: No existen taxonomías corporativas.
+1: Cada área define sus propias categorías.
+2: Existen algunas taxonomías sin gobierno.
+3: Hay taxonomías corporativas gobernadas y usadas en los sistemas principales.
+4: Las taxonomías se actualizan de forma controlada y se sincronizan.
+5: Las taxonomías se evalúan según su uso y se integran con la clasificación documental.
+C: Taxonomías documentadas | Gobierno de cambios | Uso en sistemas
+X: Una entidad usa la misma taxonomía de territorios en su SGDEA, su portal y su sistema de información geográfica.
+E: Taxonomías documentadas | Procedimiento de mantenimiento | Configuración en sistemas
+R0: Identificar categorías usadas por varias áreas.
+R1: Documentar las categorías comunes más utilizadas.
+R2: Establecer gobierno para las taxonomías corporativas.
+R3: Actualizar y sincronizar las taxonomías de forma controlada.
+R4: Integrar las taxonomías con la clasificación documental.
+R5: Evaluar las taxonomías según su uso.
+
+# Q09 Capacidad de búsqueda y recuperación
+@ crit=a tier=q mgda=TEC roles=usu,tec,gd src=F04,F07 min=3
+P: ¿Los usuarios pueden encontrar oportunamente la información y los documentos que necesitan, con búsquedas por contenido y por metadatos?
+A: Se evalúa la experiencia real de búsqueda, no solo la existencia de un buscador.
+W: La información que no se encuentra se reproduce, se solicita varias veces o se pierde.
+0: La información se encuentra solo preguntando a quien la tiene.
+1: Las búsquedas dependen del conocimiento de la ubicación de carpetas.
+2: Hay buscadores en algunos sistemas con resultados poco confiables.
+3: Los usuarios pueden buscar por contenido y metadatos en los sistemas principales.
+4: Se mide el éxito de las búsquedas y se mejoran metadatos e índices.
+5: La búsqueda es unificada entre sistemas, respetando permisos, y se evalúa con usuarios.
+C: Búsqueda por metadatos | Búsqueda por contenido | Medición del éxito de búsqueda
+X: Un abogado encuentra en segundos todos los contratos vigentes con un proveedor desde un único buscador.
+E: Pruebas de búsqueda | Configuración de índices | Encuestas de usuarios
+R0: Identificar las búsquedas más frecuentes y sus dificultades.
+R1: Organizar los repositorios para facilitar la búsqueda básica.
+R2: Habilitar la búsqueda por contenido y metadatos en los sistemas principales.
+R3: Medir el éxito de búsquedas y mejorar metadatos e índices.
+R4: Unificar la búsqueda entre sistemas respetando permisos.
+R5: Evaluar la búsqueda con usuarios de forma periódica.
+
+# Q10 Reutilización controlada de información
+@ crit=m tier=p mgda=EST roles=dat,jur,seg src=F12,F25,F27
+P: ¿La reutilización de información para nuevos fines, como analítica, publicación o intercambio, se autoriza y controla según su sensibilidad y derechos?
+A: Incluye datos abiertos, reportes a terceros y uso secundario de documentos.
+W: Reutilizar información sin control puede violar derechos o exponer datos sensibles.
+0: La información se reutiliza sin ningún control.
+1: Las reutilizaciones se deciden caso a caso sin criterios.
+2: Existen criterios para algunos tipos de reutilización.
+3: La reutilización se autoriza con criterios de sensibilidad, finalidad y derechos.
+4: Las reutilizaciones autorizadas se registran y se verifican.
+5: La reutilización se promueve de forma segura y se evalúa su valor.
+C: Criterios de autorización | Registro de reutilizaciones | Verificación de cumplimiento
+X: Antes de publicar datos abiertos de trámites, la entidad anonimiza los datos personales.
+E: Procedimiento de autorización | Registro de reutilizaciones | Informes de verificación
+R0: Identificar cómo se reutiliza hoy la información.
+R1: Definir criterios básicos para reutilizar información.
+R2: Autorizar la reutilización con criterios de sensibilidad y derechos.
+R3: Registrar y verificar las reutilizaciones autorizadas.
+R4: Promover la reutilización segura de información.
+R5: Evaluar el valor generado por la reutilización.
+
+# Q11 Analítica aplicada a procesos documentales
+@ crit=b tier=p mgda=TEC roles=dat,gd src=F27,F13
+P: ¿La organización analiza datos sobre sus procesos documentales, como volúmenes, tiempos o uso, para tomar decisiones?
+A: Se evalúa el uso de datos para decidir, no la sofisticación de las herramientas.
+W: La analítica documental convierte la intuición en evidencia para priorizar mejoras.
+0: No se analizan datos de procesos documentales.
+1: Se consultan cifras ocasionales sin análisis.
+2: Se elaboran reportes descriptivos periódicos.
+3: Los datos de procesos documentales se analizan para tomar decisiones.
+4: La analítica identifica tendencias y anticipa problemas.
+5: La analítica documental se integra con la analítica institucional.
+C: Reportes de análisis | Decisiones basadas en datos | Identificación de tendencias
+X: El análisis de radicados por canal lleva a reforzar la atención digital en los meses de mayor demanda.
+E: Tableros o reportes analíticos | Actas de decisiones | Informes de tendencias
+R0: Identificar qué datos de procesos documentales están disponibles.
+R1: Elaborar reportes descriptivos básicos.
+R2: Analizar los datos para apoyar decisiones.
+R3: Identificar tendencias y anticipar problemas.
+R4: Integrar la analítica documental con la institucional.
+R5: Evaluar el uso de la analítica en las decisiones.
+
+# Q12 Gestión de conocimiento explícito
+@ crit=m tier=p mgda=CUL roles=gd,th src=F12,F04 rel=D12-Q15
+P: ¿El conocimiento organizacional relevante, como lecciones aprendidas, manuales y buenas prácticas, se documenta y se pone a disposición de quienes lo necesitan?
+A: Se diferencia del archivo de evidencias: busca facilitar el aprendizaje y la reutilización del conocimiento.
+W: El conocimiento no documentado se pierde con la rotación de personal y se reinventa en cada proyecto.
+0: El conocimiento no se documenta.
+1: El conocimiento se documenta por iniciativa individual.
+2: Algunas áreas documentan lecciones aprendidas sin repositorio común.
+3: Existe un repositorio de conocimiento con contenidos gestionados y accesibles.
+4: Se mide el uso del repositorio y se actualizan sus contenidos.
+5: La gestión del conocimiento se integra en procesos y proyectos.
+C: Repositorio de conocimiento | Contenidos gestionados | Medición de uso
+X: Al cerrar cada proyecto, la entidad registra lecciones aprendidas en un repositorio consultable.
+E: Repositorio de conocimiento | Informes de lecciones aprendidas | Estadísticas de uso
+R0: Identificar el conocimiento crítico que no está documentado.
+R1: Documentar lecciones aprendidas de proyectos recientes.
+R2: Habilitar un repositorio común de conocimiento.
+R3: Medir el uso del repositorio y actualizar sus contenidos.
+R4: Integrar la gestión del conocimiento en procesos y proyectos.
+R5: Evaluar el aporte de la gestión del conocimiento a los resultados.
+
+# Q13 Conservación de memoria institucional
+@ crit=a tier=s mgda=DOC roles=gd,dir,arc src=F04,F21 cond=hist rel=D05-Q14
+P: ¿La organización conserva y pone en valor su memoria institucional, como decisiones históricas, hitos y documentos patrimoniales?
+A: Incluye la memoria en documentos de archivo y en otras fuentes, como testimonios o colecciones.
+W: La memoria institucional sustenta la identidad, la continuidad y la rendición de cuentas a largo plazo.
+0: No se conserva la memoria institucional.
+1: Se conservan objetos o documentos antiguos sin criterio.
+2: Algunos documentos históricos se conservan sin difusión.
+3: La memoria institucional se conserva con criterios y se pone a disposición.
+4: Se desarrollan acciones de difusión y uso de la memoria institucional.
+5: La memoria institucional se integra en la estrategia y en la comunicación de la organización.
+C: Criterios de conservación de memoria | Acceso a la memoria | Acciones de difusión
+X: Una universidad publica una línea de tiempo con documentos de su archivo histórico para su aniversario.
+E: Inventario de fondos históricos | Publicaciones o exposiciones | Registros de consulta
+R0: Identificar los documentos y fuentes de la memoria institucional.
+R1: Definir criterios para conservar la memoria institucional.
+R2: Conservar la memoria con criterios y ponerla a disposición.
+R3: Desarrollar acciones de difusión y uso de la memoria.
+R4: Integrar la memoria en la estrategia y la comunicación.
+R5: Evaluar el uso y el impacto de la memoria institucional.
+
+# Q14 Gestión del valor de los activos de información
+@ crit=b tier=p mgda=EST roles=dir,dat src=F11,F12,F27 rel=D01-Q04
+P: ¿La organización estima el valor de sus activos de información para orientar inversiones en su protección y aprovechamiento?
+A: El valor puede expresarse en términos de uso, riesgo, costo de reposición o contribución a objetivos.
+W: Conocer el valor de la información permite proporcionar los esfuerzos de protección y gestión.
+0: No se considera el valor de los activos de información.
+1: El valor se percibe de manera intuitiva.
+2: Se ha estimado el valor de algunos activos críticos.
+3: Existe un método para estimar el valor de los activos y se aplica a los críticos.
+4: El valor estimado orienta las decisiones de inversión y protección.
+5: El método de valoración se revisa y se integra en la gestión de activos.
+C: Método de valoración | Aplicación a activos críticos | Uso en decisiones
+X: Una entidad prioriza la protección de su catastro digital por su alto costo de reposición.
+E: Método de valoración documentado | Fichas de valor por activo | Decisiones de inversión
+R0: Identificar los activos de información de mayor valor percibido.
+R1: Estimar el valor de los activos críticos con criterios básicos.
+R2: Definir un método de valoración y aplicarlo a los activos críticos.
+R3: Orientar inversiones de protección con el valor estimado.
+R4: Revisar el método de valoración periódicamente.
+R5: Integrar la valoración en la gestión de activos de información.
+
+# Q15 Evaluación de calidad y utilidad de información para decisiones
+@ crit=m tier=p mgda=EST roles=dir,dat,pla src=F21,F27 pre=D13-Q03
+P: ¿Se evalúa si la información usada en decisiones directivas es suficiente, confiable y oportuna?
+A: Se trata de la calidad de la información que llega a la dirección, no solo de los datos en los sistemas.
+W: Decidir con información incompleta o desactualizada multiplica el riesgo de errores estratégicos.
+0: No se evalúa la información usada en decisiones.
+1: La calidad se cuestiona solo cuando una decisión sale mal.
+2: Algunos informes directivos tienen controles de calidad.
+3: Se evalúa la calidad y utilidad de la información que soporta decisiones directivas.
+4: Los resultados de la evaluación mejoran informes y fuentes.
+5: La evaluación se integra en el gobierno de la información y se revisa periódicamente.
+C: Evaluación de informes directivos | Mejoras derivadas | Integración en el gobierno de información
+X: El comité directivo exige que cada indicador indique su fuente, fecha de corte y responsable.
+E: Fichas de indicadores con fuente y fecha | Evaluaciones de calidad | Planes de mejora
+R0: Identificar la información que se usa en las decisiones directivas.
+R1: Registrar los problemas de calidad detectados en decisiones.
+R2: Evaluar la calidad y utilidad de la información directiva.
+R3: Mejorar informes y fuentes a partir de la evaluación.
+R4: Integrar la evaluación en el gobierno de la información.
+R5: Revisar periódicamente la evaluación de información para decisiones.

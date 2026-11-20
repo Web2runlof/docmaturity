@@ -1,0 +1,322 @@
+@dimension D14
+@name Automatización e inteligencia artificial
+@weight 2
+@sources F06,F12,F18,F20,F27
+@mgda TEC
+@summary Evalúa la madurez para automatizar y usar tecnologías inteligentes con control: oportunidades, estandarización previa, flujos, OCR, extracción, clasificación, metadatos, integración, búsqueda semántica, IA generativa, gobierno, calidad, supervisión humana, protección y evidencia de actuaciones automatizadas.
+@note El nivel 5 no exige usar IA. Una decisión documentada y justificada de no adoptar una tecnología puede reflejar madurez de gobierno; esta excepción no se extiende a las capacidades básicas de gestión documental.
+
+# Q01 Identificación de oportunidades de automatización
+@ crit=m tier=q mgda=TEC roles=pro,tec,gd src=F12,F27 rel=D04-Q04
+P: ¿La organización identifica de forma sistemática qué procesos documentales podrían beneficiarse de la automatización, considerando volumen, repetitividad y riesgo?
+A: Identificar oportunidades no implica automatizarlas; puede concluirse que no conviene hacerlo.
+W: Automatizar sin análisis previo invierte recursos en procesos que no lo necesitan o que no están listos.
+0: No se han analizado oportunidades de automatización.
+1: Las oportunidades surgen de ofertas de proveedores o iniciativas individuales.
+2: Se han identificado algunas oportunidades sin criterios explícitos.
+3: Las oportunidades se identifican con criterios de volumen, repetitividad, riesgo y beneficio.
+4: Las oportunidades se priorizan y su análisis se actualiza con datos de los procesos.
+5: La organización decide automatizar o no con base en evidencia y revisa esas decisiones periódicamente.
+C: Inventario de oportunidades | Criterios explícitos de análisis | Decisiones documentadas de automatizar o no
+X: Una entidad concluye que conviene automatizar la radicación de facturas, pero no la de tutelas, por su baja estandarización.
+E: Análisis de oportunidades | Matriz de priorización | Actas de decisión
+R0: Identificar procesos documentales repetitivos y de alto volumen.
+R1: Reemplazar las decisiones motivadas por ofertas por un análisis propio.
+R2: Aplicar criterios explícitos para evaluar oportunidades.
+R3: Priorizar oportunidades con datos de los procesos.
+R4: Documentar las decisiones de automatizar o no hacerlo.
+R5: Revisar periódicamente las decisiones con evidencia.
+
+# Q02 Estandarización previa de procesos automatizables
+@ crit=a tier=s mgda=DOC roles=pro,gd,tec src=F12,F27 pre=D04-Q04
+P: ¿Antes de automatizar un proceso documental, se estandarizan sus reglas, tipos documentales, flujos y excepciones?
+A: Automatizar un proceso no estandarizado reproduce sus problemas a mayor velocidad.
+W: La estandarización previa es condición para que la automatización sea confiable.
+0: Se automatiza sin estandarizar los procesos.
+1: Se estandarizan algunos aspectos durante la implementación.
+2: Los procesos se estandarizan parcialmente antes de automatizar.
+3: Los procesos se estandarizan en reglas, tipos, flujos y excepciones antes de automatizarlos.
+4: Se verifica que la estandarización se mantenga después de automatizar.
+5: La estandarización es una etapa obligatoria y evaluada en todos los proyectos de automatización.
+C: Reglas documentadas antes de automatizar | Excepciones definidas | Verificación posterior
+X: Antes de automatizar el trámite de incapacidades, la empresa unifica los formatos que recibe de las EPS.
+E: Documentación del proceso estandarizado | Actas de aprobación | Informes posteriores
+R0: Identificar procesos automatizados que no fueron estandarizados.
+R1: Documentar las reglas y excepciones de los procesos a automatizar.
+R2: Estandarizar tipos documentales y flujos antes de automatizar.
+R3: Verificar que la estandarización se mantenga tras automatizar.
+R4: Establecer la estandarización como etapa obligatoria.
+R5: Evaluar los proyectos de automatización frente a su estandarización previa.
+
+# Q03 Automatización de flujos documentales
+@ crit=m tier=p mgda=TEC roles=pro,tec src=F06,F27 pre=D14-Q02
+P: ¿Los flujos documentales automatizados funcionan con reglas, responsables y registros de eventos, de modo que sus resultados son trazables?
+A: Incluye flujos de aprobación, distribución y tramitación en herramientas de BPM o en sistemas de negocio.
+W: Un flujo automatizado sin trazabilidad dificulta demostrar qué ocurrió con cada documento.
+0: No existen flujos documentales automatizados.
+1: Se usan automatizaciones aisladas sin control.
+2: Algunos flujos están automatizados con trazabilidad limitada.
+3: Los flujos automatizados tienen reglas, responsables y registros de eventos.
+4: Se monitorea el desempeño de los flujos y se corrigen sus fallas.
+5: Los flujos se optimizan con datos y la decisión de automatizar se revisa periódicamente.
+C: Reglas del flujo documentadas | Registro de eventos | Monitoreo de desempeño
+X: El flujo de aprobación de contratos registra cada revisión y su responsable antes de la firma.
+E: Configuración de flujos | Registros de eventos | Reportes de desempeño
+R0: Identificar automatizaciones existentes y sus responsables.
+R1: Documentar las reglas de las automatizaciones aisladas.
+R2: Incorporar responsables y registro de eventos en los flujos.
+R3: Monitorear el desempeño y corregir fallas.
+R4: Optimizar los flujos con datos.
+R5: Revisar periódicamente la conveniencia de cada automatización.
+
+# Q04 Uso controlado de OCR
+@ crit=m tier=p mgda=TEC roles=tec,gd src=F27 cond=ia
+P: ¿Cuando se usa reconocimiento óptico de caracteres, se controla la calidad del texto obtenido y se conoce su margen de error?
+A: Puede proponerse como no aplicable si existe una decisión documentada de no usar OCR.
+W: Un OCR sin control de calidad genera búsquedas incompletas y datos erróneos.
+0: Se usa OCR sin ningún control, o se desconoce si se usa.
+1: Se usa OCR y los errores se detectan por casualidad.
+2: Se revisan muestras ocasionales de la calidad del OCR.
+3: La calidad del OCR se mide y se conoce su margen de error por tipo documental.
+4: Los resultados con baja confianza se revisan antes de usarse.
+5: El uso del OCR se evalúa periódicamente frente a su beneficio y sus riesgos.
+C: Medición del margen de error | Revisión de resultados de baja confianza | Evaluación de beneficio
+X: El OCR de facturas marca para revisión manual los campos con confianza inferior al umbral definido.
+E: Informes de calidad del OCR | Configuración de umbrales | Decisión documentada de uso o no uso
+R0: Identificar si y dónde se usa OCR.
+R1: Revisar muestras para estimar la calidad del OCR.
+R2: Medir el margen de error por tipo documental.
+R3: Revisar los resultados de baja confianza antes de usarlos.
+R4: Evaluar periódicamente el beneficio y los riesgos del OCR.
+R5: Documentar las decisiones de uso o no uso del OCR.
+
+# Q05 Extracción inteligente de información documental
+@ crit=m tier=p mgda=TEC roles=tec,pro src=F27,F20 cond=ia
+P: ¿Si se extraen datos de documentos con herramientas inteligentes, se valida su exactitud antes de usarlos en decisiones o registros oficiales?
+A: Puede proponerse como no aplicable si existe una decisión documentada de no usar estas herramientas.
+W: Los datos extraídos automáticamente pueden contener errores que se propagan a otros sistemas.
+0: Se extraen datos sin validación, o se desconoce si se hace.
+1: La validación depende de la revisión espontánea de los usuarios.
+2: Se validan algunos campos críticos de manera ocasional.
+3: Los datos extraídos se validan con reglas y revisión humana según su criticidad.
+4: Se mide la exactitud de la extracción y se ajustan los modelos o reglas.
+5: La extracción se evalúa periódicamente y se decide su continuidad con base en evidencia.
+C: Reglas de validación | Revisión humana según criticidad | Medición de exactitud
+X: Los valores extraídos de contratos se comparan con el sistema financiero antes de registrar compromisos.
+E: Informes de exactitud | Reglas de validación | Decisión documentada de uso
+R0: Identificar si se extraen datos automáticamente de documentos.
+R1: Validar manualmente los campos críticos extraídos.
+R2: Aplicar reglas de validación y revisión humana según criticidad.
+R3: Medir la exactitud y ajustar modelos o reglas.
+R4: Evaluar periódicamente la continuidad de la extracción.
+R5: Documentar los criterios de uso de la extracción inteligente.
+
+# Q06 Clasificación documental automatizada
+@ crit=m tier=p mgda=TEC roles=gd,tec src=F06,F27 cond=ia pre=D05-Q03
+P: ¿Si se clasifican documentos de forma automática o asistida, la clasificación sugerida se basa en el instrumento institucional y se revisa su exactitud?
+A: Puede proponerse como no aplicable si existe una decisión documentada de no usar clasificación automática.
+W: Una clasificación automática errónea afecta la retención, el acceso y la recuperación.
+0: Se clasifica automáticamente sin control, o se desconoce si se hace.
+1: La clasificación automática no se basa en el instrumento institucional.
+2: La clasificación sugerida usa el instrumento, sin medir su exactitud.
+3: La clasificación automática usa el instrumento institucional y se mide su exactitud.
+4: Las clasificaciones de baja confianza se revisan y los errores retroalimentan el modelo.
+5: El uso de clasificación automática se evalúa periódicamente frente a su beneficio.
+C: Base en el instrumento institucional | Medición de exactitud | Revisión de baja confianza
+X: El sistema sugiere la serie documental de cada correo capturado y un usuario confirma la sugerencia.
+E: Configuración del clasificador | Informes de exactitud | Decisión documentada de uso
+R0: Identificar si existen mecanismos de clasificación automática.
+R1: Alinear la clasificación automática con el instrumento institucional.
+R2: Medir la exactitud de la clasificación automática.
+R3: Revisar clasificaciones de baja confianza y retroalimentar el modelo.
+R4: Evaluar periódicamente el beneficio de la clasificación automática.
+R5: Documentar las decisiones sobre su uso.
+
+# Q07 Enriquecimiento automático de metadatos
+@ crit=b tier=p mgda=TEC roles=gd,tec src=F07,F27 cond=ia rel=D09-Q08
+P: ¿Si se generan metadatos de forma automática, se distingue su origen y se controla su calidad frente a los metadatos registrados por personas?
+A: Puede proponerse como no aplicable si existe una decisión documentada de no usar enriquecimiento automático.
+W: Mezclar metadatos automáticos sin identificar su origen dificulta valorar su confiabilidad.
+0: Se generan metadatos automáticos sin control, o se desconoce si se hace.
+1: Los metadatos automáticos no se distinguen de los manuales.
+2: Se identifica el origen de algunos metadatos automáticos.
+3: Los metadatos automáticos se identifican por su origen y su calidad se controla.
+4: La calidad de los metadatos automáticos se mide y se compara con la de los manuales.
+5: El enriquecimiento automático se evalúa periódicamente y se decide su alcance con evidencia.
+C: Origen del metadato registrado | Control de calidad | Comparación con metadatos manuales
+X: Las palabras clave generadas automáticamente se marcan como sugeridas hasta que un usuario las valida.
+E: Configuración de enriquecimiento | Informes de calidad | Decisión documentada de uso
+R0: Identificar si se generan metadatos de forma automática.
+R1: Registrar el origen de los metadatos automáticos.
+R2: Controlar la calidad de los metadatos automáticos.
+R3: Comparar la calidad de metadatos automáticos y manuales.
+R4: Evaluar periódicamente el alcance del enriquecimiento automático.
+R5: Documentar las decisiones sobre su uso.
+
+# Q08 Integración entre automatización y SGDEA
+@ crit=a tier=p mgda=TEC roles=tec,gd src=F06,F09 rel=D09-Q11
+P: ¿Los documentos producidos o procesados por herramientas de automatización se incorporan al SGDEA o repositorio controlado con sus metadatos y eventos?
+A: Incluye flujos BPM, bots de RPA y herramientas de IA que generan o transforman documentos.
+W: La automatización desconectada del SGDEA crea nuevos silos de documentos sin control archivístico.
+0: Las herramientas de automatización no se integran con la gestión documental.
+1: Los resultados de la automatización se guardan en carpetas sin control.
+2: Algunas automatizaciones envían documentos al repositorio sin metadatos.
+3: Los documentos de la automatización se incorporan al repositorio con metadatos y eventos.
+4: La integración se monitorea y se concilia periódicamente.
+5: Toda nueva automatización se diseña integrada con la gestión documental desde su inicio.
+C: Documentos de automatización en el repositorio | Metadatos y eventos incluidos | Conciliación
+X: Un bot que descarga certificados de un portal externo los incorpora al expediente con su fecha y origen.
+E: Documentación de integraciones | Reportes de conciliación | Muestras de expedientes
+R0: Identificar las automatizaciones que producen o transforman documentos.
+R1: Dirigir los resultados de la automatización a repositorios controlados.
+R2: Incorporar metadatos y eventos en la integración.
+R3: Monitorear y conciliar periódicamente la integración.
+R4: Diseñar nuevas automatizaciones integradas desde su inicio.
+R5: Evaluar la integración en revisiones de arquitectura.
+
+# Q09 Búsqueda semántica y recuperación contextual
+@ crit=b tier=p mgda=TEC roles=tec,usu src=F27,F20 cond=ia rel=D13-Q09
+P: ¿Si se usan herramientas de búsqueda semántica o de recuperación contextual, se respetan los permisos de acceso y se citan los documentos fuente?
+A: Puede proponerse como no aplicable si existe una decisión documentada de no usar estas herramientas.
+W: Una búsqueda inteligente que ignora permisos puede exponer información reservada.
+0: Se usan herramientas de búsqueda inteligente sin control, o se desconoce si se usan.
+1: Las herramientas se usan sin verificar el respeto de permisos.
+2: Se respetan permisos en algunas fuentes, sin citar documentos fuente.
+3: La búsqueda respeta permisos y cita los documentos fuente.
+4: Se mide la calidad de los resultados y se corrigen respuestas erróneas.
+5: El uso de estas herramientas se evalúa periódicamente frente a su beneficio y riesgos.
+C: Respeto de permisos | Cita de documentos fuente | Medición de calidad de resultados
+X: El asistente de consulta interno responde con enlaces a los documentos y solo usa los que el usuario puede ver.
+E: Configuración de permisos | Pruebas de calidad | Decisión documentada de uso
+R0: Identificar si se usan herramientas de búsqueda semántica.
+R1: Verificar que las herramientas respeten los permisos de acceso.
+R2: Exigir la cita de documentos fuente en los resultados.
+R3: Medir la calidad de los resultados y corregir errores.
+R4: Evaluar periódicamente beneficio y riesgos.
+R5: Documentar las decisiones sobre su uso.
+
+# Q10 Evaluación de pertinencia de IA generativa y agentes
+@ crit=m tier=s mgda=EST roles=dir,tec,jur src=F20,F27 pre=D14-Q01
+P: ¿Antes de adoptar IA generativa o agentes en procesos documentales, la organización evalúa su pertinencia frente al problema, los riesgos y las alternativas?
+A: Una decisión documentada de no adoptar puede representar un nivel alto de madurez.
+W: Adoptar IA por tendencia, sin un problema identificado, introduce riesgos sin beneficio claro.
+0: Se adopta o se rechaza la IA sin ningún análisis.
+1: Las decisiones sobre IA responden a tendencias o a ofertas comerciales.
+2: Se analizan beneficios esperados sin evaluar riesgos ni alternativas.
+3: Cada caso de uso se evalúa frente al problema, los riesgos y las alternativas.
+4: Las evaluaciones se documentan y se revisan cuando cambian el contexto o la tecnología.
+5: La organización mantiene un criterio institucional para adoptar o no IA y lo revisa con evidencia.
+C: Evaluación de pertinencia por caso de uso | Análisis de riesgos y alternativas | Decisiones documentadas
+X: Una entidad decide no usar IA generativa para redactar actos administrativos y sí para resumir peticiones internas.
+E: Fichas de evaluación de casos de uso | Actas de decisión | Criterio institucional de adopción
+R0: Identificar los usos de IA generativa existentes o propuestos.
+R1: Exigir un análisis del problema antes de adoptar IA.
+R2: Evaluar riesgos y alternativas en cada caso de uso.
+R3: Documentar y revisar las evaluaciones ante cambios.
+R4: Definir un criterio institucional de adopción o no adopción.
+R5: Revisar el criterio institucional con evidencia.
+
+# Q11 Gobierno y autorización de casos de uso de IA
+@ crit=a tier=q mgda=EST roles=dir,seg,jur src=F20,F12,F18 min=3 rel=D14-Q08
+P: ¿Existe una instancia o procedimiento que autoriza, registra y supervisa los casos de uso de IA que involucran documentos e información institucional?
+A: Incluye el uso de herramientas de IA por parte de los empleados con información de la organización.
+W: Sin gobierno de IA, los empleados pueden exponer información en servicios no autorizados.
+0: No existe gobierno sobre el uso de IA.
+1: Se conocen usos de IA, sin reglas ni autorización.
+2: Hay lineamientos generales de uso sin registro de casos.
+3: Existe un procedimiento que autoriza y registra los casos de uso de IA.
+4: Los casos autorizados se supervisan y se revisan sus condiciones.
+5: El gobierno de IA se evalúa y se ajusta con base en incidentes y cambios regulatorios.
+C: Procedimiento de autorización | Registro de casos de uso | Supervisión de condiciones
+X: El comité de seguridad aprueba el uso de un asistente de IA solo con información pública y sin datos personales.
+E: Política o lineamientos de IA | Registro de casos de uso | Actas de supervisión
+R0: Identificar qué herramientas de IA se usan con información institucional.
+R1: Emitir lineamientos básicos de uso de IA.
+R2: Establecer un procedimiento de autorización y registro de casos de uso.
+R3: Supervisar los casos autorizados y sus condiciones.
+R4: Evaluar el gobierno de IA con base en incidentes.
+R5: Ajustar el gobierno de IA ante cambios regulatorios y tecnológicos.
+
+# Q12 Evaluación de calidad y errores de los resultados automatizados
+@ crit=a tier=p mgda=TEC roles=tec,pro,ci src=F20,F27
+P: ¿Se mide la calidad de los resultados producidos por automatizaciones e IA y se registran y corrigen sus errores?
+A: Incluye errores de extracción, clasificación, generación de texto y decisiones automatizadas.
+W: Los errores automatizados se repiten a escala si no se miden y corrigen.
+0: No se mide la calidad de los resultados automatizados.
+1: Los errores se corrigen cuando alguien los detecta.
+2: Se revisan muestras de resultados de manera ocasional.
+3: La calidad se mide con criterios definidos y los errores se registran y corrigen.
+4: Los errores se analizan para corregir sus causas en reglas o modelos.
+5: La calidad se monitorea de forma continua y orienta decisiones de uso.
+C: Criterios de calidad | Registro de errores | Análisis de causas
+X: Un informe mensual muestra la tasa de errores de clasificación del bot y sus causas principales.
+E: Informes de calidad | Registro de errores | Planes de corrección
+R0: Identificar los resultados automatizados que se usan en decisiones.
+R1: Registrar los errores detectados por los usuarios.
+R2: Medir la calidad con criterios definidos.
+R3: Analizar las causas de errores y corregirlas.
+R4: Monitorear la calidad de forma continua.
+R5: Usar la calidad medida para decidir sobre el uso de cada automatización.
+
+# Q13 Supervisión humana en decisiones relevantes
+@ crit=a critical tier=s mgda=EST roles=dir,jur,pro src=F20,F12 min=3
+P: ¿Las decisiones relevantes que se apoyan en resultados automatizados o de IA son revisadas y asumidas por personas responsables?
+A: Se evalúa la existencia de supervisión efectiva, no la aprobación formal de lo que propone el sistema.
+W: Delegar decisiones relevantes en sistemas sin supervisión humana genera riesgos jurídicos y éticos.
+0: Las decisiones se toman automáticamente sin revisión humana.
+1: La revisión humana es formal y no verifica los resultados.
+2: Algunas decisiones automatizadas tienen revisión humana efectiva.
+3: Todas las decisiones relevantes apoyadas en automatización tienen revisión humana efectiva.
+4: Se registra quién revisa, qué revisa y cuándo modifica la propuesta automatizada.
+5: La supervisión humana se evalúa periódicamente y se ajusta según los riesgos.
+C: Decisiones relevantes identificadas | Revisión humana efectiva | Registro de la revisión
+X: El sistema propone negar una solicitud, pero un funcionario revisa el expediente y firma la decisión final.
+E: Procedimientos de supervisión | Registros de revisión humana | Evaluaciones de riesgo
+R0: Identificar las decisiones relevantes apoyadas en automatización.
+R1: Exigir revisión humana en las decisiones relevantes.
+R2: Asegurar que la revisión humana sea efectiva y no formal.
+R3: Registrar quién revisa y qué modifica.
+R4: Evaluar periódicamente la supervisión humana.
+R5: Ajustar la supervisión según los riesgos de cada caso de uso.
+
+# Q14 Protección de información, privacidad y propiedad intelectual en IA
+@ crit=a tier=s mgda=TEC roles=seg,jur,tec src=F20,F25,F18
+P: ¿Se controla qué información se entrega a herramientas de IA, de modo que no se expongan datos personales, información reservada ni contenidos protegidos?
+A: Incluye herramientas internas y servicios externos usados por empleados o contratistas.
+W: Entregar información sensible a servicios de IA no autorizados puede constituir una exposición irreversible.
+0: No se controla qué información se entrega a herramientas de IA.
+1: Se recomienda precaución sin reglas concretas.
+2: Existen reglas sobre información sensible, sin controles técnicos.
+3: Hay reglas y controles que impiden entregar información sensible a herramientas no autorizadas.
+4: Se monitorea el cumplimiento de las reglas y se atienden los incidentes.
+5: La protección se evalúa periódicamente frente a nuevas herramientas y riesgos.
+C: Reglas sobre información admisible | Controles técnicos | Monitoreo de cumplimiento
+X: El proxy institucional bloquea la carga de documentos clasificados a servicios de IA externos no autorizados.
+E: Lineamientos de uso de IA | Configuración de controles | Registros de incidentes
+R0: Identificar la información sensible que podría entregarse a herramientas de IA.
+R1: Definir reglas concretas sobre la información admisible.
+R2: Implementar controles técnicos sobre herramientas no autorizadas.
+R3: Monitorear el cumplimiento y atender incidentes.
+R4: Evaluar la protección frente a nuevas herramientas.
+R5: Revisar periódicamente las reglas con base en riesgos.
+
+# Q15 Registro y preservación de evidencias de actuaciones automatizadas
+@ crit=a tier=p mgda=DOC roles=gd,tec,jur src=F20,F09,F06 rel=D09-Q07
+P: ¿Las actuaciones realizadas por sistemas automatizados o de IA dejan evidencia que se conserva según las reglas documentales?
+A: Incluye entradas, parámetros, versión del modelo o regla, resultado y revisión humana, cuando corresponda.
+W: Sin evidencia de las actuaciones automatizadas, no es posible explicar ni defender una decisión posterior.
+0: Las actuaciones automatizadas no dejan evidencia.
+1: Quedan registros técnicos temporales que se eliminan.
+2: Se conservan algunos registros sin reglas de retención.
+3: Las actuaciones automatizadas dejan evidencia conservada según reglas documentales.
+4: La evidencia incluye versión del modelo o regla y la revisión humana.
+5: La evidencia se gestiona como documento de archivo durante su retención y se audita.
+C: Evidencia de entradas y resultados | Versión de la regla o modelo | Retención aplicada
+X: Cada decisión del motor de reglas de subsidios registra la versión de la regla aplicada y los datos de entrada.
+E: Configuración de registros de actuaciones | Reglas de retención aplicables | Muestras de evidencias
+R0: Identificar las actuaciones automatizadas con efectos relevantes.
+R1: Conservar los registros técnicos de esas actuaciones.
+R2: Aplicar reglas de retención a las evidencias de actuaciones.
+R3: Incluir versión de modelo o regla y revisión humana en la evidencia.
+R4: Gestionar la evidencia como documento de archivo.
+R5: Auditar periódicamente las evidencias de actuaciones automatizadas.

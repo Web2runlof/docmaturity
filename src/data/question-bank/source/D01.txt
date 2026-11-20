@@ -1,0 +1,321 @@
+@dimension D01
+@name Estratégica
+@weight 8
+@sources F01,F04,F05,F11,F13,F21
+@mgda EST
+@summary Evalúa si la gestión documental tiene dirección, prioridad y continuidad institucional: política, planeación, patrocinio directivo y alineación con la estrategia y la transformación digital.
+
+# Q01 Política institucional de gestión documental
+@ crit=a tier=q mgda=EST roles=dir,gd,pla src=F01,F02,F05,F11 legal=pub min=3 rel=D01-Q15,D02-Q01
+P: ¿La organización cuenta con una política de gestión documental aprobada por la instancia competente y comunicada a quienes producen y administran documentos?
+A: Se evalúa la existencia formal de la política y su divulgación; su aplicación práctica se valora en otros criterios.
+W: La política fija principios y responsabilidades sobre los cuales se construyen instrumentos, procesos y sistemas documentales.
+0: No existe una política ni un documento que declare principios de gestión documental.
+1: Hay lineamientos dispersos en circulares o correos, sin aprobación formal ni alcance definido.
+2: Existe un borrador o una política aprobada que no cubre todos los soportes ni se ha divulgado.
+3: La política está aprobada, cubre documentos físicos y electrónicos y se publica en canales oficiales.
+4: Se verifica periódicamente su conocimiento y se registran excepciones y responsables de su cumplimiento.
+5: La política se revisa con base en resultados, riesgos y cambios normativos, con versiones trazables.
+C: Acto o acta de aprobación identificado | Publicación en canal oficial | Alcance que incluye soportes electrónicos
+X: En una entidad territorial la política se adopta mediante acto administrativo y se articula con el PINAR.
+E: Política aprobada o acto de adopción | Acta de la instancia que la aprobó | Evidencia de publicación y divulgación
+R0: Redactar una política básica que defina principios, alcance y responsables.
+R1: Consolidar los lineamientos dispersos en una política única y aprobarla formalmente.
+R2: Ampliar el alcance a todos los soportes y ejecutar un plan de divulgación.
+R3: Incorporar verificaciones de conocimiento y un registro de excepciones a la política.
+R4: Vincular la revisión de la política con indicadores, auditorías y riesgos.
+R5: Mantener ciclos de revisión documentados y evaluar el efecto de la política en la práctica.
+
+# Q02 Alineación con el direccionamiento estratégico
+@ crit=m tier=s mgda=EST roles=dir,pla,gd src=F01,F05,F21
+P: ¿Los objetivos y proyectos de gestión documental se derivan del plan estratégico institucional y contribuyen de forma explícita a sus metas?
+A: Se busca un vínculo verificable entre gestión documental y estrategia, no una mención general en el plan.
+W: Sin alineación, la gestión documental compite por recursos como una tarea operativa aislada.
+0: El plan estratégico no considera la gestión documental ni la información.
+1: La gestión documental aparece mencionada de forma genérica, sin objetivos ni metas asociadas.
+2: Algunos proyectos documentales se vinculan con objetivos estratégicos, sin trazabilidad sistemática.
+3: Los objetivos documentales están vinculados explícitamente con objetivos estratégicos y sus metas.
+4: Se hace seguimiento conjunto al avance documental y estratégico con indicadores compartidos.
+5: La alineación se revisa en cada ciclo de planeación y orienta la reasignación de prioridades.
+C: Objetivo estratégico citado en el plan documental | Indicador compartido | Acta de revisión conjunta
+X: Una empresa de servicios públicos vincula la reducción de tiempos de respuesta a peticiones con su programa documental.
+E: Plan estratégico vigente | PGD, PINAR o plan documental con referencias cruzadas | Informes de seguimiento
+R0: Identificar los objetivos estratégicos que dependen de información documentada.
+R1: Definir metas documentales asociadas a objetivos estratégicos concretos.
+R2: Establecer una matriz de trazabilidad entre proyectos documentales y estrategia.
+R3: Integrar indicadores documentales en el tablero de seguimiento estratégico.
+R4: Usar el seguimiento conjunto para reasignar recursos y prioridades.
+R5: Revisar la alineación en cada ciclo de planeación con base en resultados.
+
+# Q03 Planificación archivística de mediano y largo plazo
+@ crit=a tier=s mgda=EST roles=gd,pla,dir src=F01,F02,F05,F21 legal=pub rel=D01-Q11
+P: ¿Existe un plan archivístico o documental de mediano y largo plazo con proyectos, plazos, responsables y recursos definidos?
+A: En entidades públicas puede corresponder al PINAR y al PGD; en organizaciones privadas, a un plan documental equivalente.
+W: La planificación plurianual evita que la gestión documental dependa de iniciativas anuales desarticuladas.
+0: No existe planificación documental más allá de las actividades del día a día.
+1: Se programan actividades anuales aisladas, sin horizonte plurianual ni responsables.
+2: Hay un plan de mediano plazo en elaboración o aprobado con proyectos parcialmente definidos.
+3: El plan está aprobado, define proyectos, plazos, responsables y recursos, y se ejecuta.
+4: El avance del plan se mide periódicamente y las desviaciones generan acciones documentadas.
+5: El plan se actualiza con base en diagnósticos, riesgos y resultados, manteniendo su trazabilidad.
+C: Plan con horizonte de varios años | Proyectos con responsable y recursos | Seguimiento periódico
+X: Una alcaldía articula su PINAR con el plan de desarrollo y prioriza proyectos según su diagnóstico integral.
+E: PINAR, PGD o plan documental aprobado | Cronograma de proyectos | Informes de avance
+R0: Elaborar un diagnóstico integral como base del plan documental.
+R1: Convertir las actividades sueltas en un plan con horizonte plurianual.
+R2: Completar los proyectos con plazos, responsables y recursos, y aprobar el plan.
+R3: Implementar un seguimiento periódico del avance y de las desviaciones.
+R4: Ajustar las prioridades del plan con base en riesgos y resultados medidos.
+R5: Actualizar el plan en cada diagnóstico manteniendo la trazabilidad de cambios.
+
+# Q04 Reconocimiento de la información como activo estratégico
+@ crit=m tier=p mgda=EST roles=dir,dat,pla src=F04,F11,F21
+P: ¿La alta dirección trata la información documentada como un activo que genera valor, riesgos y obligaciones, y lo refleja en decisiones concretas?
+A: Se valoran decisiones verificables (inversiones, riesgos, responsabilidades), no declaraciones generales.
+W: Cuando la información no se reconoce como activo, su protección y aprovechamiento quedan subordinados a urgencias operativas.
+0: La información se percibe solo como soporte de trámites, sin valor reconocido.
+1: Algunos directivos expresan su importancia, sin reflejo en decisiones ni recursos.
+2: Se reconoce el valor de ciertos activos de información en proyectos puntuales.
+3: Documentos de dirección identifican la información como activo y asignan responsabilidades sobre ella.
+4: Las decisiones de inversión y de riesgo consideran el valor y la criticidad de la información.
+5: La organización evalúa periódicamente el valor obtenido de sus activos de información y ajusta su gestión.
+C: Mención en documentos de dirección | Decisiones que citan el valor de la información | Responsables asignados
+X: Una entidad financiera incluye la pérdida de información contractual en su mapa de riesgos corporativos.
+E: Actas de comité directivo | Mapa de riesgos con activos de información | Política de gobierno de información
+R0: Sensibilizar a la dirección sobre el valor y los riesgos de la información documentada.
+R1: Identificar los activos de información críticos y presentarlos a la dirección.
+R2: Incorporar el valor de la información en las decisiones de proyectos y riesgos.
+R3: Formalizar responsabilidades directivas sobre los activos de información.
+R4: Medir el valor y el riesgo de los activos para orientar inversiones.
+R5: Evaluar periódicamente el retorno de la gestión de activos de información.
+
+# Q05 Patrocinio de la alta dirección
+@ crit=a tier=q mgda=EST roles=dir,gd,pla src=F01,F05,F11,F13 min=3
+P: ¿La alta dirección respalda de forma visible la gestión documental mediante decisiones, asignación de recursos y seguimiento periódico?
+A: El patrocinio se evidencia en actos concretos: aprobación de recursos, participación en comités y solicitud de resultados.
+W: Sin patrocinio directivo, las iniciativas documentales pierden continuidad y capacidad de coordinación transversal.
+0: La dirección no interviene en asuntos de gestión documental.
+1: La dirección atiende temas documentales solo ante incidentes o requerimientos externos.
+2: La dirección aprueba algunas iniciativas, pero no hace seguimiento ni asigna recursos estables.
+3: Un directivo patrocina formalmente la gestión documental y participa en sus decisiones principales.
+4: La dirección revisa periódicamente resultados documentales y exige acciones ante desviaciones.
+5: El patrocinio se mantiene ante cambios de administración y su efectividad se evalúa.
+C: Directivo patrocinador identificado | Participación en comités | Decisiones de recursos documentadas
+X: La secretaría general de una universidad preside el comité de gestión documental y revisa sus indicadores cada trimestre.
+E: Actas de comité con participación directiva | Asignaciones presupuestales | Informes presentados a la dirección
+R0: Presentar a la dirección un caso de necesidad con riesgos y beneficios documentales.
+R1: Designar formalmente un directivo patrocinador de la gestión documental.
+R2: Establecer espacios periódicos de reporte a la dirección con decisiones registradas.
+R3: Vincular el patrocinio con metas y recursos aprobados para cada vigencia.
+R4: Evaluar la efectividad del patrocinio y su continuidad ante cambios directivos.
+R5: Institucionalizar el patrocinio en la estructura de gobierno corporativo.
+
+# Q06 Visión institucional de transformación digital
+@ crit=m tier=s mgda=EST roles=dir,tec,pla src=F01,F05,F21 rel=D01-Q07
+P: ¿La organización tiene una visión de transformación digital que incorpora explícitamente la gestión de documentos electrónicos y la evidencia digital?
+A: No basta con una estrategia de tecnología: se busca que contemple cómo se producirán, conservarán y usarán los documentos digitales.
+W: Las transformaciones digitales que ignoran la gestión documental generan información sin valor probatorio ni trazabilidad.
+0: No existe una visión de transformación digital.
+1: Hay iniciativas digitales aisladas sin referencia a documentos ni a evidencia digital.
+2: La visión digital menciona la reducción de papel sin requisitos documentales explícitos.
+3: La visión digital incluye la gestión de documentos electrónicos de archivo como componente explícito.
+4: Los proyectos digitales se evalúan frente a requisitos documentales antes de aprobarse.
+5: La visión se actualiza con aprendizajes de los proyectos y con cambios tecnológicos y normativos.
+C: Documento de visión digital | Requisitos documentales en proyectos digitales | Criterios de aprobación de proyectos
+X: Una entidad que adopta trámites en línea define cómo se conformarán los expedientes electrónicos de cada trámite.
+E: Plan de transformación digital o PETI | Fichas de proyectos digitales | Lineamientos de documento electrónico
+R0: Formular una visión de transformación digital que considere la evidencia documental.
+R1: Incorporar requisitos de documento electrónico en las iniciativas digitales existentes.
+R2: Hacer explícita la gestión documental electrónica como componente de la visión digital.
+R3: Exigir una revisión documental previa a la aprobación de proyectos digitales.
+R4: Medir el efecto de los proyectos digitales en la calidad de la evidencia.
+R5: Actualizar la visión con aprendizajes y cambios tecnológicos y normativos.
+
+# Q07 Articulación con planes institucionales de tecnología
+@ crit=m tier=p mgda=TEC roles=tec,gd,pla src=F01,F21 rel=D01-Q06,D08-Q02
+P: ¿Los planes de tecnología de la organización incluyen proyectos, requisitos y recursos para la gestión documental?
+A: Se evalúa la articulación formal entre tecnología y gestión documental en la planeación de TI (por ejemplo, PETI o plan de TI).
+W: La desconexión entre planes produce sistemas que no cumplen requisitos archivísticos y retrabajos costosos.
+0: El plan de tecnología no considera necesidades documentales.
+1: Las necesidades documentales se atienden como solicitudes puntuales al área de tecnología.
+2: El plan de tecnología incluye algún proyecto documental sin requisitos archivísticos definidos.
+3: El plan de tecnología incorpora proyectos documentales con requisitos acordados con gestión documental.
+4: Se hace seguimiento conjunto a los proyectos documentales dentro del portafolio de TI.
+5: La articulación se revisa en cada ciclo y ajusta la arquitectura y las inversiones de TI.
+C: Proyectos documentales en el plan de TI | Requisitos validados por gestión documental | Seguimiento conjunto
+X: Una empresa incluye en su hoja de ruta de TI la integración del ERP con el repositorio documental.
+E: PETI o plan de TI | Fichas de proyectos con requisitos documentales | Actas de seguimiento conjunto
+R0: Identificar las necesidades documentales que requieren soporte tecnológico.
+R1: Canalizar las necesidades documentales hacia el ciclo formal de planeación de TI.
+R2: Definir requisitos archivísticos para cada proyecto documental del plan de TI.
+R3: Incluir a gestión documental en el seguimiento del portafolio de TI.
+R4: Evaluar el aporte de los proyectos de TI a las metas documentales.
+R5: Revisar la arquitectura de TI con base en resultados documentales.
+
+# Q08 Integración con sistemas de gestión organizacional
+@ crit=b tier=p mgda=EST roles=cal,gd,pla src=F04,F05,F21
+P: ¿La gestión documental está integrada con los sistemas de gestión de la organización, como calidad, ambiental, seguridad o riesgos?
+A: Se valora si los requisitos documentales de esos sistemas se gestionan de forma coordinada y no duplicada.
+W: La integración evita controles documentales paralelos y contradicciones entre sistemas de gestión.
+0: Cada sistema de gestión maneja sus documentos sin relación con la gestión documental.
+1: Existen controles documentales duplicados y criterios diferentes entre sistemas de gestión.
+2: Algunos sistemas de gestión comparten procedimientos documentales, sin un marco común.
+3: Los sistemas de gestión utilizan criterios documentales comunes definidos por gestión documental.
+4: Las auditorías de los sistemas de gestión verifican de forma integrada los controles documentales.
+5: La integración se optimiza con base en hallazgos y reduce controles redundantes.
+C: Procedimiento común de control documental | Auditorías integradas | Ausencia de listados maestros duplicados
+X: Una organización industrial unifica el control de documentos de su sistema de calidad con las reglas de retención.
+E: Manual del sistema integrado | Procedimiento de control de documentos | Informes de auditoría integrada
+R0: Inventariar los requisitos documentales de cada sistema de gestión.
+R1: Identificar duplicidades y contradicciones entre controles documentales.
+R2: Definir criterios documentales comunes para todos los sistemas de gestión.
+R3: Integrar la verificación documental en las auditorías de los sistemas.
+R4: Medir la reducción de controles redundantes y de retrabajos.
+R5: Optimizar la integración con base en hallazgos y cambios de los sistemas.
+
+# Q09 Objetivos medibles de gestión documental
+@ crit=m tier=s mgda=EST roles=gd,pla,cal src=F05,F13,F21 rel=D15-Q01
+P: ¿Los objetivos de gestión documental cuentan con indicadores, línea base y metas que permiten medir su cumplimiento?
+A: Se diferencian los objetivos declarados de los objetivos medibles con datos de seguimiento.
+W: Sin objetivos medibles no es posible demostrar avances ni justificar inversiones.
+0: No se han definido objetivos de gestión documental.
+1: Los objetivos son genéricos y no permiten medición.
+2: Algunos objetivos tienen indicadores, pero sin línea base ni metas.
+3: Los objetivos tienen indicadores, línea base, metas y responsables de medición.
+4: Los resultados se analizan periódicamente y generan acciones cuando hay desviaciones.
+5: Los objetivos y metas se recalibran con base en tendencias y prioridades institucionales.
+C: Objetivos con indicador y meta | Línea base registrada | Reportes periódicos
+X: Una IPS fija como meta entregar en cinco días hábiles las copias de historias clínicas solicitadas.
+E: Fichas de indicadores | Reportes de medición | Actas de análisis de resultados
+R0: Formular objetivos de gestión documental a partir del diagnóstico.
+R1: Convertir los objetivos genéricos en objetivos medibles.
+R2: Establecer línea base y metas para cada indicador.
+R3: Implementar reportes periódicos y análisis de desviaciones.
+R4: Usar las tendencias para priorizar acciones documentales.
+R5: Recalibrar objetivos y metas en cada ciclo de planeación.
+
+# Q10 Identificación de necesidades de grupos de interés
+@ crit=m tier=p mgda=EST roles=gd,pla,usu src=F04,F05,F11
+P: ¿La organización identifica y documenta las necesidades de información y de evidencia de sus grupos de interés internos y externos?
+A: Incluye usuarios internos, ciudadanos o clientes, reguladores, órganos de control y auditores.
+W: Las necesidades de los grupos de interés determinan qué documentos producir, conservar y hacer accesibles.
+0: No se han identificado grupos de interés en relación con la información documentada.
+1: Las necesidades se conocen de manera informal a partir de quejas o solicitudes.
+2: Se han identificado algunos grupos de interés sin documentar sus necesidades de información.
+3: Existe un análisis documentado de grupos de interés y de sus necesidades de información y evidencia.
+4: Las necesidades se actualizan con datos de solicitudes, auditorías y retroalimentación.
+5: El análisis de necesidades orienta el diseño de servicios y la priorización de proyectos.
+C: Matriz de grupos de interés | Necesidades de información documentadas | Fuentes de actualización
+X: Un operador de servicios públicos identifica que el regulador exige conservar los soportes de facturación por periodos definidos.
+E: Matriz de partes interesadas | Análisis de requisitos de información | Registros de solicitudes y peticiones
+R0: Identificar los grupos de interés que usan o exigen información documentada.
+R1: Documentar las necesidades de información de cada grupo identificado.
+R2: Completar el análisis con requisitos regulatorios y de órganos de control.
+R3: Actualizar periódicamente las necesidades con datos de solicitudes y auditorías.
+R4: Priorizar proyectos y servicios según el análisis de necesidades.
+R5: Evaluar la satisfacción de las necesidades y ajustar la oferta documental.
+
+# Q11 Identificación y priorización de proyectos estratégicos
+@ crit=m tier=p mgda=EST roles=gd,pla,dir src=F01,F05,F13 rel=D01-Q03,D03-Q11
+P: ¿Los proyectos de gestión documental se identifican y priorizan con criterios explícitos de riesgo, valor, obligación y capacidad?
+A: Se evalúa el método de priorización, no la cantidad de proyectos.
+W: La priorización explícita evita que los recursos se concentren en proyectos visibles pero de bajo impacto.
+0: No existe un portafolio de proyectos documentales.
+1: Los proyectos surgen por urgencias o por preferencias individuales.
+2: Se cuenta con un listado de proyectos priorizados sin criterios documentados.
+3: Los proyectos se priorizan con criterios explícitos de riesgo, valor, obligación y capacidad.
+4: La priorización se revisa con datos de avance y cambios en el contexto.
+5: La organización evalúa los resultados de la priorización y ajusta los criterios.
+C: Portafolio de proyectos | Criterios de priorización documentados | Revisión periódica del portafolio
+X: Una entidad prioriza organizar un fondo acumulado en riesgo de pérdida antes que una digitalización masiva.
+E: Portafolio o banco de proyectos | Matriz de priorización | Actas de aprobación
+R0: Identificar los proyectos documentales necesarios a partir del diagnóstico.
+R1: Consolidar un portafolio único de proyectos documentales.
+R2: Definir y aplicar criterios explícitos de priorización.
+R3: Revisar la priorización con datos de avance y de riesgos.
+R4: Evaluar los resultados obtenidos por los proyectos priorizados.
+R5: Ajustar los criterios de priorización con base en aprendizajes.
+
+# Q12 Definición del nivel de madurez objetivo
+@ crit=m tier=p mgda=EST roles=dir,gd,pla src=F05,F13,F14
+P: ¿La organización ha definido, para cada ámbito relevante, el nivel de madurez documental que considera adecuado alcanzar y por qué?
+A: El objetivo no tiene que ser el máximo; debe justificarse según riesgos, obligaciones y capacidad.
+W: Un objetivo explícito permite medir brechas reales y evita exigir niveles innecesarios.
+0: No se ha considerado un nivel de madurez objetivo.
+1: Se asume implícitamente que todo debe alcanzar el nivel máximo, o el tema se ignora.
+2: Hay una meta general de madurez sin diferenciar ámbitos ni justificar el nivel.
+3: Se definen niveles objetivo por ámbito con justificación basada en riesgos y obligaciones.
+4: Los niveles objetivo se revisan con resultados de diagnósticos y la capacidad disponible.
+5: Los niveles objetivo se ajustan sistemáticamente y orientan la hoja de ruta plurianual.
+C: Niveles objetivo documentados | Justificación por ámbito | Revisión tras cada diagnóstico
+X: Una empresa privada fija nivel 3 en preservación digital por la baja proporción de documentos de conservación permanente.
+E: Documento de metas de madurez | Actas de aprobación | Resultados de diagnósticos previos
+R0: Discutir con la dirección qué nivel de madurez es razonable para la organización.
+R1: Reemplazar el supuesto de nivel máximo por objetivos justificados.
+R2: Diferenciar niveles objetivo por dimensión o ámbito y justificarlos.
+R3: Revisar los niveles objetivo después de cada diagnóstico.
+R4: Vincular los niveles objetivo con la capacidad y el presupuesto disponibles.
+R5: Ajustar sistemáticamente los objetivos según resultados y contexto.
+
+# Q13 Seguimiento ejecutivo a los proyectos documentales
+@ crit=m tier=p mgda=EST roles=dir,gd,ci src=F05,F13,F21 rel=D01-Q05
+P: ¿La dirección recibe informes periódicos sobre avance, riesgos y resultados de los proyectos documentales y toma decisiones a partir de ellos?
+A: Se valora la periodicidad del reporte y la existencia de decisiones derivadas de él.
+W: El seguimiento ejecutivo permite detectar a tiempo retrasos, sobrecostos y riesgos de los proyectos.
+0: La dirección no conoce el estado de los proyectos documentales.
+1: La dirección se informa ocasionalmente, por solicitud propia o ante problemas.
+2: Se presentan informes con periodicidad irregular y sin decisiones registradas.
+3: Existen informes periódicos con avance, riesgos y resultados presentados a la dirección.
+4: Los informes generan decisiones documentadas y acciones con responsables.
+5: El seguimiento ejecutivo se evalúa y mejora en contenido, oportunidad y utilidad.
+C: Informes periódicos | Decisiones registradas en actas | Acciones con responsable
+X: Un comité directivo revisa cada trimestre el avance de la implementación del SGDEA y aprueba ajustes de alcance.
+E: Informes ejecutivos | Actas de comité | Seguimiento de compromisos
+R0: Definir qué información sobre proyectos documentales necesita la dirección.
+R1: Establecer un informe ejecutivo con periodicidad fija.
+R2: Incluir riesgos y decisiones requeridas en cada informe.
+R3: Registrar las decisiones y hacer seguimiento a los compromisos derivados.
+R4: Evaluar la utilidad del seguimiento y ajustar su contenido.
+R5: Integrar el seguimiento documental en el tablero ejecutivo institucional.
+
+# Q14 Evaluación de beneficios organizacionales esperados
+@ crit=b tier=p mgda=EST roles=dir,fin,gd src=F05,F13 rel=D03-Q15,D15-Q13
+P: ¿Antes de emprender iniciativas documentales, la organización define los beneficios esperados y la forma de verificarlos?
+A: Los beneficios pueden ser de eficiencia, cumplimiento, reducción de riesgos, acceso o memoria institucional.
+W: Definir beneficios esperados permite evaluar después si la inversión produjo resultados.
+0: Las iniciativas se emprenden sin identificar beneficios.
+1: Los beneficios se describen de forma genérica en la presentación de la iniciativa.
+2: Algunas iniciativas definen beneficios, pero sin indicadores para verificarlos.
+3: Las iniciativas definen beneficios esperados con indicadores y responsables de verificación.
+4: Los beneficios se verifican tras la implementación y se comparan con lo previsto.
+5: Los resultados de beneficios alimentan la priorización de nuevas iniciativas.
+C: Beneficios esperados en fichas de proyecto | Indicadores de beneficio | Verificación posterior
+X: Una entidad estima los metros lineales de archivo de gestión que liberará al aplicar transferencias documentales.
+E: Fichas o casos de negocio | Línea base de beneficios | Informes de cierre de proyecto
+R0: Identificar los beneficios que podrían esperarse de las iniciativas documentales.
+R1: Describir beneficios concretos y verificables para cada iniciativa.
+R2: Asociar indicadores y responsables a los beneficios esperados.
+R3: Verificar los beneficios al cierre de cada iniciativa.
+R4: Comparar beneficios previstos y obtenidos para aprender de las desviaciones.
+R5: Usar los resultados de beneficios para priorizar nuevas inversiones.
+
+# Q15 Actualización periódica de la estrategia documental
+@ crit=m tier=p mgda=EST roles=gd,dir,pla src=F01,F05,F11 pre=D01-Q01 rel=D15-Q15
+P: ¿La estrategia documental se revisa periódicamente considerando cambios normativos, organizacionales, tecnológicos y los resultados obtenidos?
+A: Se evalúa la existencia de una revisión programada y documentada, no de ajustes improvisados.
+W: Una estrategia desactualizada orienta recursos hacia problemas que ya cambiaron.
+0: La estrategia documental no se ha revisado desde su formulación, o no existe.
+1: Se hacen ajustes ocasionales ante cambios urgentes, sin revisión integral.
+2: Existe una revisión prevista, pero se realiza de manera irregular o parcial.
+3: La estrategia se revisa con periodicidad definida y sus cambios se aprueban formalmente.
+4: La revisión utiliza resultados medidos, riesgos y cambios del contexto como insumos.
+5: El ciclo de revisión se evalúa y mejora, y las versiones de la estrategia son trazables.
+C: Periodicidad de revisión definida | Insumos de la revisión documentados | Versiones aprobadas
+X: Tras la expedición de nueva normativa archivística, una entidad revisa su PGD y actualiza el cronograma.
+E: Versiones de la estrategia o del PGD | Actas de revisión | Análisis de cambios del contexto
+R0: Establecer una estrategia documental como punto de partida para su revisión.
+R1: Programar una revisión integral con periodicidad definida.
+R2: Completar la revisión con análisis normativo, tecnológico y organizacional.
+R3: Incorporar resultados medidos y riesgos como insumos obligatorios de la revisión.
+R4: Evaluar el ciclo de revisión y mantener la trazabilidad de las versiones.
+R5: Anticipar cambios del contexto mediante vigilancia normativa y tecnológica.

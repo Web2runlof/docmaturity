@@ -1,0 +1,322 @@
+@dimension D06
+@name Administración de archivos
+@weight 5
+@sources F01,F02,F22,F23,F19
+@mgda ADM
+@summary Evalúa la custodia física de los archivos: caracterización del acervo, capacidad y condiciones de depósitos, control de préstamos, seguridad, conservación preventiva, emergencias, fondos acumulados, expedientes híbridos y custodia tercerizada.
+@note Si la organización no conserva documentos físicos, varios criterios pueden proponerse como no aplicables con justificación; la validación corresponde al evaluador.
+
+# Q01 Caracterización del acervo documental físico
+@ crit=m tier=q mgda=ADM roles=arc,gd src=F01,F02 cond=fisico rel=D06-Q02
+P: ¿La organización conoce el volumen, la ubicación, el estado de organización y las fechas extremas de su acervo documental físico?
+A: Se busca una caracterización cuantificada (por ejemplo, metros lineales por depósito y estado), no estimaciones verbales.
+W: Sin conocer el acervo no es posible planificar espacio, intervenciones, transferencias ni disposición.
+0: Se desconoce el volumen y la ubicación del acervo físico.
+1: Se tienen estimaciones verbales del volumen sin registro.
+2: Existe una caracterización parcial de algunos depósitos o dependencias.
+3: El acervo físico está caracterizado en volumen, ubicación, estado y fechas extremas.
+4: La caracterización se actualiza periódicamente con ingresos y salidas documentales.
+5: La caracterización se integra en sistemas de control y orienta la planificación de espacio.
+C: Volumen por depósito | Estado de organización registrado | Fechas extremas identificadas
+X: Un diagnóstico integral identifica 2.400 metros lineales, de los cuales 900 corresponden a fondos sin organizar.
+E: Diagnóstico integral de archivos | Hojas de cálculo o sistema de control de depósitos | Informes de visitas
+R0: Realizar un levantamiento inicial del volumen y ubicación del acervo físico.
+R1: Registrar las estimaciones existentes en un formato común.
+R2: Completar la caracterización con estado de organización y fechas extremas.
+R3: Actualizar la caracterización con ingresos y salidas documentales.
+R4: Integrar la caracterización en un sistema de control de depósitos.
+R5: Usar la caracterización para planificar el espacio a mediano plazo.
+
+# Q02 Capacidad instalada de almacenamiento físico
+@ crit=m tier=s mgda=ADM roles=arc,fin,gd src=F01,F02 cond=fisico pre=D06-Q01 rel=D03-Q04
+P: ¿La capacidad de los depósitos y del mobiliario es suficiente para el volumen actual y el crecimiento previsto del acervo físico?
+A: Se compara la capacidad disponible con la ocupación y la proyección de ingresos, considerando la disposición final.
+W: La falta de capacidad conduce a almacenamientos improvisados en condiciones de riesgo.
+0: No hay espacios destinados al almacenamiento de archivos.
+1: Los documentos se almacenan en espacios improvisados o saturados.
+2: Hay depósitos destinados, con capacidad insuficiente para el volumen actual.
+3: La capacidad cubre el volumen actual y se ha estimado el crecimiento previsto.
+4: La ocupación se monitorea y la capacidad se planifica según la proyección y la disposición.
+5: La capacidad se optimiza combinando disposición final, transferencias y custodia adecuada.
+C: Capacidad versus ocupación | Proyección de crecimiento | Plan de capacidad
+X: Una entidad proyecta que su archivo central se saturará en dos años si no aplica eliminación de series con retención cumplida.
+E: Planos o fichas de depósitos | Informes de ocupación | Proyecciones de crecimiento
+R0: Identificar los espacios donde se almacenan documentos y su estado.
+R1: Reubicar los documentos almacenados en espacios improvisados de mayor riesgo.
+R2: Estimar la capacidad faltante y proyectar el crecimiento.
+R3: Monitorear la ocupación y planificar la capacidad.
+R4: Combinar disposición, transferencias y custodia para optimizar el espacio.
+R5: Revisar el plan de capacidad con datos reales de ocupación.
+
+# Q03 Condiciones ambientales de depósitos
+@ crit=a tier=s mgda=ADM roles=arc,gd src=F01,F02 cond=fisico
+P: ¿Los depósitos de archivo cuentan con control y monitoreo de temperatura, humedad relativa, iluminación y ventilación?
+A: Se valora la medición periódica y la respuesta ante desviaciones, no solo la existencia de equipos.
+W: Las condiciones ambientales inadecuadas aceleran el deterioro y favorecen agentes biológicos.
+0: No se controlan las condiciones ambientales de los depósitos.
+1: Se perciben problemas ambientales sin medición ni control.
+2: Algunos depósitos tienen equipos de control, sin monitoreo periódico.
+3: Las condiciones ambientales se miden periódicamente y se registran en los depósitos principales.
+4: Las desviaciones generan acciones correctivas documentadas.
+5: El monitoreo es continuo y los datos orientan mejoras de infraestructura.
+C: Registros de temperatura y humedad | Acciones ante desviaciones | Cobertura de depósitos
+X: Un archivo histórico registra la humedad semanalmente y activa deshumidificadores cuando supera el rango definido.
+E: Registros de monitoreo ambiental | Programa de conservación | Informes de mantenimiento de equipos
+R0: Identificar los depósitos con condiciones ambientales de riesgo.
+R1: Medir periódicamente temperatura y humedad en los depósitos principales.
+R2: Instalar o habilitar controles ambientales en los depósitos de mayor riesgo.
+R3: Documentar acciones correctivas ante desviaciones.
+R4: Implementar monitoreo continuo con registro de datos.
+R5: Orientar las mejoras de infraestructura con los datos de monitoreo.
+
+# Q04 Estado de unidades de conservación y almacenamiento
+@ crit=m tier=p mgda=ADM roles=arc src=F01,F02 cond=fisico
+P: ¿Las cajas, carpetas y mobiliario utilizados protegen adecuadamente los documentos y se encuentran en buen estado?
+A: Se evalúan materiales, estado físico y adecuación al tipo de soporte documental.
+W: Unidades de conservación inadecuadas dañan los documentos y dificultan su manipulación.
+0: Los documentos se almacenan sin unidades de conservación.
+1: Se usan unidades improvisadas o deterioradas.
+2: Parte del acervo cuenta con unidades adecuadas.
+3: El acervo principal usa unidades de conservación adecuadas y en buen estado.
+4: Se verifica periódicamente el estado de las unidades y se reemplazan las deterioradas.
+5: Las especificaciones de unidades se ajustan según soportes y resultados de verificación.
+C: Especificaciones de unidades | Proporción del acervo en unidades adecuadas | Registro de reemplazos
+X: Un archivo reemplaza carpetas con ganchos metálicos oxidados por carpetas de material adecuado.
+E: Especificaciones técnicas de unidades | Informes de estado | Registros de compras y reemplazos
+R0: Identificar los documentos almacenados sin unidades adecuadas.
+R1: Priorizar el reemplazo de unidades deterioradas en documentos de mayor valor.
+R2: Extender las unidades adecuadas al acervo principal.
+R3: Verificar periódicamente el estado de las unidades.
+R4: Ajustar las especificaciones según soportes y hallazgos.
+R5: Planificar los reemplazos de manera preventiva.
+
+# Q05 Control de ocupación y crecimiento documental
+@ crit=b tier=p mgda=ADM roles=arc,gd src=F01,F02 cond=fisico pre=D06-Q01
+P: ¿Se registran periódicamente los ingresos y salidas de documentos para conocer la ocupación y el ritmo de crecimiento del archivo?
+A: Incluye transferencias, préstamos de larga duración, eliminaciones y envíos a custodia externa.
+W: El control de ocupación permite anticipar saturaciones y medir el efecto de la disposición final.
+0: No se registran ingresos ni salidas de documentos.
+1: Se registran algunos ingresos, sin control de salidas.
+2: Se registran ingresos y salidas, sin calcular la ocupación.
+3: La ocupación y el crecimiento se calculan periódicamente a partir de los registros.
+4: Los indicadores de ocupación se usan para planificar transferencias y disposición.
+5: El control de ocupación es continuo y se integra con la gestión de capacidad.
+C: Registro de ingresos y salidas | Indicador de ocupación | Uso en planificación
+X: Un archivo central reporta trimestralmente el porcentaje de ocupación por estantería.
+E: Registros de ingresos y salidas | Indicadores de ocupación | Informes trimestrales
+R0: Registrar los ingresos de documentos al archivo.
+R1: Incorporar el registro de salidas y eliminaciones.
+R2: Calcular la ocupación y el crecimiento periódicamente.
+R3: Usar los indicadores para planificar transferencias y disposición.
+R4: Integrar el control de ocupación con la gestión de capacidad.
+R5: Automatizar el control de ocupación cuando el volumen lo justifique.
+
+# Q06 Inventario topográfico
+@ crit=m tier=p mgda=ADM roles=arc src=F02 cond=fisico rel=D05-Q10
+P: ¿Existe un registro que indique la ubicación exacta de cada unidad documental en los depósitos?
+A: El inventario topográfico vincula el inventario documental con la estantería, el módulo y la posición.
+W: Sin registro de ubicación, encontrar un expediente depende de la memoria de quien lo guardó.
+0: No se registra la ubicación de los documentos en los depósitos.
+1: La ubicación se conoce por memoria del personal.
+2: Algunos depósitos tienen registro de ubicación.
+3: Todos los depósitos tienen inventario topográfico actualizado.
+4: El inventario topográfico se verifica periódicamente contra la ubicación real.
+5: La ubicación se gestiona en un sistema integrado con préstamos y transferencias.
+C: Inventario topográfico por depósito | Verificación contra ubicación real | Integración con préstamos
+X: Al consultar un contrato antiguo, el sistema indica depósito, estante, entrepaño y caja.
+E: Inventario topográfico | Señalización de depósitos | Informes de verificación
+R0: Señalizar los depósitos, estanterías y módulos.
+R1: Registrar la ubicación de las unidades documentales más consultadas.
+R2: Completar el inventario topográfico en todos los depósitos.
+R3: Verificar periódicamente el inventario contra la ubicación real.
+R4: Integrar la ubicación con préstamos y transferencias.
+R5: Mantener la ubicación actualizada de forma continua en un sistema.
+
+# Q07 Control de préstamos y devoluciones
+@ crit=a tier=s mgda=ADM roles=arc,usu src=F01,F02 cond=fisico
+P: ¿Los préstamos de documentos se registran con solicitante, fecha, plazo y devolución, y se hace seguimiento a los préstamos vencidos?
+A: Aplica a documentos físicos; para electrónicos se evalúa mediante los controles de acceso.
+W: Los préstamos no controlados son una de las principales causas de pérdida de expedientes.
+0: Los préstamos no se registran.
+1: Se registran algunos préstamos sin control de devolución.
+2: Los préstamos se registran, sin seguimiento a los vencidos.
+3: Los préstamos se registran con plazos y se hace seguimiento a los vencidos.
+4: Se analizan los préstamos para detectar pérdidas y patrones de uso.
+5: El control de préstamos se integra con la ubicación y con la consulta electrónica.
+C: Registro de préstamos | Plazos de devolución | Seguimiento a vencidos
+X: El archivo central de una empresa envía recordatorios semanales de préstamos vencidos a los jefes de área.
+E: Registro de préstamos | Formatos de solicitud | Reportes de préstamos vencidos
+R0: Registrar todos los préstamos de documentos.
+R1: Definir plazos de devolución para los préstamos.
+R2: Hacer seguimiento a los préstamos vencidos.
+R3: Analizar patrones de uso y pérdidas a partir de los préstamos.
+R4: Integrar el control de préstamos con la ubicación de los documentos.
+R5: Reemplazar préstamos físicos por consulta electrónica cuando sea pertinente.
+
+# Q08 Seguridad física de los archivos
+@ crit=a critical tier=q mgda=ADM roles=arc,seg src=F02,F18,F19 cond=fisico min=3
+P: ¿Los depósitos de archivo tienen controles de acceso físico, protección contra incendio y medidas contra robo o intrusión?
+A: Se evalúan control de ingreso, detección y extinción de incendios, cerraduras y vigilancia proporcionales al riesgo.
+W: Un evento de seguridad física puede destruir de forma irreversible documentos únicos.
+0: Los depósitos no tienen controles de seguridad física.
+1: Existen algunos controles básicos sin mantenimiento.
+2: Los depósitos principales tienen controles parciales de acceso o incendio.
+3: Los depósitos tienen control de acceso, protección contra incendio y medidas contra intrusión.
+4: Los controles se mantienen, se prueban y se registran los ingresos a los depósitos.
+5: La seguridad física se evalúa con base en riesgos y se ajusta tras incidentes o simulacros.
+C: Control de ingreso a depósitos | Detección y extinción de incendios | Registros de mantenimiento y pruebas
+X: El depósito de historias clínicas de una IPS tiene acceso restringido por tarjeta y detección temprana de humo.
+E: Registros de ingreso a depósitos | Certificados de mantenimiento de equipos | Evaluaciones de riesgo físico
+R0: Restringir de inmediato el acceso libre a los depósitos.
+R1: Instalar controles básicos de acceso y protección contra incendio.
+R2: Completar los controles de seguridad física en todos los depósitos.
+R3: Mantener, probar y registrar los controles de seguridad física.
+R4: Evaluar la seguridad física con base en riesgos e incidentes.
+R5: Integrar la seguridad física de archivos con la gestión de continuidad.
+
+# Q09 Limpieza y conservación preventiva
+@ crit=m tier=p mgda=ADM roles=arc src=F01,F02 cond=fisico
+P: ¿Se ejecuta un programa periódico de limpieza de depósitos y documentos con procedimientos adecuados para soportes documentales?
+A: Hace parte del componente de conservación documental; se evalúa su ejecución, no solo su existencia.
+W: La limpieza y la conservación preventiva reducen el deterioro y el riesgo biológico a bajo costo.
+0: No se limpian los depósitos ni los documentos.
+1: La limpieza es ocasional y realizada sin procedimientos adecuados.
+2: Existe un procedimiento de limpieza aplicado de forma irregular.
+3: Se ejecuta un programa periódico de limpieza con procedimientos adecuados.
+4: Se registra la ejecución del programa y se verifican sus resultados.
+5: El programa se ajusta según los resultados de monitoreo y conservación.
+C: Programa de limpieza | Registros de ejecución | Procedimientos para soportes
+X: Un archivo programa limpieza trimestral de estanterías y anual de unidades de conservación.
+E: Programa de conservación preventiva | Registros de limpieza | Informes de verificación
+R0: Programar una limpieza inicial de los depósitos con mayor acumulación.
+R1: Definir procedimientos de limpieza adecuados para soportes documentales.
+R2: Ejecutar un programa periódico de limpieza.
+R3: Registrar la ejecución y verificar sus resultados.
+R4: Ajustar el programa según el monitoreo de conservación.
+R5: Integrar la conservación preventiva en el sistema integrado de conservación.
+
+# Q10 Prevención de deterioro y agentes biológicos
+@ crit=a tier=p mgda=ADM roles=arc src=F01,F02 cond=fisico rel=D06-Q03
+P: ¿Se identifican y controlan los factores de deterioro y la presencia de agentes biológicos, como hongos, insectos o roedores, en los archivos?
+A: Incluye inspecciones, saneamiento ambiental y tratamiento de documentos afectados.
+W: Un brote biológico no controlado puede extenderse y afectar la salud del personal.
+0: No se identifican factores de deterioro ni agentes biológicos.
+1: Los problemas se atienden cuando el daño ya es visible.
+2: Se realizan inspecciones ocasionales sin programa de saneamiento.
+3: Existe un programa de inspección y saneamiento ambiental que se ejecuta.
+4: Los hallazgos se registran y los documentos afectados se aíslan y tratan.
+5: La prevención se basa en monitoreo y análisis de tendencias de deterioro.
+C: Inspecciones registradas | Programa de saneamiento | Protocolo de aislamiento
+X: Tras detectar hongos en una caja, el archivo la aísla, desinfecta el área y revisa las unidades cercanas.
+E: Informes de inspección | Certificados de saneamiento | Registros de documentos tratados
+R0: Inspeccionar los depósitos para identificar agentes de deterioro.
+R1: Atender de forma prioritaria los focos biológicos detectados.
+R2: Establecer un programa de inspección y saneamiento ambiental.
+R3: Registrar hallazgos y aplicar protocolos de aislamiento y tratamiento.
+R4: Analizar tendencias de deterioro para orientar la prevención.
+R5: Integrar la prevención en la planificación de infraestructura.
+
+# Q11 Planes de emergencia para archivos
+@ crit=a critical tier=s mgda=ADM roles=arc,seg,dir src=F01,F19 cond=fisico min=3 rel=D10-Q15
+P: ¿Existe un plan de emergencia para archivos que defina cómo prevenir, responder y recuperar documentos ante inundaciones, incendios u otros desastres?
+A: Incluye prioridades de salvamento, roles, contactos, materiales y procedimientos de recuperación.
+W: En una emergencia, las primeras horas determinan qué documentos se pueden salvar.
+0: No existe un plan de emergencia para archivos.
+1: Las emergencias se atenderían de forma improvisada.
+2: El plan general de emergencias menciona los archivos sin procedimientos específicos.
+3: Existe un plan de emergencia para archivos con prioridades, roles y procedimientos.
+4: El plan se prueba mediante simulacros y se actualiza con sus resultados.
+5: El plan se integra con la continuidad del negocio y se evalúa tras cada evento.
+C: Plan con prioridades de salvamento | Roles y contactos | Simulacros realizados
+X: Un archivo identifica las series vitales que deben evacuarse primero y mantiene materiales para secado de documentos.
+E: Plan de emergencia para archivos | Informes de simulacros | Inventario de materiales de emergencia
+R0: Identificar los riesgos de emergencia que afectan los depósitos.
+R1: Definir prioridades de salvamento y responsables básicos.
+R2: Documentar un plan de emergencia específico para archivos.
+R3: Probar el plan mediante simulacros y actualizarlo.
+R4: Integrar el plan con la gestión de continuidad del negocio.
+R5: Evaluar el plan tras cada evento o simulacro.
+
+# Q12 Gestión de fondos documentales acumulados
+@ crit=m tier=p mgda=ADM roles=arc,gd src=F01,F02,F23 cond=fisico legal=pub
+P: ¿Los fondos documentales acumulados sin organizar están identificados y cuentan con un plan para su organización, valoración y disposición?
+A: En entidades públicas suele requerir tablas de valoración documental; en privadas, una valoración equivalente.
+W: Los fondos acumulados ocupan espacio, ocultan información valiosa y suelen estar en riesgo de deterioro.
+0: No se reconoce la existencia de fondos acumulados.
+1: Los fondos acumulados se conocen, sin plan de intervención.
+2: Hay un plan de intervención sin recursos o sin ejecución.
+3: Los fondos acumulados están identificados y su intervención avanza según un plan con recursos.
+4: El avance de la intervención se mide y se ajusta.
+5: Los fondos acumulados se han intervenido y se previene su reaparición.
+C: Identificación de fondos acumulados | Plan con recursos | Avance medido
+X: Una entidad intervino por etapas un fondo acumulado de 15 años, comenzando por las series de mayor consulta.
+E: Diagnóstico de fondos acumulados | Plan de intervención | Informes de avance
+R0: Identificar y cuantificar los fondos documentales acumulados.
+R1: Elaborar un plan de intervención con prioridades.
+R2: Asignar recursos y comenzar la intervención según el plan.
+R3: Medir y ajustar el avance de la intervención.
+R4: Prevenir la formación de nuevos fondos acumulados.
+R5: Evaluar los beneficios obtenidos con la intervención.
+
+# Q13 Control de expedientes híbridos
+@ crit=a tier=p mgda=DOC roles=gd,arc,tec src=F02,F03 rel=D07-Q05
+P: ¿Los expedientes con documentos en papel y en electrónico mantienen su unidad mediante referencias cruzadas, índices o metadatos comunes?
+A: Se evalúa si es posible reconstruir el expediente completo sin importar el soporte de cada documento.
+W: Un expediente híbrido sin control queda dividido y ninguna de sus partes es completa por sí sola.
+0: No se reconoce la existencia de expedientes híbridos.
+1: Las partes física y electrónica se gestionan por separado, sin vínculo.
+2: Algunos expedientes tienen referencias entre sus partes, sin regla común.
+3: Existen reglas para vincular las partes de los expedientes híbridos y se aplican.
+4: Se verifica en muestras que los expedientes híbridos estén completos.
+5: El control de expedientes híbridos se apoya en sistemas y se reduce progresivamente la hibridez innecesaria.
+C: Reglas de vinculación | Referencias o índices comunes | Muestras verificadas
+X: El expediente físico de un proceso disciplinario incluye una hoja de referencia a los documentos electrónicos del sistema.
+E: Instructivo de expedientes híbridos | Muestras de expedientes | Configuración de sistemas
+R0: Identificar los tipos de expediente que combinan soportes.
+R1: Establecer referencias básicas entre las partes de cada expediente.
+R2: Definir y aplicar reglas comunes de vinculación.
+R3: Verificar la completitud de expedientes híbridos mediante muestras.
+R4: Apoyar el control con sistemas y metadatos comunes.
+R5: Reducir progresivamente la hibridez innecesaria.
+
+# Q14 Gestión de custodia documental tercerizada
+@ crit=m tier=p mgda=ADM roles=arc,jur,prv src=F02,F19 cond=terceros rel=D02-Q10
+P: ¿Si los documentos se custodian con un tercero, la organización controla su inventario, condiciones, acceso y devolución?
+A: Aplica a bodegas externas o servicios de custodia; si no existen, puede proponerse como no aplicable.
+W: Tercerizar la custodia no traslada la responsabilidad sobre los documentos.
+0: Se desconoce qué documentos están en custodia externa.
+1: Se conocen las cajas enviadas, sin inventario de su contenido.
+2: Hay inventario, sin verificación de condiciones ni de accesos.
+3: El inventario, las condiciones y los accesos de la custodia externa se controlan.
+4: Se auditan periódicamente las instalaciones y servicios del custodio.
+5: El modelo de custodia se evalúa en costo, riesgo y calidad, y se ajusta.
+C: Inventario de lo custodiado | Auditorías al custodio | Condiciones de devolución
+X: Una empresa audita anualmente la bodega de su custodio y verifica una muestra de cajas contra el inventario.
+E: Contrato de custodia | Inventarios entregados | Informes de auditoría al custodio
+R0: Identificar qué documentos están en custodia externa.
+R1: Exigir al custodio un inventario de contenido.
+R2: Controlar condiciones, accesos y tiempos de respuesta del custodio.
+R3: Auditar periódicamente las instalaciones y servicios.
+R4: Evaluar el modelo de custodia en costo, riesgo y calidad.
+R5: Ajustar el modelo de custodia según los resultados de la evaluación.
+
+# Q15 Evaluación de servicios de archivo y atención a usuarios
+@ crit=b tier=p mgda=ADM roles=arc,usu src=F01,F13 rel=D04-Q14,D15-Q05
+P: ¿Se evalúan la oportunidad y la calidad de los servicios del archivo, como consulta, préstamo, certificación y asesoría?
+A: Puede medirse con indicadores de tiempos, encuestas o registros de quejas.
+W: Evaluar el servicio permite demostrar el valor del archivo y orientar mejoras.
+0: Los servicios del archivo no se evalúan.
+1: Se reciben comentarios ocasionales sin registro.
+2: Se miden algunos aspectos del servicio sin periodicidad.
+3: Se evalúan periódicamente la oportunidad y la calidad de los servicios.
+4: Los resultados generan acciones de mejora con seguimiento.
+5: La evaluación incluye la perspectiva de usuarios y orienta la oferta de servicios.
+C: Indicadores de servicio | Encuestas o registros de satisfacción | Acciones de mejora
+X: El archivo de una universidad mide el tiempo de respuesta a certificaciones y la satisfacción de egresados.
+E: Indicadores de servicio | Resultados de encuestas | Planes de mejora
+R0: Identificar los servicios que presta el archivo.
+R1: Registrar los comentarios y quejas de los usuarios.
+R2: Medir periódicamente la oportunidad y calidad de los servicios.
+R3: Ejecutar acciones de mejora con seguimiento.
+R4: Incorporar la perspectiva de usuarios en la oferta de servicios.
+R5: Comparar el desempeño del servicio en el tiempo y ajustar su modelo.

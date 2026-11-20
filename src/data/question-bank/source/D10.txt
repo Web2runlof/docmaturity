@@ -1,0 +1,322 @@
+@dimension D10
+@name Seguridad, riesgos y cumplimiento
+@weight 8
+@sources F02,F08,F11,F18,F19,F25,F26,F27
+@mgda TEC
+@summary Evalúa la protección de la información documentada y la gestión de obligaciones: inventario normativo, riesgos documentales, clasificación por sensibilidad, accesos, autenticación, cifrado, auditoría, incidentes, datos personales, reservas, transparencia, suspensión de disposición, proveedores y continuidad.
+@note Una respuesta de encuesta no prueba un incumplimiento legal: los resultados se presentan como posibles brechas que requieren validación.
+
+# Q01 Inventario de obligaciones legales y regulatorias
+@ crit=a tier=s mgda=EST roles=jur,gd,ci src=F02,F11,F22,F25,F26 min=3
+P: ¿La organización mantiene un inventario actualizado de las obligaciones legales, regulatorias y contractuales que afectan sus documentos e información?
+A: Incluye obligaciones de conservación, acceso, protección de datos, reserva y reporte, según el perfil de la organización.
+W: Sin inventario normativo, las obligaciones se descubren cuando ya se ha incumplido.
+0: No se han identificado las obligaciones aplicables a los documentos.
+1: Las obligaciones se conocen de manera dispersa por distintas áreas.
+2: Existe un normograma general sin relación con los documentos o series.
+3: Las obligaciones documentales están inventariadas y relacionadas con las series o procesos afectados.
+4: El inventario se actualiza mediante vigilancia normativa con responsables definidos.
+5: El inventario orienta controles, instrumentos y priorización de riesgos.
+C: Normograma o inventario de obligaciones | Relación con series o procesos | Vigilancia normativa
+X: Una empresa financiera relaciona cada obligación de reporte regulatorio con la serie documental que la soporta.
+E: Normograma | Matriz de obligaciones por serie o proceso | Registros de actualización normativa
+R0: Identificar las principales normas que afectan los documentos de la organización.
+R1: Consolidar en un único inventario las obligaciones conocidas por las áreas.
+R2: Relacionar cada obligación con las series y procesos afectados.
+R3: Establecer vigilancia normativa con responsables definidos.
+R4: Usar el inventario para orientar controles y riesgos.
+R5: Evaluar periódicamente la exhaustividad del inventario.
+
+# Q02 Evaluación de riesgos documentales
+@ crit=a tier=q mgda=EST roles=gd,ci,seg src=F08,F11,F27 min=3
+P: ¿La organización identifica, analiza y trata los riesgos que afectan a sus documentos, como pérdida, alteración, acceso indebido u obsolescencia?
+A: Puede integrarse en el mapa de riesgos institucional; se evalúa que incluya riesgos documentales específicos.
+W: Los riesgos documentales no identificados se materializan sin controles preventivos.
+0: No se identifican riesgos documentales.
+1: Los riesgos se reconocen después de que ocurren incidentes.
+2: Algunos riesgos documentales aparecen en el mapa de riesgos sin análisis específico.
+3: Los riesgos documentales se identifican, analizan y tienen controles asignados.
+4: Los riesgos se monitorean y los controles se evalúan periódicamente.
+5: La gestión de riesgos documentales se integra con la gestión de riesgos corporativa y se mejora con incidentes.
+C: Riesgos documentales en el mapa | Controles asignados | Monitoreo periódico
+X: El mapa de riesgos de una IPS incluye la pérdida de historias clínicas por fallas del sistema con controles y responsables.
+E: Mapa o matriz de riesgos | Fichas de controles | Informes de monitoreo
+R0: Identificar los riesgos documentales a partir de incidentes y del diagnóstico.
+R1: Incluir los riesgos documentales en el mapa de riesgos institucional.
+R2: Analizar los riesgos y asignar controles a cada uno.
+R3: Monitorear los riesgos y evaluar los controles periódicamente.
+R4: Integrar la gestión documental en la gestión de riesgos corporativa.
+R5: Mejorar la gestión de riesgos con el análisis de incidentes.
+
+# Q03 Clasificación de información según sensibilidad
+@ crit=a tier=p mgda=DOC roles=seg,jur,gd src=F18,F25,F26
+P: ¿La información y los documentos se clasifican según su nivel de sensibilidad o confidencialidad, con criterios documentados?
+A: Por ejemplo, pública, interna, clasificada o reservada, según el régimen aplicable.
+W: La clasificación por sensibilidad determina qué controles de acceso y protección aplicar.
+0: No se clasifica la información por sensibilidad.
+1: La sensibilidad se decide caso a caso por cada persona.
+2: Hay criterios de clasificación aplicados a algunos tipos de información.
+3: Existen criterios documentados y la información se clasifica por sensibilidad en las series principales.
+4: La clasificación se refleja en los sistemas y se verifica su aplicación.
+5: La clasificación se revisa periódicamente y se ajusta según riesgos y cambios normativos.
+C: Esquema de clasificación por sensibilidad | Aplicación a series | Reflejo en sistemas
+X: Una entidad publica su índice de información clasificada y reservada, y lo aplica en su SGDEA.
+E: Esquema de clasificación de la información | Índice de información clasificada o reservada | Configuración de etiquetas en sistemas
+R0: Identificar la información sensible que maneja la organización.
+R1: Definir niveles básicos de sensibilidad.
+R2: Documentar criterios y clasificar las series principales.
+R3: Reflejar la clasificación en los sistemas y verificar su aplicación.
+R4: Revisar periódicamente la clasificación según riesgos.
+R5: Automatizar la propagación de etiquetas de sensibilidad cuando sea viable.
+
+# Q04 Definición y aplicación de controles de acceso
+@ crit=a critical tier=q mgda=TEC roles=seg,tec,gd src=F18,F25,F26 min=3 rel=D10-Q05
+P: ¿El acceso a los documentos se otorga según el rol y la sensibilidad de la información, y se aplica efectivamente en los sistemas y depósitos?
+A: Se evalúa la aplicación real del principio de mínimo privilegio, no solo la existencia de una política.
+W: Los accesos excesivos son una causa frecuente de fugas y alteraciones de información.
+0: Cualquier persona puede acceder a cualquier documento.
+1: Los accesos se otorgan por solicitud sin criterios definidos.
+2: Existen perfiles de acceso en algunos sistemas, con permisos amplios.
+3: Los accesos se otorgan según rol y sensibilidad y se aplican en los sistemas principales.
+4: Los accesos se revisan periódicamente y se corrigen los permisos excesivos.
+5: El control de acceso se gestiona de forma centralizada y se ajusta con base en riesgos.
+C: Matriz de roles y permisos | Aplicación en sistemas | Revisiones periódicas de accesos
+X: Solo el área de talento humano y el titular pueden consultar las historias laborales en el repositorio.
+E: Matriz de perfiles y permisos | Reportes de revisión de accesos | Configuración de sistemas
+R0: Restringir los accesos abiertos a información sensible.
+R1: Definir criterios básicos para otorgar accesos.
+R2: Implementar perfiles por rol y sensibilidad en los sistemas principales.
+R3: Revisar periódicamente los accesos y corregir permisos excesivos.
+R4: Centralizar la gestión de accesos.
+R5: Ajustar el control de acceso con base en riesgos e incidentes.
+
+# Q05 Gestión del ciclo de vida de usuarios y permisos
+@ crit=a tier=s mgda=TEC roles=seg,th,tec src=F18 pre=D10-Q04
+P: ¿Los permisos de los usuarios se crean, modifican y revocan oportunamente cuando ingresan, cambian de cargo o se retiran?
+A: Incluye a contratistas, practicantes y usuarios de terceros.
+W: Las cuentas activas de personas retiradas son una puerta abierta a la información.
+0: Los permisos no se revocan cuando las personas se retiran.
+1: La revocación depende de que alguien lo recuerde.
+2: Existe un procedimiento de retiro aplicado de forma irregular.
+3: Altas, cambios y retiros se gestionan oportunamente mediante un procedimiento.
+4: Se concilian periódicamente las cuentas con las novedades de personal.
+5: La gestión de identidades se automatiza y se audita.
+C: Procedimiento de altas, cambios y retiros | Conciliación con novedades de personal | Cuentas huérfanas detectadas
+X: El procedimiento de retiro de una empresa desactiva las cuentas el último día de trabajo y lo confirma TI.
+E: Procedimiento de gestión de usuarios | Reportes de conciliación | Registros de revocación
+R0: Identificar las cuentas activas de personas retiradas.
+R1: Revocar las cuentas huérfanas detectadas.
+R2: Formalizar un procedimiento de altas, cambios y retiros.
+R3: Conciliar periódicamente las cuentas con las novedades de personal.
+R4: Automatizar la gestión de identidades.
+R5: Auditar la gestión de identidades y corregir desviaciones.
+
+# Q06 Autenticación adecuada para el nivel de riesgo
+@ crit=m tier=p mgda=TEC roles=seg,tec src=F18
+P: ¿Los mecanismos de autenticación de los sistemas documentales son proporcionales a la sensibilidad de la información, por ejemplo con doble factor para accesos críticos?
+A: Se evalúa la proporcionalidad, no la adopción indiscriminada de un mecanismo.
+W: Una autenticación débil permite suplantar usuarios y alterar documentos sin rastro confiable.
+0: Los sistemas no requieren autenticación individual.
+1: Se usan cuentas compartidas o contraseñas débiles.
+2: La autenticación es individual, sin mecanismos reforzados para accesos críticos.
+3: La autenticación es individual y los accesos críticos usan mecanismos reforzados.
+4: Se monitorean intentos de acceso anómalos y se ajustan los mecanismos.
+5: La autenticación se evalúa con base en riesgos y se integra en un modelo de identidad unificado.
+C: Cuentas individuales | Doble factor en accesos críticos | Monitoreo de intentos anómalos
+X: Los administradores del SGDEA y los usuarios con acceso a información reservada usan doble factor.
+E: Políticas de autenticación | Configuración de sistemas | Reportes de accesos anómalos
+R0: Eliminar las cuentas compartidas en sistemas documentales.
+R1: Exigir autenticación individual con contraseñas robustas.
+R2: Implementar mecanismos reforzados para accesos críticos.
+R3: Monitorear intentos de acceso anómalos.
+R4: Evaluar la autenticación con base en riesgos.
+R5: Integrar la autenticación en un modelo de identidad unificado.
+
+# Q07 Protección de información en tránsito y almacenamiento
+@ crit=a tier=p mgda=TEC roles=seg,tec src=F18,F25
+P: ¿La información documentada sensible se protege mediante cifrado u otros controles cuando se transmite y cuando se almacena?
+A: Incluye correo, transferencias de archivos, dispositivos portátiles, copias de seguridad y servicios en la nube.
+W: La información sin protección puede exponerse en una interceptación, un robo de equipos o un error de envío.
+0: La información sensible se transmite y almacena sin protección.
+1: La protección depende de la iniciativa de cada usuario.
+2: Algunos canales o repositorios están protegidos.
+3: La información sensible está protegida en tránsito y en almacenamiento en los sistemas principales.
+4: Se verifica la protección en canales y repositorios y se corrigen excepciones.
+5: La protección se gestiona con base en riesgos y se revisa ante nuevas tecnologías.
+C: Cifrado de canales | Cifrado en repositorios y copias | Verificación de excepciones
+X: Los portátiles del área jurídica tienen cifrado de disco y los envíos externos usan canales seguros.
+E: Políticas de cifrado | Configuración de canales | Informes de verificación
+R0: Identificar dónde circula y se almacena información sensible sin protección.
+R1: Proteger los canales y dispositivos de mayor riesgo.
+R2: Extender la protección a los sistemas y repositorios principales.
+R3: Verificar la protección y corregir excepciones.
+R4: Gestionar la protección con base en riesgos.
+R5: Revisar los controles ante nuevas tecnologías.
+
+# Q08 Registro y auditoría de eventos
+@ crit=a tier=p mgda=TEC roles=seg,tec,ci src=F09,F18 rel=D09-Q07
+P: ¿Los eventos de acceso y modificación de información sensible se registran, se protegen y se revisan?
+A: Se evalúa si los registros se revisan efectivamente, no solo si se generan.
+W: Sin revisión de registros, los accesos indebidos pasan inadvertidos.
+0: No se registran eventos de acceso ni modificación.
+1: Se registran eventos sin protección ni revisión.
+2: Los registros se revisan solo ante incidentes.
+3: Los eventos se registran, se protegen y se revisan periódicamente en los sistemas principales.
+4: Se generan alertas ante patrones anómalos y se investigan.
+5: La auditoría de eventos se integra en la gestión de seguridad y se mejora con base en incidentes.
+C: Registro protegido | Revisión periódica | Alertas ante anomalías
+X: Seguridad revisa mensualmente las consultas masivas de expedientes con datos personales.
+E: Configuración de registros | Informes de revisión | Alertas e investigaciones
+R0: Habilitar el registro de eventos en los sistemas con información sensible.
+R1: Proteger los registros contra modificación.
+R2: Revisar periódicamente los registros de los sistemas principales.
+R3: Configurar alertas ante patrones anómalos.
+R4: Integrar la auditoría de eventos en la gestión de seguridad.
+R5: Mejorar la auditoría con base en incidentes.
+
+# Q09 Detección y gestión de incidentes
+@ crit=a tier=p mgda=TEC roles=seg,gd,tec src=F18,F19
+P: ¿Existe un procedimiento para detectar, reportar, contener y analizar incidentes que afectan documentos e información?
+A: Incluye pérdidas, accesos indebidos, alteraciones, ransomware y envíos erróneos.
+W: Una respuesta rápida y ordenada limita el daño y permite aprender de cada incidente.
+0: No existe un procedimiento de gestión de incidentes.
+1: Los incidentes se atienden de forma improvisada.
+2: Hay un procedimiento de incidentes de TI que no considera documentos.
+3: El procedimiento cubre incidentes documentales, con roles, reporte y contención.
+4: Los incidentes se analizan y generan acciones preventivas.
+5: La gestión de incidentes se prueba y mejora con simulaciones y lecciones aprendidas.
+C: Procedimiento con incidentes documentales | Registro de incidentes | Análisis de causas
+X: Ante el envío erróneo de un expediente con datos personales, la empresa contiene, notifica y analiza la causa.
+E: Procedimiento de incidentes | Registro de incidentes | Informes de análisis de causa
+R0: Definir qué se considera un incidente documental.
+R1: Establecer un canal de reporte de incidentes.
+R2: Documentar el procedimiento con roles, contención y análisis.
+R3: Analizar los incidentes y aplicar acciones preventivas.
+R4: Probar la gestión de incidentes mediante simulaciones.
+R5: Mejorar el procedimiento con lecciones aprendidas.
+
+# Q10 Protección de datos personales
+@ crit=a critical tier=s mgda=DOC roles=jur,seg,gd src=F25 legal=gen min=3 cond=datos_personales
+P: ¿Los documentos que contienen datos personales se gestionan con controles de finalidad, acceso, conservación y atención de derechos de los titulares?
+A: La herramienta no sustituye el análisis jurídico de protección de datos; evalúa la existencia y aplicación de controles.
+W: Una gestión documental débil es una de las principales fuentes de incidentes con datos personales.
+0: No se identifican los documentos que contienen datos personales.
+1: Los datos personales se protegen de manera informal.
+2: Existe una política de tratamiento sin controles documentales específicos.
+3: Los documentos con datos personales tienen controles de acceso, conservación y atención de derechos.
+4: Los controles se verifican y se atienden oportunamente las solicitudes de los titulares.
+5: La protección de datos se integra en el diseño de procesos y sistemas y se evalúa periódicamente.
+C: Identificación de series con datos personales | Controles aplicados | Atención de solicitudes de titulares
+X: Una empresa identifica las series con datos sensibles de salud y restringe su acceso al personal autorizado.
+E: Política de tratamiento de datos | Inventario de bases y series con datos personales | Registros de atención de solicitudes
+R0: Identificar las series y sistemas que contienen datos personales.
+R1: Aplicar controles básicos de acceso a los datos personales.
+R2: Establecer controles de finalidad, conservación y atención de derechos.
+R3: Verificar los controles y atender oportunamente a los titulares.
+R4: Integrar la protección de datos en el diseño de procesos y sistemas.
+R5: Evaluar periódicamente el programa de protección de datos.
+
+# Q11 Gestión de restricciones y reservas de información
+@ crit=a critical tier=p mgda=DOC roles=jur,gd,seg src=F26,F02 legal=pub min=3 rel=D10-Q03
+P: ¿Las restricciones de acceso por reserva legal, confidencialidad contractual o secreto profesional están identificadas, justificadas y aplicadas?
+A: Para entidades públicas incluye la clasificación y reserva conforme al régimen de transparencia; para privadas, acuerdos de confidencialidad y secretos empresariales.
+W: Las restricciones mal gestionadas generan tanto exposiciones indebidas como negaciones de acceso injustificadas.
+0: No se identifican restricciones de acceso.
+1: Las restricciones se aplican por costumbre sin justificación.
+2: Algunas restricciones están identificadas, sin plazo ni fundamento documentado.
+3: Las restricciones están identificadas con su fundamento y plazo, y se aplican.
+4: Se revisan las restricciones al vencer sus plazos y se levantan cuando corresponde.
+5: La gestión de restricciones se audita y se ajusta según cambios normativos.
+C: Registro de restricciones con fundamento | Plazos definidos | Revisión al vencimiento
+X: Un documento reservado por seguridad nacional registra la norma que lo fundamenta y la fecha de revisión de la reserva.
+E: Índice de información clasificada o reservada | Acuerdos de confidencialidad | Registros de revisión
+R0: Identificar la información sometida a restricciones de acceso.
+R1: Documentar el fundamento de cada restricción.
+R2: Definir plazos para las restricciones y aplicarlas en sistemas y depósitos.
+R3: Revisar las restricciones al vencer sus plazos.
+R4: Auditar la gestión de restricciones.
+R5: Ajustar la gestión de restricciones ante cambios normativos.
+
+# Q12 Control de acceso y transparencia cuando corresponda
+@ crit=m tier=p mgda=DOC roles=jur,gd,usu src=F26,F21 legal=pub
+P: ¿Las organizaciones sujetas a obligaciones de transparencia publican y facilitan el acceso a la información pública conforme a sus instrumentos?
+A: Aplica a sujetos obligados por el régimen de transparencia. Para organizaciones no sujetas, se evalúa como buena práctica de rendición de cuentas.
+W: La gestión documental es la base para responder solicitudes de información pública de forma oportuna y completa.
+0: No se publica ni se facilita el acceso a la información que corresponde.
+1: Se atienden solicitudes de información sin instrumentos de gestión.
+2: Existen instrumentos de gestión de información pública desactualizados.
+3: Los instrumentos de información pública están actualizados y orientan la publicación y el acceso.
+4: Se mide la oportunidad y completitud de las respuestas a solicitudes de información.
+5: La transparencia se gestiona proactivamente y se evalúa con usuarios.
+C: Registro de activos de información publicado | Esquema de publicación | Tiempos de respuesta medidos
+X: Una entidad publica su registro de activos de información y responde las solicitudes dentro de los términos legales.
+E: Registro de activos de información | Esquema de publicación | Informes de solicitudes de acceso
+R0: Identificar las obligaciones de transparencia que aplican a la organización.
+R1: Elaborar los instrumentos básicos de gestión de información pública.
+R2: Actualizar los instrumentos y usarlos para publicar y facilitar el acceso.
+R3: Medir la oportunidad y completitud de las respuestas.
+R4: Gestionar la transparencia de forma proactiva.
+R5: Evaluar la transparencia con la participación de usuarios.
+
+# Q13 Suspensión de disposición documental por obligaciones judiciales o investigativas
+@ crit=a critical tier=s mgda=DOC roles=jur,gd,tec src=F11,F02 min=3 rel=D05-Q13
+P: ¿Existe un mecanismo para suspender la eliminación de documentos cuando surgen litigios, investigaciones, auditorías o requerimientos de autoridades?
+A: También conocido como retención legal; debe aplicarse a documentos físicos y electrónicos, incluido el correo.
+W: Eliminar documentos sujetos a un litigio o investigación puede acarrear sanciones y pérdida de defensa.
+0: No existe un mecanismo de suspensión de la disposición.
+1: La suspensión depende de que jurídica avise informalmente.
+2: Existe un procedimiento de suspensión aplicado solo a documentos físicos.
+3: El procedimiento de suspensión cubre documentos físicos y electrónicos y se aplica antes de eliminar.
+4: Las suspensiones vigentes se registran, se comunican y se levantan formalmente.
+5: Las suspensiones se aplican automáticamente en los sistemas y se auditan.
+C: Procedimiento de suspensión | Registro de suspensiones vigentes | Aplicación en sistemas electrónicos
+X: Al notificarse una demanda laboral, jurídica ordena suspender la eliminación de los documentos del trabajador y del área.
+E: Procedimiento de retención legal | Registro de suspensiones | Configuración en sistemas
+R0: Definir quién ordena una suspensión de disposición y cuándo.
+R1: Formalizar la comunicación de suspensiones desde jurídica.
+R2: Extender la suspensión a documentos electrónicos y al correo.
+R3: Registrar, comunicar y levantar formalmente las suspensiones.
+R4: Aplicar las suspensiones en los sistemas de forma automática.
+R5: Auditar periódicamente las suspensiones vigentes.
+
+# Q14 Evaluación de riesgos de proveedores tecnológicos
+@ crit=m tier=p mgda=TEC roles=seg,jur,tec src=F18,F08 cond=terceros rel=D02-Q10,D08-Q09
+P: ¿Se evalúan los riesgos de seguridad, continuidad y protección de datos de los proveedores que alojan o procesan documentos?
+A: Incluye proveedores de nube, SGDEA, digitalización, custodia y mensajería.
+W: Un proveedor con controles débiles traslada sus riesgos a la información de la organización.
+0: No se evalúan riesgos de proveedores.
+1: Se confía en la reputación del proveedor sin evaluación.
+2: Se solicitan certificaciones sin evaluar su alcance.
+3: Los proveedores relevantes se evalúan con criterios de seguridad, continuidad y datos antes de contratar.
+4: La evaluación se repite periódicamente y ante cambios del servicio.
+5: El riesgo de proveedores se gestiona como parte del riesgo institucional.
+C: Evaluación previa a la contratación | Revisión del alcance de certificaciones | Reevaluación periódica
+X: Antes de contratar digitalización, la entidad verifica dónde se almacenan las imágenes y quién puede acceder a ellas.
+E: Cuestionarios de evaluación de proveedores | Informes de reevaluación | Cláusulas de seguridad
+R0: Identificar los proveedores que alojan o procesan documentos.
+R1: Solicitar información de controles a los proveedores críticos.
+R2: Evaluar los proveedores relevantes antes de contratar.
+R3: Reevaluar periódicamente a los proveedores.
+R4: Integrar el riesgo de proveedores en la gestión de riesgos.
+R5: Ajustar la evaluación con base en incidentes de proveedores.
+
+# Q15 Continuidad del negocio y protección de información crítica
+@ crit=a critical tier=p mgda=EST roles=seg,dir,gd src=F19,F18 min=3 rel=D06-Q11,D08-Q14
+P: ¿La organización identifica los documentos e información vitales para continuar operando y asegura su disponibilidad ante una interrupción?
+A: Los documentos vitales son los indispensables para operar, reconstituir derechos y cumplir obligaciones tras un evento.
+W: Sin identificar los documentos vitales, la recuperación tras un desastre puede ser lenta o imposible.
+0: No se han identificado documentos vitales.
+1: Se asume que las copias de seguridad cubren la continuidad.
+2: Algunos documentos vitales están identificados, sin medidas específicas.
+3: Los documentos vitales están identificados y cuentan con medidas de protección y disponibilidad.
+4: Las medidas se prueban en ejercicios de continuidad.
+5: La protección de la información crítica se integra en la gestión de continuidad y se mejora tras cada prueba.
+C: Inventario de documentos vitales | Medidas de protección | Ejercicios de continuidad
+X: Una empresa de servicios públicos mantiene copias protegidas de sus planos de redes para operar tras un desastre.
+E: Inventario de documentos vitales | Plan de continuidad | Informes de ejercicios
+R0: Identificar los documentos indispensables para operar tras una interrupción.
+R1: Diferenciar los documentos vitales de las copias de seguridad generales.
+R2: Aplicar medidas específicas de protección a los documentos vitales.
+R3: Probar las medidas en ejercicios de continuidad.
+R4: Integrar los documentos vitales en la gestión de continuidad.
+R5: Mejorar la protección tras cada ejercicio o evento.
