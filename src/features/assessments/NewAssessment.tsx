@@ -62,7 +62,7 @@ export default function NewAssessment() {
   return (
     <>
       <PageHeader eyebrow="Proyecto de diagnóstico" title="Nueva evaluación" description="La versión metodológica, la versión del banco y las ponderaciones quedan congeladas en la evaluación." actions={<><Button onClick={() => nav(-1)}>Cancelar</Button><Button variant="primary" onClick={create} disabled={touched && !valid}>Crear evaluación</Button></>} />
-      <div className="grid gap-6 xl:grid-cols-[1fr_320px]">
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-6 xl:grid-cols-[1fr_320px]">
         <div className="space-y-6">
           <Section eyebrow="Paso 1 de 2" title="Modalidad de diagnóstico" description="La selección de criterios no es aleatoria: cada modalidad incluye la anterior según relevancia, transversalidad y criticidad.">
             <div className="grid gap-3 md:grid-cols-2 2xl:grid-cols-4" role="radiogroup" aria-label="Modalidad">
@@ -76,7 +76,7 @@ export default function NewAssessment() {
                       <span aria-hidden className={cx('flex size-5 items-center justify-center rounded-full border-2 transition-colors', on ? 'border-mint-strong bg-mint-strong text-white' : 'border-[#cbd5e1]')}>{on && <Check className="size-3" />}</span>
                     </span>
                     <span className="mt-1 text-xs font-medium text-mint-strong">{USE[m]}</span>
-                    <span className="mt-4 font-display text-[2rem] leading-none font-bold text-navy num">{n ?? 'A la medida'}</span>
+                    <span className={cx('mt-4 font-display leading-none font-bold text-navy num', n ? 'text-[2rem]' : 'pt-1.5 text-[1.45rem]')}>{n ?? 'A la medida'}</span>
                     <span className="mt-1 text-xs text-muted">{n ? `criterios · ${fmtPct((n / QUESTIONS.length) * 100)} del banco` : 'dimensiones y criterios elegidos'}</span>
                     <span className="mt-3 flex gap-0.5" aria-hidden>{[0, 1, 2, 3].map((x) => <span key={x} className={cx('h-1 flex-1 rounded-full', x <= i ? 'bg-petrol' : 'bg-neutral')} />)}</span>
                     <span className="mt-3 text-xs leading-relaxed text-muted">{MODALITY_INFO[m].text}</span>

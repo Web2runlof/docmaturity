@@ -111,8 +111,8 @@ export function Questionnaire({ questions, responses, context, onSave, onSkipSec
             <p className="truncate text-xs text-fog">{context.organization} · {context.assessment}</p>
             <p className="truncate text-sm font-semibold text-white">{context.participant} · {context.profile}</p>
           </div>
-          <div className="flex items-center gap-3">
-            <span className="text-xs text-fog" role="status" aria-live="polite">
+          <div className="flex flex-wrap items-center gap-2 md:gap-3">
+            <span className="w-full text-xs whitespace-nowrap text-fog sm:w-auto" role="status" aria-live="polite">
               {save.state === 'saving' ? 'Guardando…' : save.state === 'saved' ? `Guardado ${save.at?.toLocaleTimeString('es-CO')}` : save.state === 'error' ? <span className="text-[#FCA5A5]">Error al guardar: {save.message}</span> : 'Guardado automático'}
             </span>
             {extraActions}

@@ -38,7 +38,7 @@ export default function EvidencePage() {
           <div key={s} className="panel px-4 py-3"><div className="text-xs text-muted">{s} · {EVIDENCE_LABEL[s]}</div><div className="mt-1 font-display text-2xl font-semibold text-navy num">{analysis.evidence.byStatus[s]}</div><div className="text-xs text-muted">criterios aplicables</div></div>
         ))}
       </div>
-      <div className="grid gap-6 xl:grid-cols-[1.6fr_1fr]">
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-6 xl:grid-cols-[1.6fr_1fr]">
         <Section title="Registro de evidencias" actions={<Select aria-label="Filtrar por estado" className="w-52" value={filter} onChange={(e) => setFilter(e.target.value as typeof filter)}><option value="all">Todos los estados</option>{STATUSES.map((s) => <option key={s} value={s}>{s} · {EVIDENCE_LABEL[s]}</option>)}</Select>}>
           {!list.length ? <EmptyState icon={<FileCheck2 className="size-7" />} title="Sin evidencias registradas" description="Las evidencias sustentan el nivel validado de cada criterio y se muestran separadamente de la madurez." /> : (
             <div className="overflow-x-auto">

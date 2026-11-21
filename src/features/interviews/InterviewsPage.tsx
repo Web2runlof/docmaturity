@@ -67,7 +67,7 @@ export default function InterviewsPage() {
           })}</ul>
         </Callout></div>
       )}
-      <div className="grid gap-6 xl:grid-cols-[1.6fr_1fr]">
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-6 xl:grid-cols-[1.6fr_1fr]">
         <Section title="Participantes" description="Identificados por código o seudónimo. No se exige nombre completo, correo ni documento de identidad.">
           {!bundle.participants.length ? (
             <EmptyState icon={<UserPlus className="size-7" />} title="Sin participantes" description="Agregue participantes por perfil. La asignación de dimensiones se sugiere según el perfil y puede modificarse." actions={<Button variant="primary" disabled={locked} onClick={() => setAddOpen(true)}>Agregar participante</Button>} />

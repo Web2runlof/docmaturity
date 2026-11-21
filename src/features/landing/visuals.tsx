@@ -20,9 +20,9 @@ export function HeroVisual() {
   const front = useParallax<HTMLDivElement>(-0.04);
   const q = question('D11-Q01');
   return (
-    <div className="relative mx-auto w-full max-w-[620px] lg:h-[650px]" role="img" aria-label="Vista ilustrativa con datos simulados: madurez por dimensión, brecha por familia frente a la meta y la trazabilidad de una brecha hasta su evidencia.">
+    <div className="relative mx-auto w-full max-w-[620px] xl:h-[650px]" role="img" aria-label="Vista ilustrativa con datos simulados: madurez por dimensión, brecha por familia frente a la meta y la trazabilidad de una brecha hasta su evidencia.">
       {/* Capa posterior: mapa de dimensiones. */}
-      <div ref={back} className="relative z-0 hidden lg:absolute lg:top-0 lg:left-0 lg:block lg:w-[58%]">
+      <div ref={back} className="relative z-0 hidden xl:absolute xl:top-0 xl:left-0 xl:block xl:w-[58%]">
         <div className="glass float-slower p-4">
           <div className="flex items-baseline justify-between"><p className="text-[10.5px] font-semibold tracking-[0.12em] text-mint uppercase">Madurez por dimensión</p><p className="text-[10px] text-fog">Ilustrativo</p></div>
           <ul className="mt-3 grid grid-cols-5 gap-1.5">
@@ -40,20 +40,20 @@ export function HeroVisual() {
       </div>
 
       {/* Capa central: brecha por familia frente a la meta (superficie clara, como en la aplicación). */}
-      <div className="relative z-10 rounded-2xl border border-white/60 bg-soft text-ink shadow-[0_40px_100px_-30px_rgba(0,0,0,0.85)] lg:absolute lg:top-[178px] lg:right-0 lg:w-[74%]">
+      <div className="relative z-10 rounded-2xl border border-white/60 bg-soft text-ink shadow-[0_40px_100px_-30px_rgba(0,0,0,0.85)] xl:absolute xl:top-[178px] xl:right-0 xl:w-[74%]">
         <div className="flex items-center justify-between border-b border-line px-5 py-3">
           <span className="text-xs font-semibold text-navy">Resultados · serie percibida</span>
           <span className="rounded-full bg-neutral px-2 py-0.5 text-[10px] text-muted">Datos ilustrativos</span>
         </div>
-        <div className="grid grid-cols-[1fr_auto] gap-4 px-5 pt-4 pb-5">
+        <div className="grid grid-cols-[minmax(0,1fr)] gap-4 px-4 pt-4 pb-5 sm:grid-cols-[minmax(0,1fr)_auto] sm:px-5">
           <div>
             <div className="flex items-baseline justify-between"><p className="text-[10.5px] font-semibold tracking-[0.08em] text-muted uppercase">Madurez por familia</p><p className="flex items-center gap-1.5 text-[10px] text-muted"><span className="inline-block h-3 w-[3px] rounded-sm bg-gold" aria-hidden />Meta {fmtScore(DEFAULT_TARGET)}</p></div>
             <ul className="mt-3 space-y-2.5">
               {MGDA_FAMILIES.map((f, i) => {
                 const v = ILLUSTRATIVE_FAMILIES[i];
                 return (
-                  <li key={f.key} className="grid grid-cols-[128px_1fr_32px] items-center gap-2.5 text-[11.5px]">
-                    <span className="whitespace-nowrap text-ink">{f.title}</span>
+                  <li key={f.key} className="grid grid-cols-[minmax(0,118px)_1fr_32px] items-center gap-2.5 text-[11.5px] sm:grid-cols-[128px_1fr_32px]">
+                    <span className="truncate text-ink">{f.title}</span>
                     <span className="relative h-2 rounded-sm bg-neutral">
                       <span className="absolute inset-y-0 left-0 rounded-sm" style={{ width: `${(v / 5) * 100}%`, background: LEVEL_COLORS[levelIndex(v)] }} />
                       <span className="absolute -top-1 -bottom-1 w-[3px] rounded-sm bg-gold" style={{ left: `calc(${(DEFAULT_TARGET / 5) * 100}% - 1px)` }} />
@@ -64,7 +64,7 @@ export function HeroVisual() {
               })}
             </ul>
           </div>
-          <div className="flex w-[88px] flex-col items-center justify-center border-l border-line pl-4 text-center">
+          <div className="hidden w-[88px] flex-col items-center justify-center border-l border-line pl-4 text-center sm:flex">
             <Ring value={86} />
             <p className="mt-2 text-[10.5px] leading-tight text-muted">Cobertura del diagnóstico</p>
             <p className="text-[10.5px] font-medium text-mint-strong">Parcial</p>
@@ -73,7 +73,7 @@ export function HeroVisual() {
       </div>
 
       {/* Capa frontal: trazabilidad de una brecha hasta su evidencia. */}
-      <div ref={front} className="relative z-20 mt-4 lg:absolute lg:bottom-0 lg:left-[4%] lg:mt-0 lg:w-[58%]">
+      <div ref={front} className="relative z-20 mt-4 xl:absolute xl:bottom-0 xl:left-[4%] xl:mt-0 xl:w-[58%]">
         <div className="glass float-slow p-4">
           <p className="text-[10.5px] font-semibold tracking-[0.12em] text-mint uppercase">Trazabilidad de una brecha</p>
           <ol className="relative mt-3 space-y-2.5 pl-5">

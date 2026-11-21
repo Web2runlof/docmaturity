@@ -34,7 +34,7 @@ export default function QuestionBankPage() {
           <Button icon={<Download className="size-4" />} onClick={exportCsv}>CSV</Button>
         </>
       } />
-      <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[280px_1fr]">
         <nav aria-label="Dimensiones" className="panel h-fit p-2">
           <button onClick={() => setDim('')} className={cx('w-full rounded-md px-3 py-2 text-left text-sm', !dim ? 'bg-navy text-white' : 'hover:bg-slate-50')}>Todas las dimensiones</button>
           {DIMENSIONS.map((x) => (

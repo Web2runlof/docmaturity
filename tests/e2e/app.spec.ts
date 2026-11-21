@@ -258,3 +258,32 @@ test('Rediseño · la navegación de la aplicación indica el siguiente paso con
   const current = page.getByRole('navigation', { name: 'Navegación principal' }).locator('[aria-current="page"]');
   await expect(current).toHaveCount(1);
 });
+
+test('Rediseño · flujo de intercambio: exporta el paquete de la evaluación y lo importa en otro navegador', async ({ page, browser }) => {
+  await page.goto('');
+  await page.getByRole('button', { name: 'Explorar demostración' }).first().click();
+  await expect(page).toHaveURL(/resultados/, { timeout: 30_000 });
+  await page.goto(page.url().replace('/resultados', '/informes'));
+  const card = page.locator('section', { has: page.getByRole('heading', { name: 'Paquete de evaluación' }) });
+  const [pkgDl] = await Promise.all([page.waitForEvent('download'), (async () => {
+    await card.getByRole('button', { name: 'Exportar' }).click();
+    await page.getByRole('dialog').getByRole('button', { name: 'Exportar' }).click();
+  })()]);
+  expect(pkgDl.suggestedFilename()).toMatch(/\.dm-assessment\.json$/);
+  const dir = await mkdtemp(join(tmpdir(), 'docmaturity-e2e-'));
+  const pkgPath = join(dir, 'evaluacion.dm-assessment.json');
+  await pkgDl.saveAs(pkgPath);
+
+  const other = await browser.newContext({ locale: 'es-CO' });
+  const op = await other.newPage();
+  const external = watchExternal(op);
+  await op.goto('#/app');
+  await op.getByRole('button', { name: 'Importar evaluación' }).first().click();
+  await op.getByRole('dialog').locator('input[type="file"]').setInputFiles(pkgPath);
+  await op.getByRole('dialog').getByRole('button', { name: 'Importar', exact: true }).click();
+  await expect(op.getByText('Evaluación importada').first()).toBeVisible();
+  await op.goto('#/app/evaluaciones');
+  await expect(op.getByText('Demostración: diagnóstico 2026').first()).toBeVisible();
+  expect(external).toEqual([]);
+  await other.close();
+});

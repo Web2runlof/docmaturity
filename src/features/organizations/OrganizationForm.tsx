@@ -91,7 +91,7 @@ export default function OrganizationForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
       <PageHeader eyebrow="Caracterización" title={existing ? `Editar ${existing.name}` : 'Nueva organización'} description="Los campos opcionales pueden dejarse vacíos o marcarse como desconocidos: la aplicación no los rellena automáticamente." actions={<><Button onClick={() => nav(-1)}>Cancelar</Button><Button type="submit" variant="primary" busy={isSubmitting}>Guardar</Button></>} />
-      <div className="grid gap-6 xl:grid-cols-[1fr_360px]">
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-6 xl:grid-cols-[1fr_360px]">
         <div className="space-y-6">
           <Section id="org-basicos" eyebrow="Bloque 1 de 3 · Identificación" title="Datos básicos">
             <div className="grid gap-4 md:grid-cols-2">

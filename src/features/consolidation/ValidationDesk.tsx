@@ -57,7 +57,7 @@ export default function ValidationDesk() {
     <>
       <PageHeader eyebrow="Triangulación y consolidación" title="Mesa de validación" description="Contraste respuestas, evidencias y contradicciones. El nivel validado prevalece solo en los indicadores de madurez validada y nunca sobrescribe las respuestas originales." />
       {lowCoverage.length > 0 && <div className="mb-4"><Callout tone="warning" title="Dimensiones con baja cobertura">{lowCoverage.map((a) => `${a.dimensionId} (${a.message})`).join(' · ')}</Callout></div>}
-      <div className="grid gap-6 xl:grid-cols-[380px_minmax(0,1fr)]">
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-6 xl:grid-cols-[380px_minmax(0,1fr)]">
         <Section>
           <div className="space-y-2">
             <div className="relative"><Search className="pointer-events-none absolute left-2.5 top-2.5 size-4 text-muted" aria-hidden /><Input aria-label="Buscar criterio" placeholder="Buscar criterio" className="pl-8" value={q} onChange={(e) => setQ(e.target.value)} /></div>

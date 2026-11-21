@@ -142,7 +142,7 @@ export default function HomePage() {
             </Callout>
           )}
 
-          <div className="grid gap-6 xl:grid-cols-[1.6fr_1fr]">
+          <div className="grid grid-cols-[minmax(0,1fr)] gap-6 xl:grid-cols-[1.6fr_1fr]">
             <div className="space-y-6">
               <Section title="Evaluaciones en curso" description="Avance del ciclo de trabajo y siguiente paso recomendado, calculados con los datos de cada evaluación." actions={<Link to="/app/evaluaciones/nueva" className={buttonClass('secondary', 'sm')}><Plus className="size-3.5" aria-hidden />Nueva evaluación</Link>}>
                 {inProgress.length ? (

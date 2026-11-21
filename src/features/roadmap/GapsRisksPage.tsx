@@ -78,7 +78,7 @@ function Risks({ a, risks, aid, locked }: { a: A; risks: Risk[]; aid: string; lo
   const matrix = riskMatrix(risks);
   const pendingSuggestions = a.suggestedRisks.filter((s) => !risks.some((r) => r.libraryId === s.libraryId));
   return (
-    <div className="grid gap-6 xl:grid-cols-[1.5fr_1fr]">
+    <div className="grid grid-cols-[minmax(0,1fr)] gap-6 xl:grid-cols-[1.5fr_1fr]">
       <Section title="Registro de riesgos" actions={<Button size="sm" disabled={locked} icon={<Plus className="size-3.5" />} onClick={() => setEdit({ id: uuid(), assessmentId: aid, libraryId: 'MANUAL', title: '', description: '', questionIds: [], status: 'valorado', probability: null, impact: null, residualProbability: null, residualImpact: null, owner: '', treatment: '', createdAt: nowISO(), updatedAt: nowISO() })}>Riesgo manual</Button>}>
         {pendingSuggestions.length > 0 && (
           <div className="mb-4"><Callout tone="info" title={`${plural(pendingSuggestions.length, 'riesgo potencial sugerido', 'riesgos potenciales sugeridos')} por las brechas`}>

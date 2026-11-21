@@ -88,7 +88,7 @@ export default function RoadmapPage() {
             </Section>
           </TabPanel>
           <TabPanel value="portafolio">
-            <div className="grid gap-6 xl:grid-cols-[1.4fr_1fr]">
+            <div className="grid grid-cols-[minmax(0,1fr)] gap-6 xl:grid-cols-[1.4fr_1fr]">
               <Section title="Portafolio de proyectos">
                 <div className="overflow-x-auto"><table className="table-pro">
                   <thead><tr><th>Código</th><th>Iniciativa</th><th>Fase</th><th>Responsable</th><th>Criterios</th><th>Presupuesto</th><th>Estado</th></tr></thead>

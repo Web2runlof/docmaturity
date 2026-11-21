@@ -211,6 +211,9 @@
     color: var(--color-ink);
   }
   .btn-ghost:hover:not(:disabled) { background: var(--color-neutral); }
+  /* Sobre superficies oscuras (navegación, encabezados de enfoque) el botón fantasma usa texto claro. */
+  .on-dark .btn-ghost { color: #e2e8f0; }
+  .on-dark .btn-ghost:hover:not(:disabled) { background: rgb(255 255 255 / 0.08); color: #fff; }
   .btn-danger {
     background: #fff;
     border-color: #f3c1c1;

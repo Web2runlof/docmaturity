@@ -155,7 +155,7 @@ function LabSession({ aid }: { aid: string }) {
         <p className="sr-only" aria-live="polite">{announce}</p>
       </section>
 
-      <div className="grid gap-6 xl:grid-cols-[1fr_320px]">
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-6 xl:grid-cols-[1fr_320px]">
         <Tabs value={tab} onValueChange={setTab} tabs={[{ value: 'expediente', label: 'Expediente del caso' }, { value: 'entrevistas', label: 'Entrevistas simuladas' }, { value: 'lecturas', label: 'Lecturas' }, { value: 'entregable', label: 'Entregable' }]}>
           <TabPanel value="expediente">
             {c ? (

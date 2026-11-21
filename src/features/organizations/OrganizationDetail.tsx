@@ -42,7 +42,7 @@ export default function OrganizationDetail() {
           <Button variant="danger" icon={<Trash2 className="size-4" />} onClick={openDelete}>Eliminar</Button>
         </>
       } />
-      <div className="grid gap-6 xl:grid-cols-[1.4fr_1fr]">
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-6 xl:grid-cols-[1.4fr_1fr]">
         <div className="space-y-6">
           <Section title="Evaluaciones" actions={<Link to={`/app/evaluaciones/nueva?org=${oid}`} className={buttonClass('primary', 'sm')}><Plus className="size-3.5" aria-hidden />Nueva evaluación</Link>}>
             {assessments?.length ? (

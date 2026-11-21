@@ -76,7 +76,7 @@ docs/                  documentación, banco exportable (JSON/CSV) y trazabilida
 - [Especificación del producto](docs/PRODUCT_SPECIFICATION.md)
 - [Metodología DIAM](docs/METHODOLOGY_DIAM.md) · [Banco de criterios](docs/QUESTION_BANK.md) · [Registro de fuentes](docs/SOURCE_REGISTER.md) · [Trazabilidad (CSV)](docs/SOURCE_TRACEABILITY.csv)
 - [Motor de calificación](docs/SCORING_ENGINE.md) · [Reglas de aplicabilidad](docs/APPLICABILITY_RULES.md)
-- [Modelo de datos](docs/DATA_MODEL.md) · [Arquitectura](docs/ARCHITECTURE.md) · [Privacidad y seguridad](docs/PRIVACY_AND_SECURITY.md)
+- [Modelo de datos](docs/DATA_MODEL.md) · [Arquitectura](docs/ARCHITECTURE.md) · [Sistema visual](docs/DESIGN_SYSTEM.md) · [Privacidad y seguridad](docs/PRIVACY_AND_SECURITY.md)
 - [Flujo de entrevistas](docs/INTERVIEW_WORKFLOW.md) · [Guía de usuario](docs/USER_GUIDE.md) · [Guía académica](docs/ACADEMIC_GUIDE.md)
 - [Despliegue](docs/DEPLOYMENT.md) · [Informe de pruebas](docs/TEST_REPORT.md) · [Limitaciones conocidas](docs/KNOWN_LIMITATIONS.md) · [Cambios](docs/CHANGELOG.md) · [Progreso](docs/PROGRESS.md)
 

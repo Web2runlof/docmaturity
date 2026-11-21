@@ -37,16 +37,19 @@ export function PublicLayout() {
       <header className={cx('on-dark z-40 text-white transition-[background-color,border-color] duration-300', home ? 'fixed inset-x-0 top-0' : 'sticky top-0', solid ? 'border-b border-white/10 bg-midnight/90 backdrop-blur-md' : 'border-b border-transparent bg-transparent')}>
         <div className="mx-auto flex h-16 max-w-[1280px] items-center justify-between px-5 md:px-8">
           <Link to="/" aria-label="DOCMATURITY, inicio"><Logo inverted /></Link>
-          <nav aria-label="Sitio" className="hidden items-center gap-7 lg:flex">
+          <nav aria-label="Sitio" className="hidden items-center gap-7 xl:flex">
             {LINKS.map((l) => (
               <NavLink key={l.to} to={l.to} className={({ isActive }) => cx('relative text-sm transition-colors duration-200 after:absolute after:-bottom-1.5 after:left-0 after:h-px after:bg-mint after:transition-all after:duration-300', isActive ? 'text-white after:w-full' : 'text-fog after:w-0 hover:text-white hover:after:w-full')}>{l.label}</NavLink>
             ))}
             <Link to="/app" className={buttonClass('primary', 'sm', 'h-9 px-4')}>Abrir aplicación</Link>
           </nav>
-          <button className="flex size-10 items-center justify-center rounded-md text-white lg:hidden" onClick={() => setOpen(!open)} aria-label={open ? 'Cerrar menú' : 'Abrir menú'} aria-expanded={open}>{open ? <X className="size-5" /> : <Menu className="size-5" />}</button>
+          <div className="flex items-center gap-2 xl:hidden">
+            <Link to="/app" className={buttonClass('primary', 'sm', 'hidden h-9 px-4 sm:inline-flex')}>Abrir aplicación</Link>
+            <button className="flex size-10 items-center justify-center rounded-md text-white" onClick={() => setOpen(!open)} aria-label={open ? 'Cerrar menú' : 'Abrir menú'} aria-expanded={open}>{open ? <X className="size-5" /> : <Menu className="size-5" />}</button>
+          </div>
         </div>
         {open && (
-          <nav aria-label="Sitio móvil" className="border-t border-white/10 px-5 pb-5 pt-2 lg:hidden">
+          <nav aria-label="Sitio móvil" className="border-t border-white/10 px-5 pb-5 pt-2 xl:hidden">
             {LINKS.map((l) => <Link key={l.to} to={l.to} className="flex min-h-11 items-center border-b border-white/5 text-[0.95rem] text-slate-200">{l.label}</Link>)}
             <Link to="/app" className={buttonClass('primary', 'md', 'mt-4 w-full')}>Abrir aplicación</Link>
           </nav>

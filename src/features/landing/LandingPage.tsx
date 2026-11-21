@@ -99,7 +99,7 @@ function Hero({ busy, onDemo }: { busy: boolean; onDemo: () => void }) {
         <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-midnight to-transparent" />
       </div>
 
-      <div className="mx-auto grid w-full max-w-[1240px] items-center gap-14 px-5 pt-28 pb-16 md:px-8 lg:grid-cols-[1fr_1.04fr] lg:gap-10 lg:pt-32 lg:pb-20">
+      <div className="mx-auto grid w-full max-w-[1240px] grid-cols-[minmax(0,1fr)] items-center gap-14 px-5 pt-28 pb-16 md:px-8 lg:pt-32 xl:grid-cols-[1fr_1.04fr] xl:gap-10 xl:pb-20">
         <div>
           <Reveal>
             <p className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.05] px-3.5 py-1.5 text-xs text-fog backdrop-blur">
@@ -109,7 +109,7 @@ function Hero({ busy, onDemo }: { busy: boolean; onDemo: () => void }) {
           </Reveal>
           <Reveal delay={80}>
             <h1 id="hero-t" className="mt-7 max-w-[620px] font-display text-[2.3rem] leading-[1.06] font-extrabold tracking-[-0.028em] text-white sm:text-[2.85rem] lg:text-[3.3rem]">
-              Diagnostique lo que funciona. Evidencie lo que falta. <span className="whitespace-nowrap">Priorice <span className="text-mint">lo que sigue.</span></span>
+              Diagnostique lo que funciona. Evidencie lo que falta. <span className="sm:whitespace-nowrap">Priorice <span className="text-mint">lo que sigue.</span></span>
             </h1>
           </Reveal>
           <Reveal delay={160}>
