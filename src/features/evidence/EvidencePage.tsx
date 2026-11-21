@@ -1,6 +1,6 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, type ReactNode } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
-import { FileCheck2, Paperclip, Plus, Trash2 } from 'lucide-react';
+import { CircleDashed, CircleDot, FileCheck2, MinusCircle, Paperclip, Plus, ShieldCheck, Trash2 } from 'lucide-react';
 import type { Evidence, EvidenceStatus } from '@/types/domain';
 import { useAssessmentData } from '@/hooks/useAssessment';
 import { Button, Callout, ConfirmDialog, Dialog, EmptyState, Field, Input, PageHeader, Section, Select, Tag, Textarea } from '@/components/ui';
@@ -12,6 +12,10 @@ import { Loading, NotFound } from '../common';
 
 const STATUSES: EvidenceStatus[] = ['E0', 'E1', 'E2', 'E3'];
 const TONE: Record<EvidenceStatus, 'neutral' | 'warning' | 'info' | 'teal'> = { E0: 'neutral', E1: 'warning', E2: 'info', E3: 'teal' };
+/** El estado de evidencia se comunica con icono y texto, nunca solo con color. */
+const EV_ICON: Record<EvidenceStatus, ReactNode> = {
+  E0: <MinusCircle className="size-3" aria-hidden />, E1: <CircleDashed className="size-3" aria-hidden />, E2: <CircleDot className="size-3" aria-hidden />, E3: <ShieldCheck className="size-3" aria-hidden />,
+};
 
 export default function EvidencePage() {
   const { aid = '' } = useParams();
@@ -45,7 +49,7 @@ export default function EvidencePage() {
                     <tr key={e.id}>
                       <td className="font-medium text-navy">{e.questionId}</td>
                       <td><div>{e.title || 'Sin título'}</div><div className="text-xs text-muted">{e.reference}{e.attachment && <span className="ml-2 inline-flex items-center gap-1"><Paperclip className="size-3" />{e.attachment.name} ({fmtBytes(e.attachment.size)})</span>}</div></td>
-                      <td><Tag tone={TONE[e.status]}>{e.status} · {EVIDENCE_LABEL[e.status]}</Tag></td>
+                      <td><Tag tone={TONE[e.status]} icon={EV_ICON[e.status]}>{e.status} · {EVIDENCE_LABEL[e.status]}</Tag></td>
                       <td className="text-xs text-muted">{e.reviewer || '—'}{e.reviewResult && <div className="max-w-xs">{e.reviewResult}</div>}</td>
                       <td><div className="flex justify-end gap-1">
                         {e.attachment && <Button size="sm" variant="ghost" onClick={() => downloadBlob(e.attachment!.data, e.attachment!.name)}>Abrir</Button>}

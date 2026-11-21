@@ -1,48 +1,47 @@
-import { useState, type ReactNode } from 'react';
+import { Suspense, lazy, useState, type CSSProperties, type ReactNode } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowRight, BarChart3, Building2, Check, ClipboardCheck, FileJson, FileSearch, GraduationCap, Lock, Route, ShieldCheck, Users } from 'lucide-react';
-import { DIMENSIONS, QUESTIONS, SOURCES, LEVEL_NAMES, getDimensionFamily } from '@/data/bank';
+import { ArrowRight, ArrowUpRight, Database, FileJson, FileSearch, HardDriveDownload, KeyRound, Lock, WifiOff } from 'lucide-react';
+import { DIMENSIONS, QUESTIONS, SOURCES, getDimensionFamily } from '@/data/bank';
 import type { VerificationStatus } from '@/types/bank';
-import { EChart } from '@/components/charts/EChart';
-import { LevelLegend } from '@/components/charts/LevelLegend';
-import { heatmapOption } from '@/components/charts/options';
-import { DEFAULT_THRESHOLDS, LEVEL_COLORS } from '@/engine/constants';
-import { levelIndex } from '@/engine/scoring';
+import { EVIDENCE_FACTOR, LEVEL_COLORS, PRIORITY_WEIGHTS } from '@/engine/constants';
 import { openOrLoadDemo } from '@/services/demo';
 import { attempt } from '@/app/store';
-import { MGDA_FAMILIES, TIER_LABEL, VERIFICATION_LABEL, WORK_CYCLE } from '@/config/vocabulary';
-import { cx, fmtPct, fmtScore } from '@/utils/core';
+import { MGDA_FAMILIES, MODALITY_LABEL, TIER_LABEL, VERIFICATION_LABEL, WORK_CYCLE } from '@/config/vocabulary';
+import { buttonClass, SkeletonLoader } from '@/components/ui';
+import { AmbientImage, AnimatedCounter, MotionScope, Reveal, useInViewOnce, useScrollProgress } from '@/components/motion';
+import { cx, fmtPct } from '@/utils/core';
+import { EvidenceLadder, ExportChips, HeatStrip, HeroVisual, LevelScale, MedianDots, PhaseLanes, RiskGrid, StepVisual } from './visuals';
+import estratos1024 from '@/assets/images/estratos-1024.webp';
+import estratos1920 from '@/assets/images/estratos-1920.webp';
+import fachada1024 from '@/assets/images/fachada-1024.webp';
+import fachada1920 from '@/assets/images/fachada-1920.webp';
+import topografia1024 from '@/assets/images/topografia-1024.webp';
+import topografia1920 from '@/assets/images/topografia-1920.webp';
 
-/** Datos ilustrativos simulados para la composición visual de la portada (no provienen de ninguna organización). */
-const ILLUSTRATIVE = {
-  global: 2.1,
-  coverage: 86,
-  support: 41,
-  families: [2.62, 1.9, 2.45, 1.38, 2.05],
-  /** Brechas en orden de prioridad, con códigos y nombres reales del banco. */
-  gaps: [
-    { id: 'D11-Q01', level: 1, target: 3 },
-    { id: 'D03-Q02', level: 1.5, target: 3 },
-    { id: 'D03-Q01', level: 2, target: 3 },
-  ],
-  /** Mapa de calor ilustrativo: familia (filas) × perfil (columnas). */
-  heatCols: ['Alta dirección', 'Gestión documental', 'Tecnología', 'Jurídica'],
-  heat: [
-    [3.0, 2.5, 2.0, 2.5],
-    [2.0, 2.5, 1.5, 1.0],
-    [2.5, 3.0, 2.0, 2.0],
-    [1.5, 2.0, 2.5, 1.0],
-    [2.0, 2.5, 1.5, 2.0],
-  ],
-};
+/** La vista de producto usa ECharts: se carga solo cuando el bloque se acerca a la vista. */
+const ProductShowcase = lazy(() => import('./ProductShowcase'));
 
-const CYCLE_ICONS = { caracterizar: Building2, alcance: ClipboardCheck, entrevistar: Users, validar: FileSearch, analizar: BarChart3, planear: Route } as const;
-
+const CRITICAL = QUESTIONS.filter((q) => q.isCritical).length;
 const TIER_COUNTS = { quick: QUESTIONS.filter((q) => q.coreTier === 'quick').length, standard: QUESTIONS.filter((q) => q.coreTier !== 'professional').length, professional: QUESTIONS.length };
+const WORDS: Record<number, string> = { 4: 'cuatro', 5: 'cinco', 6: 'seis', 15: 'quince' };
+const spell = (v: number) => WORDS[v] ?? v.toLocaleString('es-CO');
+const capitalize = (t: string) => t.charAt(0).toUpperCase() + t.slice(1);
+const n = (v: number) => v.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+/** Cifras del producto: todas se derivan del banco versionado y de la configuración, nunca se escriben a mano. */
+const METRICS = [
+  { value: DIMENSIONS.length, label: 'dimensiones', note: `en ${MGDA_FAMILIES.length} familias de capacidades` },
+  { value: QUESTIONS.length, label: 'criterios', note: 'con verificaciones observables' },
+  { value: QUESTIONS.length * 6, label: 'descriptores de nivel', note: 'redactados para cada criterio' },
+  { value: CRITICAL, label: 'criterios críticos', note: 'alertan en los niveles 0 y 1' },
+  { value: Object.keys(MODALITY_LABEL).length, label: 'modalidades', note: 'de rápida a personalizada' },
+  { value: SOURCES.length, label: 'referentes', note: 'con estado de verificación' },
+];
+
 const MODALITIES = [
-  { name: TIER_LABEL.quick, count: TIER_COUNTS.quick, time: 'Una sesión', color: LEVEL_COLORS[5], text: 'Panorama inicial con los criterios esenciales de cada dimensión.' },
-  { name: TIER_LABEL.standard, count: TIER_COUNTS.standard, time: 'Varias entrevistas', color: LEVEL_COLORS[3], text: `Diagnóstico equilibrado para planificar con varios perfiles. Incluye los criterios de la modalidad ${TIER_LABEL.quick}.` },
-  { name: TIER_LABEL.professional, count: TIER_COUNTS.professional, time: 'Consultoría', color: '#8FC9C0', text: 'Todos los criterios del banco, con evidencias y validación detallada.' },
+  { key: 'quick', name: TIER_LABEL.quick, count: TIER_COUNTS.quick, time: 'Una sesión', color: LEVEL_COLORS[5], text: 'Panorama inicial con los criterios esenciales de cada dimensión.' },
+  { key: 'standard', name: TIER_LABEL.standard, count: TIER_COUNTS.standard, time: 'Varias entrevistas', color: LEVEL_COLORS[3], text: `Diagnóstico equilibrado para planificar con varios perfiles. Incluye los criterios de la modalidad ${TIER_LABEL.quick}.` },
+  { key: 'professional', name: TIER_LABEL.professional, count: TIER_COUNTS.professional, time: 'Consultoría', color: '#8FC9C0', text: 'Todos los criterios del banco, con evidencias y validación detallada.' },
 ];
 
 const FAQ = [
@@ -55,8 +54,6 @@ const FAQ = [
   { q: '¿Funciona sin conexión?', a: 'Sí. Después de la primera visita la aplicación se instala como aplicación web progresiva y funciona sin conexión.' },
 ];
 
-const coverageBandLabel = (v: number) => (v < DEFAULT_THRESHOLDS.coverageInsufficient ? 'Insuficiente' : v < DEFAULT_THRESHOLDS.coverageExploratory ? 'Exploratoria' : v < DEFAULT_THRESHOLDS.coveragePartial ? 'Parcial' : 'Alta');
-
 export default function LandingPage() {
   const nav = useNavigate();
   const [busy, setBusy] = useState(false);
@@ -67,363 +64,541 @@ export default function LandingPage() {
     setBusy(false);
     if (id) nav(`/app/evaluaciones/${id}/resultados`);
   };
-  const typeCounts = SOURCES.reduce<Record<string, number>>((acc, s) => ({ ...acc, [s.type]: (acc[s.type] ?? 0) + 1 }), {});
-  const verification = (Object.keys(VERIFICATION_LABEL) as VerificationStatus[]).map((k) => ({ k, label: VERIFICATION_LABEL[k], n: SOURCES.filter((s) => s.verificationStatus === k).length }));
-  const critical = QUESTIONS.filter((q) => q.isCritical).length;
 
   return (
     <>
       <Hero busy={busy} onDemo={demo} />
-
-      {/* 1. Introducción */}
-      <Band id="introduccion" eyebrow="01 · El diagnóstico" title="Un diagnóstico que distingue lo que se percibe de lo que se demuestra.">
-        <div className="grid gap-10 md:grid-cols-3">
-          <Prose title="Qué evalúa">Capacidades organizacionales para crear, gestionar, proteger, preservar y aprovechar documentos e información, desde la política hasta la automatización.</Prose>
-          <Prose title="Cómo lo sustenta">Cada criterio tiene seis descriptores de nivel, verificaciones observables y evidencias sugeridas. Los resultados declaran su cobertura y su soporte de evidencias.</Prose>
-          <Prose title="Qué no hace">No certifica, no emite puntajes oficiales y no reemplaza el análisis jurídico. Las asociaciones con referentes son conceptuales y verificables.</Prose>
-        </div>
-      </Band>
-
-      {/* 2. Cómo funciona */}
-      <Band id="como-funciona" eyebrow="02 · Cómo funciona" title="Seis momentos de un mismo ciclo de trabajo." tone="white">
-        <ol className="grid gap-x-10 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
-          {WORK_CYCLE.map((s, i) => {
-            const Icon = CYCLE_ICONS[s.key as keyof typeof CYCLE_ICONS];
-            return (
-              <li key={s.key} className="border-t-2 border-navy pt-5">
-                <div className="flex items-baseline justify-between"><span className="font-display text-3xl font-semibold text-slate-300 num">{String(i + 1).padStart(2, '0')}</span><Icon className="size-5 text-teal" aria-hidden /></div>
-                <h3 className="mt-3 text-lg font-semibold">{s.title}</h3>
-                <p className="mt-2 text-sm text-muted">{s.text}</p>
-              </li>
-            );
-          })}
-        </ol>
-        <p className="mt-8 text-sm"><Link to="/como-funciona" className="inline-flex items-center gap-1 font-medium text-teal hover:underline">Ver dónde se hace cada momento en la aplicación <ArrowRight className="size-4" aria-hidden /></Link></p>
-      </Band>
-
-      {/* 3. Dimensiones */}
-      <Band id="dimensiones" eyebrow="03 · Dimensiones de evaluación" title="Quince dimensiones organizadas en cinco familias.">
-        <div className="grid gap-px overflow-hidden rounded-lg border border-line bg-line lg:grid-cols-5">
-          {MGDA_FAMILIES.map((f) => {
-            const dims = DIMENSIONS.filter((d) => getDimensionFamily(d.id) === f.key);
-            return (
-              <div key={f.key} className="flex flex-col bg-white p-5">
-                <p className="text-[11px] font-semibold tracking-[0.1em] text-gold uppercase">{f.key}</p>
-                <h3 className="mt-2 text-base font-semibold">{f.title}</h3>
-                <p className="mt-1 text-xs text-muted">{f.text}</p>
-                <ul className="mt-4 space-y-2.5 border-t border-line pt-4">
-                  {dims.map((d) => (
-                    <li key={d.id} className="grid grid-cols-[36px_1fr] gap-2 text-sm">
-                      <span className="text-xs font-semibold text-teal num">{d.id}</span>
-                      <span><span className="font-medium text-ink">{d.name}</span><span className="block text-xs text-muted">{QUESTIONS.filter((q) => q.dimensionId === d.id).length} criterios</span></span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            );
-          })}
-        </div>
-        <p className="mt-4 max-w-4xl text-xs text-muted">Las familias se inspiran en los componentes del Modelo de Gestión Documental y Administración de Archivos, usados como lente de lectura. La familia de cada dimensión corresponde a su componente MGDA predominante; cada criterio conserva su propio componente. {critical} criterios están marcados como críticos y generan alertas cuando se ubican en niveles 0 o 1. <Link to="/metodologia#componentes" className="text-teal hover:underline">Ver criterios por componente</Link>.</p>
-      </Band>
-
-      {/* 4. Referentes */}
-      <Band id="referentes" eyebrow="04 · Referentes metodológicos" title="Fundamentación declarada, con estado de verificación por referente." tone="white">
-        <div className="grid gap-10 lg:grid-cols-[1fr_1.2fr]">
-          <div className="space-y-4 text-sm text-muted">
-            <p>El modelo se construyó a partir de normativa colombiana, estándares internacionales de gestión de documentos y preservación, modelos de madurez y requisitos de sistemas, y literatura académica.</p>
-            <p>Cada uno de los {SOURCES.length} referentes declara si fue verificado, verificado parcialmente, usado como referencia conceptual o aún no verificado. DOCMATURITY no reproduce textos protegidos ni afirma correspondencias con cláusulas específicas.</p>
-            <Link to="/referentes" className="inline-flex items-center gap-1 font-medium text-teal hover:underline">Ver el registro de referentes <ArrowRight className="size-4" aria-hidden /></Link>
-          </div>
-          <div className="space-y-5">
-            <figure>
-              <figcaption className="mb-2 text-xs font-semibold tracking-[0.08em] text-muted uppercase">Estado de verificación</figcaption>
-              <div className="flex h-3 overflow-hidden rounded-full bg-slate-100" aria-hidden>
-                {verification.map((v, i) => <span key={v.k} style={{ width: `${(v.n / SOURCES.length) * 100}%`, background: [LEVEL_COLORS[3], '#5FA59B', '#B9D8D3', '#E2E8F0'][i] }} />)}
-              </div>
-              <dl className="mt-3 grid grid-cols-2 gap-x-6 gap-y-2 sm:grid-cols-4">
-                {verification.map((v, i) => (
-                  <div key={v.k}><dt className="flex items-center gap-1.5 text-xs text-muted"><span className="inline-block size-2.5 rounded-[2px]" style={{ background: [LEVEL_COLORS[3], '#5FA59B', '#B9D8D3', '#CBD5E1'][i] }} aria-hidden />{v.label}</dt><dd className="font-display text-2xl font-semibold text-navy num">{v.n}</dd></div>
-                ))}
-              </dl>
-            </figure>
-            <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-4">
-              {[
-                ['norma_juridica', 'Normas jurídicas'], ['estandar_tecnico', 'Estándares técnicos'], ['modelo_madurez', 'Modelos de madurez'], ['modelo_requisitos', 'Modelos de requisitos'],
-                ['metodologia', 'Metodologías'], ['buena_practica', 'Buenas prácticas'], ['modelo_gestion', 'Modelos de gestión'], ['referente_academico', 'Referentes académicos'],
-              ].map(([k, label]) => (
-                <div key={k} className="bg-white p-4"><dt className="text-xs text-muted">{label}</dt><dd className="mt-1 font-display text-2xl font-semibold text-navy num">{typeCounts[k] ?? 0}</dd></div>
-              ))}
-            </dl>
-          </div>
-        </div>
-      </Band>
-
-      {/* 5. Modalidades */}
-      <Band id="modalidades" eyebrow="05 · Modalidades de diagnóstico" title="La profundidad se ajusta al propósito.">
-        <div className="panel p-6">
-          <div className="relative h-3 rounded-full bg-slate-100" aria-hidden>
-            {MODALITIES.slice().reverse().map((m) => <span key={m.name} className="absolute inset-y-0 left-0 rounded-full" style={{ width: `${(m.count / QUESTIONS.length) * 100}%`, background: m.color }} />)}
-          </div>
-          <div className="mt-6 grid gap-8 md:grid-cols-4">
-            {MODALITIES.map((m) => (
-              <div key={m.name}>
-                <p className="font-display text-3xl font-semibold text-navy num">{m.count}</p>
-                <p className="text-xs text-muted">criterios · {fmtPct((m.count / QUESTIONS.length) * 100)} del banco</p>
-                <h3 className="mt-3 flex items-center gap-2 text-base font-semibold"><span className="size-2.5 rounded-sm" style={{ background: m.color }} aria-hidden />{m.name}</h3>
-                <p className="text-xs font-medium text-teal">{m.time}</p>
-                <p className="mt-1 text-sm text-muted">{m.text}</p>
-              </div>
-            ))}
-            <div>
-              <p className="font-display text-3xl font-semibold text-navy">A la medida</p>
-              <p className="text-xs text-muted">dimensiones y criterios elegidos</p>
-              <h3 className="mt-3 flex items-center gap-2 text-base font-semibold"><span className="size-2.5 rounded-sm border border-dashed border-slate-400" aria-hidden />Personalizado</h3>
-              <p className="text-xs font-medium text-teal">Alcance focalizado</p>
-              <p className="mt-1 text-sm text-muted">Dimensiones seleccionadas, preguntas propias y exclusiones justificadas.</p>
-            </div>
-          </div>
-        </div>
-      </Band>
-
-      {/* 6. Entrevistas */}
-      <Band id="entrevistas" eyebrow="06 · Entrevistas y consolidación" title="Entrevistas distribuidas sin servidor." tone="white">
-        <InterviewLanes />
-      </Band>
-
-      {/* 7. Resultados visuales */}
-      <Band id="resultados" eyebrow="07 · Resultados visuales" title="Resultados que muestran su propio grado de certeza.">
-        <div className="grid gap-6 lg:grid-cols-[1.1fr_1fr]">
-          <figure className="panel p-5">
-            <figcaption className="mb-2 flex items-baseline justify-between"><span className="text-sm font-semibold text-navy">Mapa de calor por familia y perfil</span><span className="text-[11px] text-muted">Datos ilustrativos</span></figcaption>
-            <EChart height={260} label="Mapa de calor ilustrativo de mediana por familia y perfil de entrevistado" option={heatmapOption(MGDA_FAMILIES.map((f) => f.title), ILLUSTRATIVE.heatCols, ILLUSTRATIVE.heat, { valueLabel: 'Mediana' })} />
-            <div className="mt-2"><LevelLegend /></div>
-            <p className="mt-2 text-xs text-muted">En la aplicación, el mismo mapa se construye por dimensión y perfil (o área) con la mediana de las respuestas.</p>
-          </figure>
-          <div className="grid gap-4 sm:grid-cols-2">
-            {[
-              ['Madurez percibida y validada', 'Se presentan por separado; la validada solo considera criterios revisados por la persona evaluadora.'],
-              ['Cobertura', `Cuántos criterios del alcance tienen datos. Por debajo de ${DEFAULT_THRESHOLDS.coverageExploratory} %, el resultado se marca como exploratorio.`],
-              ['Soporte de evidencias', 'Nivel de sustento documental de cada criterio, de E0 a E3, expresado en porcentaje.'],
-              ['Solidez diagnóstica', 'Índice orientativo de 0 a 100 que combina cobertura, evidencias y acuerdo entre entrevistados.'],
-            ].map(([t, d]) => <div key={t} className="panel p-4"><h3 className="text-sm font-semibold">{t}</h3><p className="mt-1 text-xs text-muted">{d}</p></div>)}
-            <div className="panel p-4 sm:col-span-2">
-              <h3 className="text-sm font-semibold">Escala de madurez</h3>
-              <ol className="mt-3 grid grid-cols-6 gap-1">{LEVEL_NAMES.map((n, i) => <li key={n} className="text-center"><span className="block h-1.5 rounded-sm" style={{ background: LEVEL_COLORS[i] }} /><span className="mt-1.5 block text-[11px] font-semibold num">{i}</span><span className="block text-[10px] leading-tight text-muted">{n}</span></li>)}</ol>
-            </div>
-          </div>
-        </div>
-      </Band>
-
-      {/* 8. Protección */}
-      <Band id="proteccion" eyebrow="08 · Protección de información" title="Minimización de datos por diseño." tone="white">
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-          {[
-            [Lock, 'Datos en el dispositivo', 'Sin servidor, sin cuentas, sin telemetría ni rastreadores externos.'],
-            [FileJson, 'Archivos verificables', 'Paquetes con hash SHA-256 para detectar alteraciones accidentales. No constituyen firma digital.'],
-            [ShieldCheck, 'Cifrado opcional', 'Exportaciones con AES-GCM de 256 bits y clave derivada con PBKDF2. La contraseña no se guarda.'],
-            [FileSearch, 'Evidencias mínimas', 'Se recomienda registrar referencias y no adjuntar historias clínicas, expedientes reservados ni credenciales.'],
-          ].map(([Icon, t, d]) => {
-            const I = Icon as typeof Lock;
-            return <div key={t as string}><I className="size-5 text-teal" aria-hidden /><h3 className="mt-3 text-base font-semibold">{t as string}</h3><p className="mt-1 text-sm text-muted">{d as string}</p></div>;
-          })}
-        </div>
-        <p className="mt-8 max-w-3xl text-xs text-muted">La protección con contraseña de un archivo exportado no cifra los datos almacenados en el navegador. La aplicación no sustituye el análisis institucional de protección de datos personales. <Link to="/privacidad" className="text-teal hover:underline">Leer la política de privacidad</Link>.</p>
-      </Band>
-
-      {/* 9. FAQ */}
-      <Band id="preguntas" eyebrow="09 · Preguntas frecuentes" title="Preguntas frecuentes.">
-        <div className="max-w-3xl divide-y divide-line border-y border-line">
-          {FAQ.map((f) => (
-            <details key={f.q} className="group py-4">
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-medium text-navy"><span>{f.q}</span><span className="text-xl leading-none text-muted transition-transform group-open:rotate-45" aria-hidden>+</span></summary>
-              <p className="mt-2 text-sm text-muted">{f.a}</p>
-            </details>
-          ))}
-        </div>
-      </Band>
-
-      {/* 10. Acceso */}
-      <section id="acceso" className="bg-navy text-white">
-        <div className="mx-auto grid max-w-[1240px] gap-10 px-5 py-16 md:px-8 lg:grid-cols-[1.2fr_1fr]">
-          <div>
-            <p className="text-[11px] font-semibold tracking-[0.12em] text-gold uppercase">10 · Acceso al producto</p>
-            <h2 className="mt-3 text-3xl font-semibold text-white">Empiece por caracterizar la organización.</h2>
-            <p className="mt-3 max-w-lg text-slate-300">La aplicación guía cada etapa. Puede explorar primero un caso de demostración ficticio y eliminarlo después.</p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <Link to="/app/organizaciones/nueva" className="inline-flex h-11 items-center gap-2 rounded-md bg-white px-5 text-sm font-semibold text-navy hover:bg-slate-100">Iniciar diagnóstico</Link>
-              <button onClick={demo} disabled={busy} className="inline-flex h-11 items-center rounded-md border border-white/30 px-5 text-sm font-semibold text-white hover:bg-white/10 disabled:opacity-60">Explorar caso de demostración</button>
-            </div>
-          </div>
-          <ul className="grid gap-px overflow-hidden rounded-lg bg-white/10 text-sm">
-            {[
-              ['/app', 'Abrir la aplicación', 'Organizaciones, evaluaciones e informes.'],
-              ['/responder', 'Responder una entrevista', 'Para personas que recibieron un archivo de asignación.'],
-              ['/app/academico', 'Laboratorio académico', 'Casos ficticios para diplomados y pregrado.'],
-            ].map(([to, t, d]) => (
-              <li key={to}><Link to={to} className="flex items-center justify-between gap-4 bg-navy-dark/60 px-5 py-4 hover:bg-navy-dark"><span><span className="block font-semibold text-white">{t}</span><span className="text-xs text-slate-300">{d}</span></span>{to === '/app/academico' ? <GraduationCap className="size-5 text-gold" aria-hidden /> : <ArrowRight className="size-4 text-gold" aria-hidden />}</Link></li>
-            ))}
-          </ul>
-        </div>
-      </section>
+      <Metrics />
+      <HowItWorks />
+      <Capabilities />
+      <Product />
+      <Methodology />
+      <Dimensions />
+      <References />
+      <Modalities />
+      <Interviews />
+      <Privacy />
+      <Faq />
+      <Closing busy={busy} onDemo={demo} />
     </>
   );
 }
 
-/** Héroe oscuro con tarjetas de vidrio: la composición usa datos ilustrativos y nombres reales del modelo. */
+/* ===================================================================== */
+/* 6.1 Héroe                                                              */
+/* ===================================================================== */
+
 function Hero({ busy, onDemo }: { busy: boolean; onDemo: () => void }) {
   return (
-    <section className="relative isolate overflow-hidden bg-[#07131D] text-white" aria-labelledby="hero-t">
-      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute inset-0 opacity-[0.06]" style={{ backgroundImage: 'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)', backgroundSize: '64px 64px', maskImage: 'radial-gradient(ellipse 70% 60% at 68% 42%, #000 20%, transparent 75%)', WebkitMaskImage: 'radial-gradient(ellipse 70% 60% at 68% 42%, #000 20%, transparent 75%)' }} />
-        <div className="absolute top-[-6%] right-[-4%] size-[720px] rounded-full opacity-70" style={{ background: 'radial-gradient(circle at 50% 50%, rgba(13,148,136,0.30), rgba(13,148,136,0.08) 45%, transparent 70%)' }} />
-        <div className="absolute top-[7%] right-[4%] hidden size-[260px] rounded-full lg:block" style={{ background: 'radial-gradient(circle at 34% 28%, #E6FFFB 0%, #7FE3D5 12%, #14A898 34%, #0B5D63 58%, #0A2B3A 80%, #07131D 100%)', boxShadow: '0 0 140px 30px rgba(20,168,152,0.28), inset -30px -40px 80px rgba(7,19,29,0.75)' }} />
-        <div className="absolute bottom-0 left-0 h-40 w-full bg-gradient-to-t from-[#07131D] to-transparent" />
+    <MotionScope as="section" className="on-dark relative isolate flex min-h-[88svh] items-center overflow-hidden bg-midnight text-white" aria-labelledby="hero-t">
+      <div aria-hidden className="absolute inset-0 -z-10 overflow-hidden">
+        <AmbientImage small={estratos1024} large={estratos1920} eager kenburns className="opacity-80" />
+        <div className="ambient-drift absolute -top-[25%] -right-[12%] size-[880px] rounded-full" style={{ background: 'radial-gradient(circle, rgba(142,120,247,0.20), transparent 62%)' }} />
+        <div className="absolute -bottom-[35%] -left-[12%] size-[760px] rounded-full" style={{ background: 'radial-gradient(circle, rgba(53,217,164,0.13), transparent 64%)' }} />
+        <div className="absolute inset-0 bg-gradient-to-r from-midnight via-midnight/85 to-midnight/25" />
+        <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-midnight to-transparent" />
       </div>
 
-      <div className="mx-auto grid max-w-[1240px] items-center gap-14 px-5 pt-16 pb-20 md:px-8 lg:grid-cols-[0.95fr_1.05fr] lg:pt-20 lg:pb-28">
+      <div className="mx-auto grid w-full max-w-[1240px] items-center gap-14 px-5 pt-28 pb-16 md:px-8 lg:grid-cols-[1fr_1.04fr] lg:gap-10 lg:pt-32 lg:pb-20">
         <div>
-          <p className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-3.5 py-1.5 text-xs text-slate-200 backdrop-blur">
-            <span className="size-1.5 rounded-full bg-[#5EEAD4]" aria-hidden />
-            Modelo DIAM, versión 1.0 · {DIMENSIONS.length} dimensiones · {QUESTIONS.length} criterios
-          </p>
-          <h1 id="hero-t" className="mt-6 max-w-xl text-[2.5rem] leading-[1.05] font-bold tracking-[-0.02em] text-white md:text-[3.25rem]">Conozca la madurez documental de su organización.</h1>
-          <p className="mt-6 max-w-lg text-lg leading-relaxed text-slate-300">Evalúe capacidades, identifique brechas y convierta los resultados en una hoja de ruta de transformación.</p>
-          <div className="mt-9 flex flex-wrap gap-3">
-            <Link to="/app/organizaciones/nueva" className="inline-flex h-12 items-center gap-2 rounded-full bg-white px-6 text-sm font-semibold text-[#07131D] shadow-[0_8px_30px_-8px_rgba(255,255,255,0.45)] transition-colors hover:bg-slate-100">Iniciar diagnóstico <ArrowRight className="size-4" aria-hidden /></Link>
-            <button type="button" onClick={onDemo} disabled={busy} aria-busy={busy} className="inline-flex h-12 items-center rounded-full border border-white/25 bg-white/[0.04] px-6 text-sm font-semibold text-white backdrop-blur transition-colors hover:bg-white/10 disabled:opacity-60">{busy ? 'Abriendo…' : 'Explorar demostración'}</button>
-          </div>
-          <p className="mt-7 max-w-md text-xs text-slate-400">Funciona en el navegador, sin registro ni servidor. Los datos permanecen en el dispositivo de la persona evaluadora.</p>
+          <Reveal>
+            <p className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.05] px-3.5 py-1.5 text-xs text-fog backdrop-blur">
+              <span className="size-1.5 rounded-full bg-mint" aria-hidden />
+              Modelo DIAM, versión 1.0 · {DIMENSIONS.length} dimensiones · {QUESTIONS.length} criterios
+            </p>
+          </Reveal>
+          <Reveal delay={80}>
+            <h1 id="hero-t" className="mt-7 max-w-[620px] font-display text-[2.3rem] leading-[1.06] font-extrabold tracking-[-0.028em] text-white sm:text-[2.85rem] lg:text-[3.3rem]">
+              Diagnostique lo que funciona. Evidencie lo que falta. <span className="whitespace-nowrap">Priorice <span className="text-mint">lo que sigue.</span></span>
+            </h1>
+          </Reveal>
+          <Reveal delay={160}>
+            <p className="mt-6 max-w-[540px] text-lg leading-relaxed text-fog">Evalúe la madurez documental, archivística, tecnológica y de gobierno de la información de su organización con un método que separa lo percibido de lo validado y lo convierte en una hoja de ruta.</p>
+          </Reveal>
+          <Reveal delay={240}>
+            <div className="mt-9 flex flex-wrap items-center gap-3">
+              <Link to="/app/organizaciones/nueva" className={buttonClass('primary', 'lg')}>Iniciar diagnóstico <ArrowRight className="size-4" aria-hidden /></Link>
+              <Link to="/metodologia" className={buttonClass('outline-light', 'lg')}>Conocer la metodología</Link>
+            </div>
+            <button type="button" onClick={onDemo} disabled={busy} aria-busy={busy} className="mt-5 inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-fog underline-offset-4 transition-colors hover:text-white hover:underline disabled:opacity-60">
+              {busy ? 'Abriendo…' : 'Explorar demostración'}<ArrowRight className="size-3.5" aria-hidden />
+            </button>
+            <p className="mt-5 flex max-w-md items-start gap-2 text-xs leading-relaxed text-fog"><Lock className="mt-0.5 size-3.5 shrink-0 text-mint" aria-hidden />Funciona en el navegador, sin registro ni servidor. Los datos permanecen en el dispositivo de la persona evaluadora.</p>
+          </Reveal>
         </div>
-        <HeroCards />
+        <Reveal delay={200}><HeroVisual /></Reveal>
       </div>
+    </MotionScope>
+  );
+}
+
+/* ===================================================================== */
+/* 6.2 Métricas                                                           */
+/* ===================================================================== */
+
+function Metrics() {
+  return (
+    <section aria-label="El modelo en cifras" className="on-dark border-t border-white/[0.07] bg-midnight text-white">
+      <dl className="mx-auto grid max-w-[1240px] grid-cols-2 px-5 md:grid-cols-3 md:px-8 lg:grid-cols-6">
+        {METRICS.map((m, i) => (
+          <Reveal key={m.label} delay={i * 60} className="py-8 pr-4 lg:py-10">
+            <dt className="sr-only">{m.label}</dt>
+            <dd className="font-display text-[2.4rem] leading-none font-bold tracking-tight text-white lg:text-[2.75rem]"><AnimatedCounter value={m.value} duration={1200} /></dd>
+            <dd className="mt-2 text-sm font-medium text-white" aria-hidden>{m.label}</dd>
+            <dd className="mt-0.5 text-xs text-fog">{m.note}</dd>
+          </Reveal>
+        ))}
+      </dl>
     </section>
   );
 }
 
-const glass = 'rounded-2xl border border-white/12 bg-[#0E2130]/70 shadow-[0_30px_80px_-30px_rgba(0,0,0,0.75)] backdrop-blur-xl';
+/* ===================================================================== */
+/* Encabezados y bandas                                                   */
+/* ===================================================================== */
 
-/** Tarjetas de la portada: tablero (claro), brechas prioritarias y ciclo de trabajo (vidrio). */
-function HeroCards() {
-  const fam = MGDA_FAMILIES.map((f, i) => ({ title: f.title, v: ILLUSTRATIVE.families[i] }));
-  const gaps = ILLUSTRATIVE.gaps.map((g) => ({ ...g, name: QUESTIONS.find((q) => q.id === g.id)?.criterion ?? g.id }));
-  const current = 4; // «Analizar»
+function SectionHeading({ id, eyebrow, title, lead, dark = false, className, children }: { id: string; eyebrow: string; title: ReactNode; lead?: ReactNode; dark?: boolean; className?: string; children?: ReactNode }) {
   return (
-    <div className="relative mx-auto w-full max-w-[600px]" aria-label="Vista ilustrativa del tablero de resultados con datos simulados">
-      {/* Tablero principal */}
-      <div className="relative z-10 rounded-2xl border border-white/60 bg-white/[0.97] text-ink shadow-[0_40px_100px_-30px_rgba(0,0,0,0.8)] lg:mr-10 lg:pb-8">
-        <div className="flex items-center justify-between border-b border-line px-5 py-3">
-          <span className="text-xs font-semibold text-navy">Resultados</span>
-          <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] text-muted">Datos ilustrativos simulados</span>
-        </div>
-        <dl className="grid grid-cols-3 divide-x divide-line border-b border-line">
-          {[
-            ['Madurez percibida', fmtScore(ILLUSTRATIVE.global), LEVEL_NAMES[levelIndex(ILLUSTRATIVE.global)]],
-            ['Cobertura del diagnóstico', fmtPct(ILLUSTRATIVE.coverage), `Resultado ${coverageBandLabel(ILLUSTRATIVE.coverage).toLowerCase()}`],
-            ['Soporte de evidencias', fmtPct(ILLUSTRATIVE.support), 'E0 a E3'],
-          ].map(([k, v, h]) => (
-            <div key={k} className="px-4 py-3"><dt className="text-[10.5px] leading-tight text-muted">{k}</dt><dd className="mt-1 font-display text-[1.45rem] leading-none font-semibold text-navy num">{v}</dd><dd className="mt-1 text-[10.5px] text-teal">{h}</dd></div>
-          ))}
-        </dl>
-        <div className="px-5 pt-4 pb-5">
-          <div className="flex items-baseline justify-between"><p className="text-[11px] font-semibold tracking-[0.08em] text-muted uppercase">Madurez por familia</p><p className="flex items-center gap-1.5 text-[10.5px] text-muted"><span className="inline-block h-3 w-[3px] rounded-sm bg-gold" aria-hidden />Meta 3,00</p></div>
-          <ul className="mt-3 space-y-2.5">
-            {fam.map((f) => (
-              <li key={f.title} className="grid grid-cols-[150px_1fr_34px] items-center gap-3 text-xs">
-                <span className="whitespace-nowrap text-ink">{f.title}</span>
-                <span className="relative h-2.5 rounded-sm bg-slate-100">
-                  <span className="absolute inset-y-0 left-0 rounded-sm" style={{ width: `${(f.v / 5) * 100}%`, background: LEVEL_COLORS[levelIndex(f.v)] }} />
-                  <span className="absolute -top-1 -bottom-1 w-[3px] rounded-sm bg-gold" style={{ left: `calc(${(3 / 5) * 100}% - 1px)` }} aria-hidden />
-                </span>
-                <span className="text-right font-medium num">{fmtScore(f.v)}</span>
-              </li>
-            ))}
-          </ul>
-          <ol className="mt-4 grid grid-cols-6 gap-1" aria-label="Escala de madurez">{LEVEL_NAMES.map((n, i) => <li key={n} title={`${i} · ${n}`}><span className="block h-1 rounded-sm" style={{ background: LEVEL_COLORS[i] }} /><span className="mt-1 block text-center text-[9.5px] text-muted num">{i}</span></li>)}</ol>
-        </div>
-      </div>
+    <Reveal className={cx('max-w-3xl', className)}>
+      <p className="eyebrow">{eyebrow}</p>
+      <h2 id={`${id}-t`} className={cx('mt-3 font-display text-[1.8rem] leading-[1.12] font-bold tracking-[-0.02em] md:text-[2.45rem]', dark ? 'text-white' : 'text-navy')}>{title}</h2>
+      {lead && <p className={cx('mt-4 max-w-2xl text-base leading-relaxed md:text-[1.0625rem]', dark ? 'text-fog' : 'text-muted')}>{lead}</p>}
+      {children}
+    </Reveal>
+  );
+}
 
-      <div className="relative z-20 mt-4 grid gap-4 sm:grid-cols-[1.08fr_1fr] lg:-mt-8 lg:ml-10">
-      {/* Brechas prioritarias */}
-      <div className={cx(glass, 'p-4')}>
-        <p className="text-[10.5px] font-semibold tracking-[0.1em] text-[#5EEAD4] uppercase">Brechas prioritarias</p>
-        <p className="text-[10.5px] text-slate-400">Ordenadas por prioridad</p>
-        <ol className="mt-3 space-y-3">
-          {gaps.map((g, i) => (
-            <li key={g.id} className="grid grid-cols-[16px_1fr] gap-2 text-xs">
-              <span className="font-semibold text-slate-400 num">{i + 1}</span>
-              <span>
-                <span className="block font-semibold text-white">{g.id}</span>
-                <span className="block leading-snug text-slate-300">{g.name}</span>
-                <span className="mt-0.5 block text-[10.5px] text-slate-400 num">nivel {fmtScore(g.level)} · brecha {fmtScore(g.target - g.level)}</span>
-              </span>
-            </li>
-          ))}
-        </ol>
-      </div>
+const TONES = { soft: 'bg-soft', white: 'bg-white', canvas: 'bg-canvas' } as const;
 
-      {/* Ciclo de trabajo */}
-      <div className={cx(glass, 'p-4')}>
-        <p className="text-[10.5px] font-semibold tracking-[0.1em] text-[#5EEAD4] uppercase">Ciclo de trabajo</p>
-        <p className="text-[10.5px] text-slate-400">Seis momentos</p>
-        <ol className="mt-3 space-y-2">
-          {WORK_CYCLE.map((s, i) => (
-            <li key={s.key} className="flex items-center gap-2 text-[11.5px]">
-              <span className={cx('flex size-5 shrink-0 items-center justify-center rounded-full border text-[10px] font-semibold num', i < current ? 'border-[#14A898] bg-[#14A898] text-white' : i === current ? 'border-[#5EEAD4] text-[#5EEAD4]' : 'border-white/20 text-slate-400')} aria-hidden>{i < current ? <Check className="size-3" /> : i + 1}</span>
-              <span className={cx('leading-tight', i <= current ? 'text-white' : 'text-slate-400')}>{s.title}</span>
-              <span className="sr-only">{i < current ? '(completado)' : i === current ? '(en curso)' : '(pendiente)'}</span>
-            </li>
-          ))}
-        </ol>
+function Band({ id, tone = 'soft', children, className }: { id: string; tone?: keyof typeof TONES; children: ReactNode; className?: string }) {
+  return (
+    <section id={id} aria-labelledby={`${id}-t`} className={cx(TONES[tone], className)}>
+      <div className="mx-auto max-w-[1240px] px-5 py-20 md:px-8 md:py-28">{children}</div>
+    </section>
+  );
+}
+
+function TextLink({ to, children, dark = false }: { to: string; children: ReactNode; dark?: boolean }) {
+  return <Link to={to} className={cx('group inline-flex items-center gap-1.5 text-sm font-semibold underline-offset-4 hover:underline', dark ? 'text-mint' : 'text-mint-strong')}>{children}<ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden /></Link>;
+}
+
+/* ===================================================================== */
+/* 6.3 Cómo funciona: línea de tiempo                                     */
+/* ===================================================================== */
+
+function HowItWorks() {
+  const [ref, progress] = useScrollProgress<HTMLOListElement>();
+  const last = WORK_CYCLE.length - 1;
+  return (
+    <Band id="como-funciona">
+      <div className="flex flex-wrap items-end justify-between gap-6">
+        <SectionHeading id="como-funciona" eyebrow="01 · Cómo funciona" title="Seis momentos de un mismo ciclo de trabajo." lead="Cada momento deja un registro que alimenta al siguiente: lo que se caracteriza define la aplicabilidad, lo que se entrevista se valida y lo que se valida se prioriza." />
+        <TextLink to="/como-funciona">Ver dónde se hace cada momento</TextLink>
       </div>
+      <ol ref={ref} className="relative mt-16 grid gap-12 xl:grid-cols-6 xl:gap-0">
+        {/* Riel horizontal (escritorio) y vertical (pantallas angostas); el avance acompaña el desplazamiento. */}
+        <span aria-hidden className="absolute top-[15px] left-[15px] hidden h-px w-[83.333%] bg-[#d5dde8] xl:block" />
+        <span aria-hidden className="absolute top-[14px] left-[15px] hidden h-[3px] rounded-full bg-mint-strong xl:block" style={{ width: `calc(83.333% * ${progress})` }} />
+        <span aria-hidden className="absolute top-2 bottom-2 left-[15px] w-px bg-[#d5dde8] xl:hidden" />
+        <span aria-hidden className="absolute top-2 left-[14px] w-[3px] rounded-full bg-mint-strong xl:hidden" style={{ height: `calc((100% - 1rem) * ${progress})` }} />
+        {WORK_CYCLE.map((s, i) => {
+          const reached = progress >= i / last - 0.03;
+          return (
+            <li key={s.key} className="relative pl-14 xl:pr-7 xl:pl-0">
+              <span aria-hidden className={cx('absolute top-0 left-0 flex size-8 items-center justify-center rounded-full border-2 bg-soft text-xs font-bold transition-colors duration-300 num xl:static', reached ? 'border-mint-strong text-mint-strong' : 'border-[#cbd5e1] text-muted')}>{i + 1}</span>
+              <div className="rounded-lg border border-line bg-white px-3 py-2.5 md:max-w-sm xl:mt-6 xl:max-w-none"><StepVisual step={s.key} /></div>
+              <h3 className="mt-5 font-display text-lg font-bold text-navy">{s.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted">{s.text}</p>
+              <p className="mt-3 text-xs text-muted"><span className="font-medium text-ink">En la aplicación:</span> {s.where.map((w) => w.label).join(' · ')}</p>
+            </li>
+          );
+        })}
+      </ol>
+    </Band>
+  );
+}
+
+/* ===================================================================== */
+/* 6.4 Capacidades: bento asimétrico                                      */
+/* ===================================================================== */
+
+function Capabilities() {
+  return (
+    <MotionScope as="section" id="capacidades" aria-labelledby="capacidades-t" className="on-dark relative isolate overflow-hidden bg-midnight text-white">
+      <div aria-hidden className="ambient-drift absolute top-[10%] -left-[15%] -z-10 size-[700px] rounded-full" style={{ background: 'radial-gradient(circle, rgba(53,217,164,0.10), transparent 65%)' }} />
+      <div className="mx-auto max-w-[1240px] px-5 py-20 md:px-8 md:py-28">
+        <SectionHeading id="capacidades" dark eyebrow="02 · Capacidades" title="Del dato de entrevista a la decisión, con trazabilidad en cada paso." lead="Las capacidades trabajan sobre el mismo registro: ninguna cifra del informe se calcula fuera del motor ni pierde su vínculo con el criterio y la evidencia que la sustentan." />
+        <div className="mt-14 grid gap-4 lg:grid-cols-12">
+          <Bento className="lg:col-span-7" title="Mapa de calor por dimensión y perfil" text="La mediana de cada perfil o área por dimensión muestra dónde coinciden las percepciones y dónde divergen." featured>
+            <HeatStrip />
+            <p className="mt-3 text-[11px] text-fog">Filas: perfiles entrevistados · columnas: dimensiones D01 a D15 · datos ilustrativos</p>
+          </Bento>
+          <Bento className="lg:col-span-5" title="Entrevistas distribuidas sin servidor" text="Una respuesta por participante y la mediana entre participantes. Las respuestas especiales nunca se convierten en cero.">
+            <MedianDots />
+          </Bento>
+          <Bento className="lg:col-span-4" title="Evidencias graduadas" text="Cada criterio registra su sustento documental, del E0 al E3, y el soporte se expresa en porcentaje.">
+            <EvidenceLadder />
+          </Bento>
+          <Bento className="lg:col-span-4" title="Mesa de validación" text="La persona evaluadora contrasta lo declarado con lo demostrado y resuelve discrepancias y contradicciones.">
+            <ValidationMini />
+          </Bento>
+          <Bento className="lg:col-span-4" title="Riesgos documentales" text="Probabilidad e impacto en una matriz de cinco por cinco, con bandas de riesgo explícitas.">
+            <div className="max-w-[180px]"><RiskGrid /></div>
+          </Bento>
+          <Bento className="lg:col-span-5" title="Hoja de ruta en cuatro fases" text="Iniciativas ordenadas por prioridad explicada, con dependencias entre criterios que el plan respeta." featured>
+            <PhaseLanes />
+          </Bento>
+          <Bento className="lg:col-span-4" title="Informes y exportaciones" text="Informe ejecutivo y técnico, libro de análisis y paquetes con verificación de integridad.">
+            <ExportChips />
+          </Bento>
+          <Bento className="lg:col-span-3" title="Laboratorio académico" text="Casos ficticios, sesión guiada e insignias por la calidad del proceso." academic>
+            <ul className="flex gap-1.5" aria-hidden>{[1, 2, 3, 4, 5].map((c) => <li key={c} className="flex size-9 items-center justify-center rounded-md border border-violet/40 bg-violet/15 text-[11px] font-semibold text-white num">C{c}</li>)}</ul>
+          </Bento>
+        </div>
+      </div>
+    </MotionScope>
+  );
+}
+
+function Bento({ title, text, children, className, featured = false, academic = false }: { title: string; text: string; children: ReactNode; className?: string; featured?: boolean; academic?: boolean }) {
+  return (
+    <Reveal className={cx('group relative flex flex-col justify-between gap-6 overflow-hidden rounded-xl border p-6 transition-colors duration-300', featured ? 'border-white/12 bg-elevated' : 'border-white/[0.07] bg-surface hover:border-white/15', academic && 'border-violet/30 bg-[linear-gradient(160deg,rgba(142,120,247,0.16),rgba(18,26,42,1)_60%)]', className)}>
+      <div>
+        <h3 className="font-display text-[1.05rem] font-bold text-white">{title}</h3>
+        <p className="mt-1.5 max-w-md text-sm leading-relaxed text-fog">{text}</p>
+      </div>
+      <div>{children}</div>
+    </Reveal>
+  );
+}
+
+function ValidationMini() {
+  const rows = [['Percibido', 3, 'bg-fog/70'], ['Validado', 2, 'bg-mint']] as const;
+  return (
+    <div aria-hidden>
+      <ul className="space-y-2">
+        {rows.map(([k, v, c]) => (
+          <li key={k} className="grid grid-cols-[64px_1fr_30px] items-center gap-2 text-[11px]">
+            <span className="text-fog">{k}</span>
+            <span className="h-2 rounded-sm bg-white/10"><span className={cx('block h-full rounded-sm', c)} style={{ width: `${(v / 5) * 100}%` }} /></span>
+            <span className="text-right text-white num">{n(v)}</span>
+          </li>
+        ))}
+      </ul>
+      <div className="mt-3 flex flex-wrap gap-1.5 text-[10.5px]">
+        <span className="rounded-full border border-[#E2B65C]/50 px-2 py-0.5 text-[#F1D08B]">Discrepancia</span>
+        <span className="rounded-full border border-violet/50 px-2 py-0.5 text-[#C9BEFC]">Contradicción entre criterios</span>
       </div>
     </div>
   );
 }
 
-function Band({ id, eyebrow, title, children, tone = 'canvas' }: { id: string; eyebrow: string; title: string; children: ReactNode; tone?: 'canvas' | 'white' }) {
+/* ===================================================================== */
+/* 6.5 Visualización del producto                                         */
+/* ===================================================================== */
+
+function Product() {
+  const [near, setNear] = useState(false);
+  const ref = useInViewOnce<HTMLDivElement>(() => setNear(true), '600px 0px 600px 0px');
+  const fallback = <div className="rounded-2xl border border-line bg-white p-8" style={{ minHeight: 640 }}><SkeletonLoader lines={6} /></div>;
   return (
-    <section id={id} aria-labelledby={`${id}-t`} className={cx('border-b border-line', tone === 'white' ? 'bg-white' : 'bg-canvas')}>
-      <div className="mx-auto max-w-[1240px] px-5 py-16 md:px-8 md:py-20">
-        <p className="eyebrow">{eyebrow}</p>
-        <h2 id={`${id}-t`} className="mt-3 mb-10 max-w-2xl text-2xl font-semibold md:text-[2rem]">{title}</h2>
-        {children}
+    <Band id="resultados" tone="canvas">
+      <SectionHeading id="resultados" eyebrow="03 · Resultados" title="Resultados que declaran su propio grado de certeza." lead="El tablero separa la madurez percibida de la validada, informa la cobertura del diagnóstico y el soporte de evidencias, y ordena las brechas frente a la meta." />
+      <div ref={ref} className="mt-12">
+        {near ? <Suspense fallback={fallback}><ProductShowcase /></Suspense> : fallback}
       </div>
-    </section>
+      <dl className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        {[
+          ['Madurez percibida y validada', 'Se presentan por separado; la validada solo considera criterios revisados por la persona evaluadora.'],
+          ['Cobertura', 'Cuántos criterios del alcance tienen datos. Por debajo del 70 %, el resultado se marca como exploratorio.'],
+          ['Soporte de evidencias', `Promedio del factor de evidencia de E0 (${n(EVIDENCE_FACTOR.E0)}) a E3 (${n(EVIDENCE_FACTOR.E3)}), expresado en porcentaje.`],
+          ['Solidez diagnóstica', 'Índice orientativo de 0 a 100 que combina cobertura, evidencias y acuerdo entre entrevistados.'],
+        ].map(([t, d], i) => (
+          <Reveal key={t} delay={i * 60} className="border-t-2 border-navy pt-4">
+            <dt className="text-sm font-bold text-navy">{t}</dt>
+            <dd className="mt-1.5 text-sm leading-relaxed text-muted">{d}</dd>
+          </Reveal>
+        ))}
+      </dl>
+    </Band>
   );
 }
 
-function Prose({ title, children }: { title: string; children: ReactNode }) {
-  return <div className="border-l-2 border-gold pl-5"><h3 className="text-base font-semibold">{title}</h3><p className="mt-2 text-sm text-muted">{children}</p></div>;
+/* ===================================================================== */
+/* 6.6 Metodología y rigor                                                */
+/* ===================================================================== */
+
+function Methodology() {
+  const priority = `${n(PRIORITY_WEIGHTS.gap)}·Brecha + ${n(PRIORITY_WEIGHTS.impact)}·Impacto + ${n(PRIORITY_WEIGHTS.criticality)}·Criticidad + ${n(PRIORITY_WEIGHTS.urgency)}·Urgencia + ${n(PRIORITY_WEIGHTS.enabler)}·Habilitador`;
+  const layers = [
+    { k: 'Dimensiones', v: String(DIMENSIONS.length), d: `Agrupadas en ${MGDA_FAMILIES.length} familias, de la estrategia a la automatización.` },
+    { k: 'Criterios', v: String(QUESTIONS.length), d: 'Cada uno con explicación, verificaciones observables y evidencias sugeridas.' },
+    { k: 'Niveles', v: '0 a 5', d: 'Seis descriptores redactados para cada criterio.', scale: true },
+    { k: 'Evidencias', v: 'E0 a E3', d: `Factor de soporte ${(['E0', 'E1', 'E2', 'E3'] as const).map((e) => n(EVIDENCE_FACTOR[e])).join(' · ')}.` },
+    { k: 'Percepción', v: 'Mediana', d: 'Una respuesta por participante; mediana entre participantes.' },
+    { k: 'Validación', v: 'Mesa', d: 'Lo validado solo considera criterios revisados por la persona evaluadora.' },
+    { k: 'Priorización', v: '5 factores', d: priority },
+  ];
+  return (
+    <MotionScope as="section" id="metodologia" aria-labelledby="metodologia-t" className="on-dark relative isolate overflow-hidden bg-midnight text-white">
+      <div aria-hidden className="absolute inset-0 -z-10">
+        <AmbientImage small={fachada1024} large={fachada1920} kenburns className="opacity-45" />
+        <div className="absolute inset-0 bg-gradient-to-r from-midnight via-midnight/92 to-midnight/70" />
+      </div>
+      <div className="mx-auto grid max-w-[1240px] gap-14 px-5 py-20 md:px-8 md:py-28 lg:grid-cols-[0.9fr_1.1fr]">
+        <div>
+          <SectionHeading id="metodologia" dark eyebrow="04 · Metodología y rigor" title="Un método que se puede revisar, no una caja negra." lead="El Modelo Integrado de Evaluación DocMaturity (DIAM) desciende de la dimensión al criterio, del criterio al nivel y del nivel a la evidencia. Las fórmulas son deterministas y están documentadas sin simplificaciones." />
+          <Reveal delay={120}>
+            <ul className="mt-8 space-y-3 text-sm text-fog">
+              {[
+                'No certifica ni emite puntajes oficiales: es una herramienta de autodiagnóstico y consultoría.',
+                'No reemplaza el MGDA, el FURAG, las auditorías ni el análisis jurídico de la organización.',
+                'Las asociaciones con normas y estándares son conceptuales y no implican respaldo del AGN ni de organismos de normalización.',
+              ].map((t) => <li key={t} className="flex gap-3"><span className="mt-2 h-px w-4 shrink-0 bg-mint" aria-hidden />{t}</li>)}
+            </ul>
+            <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3"><TextLink to="/metodologia" dark>Conocer la metodología</TextLink><TextLink to="/referentes" dark>Ver el registro de referentes</TextLink></div>
+          </Reveal>
+        </div>
+        {/* Escalera del modelo: cada peldaño concreta el anterior. */}
+        <ol className="relative space-y-2.5" aria-label="Estructura del modelo, de la dimensión a la priorización">
+          {layers.map((l, i) => (
+            <Reveal as="li" key={l.k} delay={i * 70} className="lg:[margin-left:var(--step)]" style={{ '--step': `${i * 3.2}%` } as CSSProperties}>
+              <div className="grid grid-cols-[96px_1fr] items-start gap-4 rounded-lg border border-white/[0.08] bg-surface/80 px-4 py-3.5 backdrop-blur sm:grid-cols-[112px_92px_1fr]">
+                <span className="text-[11px] font-semibold tracking-[0.1em] text-mint uppercase">{l.k}</span>
+                <span className="hidden font-display text-base font-bold text-white sm:block num">{l.v}</span>
+                <div className="text-sm leading-snug text-fog"><span className="font-semibold text-white sm:hidden">{l.v} · </span>{l.d}{l.scale && <div className="mt-2.5 max-w-[260px]"><LevelScale dark compact /></div>}</div>
+              </div>
+            </Reveal>
+          ))}
+        </ol>
+      </div>
+    </MotionScope>
+  );
 }
 
-/** Carriles del flujo distribuido de entrevistas. */
-function InterviewLanes() {
+/* ===================================================================== */
+/* Dimensiones, referentes, modalidades y entrevistas                     */
+/* ===================================================================== */
+
+function Dimensions() {
+  return (
+    <Band id="dimensiones" tone="white">
+      <SectionHeading id="dimensiones" eyebrow="05 · Dimensiones de evaluación" title={`${capitalize(spell(DIMENSIONS.length))} dimensiones organizadas en ${spell(MGDA_FAMILIES.length)} familias.`} />
+      <div className="mt-12 grid gap-px overflow-hidden rounded-xl border border-line bg-line md:grid-cols-2 lg:grid-cols-5">
+        {MGDA_FAMILIES.map((f, i) => {
+          const dims = DIMENSIONS.filter((d) => getDimensionFamily(d.id) === f.key);
+          return (
+            <Reveal key={f.key} delay={i * 60} className="flex flex-col bg-white p-5 transition-colors duration-300 hover:bg-soft">
+              <p className="text-[11px] font-semibold tracking-[0.1em] text-[#8A6A2F] uppercase">{f.key}</p>
+              <h3 className="mt-2 font-display text-base font-bold text-navy">{f.title}</h3>
+              <p className="mt-1 text-xs leading-relaxed text-muted">{f.text}</p>
+              <ul className="mt-4 space-y-2.5 border-t border-line pt-4">
+                {dims.map((d) => (
+                  <li key={d.id} className="grid grid-cols-[36px_1fr] gap-2 text-sm">
+                    <span className="text-xs font-semibold text-mint-strong num">{d.id}</span>
+                    <span><span className="font-medium text-ink">{d.name}</span><span className="block text-xs text-muted">{QUESTIONS.filter((q) => q.dimensionId === d.id).length} criterios</span></span>
+                  </li>
+                ))}
+              </ul>
+            </Reveal>
+          );
+        })}
+      </div>
+      <p className="mt-5 max-w-4xl text-xs leading-relaxed text-muted">Las familias se inspiran en los componentes del Modelo de Gestión Documental y Administración de Archivos, usados como lente de lectura. La familia de cada dimensión corresponde a su componente MGDA predominante; cada criterio conserva su propio componente. {CRITICAL} criterios están marcados como críticos y generan alertas cuando se ubican en niveles 0 o 1. <Link to="/metodologia#componentes" className="font-medium text-mint-strong hover:underline">Ver criterios por componente</Link>.</p>
+    </Band>
+  );
+}
+
+const VERIFICATION_COLORS = ['#0B7A58', '#35D9A4', '#A9ECD2', '#D5DDE8'];
+
+function References() {
+  const typeCounts = SOURCES.reduce<Record<string, number>>((acc, s) => ({ ...acc, [s.type]: (acc[s.type] ?? 0) + 1 }), {});
+  const verification = (Object.keys(VERIFICATION_LABEL) as VerificationStatus[]).map((k) => ({ k, label: VERIFICATION_LABEL[k], n: SOURCES.filter((s) => s.verificationStatus === k).length }));
+  return (
+    <Band id="referentes">
+      <div className="grid gap-12 lg:grid-cols-[1fr_1.2fr]">
+        <SectionHeading id="referentes" eyebrow="06 · Referentes metodológicos" title="Fundamentación declarada, con estado de verificación por referente.">
+          <div className="mt-5 space-y-4 text-sm leading-relaxed text-muted">
+            <p>El modelo se construyó a partir de normativa colombiana, estándares internacionales de gestión de documentos y preservación, modelos de madurez y requisitos de sistemas, y literatura académica.</p>
+            <p>Cada uno de los {SOURCES.length} referentes declara si fue verificado, verificado parcialmente, usado como referencia conceptual o aún no verificado. DOCMATURITY no reproduce textos protegidos ni afirma correspondencias con cláusulas específicas.</p>
+            <TextLink to="/referentes">Ver el registro de referentes</TextLink>
+          </div>
+        </SectionHeading>
+        <Reveal delay={100} className="flex flex-col gap-6">
+          <figure className="m-0 rounded-xl border border-line bg-white p-5">
+            <figcaption className="mb-3 text-xs font-semibold tracking-[0.08em] text-muted uppercase">Estado de verificación</figcaption>
+            <div className="flex h-3 gap-0.5 overflow-hidden rounded-full" aria-hidden>
+              {verification.map((v, i) => <span key={v.k} style={{ width: `${(v.n / SOURCES.length) * 100}%`, background: VERIFICATION_COLORS[i] }} />)}
+            </div>
+            <dl className="mt-4 grid grid-cols-2 gap-x-6 gap-y-3 sm:grid-cols-4">
+              {verification.map((v, i) => (
+                <div key={v.k}><dt className="flex items-center gap-1.5 text-xs text-muted"><span className="inline-block size-2.5 rounded-[2px]" style={{ background: VERIFICATION_COLORS[i] }} aria-hidden />{v.label}</dt><dd className="font-display text-2xl font-bold text-navy num">{v.n}</dd></div>
+              ))}
+            </dl>
+          </figure>
+          <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-line bg-line sm:grid-cols-4">
+            {[
+              ['norma_juridica', 'Normas jurídicas'], ['estandar_tecnico', 'Estándares técnicos'], ['modelo_madurez', 'Modelos de madurez'], ['modelo_requisitos', 'Modelos de requisitos'],
+              ['metodologia', 'Metodologías'], ['buena_practica', 'Buenas prácticas'], ['modelo_gestion', 'Modelos de gestión'], ['referente_academico', 'Referentes académicos'],
+            ].map(([k, label]) => (
+              <div key={k} className="bg-white p-4"><dt className="text-xs text-muted">{label}</dt><dd className="mt-1 font-display text-2xl font-bold text-navy num">{typeCounts[k] ?? 0}</dd></div>
+            ))}
+          </dl>
+        </Reveal>
+      </div>
+    </Band>
+  );
+}
+
+function Modalities() {
+  return (
+    <Band id="modalidades" tone="white">
+      <SectionHeading id="modalidades" eyebrow="07 · Modalidades de diagnóstico" title="La profundidad se ajusta al propósito." lead="Las tres modalidades del banco son acumulativas: cada una incluye los criterios de la anterior. La personalizada parte de dimensiones elegidas." />
+      <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        {MODALITIES.map((m, i) => (
+          <Reveal key={m.key} delay={i * 70} className="flex flex-col rounded-xl border border-line bg-soft p-6">
+            <h3 className="flex items-center gap-2 font-display text-base font-bold text-navy"><span className="size-2.5 rounded-sm" style={{ background: m.color }} aria-hidden />{m.name}</h3>
+            <p className="mt-1 text-xs font-semibold text-mint-strong">{m.time}</p>
+            <p className="mt-6 font-display text-[2.6rem] leading-none font-extrabold tracking-tight text-navy num">{m.count}</p>
+            <p className="mt-1 text-xs text-muted">criterios · {fmtPct((m.count / QUESTIONS.length) * 100)} del banco</p>
+            <span className="mt-3 block h-1.5 rounded-full bg-neutral" aria-hidden><span className="block h-full rounded-full" style={{ width: `${(m.count / QUESTIONS.length) * 100}%`, background: m.color }} /></span>
+            <p className="mt-5 text-sm leading-relaxed text-muted">{m.text}</p>
+          </Reveal>
+        ))}
+        <Reveal delay={210} className="flex flex-col rounded-xl border border-dashed border-[#b8c4d4] bg-white p-6">
+          <h3 className="flex items-center gap-2 font-display text-base font-bold text-navy"><span className="size-2.5 rounded-sm border border-dashed border-slate-500" aria-hidden />Personalizado</h3>
+          <p className="mt-1 text-xs font-semibold text-mint-strong">Alcance focalizado</p>
+          <p className="mt-6 font-display text-[2rem] leading-[1.3] font-extrabold tracking-tight text-navy">A la medida</p>
+          <p className="mt-1 text-xs text-muted">dimensiones y criterios elegidos</p>
+          <span className="mt-3 block h-1.5 rounded-full border border-dashed border-[#b8c4d4]" aria-hidden />
+          <p className="mt-5 text-sm leading-relaxed text-muted">Dimensiones seleccionadas, preguntas propias y exclusiones justificadas.</p>
+        </Reveal>
+      </div>
+    </Band>
+  );
+}
+
+function Interviews() {
   const lanes = [
     { who: 'Persona evaluadora', steps: [{ col: 1, n: 1, t: 'Crea la asignación', d: 'Perfil, criterios e instrucciones' }, { col: 4, n: 6, t: 'Importa y consolida', d: 'Verificación de hash, revisiones y duplicados' }, { col: 5, n: 7, t: 'Valida en la mesa', d: 'Discrepancias, contradicciones y evidencias' }] },
     { who: 'Archivo', steps: [{ col: 2, n: 2, t: '.dm-assignment.json', d: 'Opcionalmente cifrado' }, { col: 3, n: 5, t: '.dm-interview.json', d: 'Con hash SHA-256' }] },
     { who: 'Persona entrevistada', steps: [{ col: 2, n: 3, t: 'Abre «Responder entrevista»', d: 'Sin cuenta ni instalación' }, { col: 3, n: 4, t: 'Responde sin conexión', d: 'Guarda avance y exporta' }] },
   ];
   return (
-    <div>
-      <div className="hidden overflow-hidden rounded-lg border border-line md:block">
-        {lanes.map((l, li) => (
-          <div key={l.who} className={cx('grid grid-cols-[150px_repeat(5,1fr)]', li > 0 && 'border-t border-line')}>
-            <div className="flex items-center bg-slate-50 px-4 py-5 text-sm font-semibold text-navy">{l.who}</div>
-            {[1, 2, 3, 4, 5].map((c) => {
-              const s = l.steps.find((x) => x.col === c);
-              return (
-                <div key={c} className="border-l border-dashed border-line p-3">
-                  {s && <div className={cx('rounded-md border p-3', l.who === 'Archivo' ? 'border-gold/50 bg-[#FDF8F0]' : 'border-line bg-white')}><p className="flex items-baseline gap-2 text-sm font-semibold text-ink"><span className="text-xs font-semibold text-teal num">{s.n}</span>{s.t}</p><p className="mt-0.5 text-xs text-muted">{s.d}</p></div>}
-                </div>
-              );
-            })}
-          </div>
-        ))}
+    <Band id="entrevistas">
+      <SectionHeading id="entrevistas" eyebrow="08 · Entrevistas y consolidación" title="Entrevistas distribuidas por archivo, sin servidor." lead="La persona evaluadora prepara una asignación, la persona entrevistada responde sin conexión y el archivo de respuestas regresa con un hash que permite detectar alteraciones accidentales." />
+      <Reveal className="mt-12">
+        <div className="hidden overflow-hidden rounded-xl border border-line bg-white md:block">
+          {lanes.map((l, li) => (
+            <div key={l.who} className={cx('grid grid-cols-[160px_repeat(5,1fr)]', li > 0 && 'border-t border-line')}>
+              <div className="flex items-center bg-soft px-4 py-5 text-sm font-bold text-navy">{l.who}</div>
+              {[1, 2, 3, 4, 5].map((c) => {
+                const s = l.steps.find((x) => x.col === c);
+                return (
+                  <div key={c} className="border-l border-dashed border-line p-3">
+                    {s && <div className={cx('rounded-lg border p-3', l.who === 'Archivo' ? 'border-violet/30 bg-violet-soft' : 'border-line bg-white shadow-[0_1px_2px_rgba(11,16,32,0.04)]')}><p className="flex items-baseline gap-2 text-sm font-semibold text-ink [overflow-wrap:anywhere]"><span className="text-xs font-bold text-mint-strong num">{s.n}</span>{s.t}</p><p className="mt-0.5 text-xs text-muted">{s.d}</p></div>}
+                  </div>
+                );
+              })}
+            </div>
+          ))}
+        </div>
+        <ol className="relative space-y-3 pl-6 md:hidden">
+          <span aria-hidden className="absolute top-2 bottom-2 left-[7px] w-px bg-[#d5dde8]" />
+          {['Persona evaluadora: crea la asignación', 'Archivo .dm-assignment.json', 'Persona entrevistada: responde sin conexión', 'Archivo .dm-interview.json con hash', 'Persona evaluadora: importa, consolida y valida'].map((t, i) => (
+            <li key={t} className="relative rounded-lg border border-line bg-white p-3 text-sm"><span aria-hidden className="absolute top-4 -left-[22px] size-2.5 rounded-full border-2 border-mint-strong bg-soft" /><span className="mr-2 font-bold text-mint-strong num">{i + 1}</span>{t}</li>
+          ))}
+        </ol>
+        <p className="mt-5 text-xs text-muted">El intercambio se realiza por los canales que la organización autorice (correo institucional, carpeta compartida, memoria USB). La aplicación nunca carga archivos a servidores externos.</p>
+      </Reveal>
+    </Band>
+  );
+}
+
+/* ===================================================================== */
+/* 6.7 Privacidad y autonomía                                             */
+/* ===================================================================== */
+
+function Privacy() {
+  const items = [
+    [Database, 'Datos en el dispositivo', 'IndexedDB del navegador. Sin servidor, sin cuentas, sin telemetría ni rastreadores externos.'],
+    [WifiOff, 'Funciona sin conexión', 'Después de la primera visita se instala como aplicación web progresiva.'],
+    [FileJson, 'Exportación verificable', 'Paquetes con hash SHA-256 para detectar alteraciones accidentales. No constituyen firma digital.'],
+    [KeyRound, 'Cifrado opcional', 'AES-GCM de 256 bits con clave derivada mediante PBKDF2. La contraseña no se guarda.'],
+    [HardDriveDownload, 'Respaldos bajo su control', 'Copia completa en un archivo que usted conserva y puede restaurar en otro equipo.'],
+    [FileSearch, 'Evidencias mínimas', 'Se registran referencias. No adjunte historias clínicas, expedientes reservados ni credenciales.'],
+  ] as const;
+  return (
+    <section id="proteccion" aria-labelledby="proteccion-t" className="on-dark bg-surface text-white">
+      <div className="mx-auto grid max-w-[1240px] gap-14 px-5 py-20 md:px-8 md:py-28 lg:grid-cols-[0.85fr_1.15fr]">
+        <SectionHeading id="proteccion" dark eyebrow="09 · Privacidad y autonomía" title="Su información no sale del dispositivo." lead="DOCMATURITY no tiene servidor ni base de datos remota. Usted decide qué se exporta, con quién se comparte y cuándo se respalda.">
+          <p className="mt-6 max-w-xl text-xs leading-relaxed text-fog">El navegador aísla los datos por origen. En la publicación de demostración el origen se comparte con otras páginas del mismo dominio: para trabajar con información real, publique la aplicación en un dominio propio o use un perfil de navegador dedicado. La protección con contraseña de un archivo exportado no cifra los datos almacenados en el navegador.</p>
+          <div className="mt-6"><TextLink to="/privacidad" dark>Leer la política de privacidad</TextLink></div>
+        </SectionHeading>
+        <ul className="grid gap-px overflow-hidden rounded-xl border border-white/[0.08] bg-white/[0.08] sm:grid-cols-2">
+          {items.map(([Icon, t, d], i) => (
+            <Reveal as="li" key={t} delay={i * 60} className="bg-surface p-6">
+              <Icon className="size-5 text-mint" aria-hidden />
+              <h3 className="mt-4 font-display text-base font-bold text-white">{t}</h3>
+              <p className="mt-1.5 text-sm leading-relaxed text-fog">{d}</p>
+            </Reveal>
+          ))}
+        </ul>
       </div>
-      <ol className="space-y-3 md:hidden">
-        {['Persona evaluadora: crea la asignación', 'Archivo .dm-assignment.json', 'Persona entrevistada: responde sin conexión', 'Archivo .dm-interview.json con hash', 'Persona evaluadora: importa, consolida y valida'].map((t, i) => <li key={t} className="panel flex gap-3 p-3 text-sm"><span className="font-semibold text-teal num">{i + 1}</span>{t}</li>)}
-      </ol>
-      <p className="mt-4 text-xs text-muted">El intercambio se realiza por los canales que la organización autorice (correo institucional, carpeta compartida, memoria USB). La aplicación nunca carga archivos a servidores externos.</p>
-    </div>
+    </section>
+  );
+}
+
+/* ===================================================================== */
+/* Preguntas frecuentes y cierre                                          */
+/* ===================================================================== */
+
+function Faq() {
+  return (
+    <Band id="preguntas" tone="white">
+      <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr]">
+        <SectionHeading id="preguntas" eyebrow="10 · Preguntas frecuentes" title="Lo que conviene saber antes de empezar." />
+        <div className="divide-y divide-line border-y border-line">
+          {FAQ.map((f) => (
+            <details key={f.q} className="group py-5">
+              <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-4 font-semibold text-navy"><span>{f.q}</span><span className="flex size-7 shrink-0 items-center justify-center rounded-full border border-line text-lg leading-none text-muted transition-transform duration-200 group-open:rotate-45" aria-hidden>+</span></summary>
+              <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted">{f.a}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </Band>
+  );
+}
+
+function Closing({ busy, onDemo }: { busy: boolean; onDemo: () => void }) {
+  return (
+    <MotionScope as="section" id="acceso" aria-labelledby="acceso-t" className="on-dark relative isolate overflow-hidden bg-midnight text-white">
+      <div aria-hidden className="absolute inset-0 -z-10">
+        <AmbientImage small={topografia1024} large={topografia1920} kenburns className="opacity-90" />
+        <div className="absolute inset-0 bg-gradient-to-b from-midnight/40 via-transparent to-midnight/80" />
+      </div>
+      <div className="mx-auto grid max-w-[1240px] gap-14 px-5 py-24 md:px-8 md:py-32 lg:grid-cols-[1.3fr_1fr] lg:items-end">
+        <Reveal>
+          <p className="eyebrow">11 · Acceso al producto</p>
+          <h2 id="acceso-t" className="mt-4 max-w-3xl font-display text-[2rem] leading-[1.1] font-extrabold tracking-[-0.025em] text-white md:text-[2.9rem]">Una organización no alcanza madurez por tener documentos. <span className="text-mint">La demuestra en sus capacidades de gestión.</span></h2>
+          <div className="mt-10 flex flex-wrap gap-3">
+            <Link to="/app/evaluaciones/nueva" className={buttonClass('primary', 'lg')}>Crear una evaluación <ArrowRight className="size-4" aria-hidden /></Link>
+            <button type="button" onClick={onDemo} disabled={busy} aria-busy={busy} className={buttonClass('outline-light', 'lg')}>{busy ? 'Abriendo…' : 'Explorar caso de demostración'}</button>
+          </div>
+        </Reveal>
+        <Reveal delay={120}>
+          <ul className="divide-y divide-white/10 overflow-hidden rounded-xl border border-white/10 bg-midnight/60 backdrop-blur">
+            {[
+              ['/app', 'Abrir la aplicación', 'Organizaciones, evaluaciones e informes.'],
+              ['/responder', 'Responder una entrevista', 'Para personas que recibieron un archivo de asignación.'],
+              ['/app/academico', 'Laboratorio académico', 'Casos ficticios para diplomados y pregrado.'],
+            ].map(([to, t, d]) => (
+              <li key={to}><Link to={to} className="group flex min-h-16 items-center justify-between gap-4 px-5 py-4 transition-colors hover:bg-white/[0.05]"><span><span className="block font-semibold text-white">{t}</span><span className="text-xs text-fog">{d}</span></span><ArrowUpRight className="size-4 shrink-0 text-mint transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden /></Link></li>
+            ))}
+          </ul>
+        </Reveal>
+      </div>
+    </MotionScope>
   );
 }

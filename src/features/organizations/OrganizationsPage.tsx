@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import { ViewTabs } from '../common';
 import { Building2, Plus, Search } from 'lucide-react';
 import { db } from '@/database/db';
-import { Button, EmptyState, Input, PageHeader, Section, Tag } from '@/components/ui';
+import { EmptyState, Input, PageHeader, Section, Tag, buttonClass } from '@/components/ui';
 import { getProfile } from '@/data/sector-profiles';
 import { fmtDate } from '@/utils/core';
 
@@ -32,7 +32,7 @@ export default function OrganizationsPage() {
 
   return (
     <>
-      <PageHeader eyebrow="Caracterización" title="Organizaciones" description="Cada organización puede tener múltiples evaluaciones. Los datos se separan por organización y evaluación." actions={<Link to="/app/organizaciones/nueva"><Button variant="primary" icon={<Plus className="size-4" />}>Crear organización</Button></Link>} />
+      <PageHeader eyebrow="Caracterización" title="Organizaciones" description="Cada organización puede tener múltiples evaluaciones. Los datos se separan por organización y evaluación." actions={<Link to="/app/organizaciones/nueva" className={buttonClass('primary')}><Plus className="size-4" aria-hidden />Crear organización</Link>} />
       <Section>
         <div className="mb-4 flex flex-col gap-3 sm:flex-row">
           <div className="relative flex-1">
@@ -42,7 +42,7 @@ export default function OrganizationsPage() {
           <ViewTabs label="Vista de organizaciones" value={view} onChange={setView} options={[{ value: 'activas', label: 'Activas', count: tally.activas }, { value: 'archivadas', label: 'Archivadas', count: tally.archivadas }, { value: 'simuladas', label: 'Casos simulados', count: tally.simuladas }]} />
         </div>
         {!orgs ? null : list.length === 0 ? (
-          <EmptyState icon={<Building2 className="size-8" />} title={view === 'activas' ? 'No hay organizaciones activas' : 'No hay resultados'} description="Cree una organización para iniciar su caracterización y sus evaluaciones." actions={<Link to="/app/organizaciones/nueva"><Button variant="primary">Crear organización</Button></Link>} />
+          <EmptyState icon={<Building2 className="size-8" />} title={view === 'activas' ? 'No hay organizaciones activas' : 'No hay resultados'} description="Cree una organización para iniciar su caracterización y sus evaluaciones." actions={<Link to="/app/organizaciones/nueva" className={buttonClass('primary')}>Crear organización</Link>} />
         ) : (
           <div className="overflow-x-auto">
             <table className="table-pro">

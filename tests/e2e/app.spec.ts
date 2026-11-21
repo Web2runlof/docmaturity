@@ -24,7 +24,7 @@ test('59/60 · rutas públicas y de la aplicación funcionan bajo la base de Git
   const external = watchExternal(page);
   const errors = watchErrors(page);
   const routes: [string, RegExp][] = [
-    ['', /Conozca la madurez documental/],
+    ['', /Diagnostique lo que funciona/],
     ['#/como-funciona', /Del primer dato a la hoja de ruta/],
     ['#/metodologia', /Modelo Integrado de Evaluación DocMaturity/],
     ['#/referentes', /Referentes normativos/],
@@ -189,7 +189,7 @@ test('55 · navegación por teclado: enlace de salto, foco visible y diálogos c
   // Con HashRouter el enlace no debe cambiar la ruta: mueve el foco al contenido principal.
   await page.keyboard.press('Enter');
   await expect(page.locator('main#contenido')).toBeFocused();
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('Conozca la madurez documental');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Diagnostique lo que funciona');
   await page.goto('#/app/configuracion');
   await page.getByRole('button', { name: 'Exportar copia de seguridad' }).focus();
   await page.keyboard.press('Enter');
@@ -205,8 +205,56 @@ test('56 · funciona sin conexión después de la primera visita', async ({ page
   await page.waitForFunction(() => Boolean(navigator.serviceWorker.controller));
   await context.setOffline(true);
   await page.reload();
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('Conozca la madurez documental');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Diagnostique lo que funciona');
   await page.goto('#/app/cuestionarios');
   await expect(page.getByRole('heading', { name: 'Cuestionarios' })).toBeVisible();
   await context.setOffline(false);
+});
+
+test('Rediseño · pie de página con autoría, portada con cifras del banco y movimiento reducido', async ({ browser }) => {
+  const ctx = await browser.newContext({ locale: 'es-CO', reducedMotion: 'reduce', viewport: { width: 1440, height: 900 } });
+  const page = await ctx.newPage();
+  const external = watchExternal(page);
+  const errors = watchErrors(page);
+  await page.goto('');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Priorice lo que sigue');
+  // Las llamadas a la acción llevan a rutas reales.
+  await expect(page.getByRole('link', { name: 'Iniciar diagnóstico' }).first()).toHaveAttribute('href', '#/app/organizaciones/nueva');
+  await expect(page.getByRole('link', { name: 'Conocer la metodología' }).first()).toHaveAttribute('href', '#/metodologia');
+  await expect(page.getByRole('link', { name: 'Crear una evaluación' })).toHaveAttribute('href', '#/app/evaluaciones/nueva');
+  // Cifras derivadas del banco: con movimiento reducido se muestran de inmediato, sin animación.
+  const metrics = page.getByRole('region', { name: 'El modelo en cifras' });
+  await expect(metrics).toContainText('225');
+  await expect(metrics).toContainText('1.350');
+  // Con movimiento reducido el contenido de aparición progresiva es visible sin desplazarse.
+  const opacity = await page.locator('.reveal').last().evaluate((el) => getComputedStyle(el).opacity);
+  expect(opacity).toBe('1');
+  const animated = await page.locator('.kenburns').first().evaluate((el) => getComputedStyle(el).animationName);
+  expect(animated).toBe('none');
+  // Atribución de autoría en el pie de página.
+  const author = page.getByRole('contentinfo').getByRole('link', { name: /Sergio Gómez Flórez/ });
+  await expect(author).toHaveAttribute('href', 'https://www.linkedin.com/in/sergio-gomez-florez/');
+  await expect(author).toHaveAttribute('target', '_blank');
+  await expect(author).toHaveAttribute('rel', /noopener/);
+  await expect(page.getByRole('contentinfo')).toContainText('Diseñado y creado por: Sergio Gómez Flórez');
+  // La vista de producto (ECharts) se carga al acercarse y no genera solicitudes externas.
+  await page.locator('#resultados').scrollIntoViewIfNeeded();
+  await expect(page.getByRole('img', { name: /Radar ilustrativo/ })).toBeVisible();
+  expect(external).toEqual([]);
+  expect(errors).toEqual([]);
+  await ctx.close();
+});
+
+test('Rediseño · la navegación de la aplicación indica el siguiente paso con datos reales', async ({ page }) => {
+  await page.goto('');
+  await page.getByRole('button', { name: 'Explorar demostración' }).first().click();
+  await expect(page).toHaveURL(/resultados/, { timeout: 30_000 });
+  const chip = page.getByRole('banner').getByRole('link', { name: /Siguiente paso/ });
+  await expect(chip).toBeVisible();
+  await expect(page.getByRole('navigation', { name: 'Navegación principal' })).toContainText('Evaluación activa');
+  await chip.click();
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+  // El elemento contextual activo es único: «Evaluaciones» cede el resaltado dentro de una evaluación.
+  const current = page.getByRole('navigation', { name: 'Navegación principal' }).locator('[aria-current="page"]');
+  await expect(current).toHaveCount(1);
 });

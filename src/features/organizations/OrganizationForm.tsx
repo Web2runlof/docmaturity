@@ -93,7 +93,7 @@ export default function OrganizationForm() {
       <PageHeader eyebrow="Caracterización" title={existing ? `Editar ${existing.name}` : 'Nueva organización'} description="Los campos opcionales pueden dejarse vacíos o marcarse como desconocidos: la aplicación no los rellena automáticamente." actions={<><Button onClick={() => nav(-1)}>Cancelar</Button><Button type="submit" variant="primary" busy={isSubmitting}>Guardar</Button></>} />
       <div className="grid gap-6 xl:grid-cols-[1fr_360px]">
         <div className="space-y-6">
-          <Section title="Datos básicos">
+          <Section id="org-basicos" eyebrow="Bloque 1 de 3 · Identificación" title="Datos básicos">
             <div className="grid gap-4 md:grid-cols-2">
               <Field label="Nombre o razón social" htmlFor="name" required error={errors.name?.message}><Input id="name" {...register('name')} aria-invalid={Boolean(errors.name)} /></Field>
               <Field label="Nombre abreviado" htmlFor="shortName"><Input id="shortName" {...register('shortName')} /></Field>
@@ -116,7 +116,7 @@ export default function OrganizationForm() {
             <div className="mt-4"><Field label="Descripción organizacional" htmlFor="description"><Textarea id="description" rows={4} {...register('description')} /></Field></div>
           </Section>
 
-          <Section title="Naturaleza jurídica y aplicabilidad" description="La aplicación no clasifica a la organización como sujeto obligado por su nombre, naturaleza societaria o sector. Responda según el ámbito de información afectado.">
+          <Section id="org-juridica" eyebrow="Bloque 2 de 3 · Marco legal" title="Naturaleza jurídica y aplicabilidad" description="La aplicación no clasifica a la organización como sujeto obligado por su nombre, naturaleza societaria o sector. Responda según el ámbito de información afectado.">
             <div className="grid gap-4 md:grid-cols-2">
               <Field label="Perfil organizacional" htmlFor="profileId"><Select id="profileId" {...register('profileId')}>{SECTOR_PROFILES.map((p) => <option key={p.id} value={p.id}>{p.label}</option>)}</Select></Field>
               <div className="rounded-md bg-canvas px-3 py-2 text-xs text-muted">{profile.description} {profile.terminologyNote}</div>
@@ -129,7 +129,7 @@ export default function OrganizationForm() {
             </div>
           </Section>
 
-          <Section title="Caracterización documental" description="Indique para cada dato si fue proporcionado, estimado o verificado. Los datos desconocidos se registran como tales.">
+          <Section id="org-documental" eyebrow="Bloque 3 de 3 · Documental y tecnológico" title="Caracterización documental" description="Indique para cada dato si fue proporcionado, estimado o verificado. Los datos desconocidos se registran como tales.">
             <div className="divide-y divide-line">
               {DOCUMENTARY_FIELDS.map((f) => {
                 const cur = documentary[f.key];
@@ -150,7 +150,16 @@ export default function OrganizationForm() {
             </div>
           </Section>
         </div>
-        <div className="space-y-6">
+        <div className="space-y-6 xl:sticky xl:top-20 xl:self-start">
+          <nav aria-label="Bloques del formulario" className="on-dark rounded-xl bg-midnight p-5 text-white">
+            <p className="eyebrow">En este formulario</p>
+            <ol className="mt-3 space-y-1 text-sm">
+              {[['org-basicos', 'Datos básicos'], ['org-juridica', 'Naturaleza jurídica y aplicabilidad'], ['org-documental', 'Caracterización documental']].map(([id, t], i) => (
+                <li key={id}><a href={`#${id}`} onClick={(e) => { e.preventDefault(); document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} className="flex min-h-9 items-center gap-3 rounded-md px-2 text-fog hover:bg-white/[0.05] hover:text-white"><span className="flex size-6 items-center justify-center rounded-full border border-white/15 text-[11px] font-semibold text-mint num">{i + 1}</span>{t}</a></li>
+              ))}
+            </ol>
+            <p className="mt-4 border-t border-white/10 pt-3 text-xs leading-relaxed text-fog">Solo el nombre es obligatorio. Lo que se desconozca puede registrarse como desconocido: no se convierte en un supuesto.</p>
+          </nav>
           <Section title="Logo (opcional)" description="Se guarda solo en este navegador.">
             {logo ? <img src={logo} alt="Logo de la organización" className="mb-3 max-h-24 rounded border border-line bg-white p-2" /> : <p className="mb-3 text-sm text-muted">Sin logo.</p>}
             <input type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml" aria-label="Cargar logo" onChange={(e) => { const f = e.target.files?.[0]; if (f) onLogo(f); }} className="text-sm" />

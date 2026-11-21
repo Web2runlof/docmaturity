@@ -18,11 +18,13 @@ const n = (v: number) => v.toLocaleString('es-CO');
 function Page({ eyebrow, title, intro, children }: { eyebrow: string; title: string; intro: ReactNode; children: ReactNode }) {
   return (
     <>
-      <header className="border-b border-line bg-canvas">
-        <div className="mx-auto max-w-[1040px] px-5 py-14 md:px-8">
+      <header className="on-dark relative isolate overflow-hidden bg-midnight text-white">
+        <div aria-hidden className="absolute -top-40 right-[-10%] -z-10 size-[620px] rounded-full" style={{ background: 'radial-gradient(circle, rgba(142,120,247,0.18), transparent 64%)' }} />
+        <div aria-hidden className="absolute -bottom-56 left-[-8%] -z-10 size-[560px] rounded-full" style={{ background: 'radial-gradient(circle, rgba(53,217,164,0.10), transparent 66%)' }} />
+        <div className="mx-auto max-w-[1040px] px-5 pt-14 pb-16 md:px-8 md:pt-16 md:pb-20">
           <p className="eyebrow">{eyebrow}</p>
-          <h1 className="mt-3 max-w-3xl text-3xl font-bold md:text-4xl">{title}</h1>
-          <div className="mt-4 max-w-2xl text-base text-muted">{intro}</div>
+          <h1 className="mt-3 max-w-3xl font-display text-[2rem] leading-[1.1] font-bold tracking-[-0.02em] text-white md:text-[2.6rem]">{title}</h1>
+          <div className="mt-5 max-w-2xl text-base leading-relaxed text-fog md:text-[1.0625rem]">{intro}</div>
         </div>
       </header>
       <div className="mx-auto max-w-[1040px] space-y-14 px-5 py-14 md:px-8">{children}</div>
@@ -33,7 +35,7 @@ function Page({ eyebrow, title, intro, children }: { eyebrow: string; title: str
 function Block({ title, children, id }: { title: string; children: ReactNode; id?: string }) {
   return (
     <section id={id} aria-labelledby={id ? `${id}-t` : undefined}>
-      <h2 id={id ? `${id}-t` : undefined} className="border-b border-line pb-3 text-xl font-semibold">{title}</h2>
+      <h2 id={id ? `${id}-t` : undefined} className="border-b border-line pb-3 font-display text-xl font-bold text-navy">{title}</h2>
       <div className="mt-5 space-y-4 text-[0.95rem] leading-relaxed text-ink">{children}</div>
     </section>
   );
@@ -87,7 +89,7 @@ export function HowItWorksPage() {
 export function MethodologyPage() {
   const t = DEFAULT_THRESHOLDS;
   return (
-    <Page eyebrow={`Metodología · banco ${BANK_VERSION}`} title={MODEL_NAME} intro={`${DIMENSIONS.length} dimensiones, ${QUESTIONS.length} criterios originales y ${QUESTIONS.length * 6} descriptores de nivel redactados individualmente. Las fórmulas se aplican de forma determinista y se documentan aquí sin simplificaciones.`}>
+    <Page eyebrow={`Metodología · banco ${BANK_VERSION}`} title={MODEL_NAME} intro={`${DIMENSIONS.length} dimensiones, ${QUESTIONS.length} criterios originales y ${(QUESTIONS.length * 6).toLocaleString('es-CO')} descriptores de nivel redactados individualmente. Las fórmulas se aplican de forma determinista y se documentan aquí sin simplificaciones.`}>
       <Block title="Escala de madurez" id="escala">
         <ol className="grid gap-2">{LEVEL_NAMES.map((name, i) => (
           <li key={name} className="grid grid-cols-[8px_120px_1fr] items-start gap-4 rounded-md border border-line bg-white p-3">

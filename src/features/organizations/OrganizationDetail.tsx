@@ -3,7 +3,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { useState } from 'react';
 import { Archive, ArchiveRestore, Copy, Download, Pencil, Plus, Trash2 } from 'lucide-react';
 import { db } from '@/database/db';
-import { Button, ConfirmDialog, KeyValue, PageHeader, Section, Tag } from '@/components/ui';
+import { Button, ConfirmDialog, KeyValue, PageHeader, Section, Tag, buttonClass } from '@/components/ui';
 import { DOCUMENTARY_FIELDS, getProfile } from '@/data/sector-profiles';
 import { deleteOrganization, duplicateOrganization, organizationDependencies, setOrganizationArchived } from '@/services/repo';
 import { buildAssessmentPackage, buildOrganizationPackage } from '@/services/packages';
@@ -35,7 +35,7 @@ export default function OrganizationDetail() {
     <>
       <PageHeader eyebrow={getProfile(org.profileId).label} title={org.name} description={org.shortName} actions={
         <>
-          <Link to={`/app/organizaciones/${oid}/editar`}><Button icon={<Pencil className="size-4" />}>Editar</Button></Link>
+          <Link to={`/app/organizaciones/${oid}/editar`} className={buttonClass('secondary')}><Pencil className="size-4" aria-hidden />Editar</Link>
           <Button icon={<Download className="size-4" />} onClick={() => setExp(true)}>Exportar JSON</Button>
           <Button icon={<Copy className="size-4" />} onClick={async () => { const id = await attempt(() => duplicateOrganization(oid), 'Organización duplicada'); if (id) nav(`/app/organizaciones/${id}`); }}>Duplicar</Button>
           <Button icon={org.archived ? <ArchiveRestore className="size-4" /> : <Archive className="size-4" />} onClick={() => attempt(() => setOrganizationArchived(oid, !org.archived), org.archived ? 'Organización restaurada' : 'Organización archivada')}>{org.archived ? 'Restaurar' : 'Archivar'}</Button>
@@ -44,7 +44,7 @@ export default function OrganizationDetail() {
       } />
       <div className="grid gap-6 xl:grid-cols-[1.4fr_1fr]">
         <div className="space-y-6">
-          <Section title="Evaluaciones" actions={<Link to={`/app/evaluaciones/nueva?org=${oid}`}><Button size="sm" variant="primary" icon={<Plus className="size-3.5" />}>Nueva evaluación</Button></Link>}>
+          <Section title="Evaluaciones" actions={<Link to={`/app/evaluaciones/nueva?org=${oid}`} className={buttonClass('primary', 'sm')}><Plus className="size-3.5" aria-hidden />Nueva evaluación</Link>}>
             {assessments?.length ? (
               <ul className="divide-y divide-line">
                 {assessments.map((a) => (

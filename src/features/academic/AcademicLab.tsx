@@ -31,7 +31,7 @@ export default function AcademicLab() {
 
   return (
     <>
-      <PageHeader eyebrow="Modo académico" title="Laboratorio de diagnóstico documental" description="Sesión guiada de 60 minutos (ajustable) sobre casos ficticios: caracterizar, entrevistar, triangular, priorizar y sustentar. Los casos se cargan solo a petición y quedan marcados como simulación." />
+      <PageHeader tone="academic" eyebrow="Modo académico" title="Laboratorio de diagnóstico documental" description="Sesión guiada de 60 minutos (ajustable) sobre casos ficticios: caracterizar, entrevistar, triangular, priorizar y sustentar. Los casos se cargan solo a petición y quedan marcados como simulación." />
       <Callout tone="info" title="Casos ficticios">Las organizaciones, personas, sistemas y hechos de los casos son simulaciones pedagógicas y no deben atribuirse a organizaciones reales. Puede eliminarlos en Configuración.</Callout>
 
       <Section className="mt-6" title="Casos disponibles">
@@ -40,7 +40,7 @@ export default function AcademicLab() {
             const org = orgs.find((o) => o.name === c.title);
             const existing = org ? assessments.filter((a) => a.organizationId === org.id) : [];
             return (
-              <article key={c.id} className={cx('rounded-lg border p-4', existing.some((e) => e.id === selected) ? 'border-petrol bg-teal-50/40' : 'border-line')}>
+              <article key={c.id} className={cx('rounded-lg border p-4', existing.some((e) => e.id === selected) ? 'border-violet bg-violet-soft/60 shadow-[0_0_0_1px_var(--color-violet)]' : 'border-line bg-white')}>
                 <p className="text-xs text-muted">{getProfile(c.profileId).label}</p>
                 <h3 className="mt-1 font-semibold">{c.title}</h3>
                 <p className="mt-1 text-sm text-muted line-clamp-3">{c.context}</p>
@@ -134,13 +134,13 @@ function LabSession({ aid }: { aid: string }) {
 
   return (
     <div className="mt-6 space-y-6">
-      <section className="panel grid gap-4 p-5 lg:grid-cols-[1fr_auto]" aria-label="Temporizador del laboratorio">
+      <section className="panel grid gap-4 border-t-[3px] border-t-violet p-5 lg:grid-cols-[1fr_auto]" aria-label="Temporizador del laboratorio">
         <div>
-          <p className="eyebrow">Fase {t.phase.id} de {t.phases.length} · {t.phase.minutes} minutos</p>
+          <p className="eyebrow !text-violet-strong">Fase {t.phase.id} de {t.phases.length} · {t.phase.minutes} minutos</p>
           <h2 className="mt-1 text-lg font-semibold">{t.phase.name}</h2>
           <p className="text-sm text-muted">{t.phase.goal}</p>
           <ol className="mt-4 grid grid-cols-4 gap-1" aria-label="Fases">
-            {t.phases.map((p) => <li key={p.id} className={cx('rounded px-2 py-1.5 text-xs', p.id < t.phase.id ? 'bg-teal-50 text-teal-800' : p.id === t.phase.id ? 'bg-navy text-white' : 'bg-slate-100 text-muted')}><span className="font-semibold">{p.id}.</span> {p.name} · {p.minutes}′</li>)}
+            {t.phases.map((p) => <li key={p.id} className={cx('rounded px-2 py-1.5 text-xs', p.id < t.phase.id ? 'bg-violet-soft text-violet-strong' : p.id === t.phase.id ? 'bg-violet-strong text-white' : 'bg-neutral text-muted')}><span className="font-semibold">{p.id}.</span> {p.name} · {p.minutes}′</li>)}
           </ol>
         </div>
         <div className="flex flex-col items-start justify-center gap-2 lg:items-end">

@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 
 test('54 · experiencia móvil: menú, cuestionario del entrevistado y contenido sin desbordamiento horizontal', async ({ page }) => {
   await page.goto('');
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('Conozca la madurez documental');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Diagnostique lo que funciona');
   await page.getByRole('button', { name: 'Abrir menú' }).click();
   await expect(page.getByRole('navigation', { name: 'Sitio móvil' })).toBeVisible();
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);

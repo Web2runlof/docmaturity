@@ -3,7 +3,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { useState } from 'react';
 import { FolderKanban, Plus, Upload } from 'lucide-react';
 import { db } from '@/database/db';
-import { Button, EmptyState, PageHeader, Section, Tag } from '@/components/ui';
+import { Button, EmptyState, PageHeader, Section, Tag, buttonClass } from '@/components/ui';
 import { fmtDate } from '@/utils/core';
 import { STATUS_LABEL, ViewTabs, modalityLabel } from '../common';
 import { ImportAssessmentDialog } from './ImportAssessmentDialog';
@@ -24,14 +24,14 @@ export default function AssessmentsPage() {
   return (
     <>
       <PageHeader eyebrow="Proyectos de diagnóstico" title="Evaluaciones" description="Cada evaluación congela su versión metodológica, su banco y sus ponderaciones para garantizar la reproducibilidad." actions={
-        <><Button icon={<Upload className="size-4" />} onClick={() => setImportOpen(true)}>Importar</Button><Link to="/app/evaluaciones/nueva"><Button variant="primary" icon={<Plus className="size-4" />}>Nueva evaluación</Button></Link></>
+        <><Button icon={<Upload className="size-4" />} onClick={() => setImportOpen(true)}>Importar</Button><Link to="/app/evaluaciones/nueva" className={buttonClass('primary')}><Plus className="size-4" aria-hidden />Nueva evaluación</Link></>
       } />
       <Section>
         <div className="mb-4 flex justify-end">
           <ViewTabs label="Vista de evaluaciones" value={filter} onChange={setFilter} options={[{ value: 'reales', label: 'Diagnósticos reales', count: tally.reales }, { value: 'archivadas', label: 'Archivadas', count: tally.archivadas }, { value: 'simuladas', label: 'Casos simulados', count: tally.simuladas }]} />
         </div>
         {!list.length ? (
-          <EmptyState icon={<FolderKanban className="size-8" />} title="No hay evaluaciones en esta vista" description="Cree una evaluación sobre una organización existente o importe un archivo .dm-assessment.json." actions={<Link to="/app/evaluaciones/nueva"><Button variant="primary">Nueva evaluación</Button></Link>} />
+          <EmptyState icon={<FolderKanban className="size-8" />} title="No hay evaluaciones en esta vista" description="Cree una evaluación sobre una organización existente o importe un archivo .dm-assessment.json." actions={<Link to="/app/evaluaciones/nueva" className={buttonClass('primary')}>Nueva evaluación</Link>} />
         ) : (
           <div className="overflow-x-auto">
             <table className="table-pro">

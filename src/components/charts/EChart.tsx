@@ -50,13 +50,14 @@ export function EChart({ option, height = 320, label, summary, table, onClick, e
   }, [empty]);
 
   useEffect(() => {
-    chart.current?.setOption({ animation: !reduced(), animationDuration: 220, textStyle: { fontFamily: 'Inter, sans-serif' }, ...option }, true);
+    // Transiciones de entrada y de cambio de estado moderadas; los valores siempre son los reales.
+    chart.current?.setOption({ animation: !reduced(), animationDuration: 650, animationEasing: 'cubicOut', animationDurationUpdate: 380, animationEasingUpdate: 'cubicOut', textStyle: { fontFamily: 'Inter, sans-serif' }, ...option }, true);
   }, [option]);
 
   return (
     <figure className="m-0">
       {empty ? (
-        <div className="flex items-center justify-center rounded-md border border-dashed border-line bg-slate-50/60 text-sm text-muted" style={{ height }}>{empty}</div>
+        <div className="flex items-center justify-center rounded-lg border border-dashed border-[#cfd8e3] bg-soft px-6 text-center text-sm text-muted" style={{ height }}>{empty}</div>
       ) : (
         <div ref={ref} role="img" aria-label={label} style={{ height, width: '100%' }} />
       )}

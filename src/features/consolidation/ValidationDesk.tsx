@@ -4,7 +4,7 @@ import { CheckCircle2, CircleDashed, Plus, Search, TriangleAlert } from 'lucide-
 import type { Level } from '@/types/bank';
 import { useAssessmentData } from '@/hooks/useAssessment';
 import { useSettings } from '@/hooks/useAssessment';
-import { Button, Callout, Field, Input, LevelTag, PageHeader, Section, Select, Tag, Textarea } from '@/components/ui';
+import { Button, Callout, Field, Input, LevelTag, PageHeader, Section, Select, StatusBadge, Tag, Textarea } from '@/components/ui';
 import { LEVEL_NAMES, dimensionName, getSource } from '@/data/bank';
 import { ALERT_LABEL, CONTRADICTION_RULES, type ValidationAlertKind } from '@/engine/triangulation';
 import { EVIDENCE_LABEL, SPECIAL_LABEL, VALIDATED_EVIDENCE_LEVEL } from '@/engine/constants';
@@ -75,7 +75,7 @@ export default function ValidationDesk() {
               const al = alertsBy.get(s.question.id) ?? [];
               return (
                 <li key={s.question.id}>
-                  <button onClick={() => select(s.question.id)} className={cx('flex w-full items-start gap-3 px-2 py-2.5 text-left', current?.question.id === s.question.id ? 'bg-teal-50/60' : 'hover:bg-slate-50')} aria-current={current?.question.id === s.question.id}>
+                  <button onClick={() => select(s.question.id)} className={cx('flex w-full items-start gap-3 px-2 py-2.5 text-left', current?.question.id === s.question.id ? 'bg-mint-soft/70 shadow-[inset_3px_0_0_var(--color-mint-strong)]' : 'hover:bg-soft')} aria-current={current?.question.id === s.question.id}>
                     {s.validated !== null ? <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-petrol" aria-label="Validado" /> : al.length ? <TriangleAlert className="mt-0.5 size-4 shrink-0 text-warning" aria-label="Con alertas" /> : <CircleDashed className="mt-0.5 size-4 shrink-0 text-nodata" aria-label="Pendiente" />}
                     <span className="min-w-0 flex-1">
                       <span className="block text-sm"><span className="font-medium text-navy">{s.question.id}</span> {s.question.criterion}</span>
@@ -83,8 +83,12 @@ export default function ValidationDesk() {
                         <span>Mediana {fmtScore(s.preliminary)}</span>
                         <span>n={s.stats?.n ?? 0}</span>
                         {s.stats && s.stats.n > 1 && <span>Rango {s.stats.range}</span>}
-                        {!s.applicable && <span className="text-warning">No aplica (validado)</span>}
-                        {s.insufficientEvidence && <Tag tone="warning">Validado sin evidencia suficiente</Tag>}
+                      </span>
+                      <span className="mt-1.5 flex flex-wrap gap-1">
+                        {!s.applicable ? <StatusBadge kind="no_aplica" label="No aplica (validado)" /> : s.validated !== null ? <StatusBadge kind="validado" /> : <StatusBadge kind="por_validar" />}
+                        {s.insufficientEvidence && <StatusBadge kind="evidencia_insuficiente" label="Validado sin evidencia suficiente" />}
+                        {al.includes('discrepancia') && <StatusBadge kind="discrepancia" />}
+                        {al.includes('contradiccion') && <StatusBadge kind="contradiccion" />}
                       </span>
                     </span>
                   </button>
