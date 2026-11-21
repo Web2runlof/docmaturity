@@ -9,9 +9,9 @@ Correcciones de la auditoría funcional. No cambia la arquitectura (sin servidor
 ### Cálculos e indicadores (P0)
 - C1 «Alcance sobre el banco» (antes «Cobertura del banco completo») y nuevo indicador «Cobertura del banco» (criterios con puntuación / 225) en Resultados, Resumen, narrativa, PDF y XLSX.
 - C2 «Brecha frente a la meta» como promedio ponderado de máx(0, meta − nivel) por criterio puntuado, por serie.
-- C3 Fórmula publicada de solidez con el acuerdo × 100 (escala 0–100).
+- C3 Fórmula publicada de solidez con el acuerdo × 100 (escala 0–100), también en los informes PDF (tarjeta del informe ejecutivo y tabla «Indicadores y fórmulas» del informe técnico).
 - C4–C5 Cada vista recalcula sus indicadores sobre su serie o los marca «Solo percibida» / «Común a las vistas»; sello «Exploratorio» y «Calculada sobre D01–D05»; aviso de universos distintos en Comparación; la narrativa usa una sola serie.
-- C6 «Validado sin evidencia suficiente» (nivel ≥ 3 con E0/E1) en la mesa, los resultados y los informes; advertencia al guardar; excluido de las capacidades sustentadas.
+- C6 «Validado sin evidencia suficiente» (nivel ≥ 3 con E0/E1) en la mesa, los resultados y los informes (incluida una tarjeta en el informe ejecutivo); advertencia al guardar; excluido de las capacidades sustentadas.
 - C7 Radar de comparación solo con dimensiones con datos en ambas series.
 - C8 Lecturas organizacional y tecnológica en una constante compartida (partición de las 15 dimensiones), reproducibles y documentadas.
 - C9 Componente MGDA por criterio como fuente de verdad; tabla de criterios por componente en Metodología.
@@ -32,7 +32,7 @@ Correcciones de la auditoría funcional. No cambia la arquitectura (sin servidor
 ### Textos (P2)
 - Trato de «usted» en toda la interfaz, incluida la portada; tagline y nombre del modelo en español; «tablero» en lugar de «dashboard»; «meta» como término único.
 - Bandas de cobertura de la metodología en la portada; brechas de ejemplo con códigos y nombres reales del banco; ciclo de seis momentos idéntico en portada, héroe y «Cómo funciona».
-- Respuestas especiales con su efecto sobre la cobertura; códigos internos ocultos; nombres legibles de las reglas de contraste; pluralización real.
+- Respuestas especiales con su efecto sobre la cobertura; códigos internos ocultos (verificado con un barrido automático del texto visible de 29 pantallas y de los PDF); nombres legibles de las reglas de contraste; pluralización real.
 - Referentes: «Lo que este referente no cubre», «Limitaciones de la verificación», F27 marcado como agrupador, filtro por tipo y orden por código.
 - Aviso de almacenamiento único; «Abrir entrevista».
 
@@ -41,7 +41,7 @@ Correcciones de la auditoría funcional. No cambia la arquitectura (sin servidor
 - Línea de tiempo con fases neutras, leyenda, etiquetas completas y mes de inicio; mapa de dependencias propio (SVG) con encabezado por fase y conectores que no cruzan tarjetas.
 - Matriz de brechas por severidad de columna; discrepancias agregadas con conteo; impacto–esfuerzo con cortes en 2,5 y desplazamiento determinista; matriz de riesgos con leyenda de bandas.
 - Radar en sentido horario y alternativa de barras por familia; «Sin datos» explícito en las barras; cobertura coloreada por banda con umbrales rotulados; hallazgos MGDA con «Sin evaluar».
-- Ajustes de maquetación (menú, Alcance, Mesa, tablas, Entrevistas, Referentes).
+- Ajustes de maquetación (menú, Alcance, Mesa, tablas, Entrevistas, Referentes) y en los PDF: las notas de las tarjetas se ajustan al ancho y los títulos no quedan separados de su gráfico o tabla.
 - Héroe de la portada rediseñado: fondo oscuro, tarjetas de vidrio con datos ilustrativos y nombres reales del modelo.
 
 ### Demostración (V14)

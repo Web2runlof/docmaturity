@@ -9,7 +9,7 @@ Ejecución del 20 de noviembre de 2026 sobre la versión 1.0.0 (Node.js 22.23, C
 | Lint | `npm run lint` | Sin errores ni advertencias |
 | Tipos | `npm run typecheck` | Sin errores (TypeScript estricto) |
 | Banco | `npm run bank` | 15 dimensiones, 225 criterios, 1.350 descriptores únicos, 22 críticos |
-| Unitarias e integración | `npm run test` | **90 de 90 aprobadas** (6 archivos) |
+| Unitarias e integración | `npm run test` | **92 de 92 aprobadas** (6 archivos) |
 | Build de producción | `npm run build` | Correcto; 107 recursos precargados por el service worker (≈ 4,4 MB) |
 | End-to-end | `npm run test:e2e` | **8 de 8 aprobadas** (7 escritorio 1440 × 900 y 1 móvil Pixel 7) |
 
@@ -101,7 +101,7 @@ U = prueba unitaria o de integración (Vitest, `tests/unit`); E = prueba end-to-
 | Demostración repetida | Clics repetidos o simultáneos en «Explorar demostración» no crean duplicados |
 | Demostración enriquecida | 1 entrevista importada con hash, E2/E3 en ≥ 8 dimensiones, soporte > 20 %, iniciativas valoradas y una en la fase 4 |
 
-Además, se cargó la demostración en el sitio compilado y se recorrieron todas las rutas públicas y de la aplicación (incluidas las vistas Validada y Comparación, las pestañas de la hoja de ruta y de brechas, y las páginas 404) sin errores de consola ni peticiones externas.
+Además, se cargó la demostración en el sitio compilado y se recorrieron todas las rutas públicas y de la aplicación (incluidas las vistas Validada y Comparación, las pestañas de la hoja de ruta y de brechas, y las páginas 404) sin errores de consola ni peticiones externas. Un barrido automático del texto visible de esas 29 pantallas y de los dos PDF no encontró códigos internos (`NO_SABE`, nombres de campos, identificadores con guion bajo), siglas en minúscula, plurales con paréntesis ni porcentajes con punto decimal.
 
 ## 3. Casos matemáticos obligatorios
 

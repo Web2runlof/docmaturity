@@ -10,7 +10,8 @@ import type { AssessmentBundle } from '@/types/domain';
 import { LEVEL_NAMES, dimensionName, getSource } from '@/data/bank';
 import { getProfile } from '@/data/sector-profiles';
 import { COVERAGE_BAND_LABEL, currentScore, levelIndex } from '@/engine/scoring';
-import { EVIDENCE_LABEL, LEVEL_COLORS } from '@/engine/constants';
+import { EVIDENCE_LABEL, LENS_DIMENSIONS, LEVEL_COLORS } from '@/engine/constants';
+import { dimensionRangeLabel } from '@/engine/analyze';
 import { RISK_STATUS_LABEL } from '@/engine/risk';
 import { APP_TAGLINE, MODEL_NAME, TARGET_TERM, VERIFICATION_LABEL, modalityLabel } from '@/config/vocabulary';
 import { fmtPct, fmtScore } from '@/utils/core';
@@ -32,6 +33,10 @@ export function pdfSafe(s: string): string {
 /** Formatos únicos: madurez y brechas con 2 decimales; porcentajes con 1 decimal. */
 const f1 = (v: number | null | undefined) => fmtScore(v, 'Sin datos');
 const fp = (v: number | null | undefined) => fmtPct(v);
+/** Color de la serie percibida: el mismo tono de la paleta secuencial que usa el tablero (nivel 3). */
+const SERIES_RGB: [number, number, number] = [parseInt(LEVEL_COLORS[3].slice(1, 3), 16), parseInt(LEVEL_COLORS[3].slice(3, 5), 16), parseInt(LEVEL_COLORS[3].slice(5, 7), 16)];
+const solidityValue = (a: Analysis) => (a.solidity.index === null ? 'No calculable' : String(Math.round(a.solidity.index)));
+const SOLIDITY_FORMULA = '0,4·Cobertura + 0,4·Soporte + 0,2·(Acuerdo × 100)';
 const evidenceCell = (s: Analysis['states'][number]) => (!s.applicable ? 'No aplica' : s.insufficientEvidence ? `${s.evidenceStatus} · validado sin evidencia suficiente` : s.evidenceStatus);
 
 class Report {
@@ -71,16 +76,17 @@ class Report {
     d.addPage();
     this.y = 20;
   }
-  h1(text: string) {
-    this.ensure(18);
+  /** Título de sección. `keepWith` reserva el alto del contenido siguiente para no dejar el título huérfano. */
+  h1(text: string, keepWith = 0) {
+    this.ensure(18 + keepWith);
     this.doc.setFont('helvetica', 'bold'); this.doc.setFontSize(15); this.setColor(C.navy);
     this.doc.text(pdfSafe(text), this.M, this.y);
     this.doc.setDrawColor(C.gold[0], C.gold[1], C.gold[2]); this.doc.setLineWidth(0.6);
     this.doc.line(this.M, this.y + 2.5, this.M + 18, this.y + 2.5);
     this.y += 10;
   }
-  h2(text: string) {
-    this.ensure(12);
+  h2(text: string, keepWith = 0) {
+    this.ensure(12 + keepWith);
     this.doc.setFont('helvetica', 'bold'); this.doc.setFontSize(11); this.setColor(C.text);
     this.doc.text(pdfSafe(text), this.M, this.y);
     this.y += 6;
@@ -96,23 +102,37 @@ class Report {
     }
     this.y += 2.5;
   }
+  /** Tarjetas de indicadores en tres columnas. La nota se ajusta al ancho y la fila crece según la nota más larga. */
   kpis(items: { label: string; value: string; note?: string }[]) {
     const cols = 3;
-    const w = (this.CW - (cols - 1) * 4) / cols;
-    const rows = Math.ceil(items.length / cols);
-    this.ensure(rows * 22 + 2);
-    items.forEach((it, i) => {
-      const x = this.M + (i % cols) * (w + 4);
-      const y = this.y + Math.floor(i / cols) * 22;
-      this.doc.setDrawColor(C.border[0], C.border[1], C.border[2]); this.doc.setLineWidth(0.3);
-      this.doc.rect(x, y, w, 19);
-      this.doc.setFont('helvetica', 'normal'); this.doc.setFontSize(7.5); this.setColor(C.slate);
-      this.doc.text(this.doc.splitTextToSize(pdfSafe(it.label), w - 6), x + 3, y + 5);
-      this.doc.setFont('helvetica', 'bold'); this.doc.setFontSize(14); this.setColor(C.navy);
-      this.doc.text(pdfSafe(it.value), x + 3, y + 14);
-      if (it.note) { this.doc.setFont('helvetica', 'normal'); this.doc.setFontSize(6.5); this.setColor(C.slate); this.doc.text(pdfSafe(it.note).slice(0, 60), x + 3, y + 17.5); }
-    });
-    this.y += rows * 22 + 3;
+    const gap = 4;
+    const w = (this.CW - (cols - 1) * gap) / cols;
+    const noteLh = 2.6;
+    this.doc.setFont('helvetica', 'normal'); this.doc.setFontSize(6.5);
+    const notes = items.map((it) => (it.note ? (this.doc.splitTextToSize(pdfSafe(it.note), w - 6) as string[]).slice(0, 3) : []));
+    for (let r = 0; r * cols < items.length; r += 1) {
+      const row = items.slice(r * cols, r * cols + cols);
+      const maxNote = Math.max(0, ...notes.slice(r * cols, r * cols + cols).map((n) => n.length));
+      const h = 16 + maxNote * noteLh + (maxNote ? 1.5 : 0);
+      this.ensure(h + 3);
+      row.forEach((it, k) => {
+        const x = this.M + k * (w + gap);
+        const y = this.y;
+        this.doc.setDrawColor(C.border[0], C.border[1], C.border[2]); this.doc.setLineWidth(0.3);
+        this.doc.rect(x, y, w, h);
+        this.doc.setFont('helvetica', 'normal'); this.doc.setFontSize(7.5); this.setColor(C.slate);
+        this.doc.text((this.doc.splitTextToSize(pdfSafe(it.label), w - 6) as string[])[0], x + 3, y + 5);
+        this.doc.setFont('helvetica', 'bold'); this.doc.setFontSize(14); this.setColor(C.navy);
+        this.doc.text(pdfSafe(it.value), x + 3, y + 12.5);
+        const n = notes[r * cols + k];
+        if (n.length) {
+          this.doc.setFont('helvetica', 'normal'); this.doc.setFontSize(6.5); this.setColor(C.slate);
+          n.forEach((line, li) => this.doc.text(line, x + 3, y + 16.2 + li * noteLh));
+        }
+      });
+      this.y += h + 3;
+    }
+    this.y += 1;
   }
   table(head: string[], body: (string | number | null)[][], widths?: number[]) {
     this.ensure(16);
@@ -233,31 +253,33 @@ export function buildExecutivePDF(a: Analysis, bundle: AssessmentBundle): Blob {
     { label: 'Cobertura del banco', value: fp(a.coverage.bankCoverage), note: `${a.coverage.bankScored} de ${a.coverage.bankTotal} con puntuación` },
     { label: 'Soporte de evidencias', value: fp(a.evidence.support) },
     { label: 'Cobertura de validación', value: fp(a.coverage.validationCoverage) },
-    { label: 'Capacidades críticas con alerta', value: String(a.critical.length) },
+    { label: 'Capacidades críticas con alerta', value: String(a.views.preliminary.critical.length), note: 'Serie percibida' },
+    { label: 'Índice orientativo de solidez', value: solidityValue(a), note: `Escala 0–100: ${SOLIDITY_FORMULA}` },
+    { label: 'Validados sin evidencia suficiente', value: String(a.lenses.insufficientEvidence.length), note: a.lenses.insufficientEvidence.length ? a.lenses.insufficientEvidence.join(', ') : 'Nivel ≥ 3 con evidencia E0 o E1' },
   ]);
-  r.h1('Madurez por dimensión (serie percibida)');
+  r.h1('Madurez por dimensión (serie percibida)', 92);
   r.radar(dimLabels(a), [
-    { name: 'Percibida (preliminar)', values: a.dimensions.map((d) => d.preliminary), color: [13, 148, 136] },
+    { name: 'Percibida (preliminar)', values: a.dimensions.map((d) => d.preliminary), color: SERIES_RGB },
     { name: TARGET_TERM.capital, values: a.dimensions.map((d) => d.target), color: [198, 155, 89] },
   ]);
   r.bars(a.dimensions.map((d) => ({ label: `${d.dimensionId} ${dimensionName(d.dimensionId)}`, value: d.preliminary, target: d.target })));
   r.p('La madurez validada se presenta aparte porque se calcula sobre un universo menor de criterios.', 7.5, C.slate);
-  r.h1('Principales brechas');
+  r.h1('Principales brechas', 24);
   const gaps = a.states.filter((s) => s.applicable && currentScore(s) !== null && s.target - (currentScore(s) as number) > 0).sort((x, y) => (y.target - (currentScore(y) as number)) - (x.target - (currentScore(x) as number))).slice(0, 12);
   r.table(['Criterio', 'Nombre', 'Actual*', TARGET_TERM.capital, 'Brecha'], gaps.map((s) => [s.question.id, s.question.criterion, f1(currentScore(s)), f1(s.target), f1(s.target - (currentScore(s) as number))]), [18, 96, 18, 20, 22]);
   r.p('* Actual: nivel validado cuando existe; si no, nivel preliminar del criterio.', 7.5, C.slate);
-  r.h1('Riesgos potenciales');
+  r.h1('Riesgos potenciales', 24);
   const risks = bundle.risks.length ? bundle.risks : [];
   if (risks.length) r.table(['Riesgo', 'Estado', 'P', 'I', 'Clasificación'], risks.map((x) => [x.title, RISK_STATUS_LABEL[x.status], x.probability, x.impact, riskBand(riskScore(x.probability, x.impact))?.label ?? 'Sin valorar']), [70, 30, 12, 12, 50]);
   else narrative.find((s) => s.key === 'riesgos')?.paragraphs.forEach((p) => r.p(p.text));
-  r.h1('Prioridades');
+  r.h1('Prioridades', 24);
   r.table(['Criterio', 'Acción recomendada', 'Prioridad'], a.priorities.slice(0, 10).map((p) => [p.questionId, a.recommendations.find((x) => x.questionId === p.questionId)?.action ?? '', f1(p.score)]), [20, 134, 20]);
-  r.h1('Hoja de ruta');
+  r.h1('Hoja de ruta', 24);
   const inis = bundle.initiatives.length ? [...bundle.initiatives].sort((x, y) => x.phase - y.phase || x.startDate.localeCompare(y.startDate) || x.order - y.order) : [];
   if (inis.length) r.table(['Fase', 'Iniciativa', 'Inicio', 'Fin', 'Responsable'], inis.map((i) => [`${i.phase}. ${PHASES[i.phase - 1].name}`, i.name, i.startDate, i.endDate, i.owner]), [36, 64, 20, 20, 34]);
   else narrative.find((s) => s.key === 'hoja_ruta')?.paragraphs.forEach((p) => r.p(p.text));
   r.p('Los plazos son propuestas orientativas, no cronogramas contractuales.', 7.5, C.slate);
-  r.h1('Limitaciones');
+  r.h1('Limitaciones', 24);
   narrative.find((s) => s.key === 'limitaciones')?.paragraphs.forEach((p) => r.p(p.text));
   return r.finish();
 }
@@ -278,11 +300,27 @@ export function buildTechnicalPDF(a: Analysis, bundle: AssessmentBundle): Blob {
   narrative.find((s) => s.key === 'alcance')?.paragraphs.forEach((p) => r.p(p.text));
   r.h2('Ponderaciones utilizadas');
   r.table(['Dimensión', 'Nombre', 'Ponderación'], a.dimensions.map((d) => [d.dimensionId, dimensionName(d.dimensionId), d.weight]), [24, 120, 30]);
+  r.h2('Indicadores y fórmulas', 30);
+  const vp = a.views.preliminary;
+  const vv = a.views.validated;
+  r.table(['Indicador', 'Fórmula', 'Valor'], [
+    ['Madurez percibida', `Mediana por criterio (una respuesta por participante); promedio ponderado por dimensión. Calculada sobre ${vp.includedLabel}.`, f1(vp.global.score)],
+    ['Madurez validada', `Niveles validados; mismo cálculo. Calculada sobre ${vv.includedLabel}${vv.exploratory ? ' (exploratorio)' : ''}.`, f1(vv.global.score)],
+    [`Brecha frente a la ${TARGET_TERM.one}`, 'Promedio ponderado de máx(0, meta − nivel) por criterio puntuado (serie percibida).', f1(vp.gap)],
+    ['Cobertura del diagnóstico', 'Criterios aplicables con puntuación / criterios aplicables del alcance.', `${fp(a.coverage.coverage)} (${a.coverage.numeric}/${a.coverage.applicable})`],
+    ['Alcance sobre el banco', `Criterios aplicables del alcance / ${a.coverage.bankTotal}.`, fp(a.coverage.scopeCoverage)],
+    ['Cobertura del banco', `Criterios del banco con puntuación / ${a.coverage.bankTotal}.`, `${fp(a.coverage.bankCoverage)} (${a.coverage.bankScored}/${a.coverage.bankTotal})`],
+    ['Soporte de evidencias', 'Promedio ponderado del factor de evidencia (E0 = 0; E1 = 0,25; E2 = 0,6; E3 = 1).', fp(a.evidence.support)],
+    ['Acuerdo entre entrevistados', 'Promedio de 1 − rango/5 en criterios con al menos dos participantes (0–1).', f1(a.agreement.agreement)],
+    ['Índice orientativo de solidez', `${SOLIDITY_FORMULA}; escala 0–100. No es una confianza estadística.`, solidityValue(a)],
+    ['Madurez organizacional', `Promedio ponderado por dimensión de ${dimensionRangeLabel([...LENS_DIMENSIONS.organizational])}.`, f1(vp.organizational.score)],
+    ['Madurez tecnológica', `Promedio ponderado por dimensión de ${dimensionRangeLabel([...LENS_DIMENSIONS.technological])}.`, f1(vp.technological.score)],
+  ], [40, 108, 26]);
   r.h1('Participantes');
   r.table(['Código', 'Perfil', 'Área', 'Criterios respondidos'], a.participantComparison.map((pc) => [pc.participant.code, roleLabel(pc.participant.profile), pc.participant.area, pc.answered]), [30, 60, 50, 34]);
-  r.h1('Resultados por dimensión');
+  r.h1('Resultados por dimensión', 92);
   r.radar(dimLabels(a), [
-    { name: 'Percibida (preliminar)', values: a.dimensions.map((d) => d.preliminary), color: [13, 148, 136] },
+    { name: 'Percibida (preliminar)', values: a.dimensions.map((d) => d.preliminary), color: SERIES_RGB },
     { name: TARGET_TERM.capital, values: a.dimensions.map((d) => d.target), color: [198, 155, 89] },
   ]);
   r.p(`Madurez validada: ${f1(a.globalValidated.score)} (${validatedNote(a)}).`, 8.5);
@@ -329,7 +367,7 @@ export function buildAcademicPDF(a: Analysis, bundle: AssessmentBundle, d: Acade
     { label: 'Madurez validada del alcance', value: f1(a.globalValidated.score), note: validatedNote(a) },
     { label: 'Cobertura del diagnóstico', value: fp(a.coverage.coverage) },
   ]);
-  r.radar(dimLabels(a), [{ name: 'Percibida (preliminar)', values: a.dimensions.map((x) => x.preliminary), color: [13, 148, 136] }, { name: TARGET_TERM.capital, values: a.dimensions.map((x) => x.target), color: [198, 155, 89] }]);
+  r.radar(dimLabels(a), [{ name: 'Percibida (preliminar)', values: a.dimensions.map((x) => x.preliminary), color: SERIES_RGB }, { name: TARGET_TERM.capital, values: a.dimensions.map((x) => x.target), color: [198, 155, 89] }]);
   r.h1('Cinco brechas principales');
   const gaps = a.states.filter((s) => s.applicable && currentScore(s) !== null && s.target - (currentScore(s) as number) > 0).sort((x, y) => (y.target - (currentScore(y) as number)) - (x.target - (currentScore(x) as number))).slice(0, 5);
   r.table(['Criterio', 'Nombre', 'Actual', 'Brecha'], gaps.map((s) => [s.question.id, s.question.criterion, f1(currentScore(s)), f1(s.target - (currentScore(s) as number))]), [20, 110, 20, 24]);
@@ -341,7 +379,7 @@ export function buildAcademicPDF(a: Analysis, bundle: AssessmentBundle, d: Acade
   if (!a.contradictions.length) r.p('No se activaron reglas de contraste con las puntuaciones registradas.');
   r.h1('Tres iniciativas prioritarias');
   r.table(['Iniciativa', 'Fase', 'Criterios'], a.initiatives.slice(0, 3).map((i) => [i.template.name, `${i.phase}. ${PHASES[i.phase - 1].name}`, i.questionIds.join(', ')]), [70, 44, 60]);
-  r.h1('Hoja de ruta');
+  r.h1('Hoja de ruta', 24);
   buildNarrative(a, { risks: bundle.risks, initiatives: bundle.initiatives }).find((s) => s.key === 'hoja_ruta')?.paragraphs.forEach((p) => r.p(p.text));
   r.h1('Conclusiones argumentadas');
   r.p(d.conclusions || 'El grupo no registró conclusiones.');

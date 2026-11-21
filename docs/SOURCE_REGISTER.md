@@ -45,7 +45,7 @@ Fecha de consulta de referencia: ver columna correspondiente. Las asociaciones c
 - **Alcance:** Modelo de referencia para la implementación de la política de gestión documental y administración de archivos en entidades públicas colombianas, con autodiagnóstico por componentes y niveles.
 - **Qué evalúa:** Componentes estratégico, administración de archivos, documental, tecnológico y cultural.
 - **Qué no evalúa:** No constituye una evaluación de software ni un modelo de preservación digital detallado.
-- **Relación con DIAM:** DIAM toma los cinco componentes como eje de clasificación de criterios (campo mgdaComponent). Los niveles DIAM no equivalen a los niveles oficiales del MGDA.
+- **Relación con DIAM:** DIAM toma los cinco componentes como eje de clasificación: cada criterio tiene asignado su propio componente y la familia de cada dimensión corresponde a su componente predominante. Los niveles DIAM no equivalen a los niveles oficiales del MGDA.
 - **Componentes o apartados verificados:** Cinco componentes del modelo, confirmados en documentos institucionales públicos que aplican el MGDA (2024-2026). La herramienta oficial de autodiagnóstico no se reprodujo.
 - **Limitaciones de acceso:** La verificación se apoyó en documentos publicados por entidades que aplican el modelo. Confirme la versión vigente en la página oficial del AGN.
 - **Estado de verificación:** Verificado parcialmente

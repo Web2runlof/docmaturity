@@ -110,3 +110,16 @@ describe('Banco maestro DIAM', () => {
     }
   });
 });
+
+describe('Textos visibles de los referentes', () => {
+  it('no contienen nombres de campos, códigos internos ni alusiones al desarrollo', () => {
+    for (const s of SOURCES) {
+      const visible = [s.title, s.scope, s.evaluates, s.relation, s.notEvaluates, s.verifiedParts, s.accessLimitations, s.version].filter(Boolean).join(' ');
+      expect(visible, s.id).not.toMatch(/mgdaComponent|coreTier|sourceRefs|\bNO_[A-Z_]+\b|durante el desarrollo|según especificación|por confirmar\)/);
+    }
+  });
+
+  it('F27 está marcado como agrupador', () => {
+    expect(SOURCES.find((s) => s.id === 'F27')?.isGroup).toBe(true);
+  });
+});
