@@ -11,7 +11,7 @@ Ejecución del 21 de noviembre de 2026 sobre la versión 2.0.0 (rama `redesign/i
 | Banco | `npm run bank` | 15 dimensiones, 225 criterios, 1.350 descriptores únicos, 22 críticos |
 | Unitarias e integración | `npm run test` | **92 de 92 aprobadas** (6 archivos) |
 | Build de producción | `npm run build` | Correcto; 117 recursos precargados por el service worker (≈ 5,0 MB) |
-| End-to-end | `npm run test:e2e` | **11 de 11 aprobadas** (10 escritorio 1440 × 900 y 1 móvil Pixel 7) |
+| End-to-end | `npm run test:e2e` | **12 de 12 aprobadas** (11 escritorio 1440 × 900 y 1 móvil Pixel 7) |
 | Desbordamiento horizontal | 24 rutas × 360/768/1024/1440 px | Sin desbordamientos ni errores de consola |
 
 ## 2. Cobertura de los 60 casos obligatorios
@@ -112,7 +112,8 @@ Además, se cargó la demostración en el sitio compilado y se recorrieron todas
 | Atribución «Diseñado y creado por: Sergio Gómez Flórez» con enlace a LinkedIn, `target="_blank"` y `rel="noopener noreferrer"` | E `Rediseño · pie de página…` |
 | Cifras de la portada derivadas del banco (225, 1.350) | E `Rediseño · pie de página…` |
 | Movimiento reducido: contenido visible sin animación ni Ken Burns | E `Rediseño · pie de página…` (contexto `reducedMotion: 'reduce'`) |
-| Vista de producto diferida sin solicitudes externas ni errores | E `Rediseño · pie de página…` |
+| Movimiento reducido: póster en lugar de video y carrusel sin avance automático | E `Rediseño · pie de página…` |
+| Video de fondo local (silenciado, en bucle, póster, WebM y MP4), marquesina accesible y carrusel con pausa, sin solicitudes externas | E `Rediseño · portada con video…` |
 | Siguiente paso y resaltado único en la navegación | E `Rediseño · la navegación…` |
 | Paquete de evaluación exportado desde Informes e importado en otro navegador | E `Rediseño · flujo de intercambio…` |
 | Flujo completo (organización → evaluación → entrevista → evidencia → validación → resultados → informes → exportación e importación) | E `01/04/49`, `19–24`, `43/44/45`, `42`, `Rediseño · flujo de intercambio…` |

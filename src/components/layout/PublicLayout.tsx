@@ -34,24 +34,24 @@ export function PublicLayout() {
   return (
     <div className="min-h-screen bg-white">
       <SkipLink />
-      <header className={cx('on-dark z-40 text-white transition-[background-color,border-color] duration-300', home ? 'fixed inset-x-0 top-0' : 'sticky top-0', solid ? 'border-b border-white/10 bg-midnight/90 backdrop-blur-md' : 'border-b border-transparent bg-transparent')}>
-        <div className="mx-auto flex h-16 max-w-[1280px] items-center justify-between px-5 md:px-8">
-          <Link to="/" aria-label="DOCMATURITY, inicio"><Logo inverted /></Link>
-          <nav aria-label="Sitio" className="hidden items-center gap-7 xl:flex">
+      {/* Navegación flotante en forma de cápsula; sobre el héroe es translúcida. */}
+      <header className={cx('on-dark z-40 px-3 pt-3 text-white md:px-5', home ? 'fixed inset-x-0 top-0' : 'sticky top-0 bg-midnight pb-3')}>
+        <div className={cx('mx-auto flex h-14 max-w-[1180px] items-center justify-between rounded-full border pr-2 pl-4 transition-[background-color,border-color,box-shadow] duration-300 md:pl-5', solid ? 'border-white/12 bg-midnight/80 shadow-[0_20px_50px_-25px_rgba(0,0,0,0.8)] backdrop-blur-xl' : 'border-white/10 bg-white/[0.04] backdrop-blur-md')}>
+          <Link to="/" aria-label="DOCMATURITY, inicio" className="rounded-full"><Logo inverted /></Link>
+          <nav aria-label="Sitio" className="hidden items-center gap-1 xl:flex">
             {LINKS.map((l) => (
-              <NavLink key={l.to} to={l.to} className={({ isActive }) => cx('relative text-sm transition-colors duration-200 after:absolute after:-bottom-1.5 after:left-0 after:h-px after:bg-mint after:transition-all after:duration-300', isActive ? 'text-white after:w-full' : 'text-fog after:w-0 hover:text-white hover:after:w-full')}>{l.label}</NavLink>
+              <NavLink key={l.to} to={l.to} className={({ isActive }) => cx('rounded-full px-3.5 py-2 text-sm transition-colors duration-200', isActive ? 'bg-white/10 text-white' : 'text-[#cfd7e3] hover:bg-white/[0.06] hover:text-white')}>{l.label}</NavLink>
             ))}
-            <Link to="/app" className={buttonClass('primary', 'sm', 'h-9 px-4')}>Abrir aplicación</Link>
           </nav>
-          <div className="flex items-center gap-2 xl:hidden">
-            <Link to="/app" className={buttonClass('primary', 'sm', 'hidden h-9 px-4 sm:inline-flex')}>Abrir aplicación</Link>
-            <button className="flex size-10 items-center justify-center rounded-md text-white" onClick={() => setOpen(!open)} aria-label={open ? 'Cerrar menú' : 'Abrir menú'} aria-expanded={open}>{open ? <X className="size-5" /> : <Menu className="size-5" />}</button>
+          <div className="flex items-center gap-2">
+            <Link to="/app" className={buttonClass('primary', 'sm', 'hidden h-10 rounded-full px-5 sm:inline-flex')}>Abrir aplicación</Link>
+            <button className="flex size-10 items-center justify-center rounded-full text-white hover:bg-white/10 xl:hidden" onClick={() => setOpen(!open)} aria-label={open ? 'Cerrar menú' : 'Abrir menú'} aria-expanded={open}>{open ? <X className="size-5" /> : <Menu className="size-5" />}</button>
           </div>
         </div>
         {open && (
-          <nav aria-label="Sitio móvil" className="border-t border-white/10 px-5 pb-5 pt-2 xl:hidden">
-            {LINKS.map((l) => <Link key={l.to} to={l.to} className="flex min-h-11 items-center border-b border-white/5 text-[0.95rem] text-slate-200">{l.label}</Link>)}
-            <Link to="/app" className={buttonClass('primary', 'md', 'mt-4 w-full')}>Abrir aplicación</Link>
+          <nav aria-label="Sitio móvil" className="page-in mx-auto mt-2 max-w-[1180px] rounded-[24px] border border-white/12 bg-midnight/95 px-5 pt-2 pb-5 backdrop-blur-xl xl:hidden">
+            {LINKS.map((l) => <Link key={l.to} to={l.to} className="flex min-h-12 items-center border-b border-white/[0.06] text-[0.95rem] text-slate-200">{l.label}</Link>)}
+            <Link to="/app" className={buttonClass('primary', 'md', 'mt-4 w-full rounded-full')}>Abrir aplicación</Link>
           </nav>
         )}
       </header>
@@ -65,6 +65,9 @@ export function PublicLayout() {
           <FooterCol title="Producto" links={[['/app', 'Aplicación'], ['/responder', 'Responder una entrevista'], ['/app/academico', 'Laboratorio académico']]} />
           <FooterCol title="Metodología" links={[['/metodologia', 'Modelo DIAM, versión 1.0'], ['/como-funciona', 'Cómo funciona'], ['/app/biblioteca', 'Biblioteca metodológica']]} />
           <FooterCol title="Confianza" links={[['/referentes', 'Referentes y fuentes'], ['/privacidad', 'Privacidad y datos locales']]} />
+        </div>
+        <div aria-hidden className="pointer-events-none mx-auto max-w-[1280px] overflow-hidden px-5 select-none md:px-8">
+          <p className="bg-gradient-to-b from-white/[0.14] to-white/0 bg-clip-text font-display text-[12.6vw] leading-[0.82] font-semibold tracking-[-0.055em] text-transparent xl:text-[10.6rem]">DOCMATURITY</p>
         </div>
         <div className="border-t border-white/10">
           <div className="mx-auto flex max-w-[1280px] flex-col gap-3 px-5 py-5 text-xs md:flex-row md:items-center md:justify-between md:px-8">
@@ -85,7 +88,7 @@ export function PublicLayout() {
 function FooterCol({ title, links }: { title: string; links: [string, string][] }) {
   return (
     <div className="text-sm">
-      <p className="eyebrow mb-4">{title}</p>
+      <p className="mb-4 text-sm font-medium text-white">{title}</p>
       <ul className="space-y-2.5">
         {links.map(([to, label]) => <li key={to}><Link to={to} className="transition-colors hover:text-white">{label}</Link></li>)}
       </ul>

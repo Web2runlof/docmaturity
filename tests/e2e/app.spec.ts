@@ -237,9 +237,14 @@ test('Rediseño · pie de página con autoría, portada con cifras del banco y m
   await expect(author).toHaveAttribute('target', '_blank');
   await expect(author).toHaveAttribute('rel', /noopener/);
   await expect(page.getByRole('contentinfo')).toContainText('Diseñado y creado por: Sergio Gómez Flórez');
-  // La vista de producto (ECharts) se carga al acercarse y no genera solicitudes externas.
-  await page.locator('#resultados').scrollIntoViewIfNeeded();
-  await expect(page.getByRole('img', { name: /Radar ilustrativo/ })).toBeVisible();
+  // Video de fondo: con movimiento reducido solo se muestra el póster (no hay elemento <video>).
+  await expect(page.locator('video')).toHaveCount(0);
+  // Carrusel de pantallas: sin avance automático con movimiento reducido, pero navegable.
+  const carousel = page.locator('[aria-roledescription="carrusel"]');
+  await carousel.scrollIntoViewIfNeeded();
+  await expect(carousel.getByRole('button', { name: 'Pausar el carrusel' })).toHaveCount(0);
+  await carousel.getByRole('button', { name: 'Diapositiva siguiente' }).click();
+  await expect(carousel.getByRole('button', { name: /Ir a la diapositiva 2/ })).toHaveAttribute('aria-current', 'true');
   expect(external).toEqual([]);
   expect(errors).toEqual([]);
   await ctx.close();
@@ -286,4 +291,25 @@ test('Rediseño · flujo de intercambio: exporta el paquete de la evaluación y 
   await expect(op.getByText('Demostración: diagnóstico 2026').first()).toBeVisible();
   expect(external).toEqual([]);
   await other.close();
+});
+
+test('Rediseño · portada con video de fondo local, marquesina y carrusel con pausa', async ({ page }) => {
+  const external = watchExternal(page);
+  const errors = watchErrors(page);
+  await page.goto('');
+  // El video es local y silenciado, con póster y dos formatos.
+  const video = page.locator('video').first();
+  await expect(video).toHaveAttribute('poster', /hero-poster/);
+  expect(await video.evaluate((v: HTMLVideoElement) => v.muted && v.loop)).toBe(true);
+  await expect(video.locator('source')).toHaveCount(2);
+  // Marquesina de referentes: la copia decorativa queda oculta a tecnologías de asistencia.
+  await expect(page.getByRole('list', { name: 'Referentes, primera fila' })).toContainText('ISO 15489');
+  // Carrusel con control de pausa (WCAG 2.2.2) y seis diapositivas.
+  const carousel = page.locator('[aria-roledescription="carrusel"]');
+  await carousel.scrollIntoViewIfNeeded();
+  await expect(carousel.locator('[aria-roledescription="diapositiva"]')).toHaveCount(6);
+  await carousel.getByRole('button', { name: 'Pausar el carrusel' }).click();
+  await expect(carousel.getByRole('button', { name: 'Reanudar el carrusel' })).toBeVisible();
+  expect(external).toEqual([]);
+  expect(errors).toEqual([]);
 });

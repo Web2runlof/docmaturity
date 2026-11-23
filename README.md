@@ -84,4 +84,4 @@ Banco exportable: [JSON](docs/question-bank/diam-question-bank.json) · [CSV](do
 
 ## Licencia
 
-El código original se distribuye bajo licencia [MIT](LICENSE). Las normas, estándares, modelos y publicaciones citados como referentes conservan sus propias licencias y derechos; este repositorio no los reproduce ni los relicencia. Las fuentes tipográficas Inter y Plus Jakarta Sans se distribuyen bajo SIL Open Font License 1.1.
+El código original se distribuye bajo licencia [MIT](LICENSE). Las normas, estándares, modelos y publicaciones citados como referentes conservan sus propias licencias y derechos; este repositorio no los reproduce ni los relicencia. Las fuentes tipográficas Inter, Inter Tight e Instrument Serif se distribuyen bajo SIL Open Font License 1.1. El video, los renders y las capturas de la portada son originales (ver `scripts/media/`).

@@ -41,10 +41,11 @@ La **escala de madurez 0–5** (`lv0…lv5`, `LEVEL_COLORS`) y los colores de ri
 
 ## 3. Tipografía
 
-- **Plus Jakarta Sans** (600, 700, 800) para titulares y cifras: `font-display`.
+- **Inter Tight** (500, 600, 700) para titulares y cifras: `font-display`, con interletrado de −0,035 a −0,045 em en los titulares grandes.
+- **Instrument Serif** itálica para la expresión destacada de cada titular de la portada («lo que sigue», «decisión», «aquí»): `font-serif`. Es el rasgo editorial de la identidad; no se usa en la aplicación de trabajo.
 - **Inter** (400, 500, 600) para lectura e interfaz: `font-sans`.
-- Ambas se sirven localmente (`@fontsource`), sin solicitudes a terceros.
-- Titulares de portada: 2,3–3,3 rem, `tracking` −0,028 em. Encabezados de página: 1,75–2,1 rem. Cuerpo: 15–17 px con `leading-relaxed`.
+- Las tres se sirven localmente (`@fontsource`, subconjunto latino), sin solicitudes a terceros.
+- Titular del héroe: 2,6–4,8 rem. Titulares de sección: 2,2–3,4 rem. Cuerpo: 15–20 px con `leading-relaxed`.
 - Cifras con `tabular-nums` (clase `num`) y formato es-CO: coma decimal, punto de miles.
 
 ## 4. Espaciado, radios y sombras
@@ -67,6 +68,12 @@ Implementado con CSS y APIs nativas (`IntersectionObserver`, `requestAnimationFr
 | Progreso del ciclo (`useScrollProgress`) | Línea de tiempo «Cómo funciona» | Ligado al desplazamiento, sin interceptarlo |
 | Transición de página (`page-in`) | Cambio de ruta en la aplicación | 260 ms |
 | Microinteracciones | Botones, navegación, tarjetas | 180–320 ms |
+| Video de fondo desenfocado (`BackgroundVideo`) | Héroe y cierre | Bucle de 12 s, pausado fuera de la vista |
+| Marquesina (`Marquee`) | Referentes | 55–62 s por vuelta; se detiene al pasar el puntero o enfocar |
+| Palabra rotativa (`WordRotator`) | Héroe | Cada 2,6 s; ancho reservado para que el texto no salte |
+| Texto que se ilumina (`ScrollRevealText`) | Declaración | Ligado al desplazamiento |
+| Carrusel con avance automático | Pantallas de la aplicación | 6 s por diapositiva, con botón de pausa |
+| Luz que sigue al puntero (`.spotlight`) | Tarjetas de capacidades y modalidades | Inmediata |
 | Gráficos | ECharts | 650 ms de entrada, 380 ms de actualización |
 
 Reglas:
@@ -76,28 +83,36 @@ Reglas:
 - No hay animaciones permanentes en formularios, tablas ni cuestionarios.
 - Las animaciones decorativas se pausan cuando su bloque sale de la vista.
 
-## 6. Imágenes
+## 6. Video e imágenes
 
-Tres composiciones generativas originales (sin fotografías ni recursos de terceros), en WebP local a 1024 y 1920 px:
+Todos los medios son originales y locales (`src/assets/landing/`); el procedimiento está en `scripts/media/README.md`.
 
-| Archivo | Uso | Peso 1920 / 1024 |
-|---|---|---|
-| `estratos` | Héroe (carga inmediata) | 131 KB / 10 KB |
-| `fachada` | Metodología (carga diferida) | 247 KB / 25 KB |
-| `topografia` | Cierre (carga diferida) | 62 KB / 8 KB |
+| Recurso | Qué es | Uso | Peso |
+|---|---|---|---|
+| `hero-loop.webm` / `.mp4` | Escena 3D propia (campo de documentos de vidrio con luz menta y violeta), 12 s en bucle perfecto, desenfocada al codificar | Fondo del héroe y del cierre | 247 KB / 524 KB |
+| `hero-poster.webp` | Primer cuadro del video | Póster, movimiento reducido y ahorro de datos | 8 KB |
+| `render-field`, `render-stack`, `render-strata`, `render-vault` | Renders 3D fijos (800 y 1600 px) | Pasos del método y privacidad | 7–67 KB |
+| `shot-*` | Capturas reales de la aplicación con el caso de demostración (960 y 1600 px) | Vista del producto en el héroe y carrusel | 32–120 KB |
 
-`AmbientImage` usa `srcset`, `loading="lazy"` salvo en el héroe, `decoding="async"`, `alt=""` y `aria-hidden`; su contenedor tiene el color Midnight como respaldo. El precache de la PWA incluye `webp` y `avif` para que funcionen sin conexión.
+Reglas:
+
+- El video es silenciado, en bucle, `playsinline`, sin controles y oculto a tecnologías de asistencia. Solo se reproduce mientras está en la vista; con movimiento reducido o ahorro de datos se muestra el póster.
+- El desenfoque va «horneado» en el archivo: el navegador no aplica filtros en tiempo real.
+- Las imágenes usan `srcset`, carga diferida (salvo la vista del producto del héroe) y fondo Midnight de respaldo.
+- Los medios de la portada no entran en el precache de la PWA: se guardan en caché la primera vez que se ven (`dm-imagenes`). El video no se guarda; sin conexión se ve el póster.
 
 ## 7. Componentes
 
 | Componente | Archivo | Notas |
 |---|---|---|
-| `MarketingHero` (héroe) | `features/landing/LandingPage.tsx` · `Hero` | Composición en `visuals.tsx` · `HeroVisual` (tres capas con datos ilustrativos). |
+| `MarketingHero` (héroe) | `features/landing/LandingPage.tsx` · `Hero` | Video de fondo desenfocado, titular con serif itálica, palabra rotativa y vista real del producto que se endereza al desplazarse. |
+| `Carousel` | `features/landing/Carousel.tsx` | Desplazamiento nativo con imanes, arrastre, teclado, avance automático pausable y Ken Burns en la diapositiva activa. |
+| `BackgroundVideo`, `Marquee`, `WordRotator`, `ScrollRevealText`, `useSpotlight` | `components/motion` | Ver § 5. |
 | `AppShell` | `components/layout/AppLayout.tsx` | Barra lateral agrupada (Trabajo, Conocimiento, Sistema), barra activa menta, tarjeta de evaluación activa, migas de pan, siguiente paso, menú móvil con Escape. |
 | `SectionHeading` | `LandingPage.tsx` | Antetítulo, título y entrada. |
 | `AnimatedCounter`, `Reveal`, `MotionScope`, `AmbientImage` | `components/motion` | Ver § 5. |
-| `FloatingVisual` | `visuals.tsx` | Capas `glass` con flotación y paralaje. |
-| `FeatureCard` (bento) | `LandingPage.tsx` · `Bento` | Tamaños asimétricos; destacado y académico. |
+| `FeatureCard` | `LandingPage.tsx` · `Capabilities` | Tarjetas con icono y luz que sigue al puntero. |
+| Planes por modalidad | `LandingPage.tsx` · `Modalities` | Formato de tabla de planes: cifra grande, inclusiones y modalidad recomendada. |
 | `KPIStat`, `ProgressRing`, `Progress`, `SkeletonLoader` | `components/ui` | `Progress` admite variante oscura. |
 | `StatusBadge` | `components/ui` | Estado con icono y texto (pendiente, validado, discrepancia, contradicción, evidencia insuficiente…). |
 | `AssessmentModeCard` | `features/assessments/NewAssessment.tsx` | Tarjetas comparables por modalidad con resumen fijo. |
@@ -110,8 +125,8 @@ Tres composiciones generativas originales (sin fotografías ni recursos de terce
 
 | Pantalla | Nivel de rediseño |
 |---|---|
-| Portada | Reconstruida: héroe, cifras, ciclo, capacidades, producto, metodología, dimensiones, referentes, modalidades, entrevistas, privacidad, preguntas, cierre. |
-| Pie de página público | Reconstruido, con «Diseñado y creado por: Sergio Gómez Flórez» (LinkedIn, pestaña nueva). |
+| Portada | Reconstruida dos veces. Versión actual: navegación flotante, héroe con video desenfocado y vista real del producto, marquesina de referentes, cifras, método en tres pasos con renders 3D, carrusel de pantallas, capacidades, modalidades como planes, privacidad, declaración que se ilumina, preguntas y cierre con video. |
+| Navegación y pie públicos | Cápsula flotante translúcida; pie con marca a gran escala y «Diseñado y creado por: Sergio Gómez Flórez» (LinkedIn, pestaña nueva). |
 | Cómo funciona, Metodología, Referentes, Privacidad | Banda de entrada oscura; contenido sin cambios. |
 | Estructura de la aplicación | Reconstruida (navegación, encabezado, transición). |
 | Inicio | Reorganizado como panorama: indicadores, evaluaciones en curso con avance y siguiente paso, finalizadas, actividad reciente, respaldo. |
@@ -133,10 +148,10 @@ Tres composiciones generativas originales (sin fotografías ni recursos de terce
 
 ## 10. Rendimiento (Chrome, CPU 4×, mediana de 3)
 
-| Ruta | Antes FCP / LCP | Después FCP / LCP | JS antes → después | CLS |
+| Ruta | Antes (v1.1) FCP / LCP | Ahora FCP / LCP | JS | CLS |
 |---|---|---|---|---|
-| Portada | 472 / 1 172 ms | 480 / 1 068 ms | 698 → 475 KB | 0 |
-| Inicio de la aplicación | 520 / 820 ms | 512 / 808 ms | 460 → 467 KB | 0 |
-| Metodología | 492 / 724 ms | 556 / 896 ms | 465 → 470 KB | 0 |
+| Portada | 472 / 1 172 ms | 524 / 1 224 ms | 698 → 473 KB | 0,007 |
+| Inicio de la aplicación | 520 / 820 ms | 504 / 852 ms | 460 → 467 KB | 0 |
+| Metodología | 492 / 724 ms | 580 / 908 ms | 465 → 470 KB | 0 |
 
-La portada ya no carga ECharts al inicio: la vista de producto se descarga solo al acercarse a la vista. La imagen del héroe agrega 131 KB en pantallas anchas (10 KB en móviles).
+La portada carga 108 KB de imagen al inicio (póster y vista del producto); el video (247 KB en WebM) se descarga después y solo si el movimiento no está reducido. El titular del héroe entra con una animación de carga, no de desplazamiento, para no retrasar el LCP.

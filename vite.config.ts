@@ -85,6 +85,16 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,webp,avif,woff2,json}'],
+        // Los medios de la portada (capturas, renders y video) no se precargan: se guardan en caché
+        // la primera vez que se ven, para no sumar ~1,5 MB a la instalación de la aplicación.
+        globIgnores: ['**/assets/shot-*', '**/assets/render-*', '**/assets/hero-*'],
+        runtimeCaching: [
+          {
+            urlPattern: ({ request, sameOrigin }) => sameOrigin && request.destination === 'image',
+            handler: 'CacheFirst',
+            options: { cacheName: 'dm-imagenes', expiration: { maxEntries: 60 } },
+          },
+        ],
         maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
         navigateFallback: 'index.html',
         cleanupOutdatedCaches: true,

@@ -9,7 +9,7 @@ Rediseño visual y de experiencia. No cambian el modelo DIAM, el banco versionad
 ### Identidad y sistema visual
 - Tokens nuevos (Midnight, Deep Surface, Elevated, Mint, Violet, Soft White, Neutral) con remapeo de los nombres heredados: todas las pantallas adoptan la paleta sin reescribirse. La escala de madurez y los colores de riesgo no cambian.
 - Isotipo, favicon e íconos de la PWA renovados; color de tema `#0B1020`.
-- Plus Jakarta Sans 800 para titulares (local).
+- Tipografía: Inter Tight para titulares e Instrument Serif itálica para la expresión destacada de la portada (locales).
 - Sistema de movimiento propio (`src/components/motion`): aparición al desplazarse, contadores, paralaje del héroe, luz ambiental, Ken Burns, progreso ligado al desplazamiento y transición de página. Todo se desactiva con movimiento reducido y se pausa fuera de la vista.
 - Tres imágenes generativas originales en WebP local (1024 y 1920 px), diferidas salvo la del héroe; el precache incluye `webp` y `avif`.
 
@@ -20,6 +20,13 @@ Rediseño visual y de experiencia. No cambian el modelo DIAM, el banco versionad
 - Encabezado transparente sobre el héroe que se vuelve sólido al desplazarse; menú completo desde 1280 px.
 - Pie de página con «Diseñado y creado por: Sergio Gómez Flórez» enlazado a LinkedIn (pestaña nueva, `noopener noreferrer`).
 - Páginas informativas con banda de entrada oscura.
+
+### Portada, segunda versión (tras la revisión del 23 de noviembre)
+- Héroe con video de fondo propio desenfocado (escena 3D original, 12 s en bucle, 247 KB en WebM) y contenido encima; póster con movimiento reducido o ahorro de datos.
+- Titular con serif itálica, palabra rotativa («Para entidades públicas, empresas privadas…») y vista real del producto que se endereza al desplazarse.
+- Navegación flotante en cápsula, marquesina de referentes, cifras grandes, método en tres pasos con renders 3D originales, carrusel de seis pantallas reales (arrastre, teclado, avance automático con pausa y Ken Burns), capacidades con luz que sigue al puntero, modalidades como tabla de planes, privacidad con render, declaración que se ilumina al desplazarse y cierre con video.
+- Pie con la marca a gran escala; se conserva «Diseñado y creado por: Sergio Gómez Flórez».
+- Los medios de la portada se guardan en caché al verse y no engrosan el precache de la PWA.
 
 ### Aplicación
 - Navegación lateral oscura agrupada (Trabajo, Conocimiento, Sistema) con indicador activo, tarjeta de evaluación activa con avance del ciclo y siguiente paso; «Evaluaciones» cede el resaltado dentro de una evaluación.
@@ -39,7 +46,7 @@ Rediseño visual y de experiencia. No cambian el modelo DIAM, el banco versionad
 - Versión de la aplicación unificada en 2.0.0 (los paquetes declaraban 1.0.0).
 
 ### Pruebas
-- E2E actualizadas al nuevo titular y tres pruebas nuevas: autoría del pie de página, cifras del banco, rutas de las llamadas a la acción, movimiento reducido y carga diferida de la vista de producto; siguiente paso y resaltado único de la navegación; exportación del paquete de evaluación e importación en otro navegador.
+- E2E actualizadas al nuevo titular y cuatro pruebas nuevas: video de fondo, marquesina y carrusel con pausa; autoría del pie de página, cifras del banco, rutas de las llamadas a la acción, movimiento reducido y carga diferida de la vista de producto; siguiente paso y resaltado único de la navegación; exportación del paquete de evaluación e importación en otro navegador.
 
 ## [1.1.0] — 2026-11-20
 

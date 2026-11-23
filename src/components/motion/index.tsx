@@ -160,3 +160,123 @@ export function AmbientImage({ small, large, className, eager = false, kenburns 
     />
   );
 }
+
+/** Progreso (0–1) de un elemento mientras cruza la vista, con origen y recorrido configurables. */
+export function useElementProgress<T extends HTMLElement>(start = 0.9, span = 0.6) {
+  const ref = useRef<T>(null);
+  const [progress, setProgress] = useState(prefersReducedMotion() ? 1 : 0);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || prefersReducedMotion()) { setProgress(1); return; }
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const r = el.getBoundingClientRect();
+      const vh = window.innerHeight;
+      setProgress(Math.max(0, Math.min(1, (vh * start - r.top) / (vh * span))));
+    };
+    const onScroll = () => { if (!frame) frame = requestAnimationFrame(update); };
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    return () => { window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onScroll); if (frame) cancelAnimationFrame(frame); };
+  }, [start, span]);
+  return [ref, progress] as const;
+}
+
+/**
+ * Video de fondo decorativo (local, silenciado, en bucle). Se reproduce solo mientras está en la
+ * vista; con movimiento reducido o ahorro de datos se muestra únicamente el póster.
+ */
+export function BackgroundVideo({ webm, mp4, poster, className }: { webm: string; mp4: string; poster: string; className?: string }) {
+  const ref = useRef<HTMLVideoElement>(null);
+  const reduced = useReducedMotion();
+  const saveData = typeof navigator !== 'undefined' && Boolean((navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData);
+  const still = reduced || saveData;
+  useEffect(() => {
+    const v = ref.current;
+    if (!v || still) return;
+    v.muted = true;
+    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) void v.play().catch(() => undefined); else v.pause(); }, { threshold: 0.05 });
+    io.observe(v);
+    return () => { io.disconnect(); v.pause(); };
+  }, [still]);
+  const cls = cx('pointer-events-none absolute inset-0 size-full object-cover select-none', className);
+  if (still) return <img src={poster} alt="" aria-hidden className={cls} />;
+  return (
+    <video ref={ref} className={cls} poster={poster} muted loop playsInline autoPlay preload="metadata" aria-hidden tabIndex={-1} disablePictureInPicture disableRemotePlayback>
+      <source src={webm} type="video/webm" />
+      <source src={mp4} type="video/mp4" />
+    </video>
+  );
+}
+
+/** Marquesina continua: la segunda copia es decorativa y se oculta a tecnologías de asistencia. */
+export function Marquee({ items, label, reverse = false, duration = 48, className, itemClassName }: { items: ReactNode[]; label: string; reverse?: boolean; duration?: number; className?: string; itemClassName?: string }) {
+  const row = (hidden: boolean) => (
+    <ul className="flex shrink-0 items-center" aria-hidden={hidden || undefined} aria-label={hidden ? undefined : label}>
+      {items.map((it, i) => <li key={i} className={cx('flex shrink-0 items-center', itemClassName)}>{it}</li>)}
+    </ul>
+  );
+  return (
+    <div className={cx('marquee overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_8%,#000_92%,transparent)]', className)}>
+      <div className={cx('marquee-track flex w-max', reverse && 'is-reverse')} style={{ '--marquee-dur': `${duration}s` } as CSSProperties}>
+        {row(false)}{row(true)}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Palabra que rota con una transición breve; el texto completo queda disponible para lectores de
+ * pantalla. Todas las variantes ocupan la misma celda, centradas: el ancho no cambia y nada salta.
+ */
+export function WordRotator({ words, prefix, interval = 2600, className, wordClassName }: { words: string[]; prefix?: string; interval?: number; className?: string; wordClassName?: string }) {
+  const [i, setI] = useState(0);
+  const reduced = useReducedMotion();
+  useEffect(() => {
+    if (reduced || words.length < 2) return;
+    const id = window.setInterval(() => setI((x) => (x + 1) % words.length), interval);
+    return () => window.clearInterval(id);
+  }, [reduced, words.length, interval]);
+  return (
+    <span className={cx('relative inline-grid justify-items-center', className)}>
+      <span className="sr-only">{prefix ? `${prefix} ` : ''}{words.join(', ')}</span>
+      {words.map((w, k) => (
+        <span key={k === i ? `on-${i}` : k} aria-hidden className={cx('whitespace-nowrap [grid-area:1/1]', k === i ? 'word-in' : 'invisible')}>
+          {prefix && <>{prefix} </>}<span className={wordClassName}>{w}</span>
+        </span>
+      ))}
+    </span>
+  );
+}
+
+/** Texto que se ilumina palabra por palabra según el desplazamiento (sin interceptarlo). */
+export function ScrollRevealText({ text, className, as = 'p', id }: { text: string; className?: string; as?: ElementType; id?: string }) {
+  const [ref, p] = useElementProgress<HTMLDivElement>(0.85, 0.7);
+  const words = text.split(' ');
+  return (
+    <div ref={ref}>
+      {createElement(as, { className, id }, words.map((w, k) => {
+        const o = Math.max(0.16, Math.min(1, p * words.length * 1.15 - k));
+        return <span key={k} style={{ opacity: o, transition: 'opacity 120ms linear' }}>{w}{k < words.length - 1 ? ' ' : ''}</span>;
+      }))}
+    </div>
+  );
+}
+
+/** Luz que sigue al puntero: actualiza --mx y --my en el elemento `.spotlight` bajo el puntero. */
+export function useSpotlight() {
+  useEffect(() => {
+    if (prefersReducedMotion()) return;
+    const on = (e: PointerEvent) => {
+      const el = (e.target as HTMLElement | null)?.closest?.('.spotlight') as HTMLElement | null;
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      el.style.setProperty('--mx', `${e.clientX - r.left}px`);
+      el.style.setProperty('--my', `${e.clientY - r.top}px`);
+    };
+    document.addEventListener('pointermove', on, { passive: true });
+    return () => document.removeEventListener('pointermove', on);
+  }, []);
+}
