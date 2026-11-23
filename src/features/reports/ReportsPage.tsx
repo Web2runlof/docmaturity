@@ -1,9 +1,9 @@
 import { useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { Bot, ClipboardCopy, FileJson, FileSpreadsheet, FileText, Trash2 } from 'lucide-react';
+import { Bot, ClipboardCopy, DatabaseBackup, FileJson, FileSpreadsheet, FileText, Trash2 } from 'lucide-react';
 import { useAssessmentData } from '@/hooks/useAssessment';
-import { Button, Callout, ConfirmDialog, Field, PageHeader, Section, Select, Tag, Textarea } from '@/components/ui';
+import { Button, Callout, ConfirmDialog, Field, PageHeader, Section, Select, Tag, Textarea, buttonClass } from '@/components/ui';
 import { buildNarrative } from '@/engine/narrative';
 import { buildExecutivePDF, buildTechnicalPDF } from '@/services/exports/pdf';
 import { buildWorkbook } from '@/services/exports/xlsx';
@@ -51,11 +51,18 @@ export default function ReportsPage() {
           Cobertura del diagnóstico: {a.coverage.band ? COVERAGE_BAND_LABEL[a.coverage.band].toLowerCase() : 'sin datos'}.{a.globalValidated.score === null ? ' No hay criterios validados.' : a.views.validated.exploratory ? ` La serie validada es exploratoria: se calcula sobre ${a.views.validated.includedLabel}.` : ''} Los informes lo indican expresamente en la portada y en la sección de limitaciones.
         </Callout></div>
       )}
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <ReportCard icon={<FileText className="size-5" />} title="Informe ejecutivo (PDF)" text="Resultado global, mapa por dimensiones, alertas críticas, prioridades y hoja de ruta resumida para la alta dirección." action={<Button variant="primary" busy={busy === 'exec'} onClick={() => run('exec', () => buildExecutivePDF(a, bundle), `${base}-informe-ejecutivo.pdf`)}>Descargar</Button>} />
-        <ReportCard icon={<FileText className="size-5" />} title="Informe técnico (PDF)" text="Metodología, alcance, fórmulas, resultados por criterio, evidencias, validación, riesgos, referentes y limitaciones." action={<Button variant="primary" busy={busy === 'tech'} onClick={() => run('tech', () => buildTechnicalPDF(a, bundle), `${base}-informe-tecnico.pdf`)}>Descargar</Button>} />
-        <ReportCard icon={<FileSpreadsheet className="size-5" />} title="Libro de análisis (XLSX)" text="Quince hojas: resumen, dimensiones, criterios, respuestas, evidencias, validación, brechas, riesgos, prioridades, hoja de ruta y cobertura." action={<Button variant="primary" busy={busy === 'xlsx'} onClick={() => run('xlsx', () => buildWorkbook(a, bundle), `${base}-analisis.xlsx`)}>Descargar</Button>} />
-        <ReportCard icon={<FileJson className="size-5" />} title="Paquete de evaluación" text="Archivo .dm-assessment.json para trasladar la evaluación a otro equipo, con cifrado opcional. Excluye adjuntos de evidencias." action={<Button variant="primary" onClick={() => setExp(true)}>Exportar</Button>} />
+      <div className="space-y-4">
+        <ReportGroup id="g-informes" title="Informes" note="Documentos para leer, presentar y archivar.">
+          <ReportCard format="PDF" icon={<FileText className="size-5" />} title="Informe ejecutivo (PDF)" text="Resultado global, mapa por dimensiones, alertas críticas, prioridades y hoja de ruta resumida para la alta dirección." action={<Button variant="primary" busy={busy === 'exec'} onClick={() => run('exec', () => buildExecutivePDF(a, bundle), `${base}-informe-ejecutivo.pdf`)}>Descargar</Button>} />
+          <ReportCard format="PDF" icon={<FileText className="size-5" />} title="Informe técnico (PDF)" text="Metodología, alcance, fórmulas, resultados por criterio, evidencias, validación, riesgos, referentes y limitaciones." action={<Button variant="primary" busy={busy === 'tech'} onClick={() => run('tech', () => buildTechnicalPDF(a, bundle), `${base}-informe-tecnico.pdf`)}>Descargar</Button>} />
+        </ReportGroup>
+        <ReportGroup id="g-datos" title="Datos y análisis" note="Cifras de la evaluación para trabajarlas en una hoja de cálculo.">
+          <ReportCard format="XLSX" icon={<FileSpreadsheet className="size-5" />} title="Libro de análisis (XLSX)" text="Quince hojas: resumen, dimensiones, criterios, respuestas, evidencias, validación, brechas, riesgos, prioridades, hoja de ruta y cobertura." action={<Button variant="primary" busy={busy === 'xlsx'} onClick={() => run('xlsx', () => buildWorkbook(a, bundle), `${base}-analisis.xlsx`)}>Descargar</Button>} />
+        </ReportGroup>
+        <ReportGroup id="g-intercambio" title="Intercambio y respaldo" note="Archivos para trasladar o resguardar la información, con cifrado opcional.">
+          <ReportCard format="JSON" icon={<FileJson className="size-5" />} title="Paquete de evaluación" text="Archivo .dm-assessment.json para trasladar la evaluación a otro equipo, con cifrado opcional. Excluye adjuntos de evidencias." action={<Button variant="primary" onClick={() => setExp(true)}>Exportar</Button>} />
+          <ReportCard format="JSON" icon={<DatabaseBackup className="size-5" />} title="Copia de seguridad completa" text="Todas las organizaciones y evaluaciones de este navegador en un solo archivo, con cifrado opcional. Se genera y se restaura desde Configuración." action={<Link to="/app/configuracion" className={buttonClass('secondary')}>Ir a Configuración</Link>} />
+        </ReportGroup>
       </div>
 
       <div className="mt-8 grid gap-6 xl:grid-cols-[1.6fr_1fr]">
@@ -87,12 +94,27 @@ export default function ReportsPage() {
   );
 }
 
-function ReportCard({ icon, title, text, action }: { icon: React.ReactNode; title: string; text: string; action: React.ReactNode }) {
+function ReportGroup({ id, title, note, children }: { id: string; title: string; note: string; children: React.ReactNode }) {
+  return (
+    <div role="group" aria-labelledby={id} className="grid gap-4 rounded-xl border border-line bg-soft/60 p-4 lg:grid-cols-[220px_1fr] lg:p-5">
+      <div className="lg:pt-1">
+        <h2 id={id} className="font-display text-base font-bold text-navy">{title}</h2>
+        <p className="mt-1 text-xs leading-relaxed text-muted">{note}</p>
+      </div>
+      <div className="grid gap-4 md:grid-cols-2">{children}</div>
+    </div>
+  );
+}
+
+function ReportCard({ icon, title, text, action, format }: { icon: React.ReactNode; title: string; text: string; action: React.ReactNode; format: 'PDF' | 'XLSX' | 'JSON' }) {
   return (
     <section className="panel flex flex-col p-5">
-      <span className="inline-flex size-10 items-center justify-center rounded-md bg-teal-50 text-teal-700" aria-hidden>{icon}</span>
-      <h2 className="mt-3 text-base font-semibold">{title}</h2>
-      <p className="mt-1 flex-1 text-sm text-muted">{text}</p>
+      <div className="flex items-start justify-between gap-3">
+        <span className="inline-flex size-10 items-center justify-center rounded-md bg-mint-soft text-mint-strong" aria-hidden>{icon}</span>
+        <span className="rounded border border-line px-1.5 py-0.5 text-[10.5px] font-semibold tracking-wide text-muted">{format}</span>
+      </div>
+      <h3 className="mt-3 text-base font-semibold text-navy">{title}</h3>
+      <p className="mt-1 flex-1 text-sm leading-relaxed text-muted">{text}</p>
       <div className="mt-4">{action}</div>
     </section>
   );

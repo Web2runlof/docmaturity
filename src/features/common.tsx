@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import type { AssessmentModality } from '@/types/domain';
 import type { RespondentProfile } from '@/types/bank';
-import { Button, Callout, EmptyState } from '@/components/ui';
+import { Callout, EmptyState, buttonClass } from '@/components/ui';
 import { questionIdsForTier } from '@/data/bank';
 import { Loader2 } from 'lucide-react';
 import { LOCAL_DATA_NOTICE, PROFILE_LABEL as PROFILE_LABEL_ALL } from '@/config/vocabulary';
@@ -26,7 +26,7 @@ export function NotFound({ what = 'La evaluación' }: { what?: string }) {
     <EmptyState
       title={`${what} no existe en este navegador`}
       description="Los datos de DOCMATURITY se almacenan localmente. Si trabajó en otro dispositivo o navegador, importe el archivo exportado."
-      actions={<Link to="/app"><Button variant="primary">Volver al inicio</Button></Link>}
+      actions={<Link to="/app" className={buttonClass('primary')}>Volver al inicio</Link>}
     />
   );
 }

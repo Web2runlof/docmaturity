@@ -1,14 +1,19 @@
 import { APP_NAME, APP_TAGLINE } from '@/config/vocabulary';
 
-/** Isotipo original: capas documentales que progresan como una escalera de capacidades. */
+/**
+ * Isotipo: tres estratos de capacidad que crecen como una escalera (documentos → información →
+ * inteligencia). El estrato superior lleva el acento menta; el punto violeta marca la evidencia.
+ */
 export function Isotype({ size = 28, inverted = false }: { size?: number; inverted?: boolean }) {
+  const base = inverted ? '#F8FAFC' : '#172033';
+  const ghost = inverted ? 'rgba(255,255,255,0.18)' : '#DDE4EE';
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" role="img" aria-label="Isotipo de DOCMATURITY" focusable="false">
-      <rect x="3" y="22" width="26" height="5" rx="1" fill={inverted ? '#FFFFFF' : '#142B3A'} />
-      <rect x="3" y="14.5" width="19" height="5" rx="1" fill="#0D9488" />
-      <rect x="3" y="7" width="12" height="5" rx="1" fill="#C69B59" />
-      <rect x="17.5" y="7" width="3" height="5" rx="0.6" fill={inverted ? 'rgba(255,255,255,0.35)' : '#E2E8F0'} />
-      <rect x="24.5" y="14.5" width="3" height="5" rx="0.6" fill={inverted ? 'rgba(255,255,255,0.35)' : '#E2E8F0'} />
+      <rect x="3" y="22" width="26" height="5" rx="1.4" fill={base} />
+      <rect x="3" y="14.5" width="19" height="5" rx="1.4" fill={inverted ? '#AAB6C7' : '#5B6B82'} />
+      <rect x="3" y="7" width="12" height="5" rx="1.4" fill="#35D9A4" />
+      <rect x="24.5" y="14.5" width="4.5" height="5" rx="1.4" fill={ghost} />
+      <circle cx="21" cy="9.5" r="2.4" fill="#8E78F7" />
     </svg>
   );
 }
@@ -19,8 +24,8 @@ export function Logo({ inverted = false, compact = false, tagline = true }: { in
       <Isotype inverted={inverted} />
       {!compact && (
         <span className="leading-none">
-          <span className={`block font-display text-[0.98rem] font-bold tracking-[0.06em] ${inverted ? 'text-white' : 'text-navy'}`}>{APP_NAME}</span>
-          {tagline && <span className={`mt-1 block text-[0.62rem] tracking-[0.04em] ${inverted ? 'text-slate-300' : 'text-muted'}`}>{APP_TAGLINE}</span>}
+          <span className={`block font-display text-[0.98rem] font-extrabold tracking-[0.08em] ${inverted ? 'text-white' : 'text-navy'}`}>{APP_NAME}</span>
+          {tagline && <span className={`mt-1 block text-[0.62rem] tracking-[0.05em] ${inverted ? 'text-fog' : 'text-muted'}`}>{APP_TAGLINE}</span>}
         </span>
       )}
     </span>

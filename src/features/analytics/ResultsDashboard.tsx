@@ -4,7 +4,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { ArrowUpRight, TriangleAlert } from 'lucide-react';
 import { useAssessmentData } from '@/hooks/useAssessment';
 import { db } from '@/database/db';
-import { Button, Callout, EmptyState, LevelTag, PageHeader, Section, Select, Tag, Tip } from '@/components/ui';
+import { Button, Callout, EmptyState, LevelTag, PageHeader, Section, Select, Tag, Tip, buttonClass } from '@/components/ui';
 import { EChart } from '@/components/charts/EChart';
 import { LevelLegend } from '@/components/charts/LevelLegend';
 import {
@@ -192,7 +192,7 @@ export default function ResultsDashboard() {
       } />
 
       {noData ? (
-        <Section><EmptyState title="Todavía no hay respuestas" description="Los gráficos se construyen con datos reales del diagnóstico. Registre entrevistas dirigidas o importe entrevistas autoadministradas." actions={<Link to={`/app/evaluaciones/${aid}/entrevistas`}><Button variant="primary">Ir a entrevistas</Button></Link>} /></Section>
+        <Section><EmptyState title="Todavía no hay respuestas" description="Los gráficos se construyen con datos reales del diagnóstico. Registre entrevistas dirigidas o importe entrevistas autoadministradas." actions={<Link to={`/app/evaluaciones/${aid}/entrevistas`} className={buttonClass('primary')}>Ir a entrevistas</Link>} /></Section>
       ) : (
         <div className="space-y-6">
           {mode === 'validada' && narrowerValidated && (
@@ -264,7 +264,7 @@ export default function ResultsDashboard() {
             </Section>
           )}
 
-          <div className="grid gap-6 xl:grid-cols-[1.3fr_1fr]">
+          <div className="grid grid-cols-[minmax(0,1fr)] gap-6 xl:grid-cols-[1.3fr_1fr]">
             <Section title="Distribución de criterios por nivel" description="Los criterios sin datos se muestran aparte y no como nivel cero." actions={cmp ? <Tag>Serie percibida</Tag> : undefined}>
               <EChart height={280} label="Distribución de criterios por nivel" option={distributionOption(dist.counts, dist.noData)} table={{ columns: ['Nivel', 'Criterios'], rows: [...dist.counts.map((c, i) => [`${i} · ${LEVEL_NAMES[i]}`, c]), ['Sin datos', dist.noData]] }} />
             </Section>
@@ -320,8 +320,8 @@ export default function ResultsDashboard() {
             </Section>
           </div>
 
-          <div className="grid gap-6 xl:grid-cols-[1.4fr_1fr]">
-            <Section title="Hoja de ruta" actions={<div className="flex items-center gap-2"><ScopeTag scope="comun" mode={mode} /><Link to={`/app/evaluaciones/${aid}/hoja-de-ruta`}><Button size="sm">Editar</Button></Link></div>}>
+          <div className="grid grid-cols-[minmax(0,1fr)] gap-6 xl:grid-cols-[1.4fr_1fr]">
+            <Section title="Hoja de ruta" actions={<div className="flex items-center gap-2"><ScopeTag scope="comun" mode={mode} /><Link to={`/app/evaluaciones/${aid}/hoja-de-ruta`} className={buttonClass('secondary', 'sm')}>Editar</Link></div>}>
               <EChart height={Math.max(260, initiatives.length * 30 + 70)} label="Hoja de ruta de iniciativas" option={ganttOption(initiatives.map((i) => ({ name: `${i.code} ${i.name}`, start: i.startDate, end: i.endDate, phase: i.phase })), [...PHASES], roadmapAnchor(a.assessment))} empty={initiatives.length ? undefined : <span>Hoja de ruta sin generar. <Link className="text-teal underline" to={`/app/evaluaciones/${aid}/hoja-de-ruta`}>Generar propuesta</Link></span>} table={{ columns: ['Iniciativa', 'Fase', 'Inicio', 'Fin'], rows: initiatives.map((i) => [`${i.code} ${i.name}`, i.phase, i.startDate, i.endDate]) }} />
             </Section>
             <Section title="Hallazgos por componente MGDA" description="Criterios con brecha, sin brecha y sin evaluar por componente; cada criterio conserva su propio componente." actions={cmp ? <Tag>Serie percibida</Tag> : undefined}>

@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { Download, FileInput, Trash2 } from 'lucide-react';
 import { db } from '@/database/db';
-import { Button, Callout, ConfirmDialog, FileDrop, Section, Tag } from '@/components/ui';
+import { Button, Callout, ConfirmDialog, FileDrop, Section, Tag, buttonClass } from '@/components/ui';
 import { lookupQuestion } from '@/data/bank';
 import { buildInterviewPackage, importAssignmentPackage, saveRespondentResponse } from '@/services/packages';
 import { PACKAGE_LIMITS } from '@/schemas/packages';
@@ -60,7 +60,7 @@ export function RespondentHome() {
                   </div>
                   <div className="flex items-center gap-2">
                     <Tag tone={s.status === 'finalizada' ? 'teal' : 'neutral'}>{s.status === 'finalizada' ? 'Finalizada' : 'En curso'}</Tag>
-                    <Link to={`/responder/${s.id}`}><Button size="sm" variant="primary" icon={<FileInput className="size-3.5" />}>{s.status === 'finalizada' ? 'Consultar' : 'Continuar'}</Button></Link>
+                    <Link to={`/responder/${s.id}`} className={buttonClass('primary', 'sm')}><FileInput className="size-3.5" aria-hidden />{s.status === 'finalizada' ? 'Consultar' : 'Continuar'}</Link>
                     <Button size="sm" variant="ghost" icon={<Trash2 className="size-3.5" />} aria-label="Eliminar entrevista de este dispositivo" onClick={() => setDel(s.id)} />
                   </div>
                 </li>

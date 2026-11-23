@@ -37,7 +37,7 @@ Aplicación de página única (SPA) estática, sin backend. Todo el procesamient
 | Pruebas | Vitest + jsdom + fake-indexeddb; Playwright |
 | Build | Vite 8; base `/docmaturity/` (sobrescribible con `VITE_BASE`) |
 
-Las fuentes Inter y Plus Jakarta Sans se empaquetan localmente con `@fontsource`; no hay CDN.
+Las fuentes Inter, Inter Tight e Instrument Serif se empaquetan localmente con `@fontsource`; no hay CDN.
 
 ## 3. Flujo de datos
 

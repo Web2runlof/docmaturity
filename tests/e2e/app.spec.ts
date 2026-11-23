@@ -24,7 +24,7 @@ test('59/60 · rutas públicas y de la aplicación funcionan bajo la base de Git
   const external = watchExternal(page);
   const errors = watchErrors(page);
   const routes: [string, RegExp][] = [
-    ['', /Conozca la madurez documental/],
+    ['', /Diagnostique lo que funciona/],
     ['#/como-funciona', /Del primer dato a la hoja de ruta/],
     ['#/metodologia', /Modelo Integrado de Evaluación DocMaturity/],
     ['#/referentes', /Referentes normativos/],
@@ -189,7 +189,7 @@ test('55 · navegación por teclado: enlace de salto, foco visible y diálogos c
   // Con HashRouter el enlace no debe cambiar la ruta: mueve el foco al contenido principal.
   await page.keyboard.press('Enter');
   await expect(page.locator('main#contenido')).toBeFocused();
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('Conozca la madurez documental');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Diagnostique lo que funciona');
   await page.goto('#/app/configuracion');
   await page.getByRole('button', { name: 'Exportar copia de seguridad' }).focus();
   await page.keyboard.press('Enter');
@@ -205,8 +205,111 @@ test('56 · funciona sin conexión después de la primera visita', async ({ page
   await page.waitForFunction(() => Boolean(navigator.serviceWorker.controller));
   await context.setOffline(true);
   await page.reload();
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('Conozca la madurez documental');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Diagnostique lo que funciona');
   await page.goto('#/app/cuestionarios');
   await expect(page.getByRole('heading', { name: 'Cuestionarios' })).toBeVisible();
   await context.setOffline(false);
+});
+
+test('Rediseño · pie de página con autoría, portada con cifras del banco y movimiento reducido', async ({ browser }) => {
+  const ctx = await browser.newContext({ locale: 'es-CO', reducedMotion: 'reduce', viewport: { width: 1440, height: 900 } });
+  const page = await ctx.newPage();
+  const external = watchExternal(page);
+  const errors = watchErrors(page);
+  await page.goto('');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Priorice lo que sigue');
+  // Las llamadas a la acción llevan a rutas reales.
+  await expect(page.getByRole('link', { name: 'Iniciar diagnóstico' }).first()).toHaveAttribute('href', '#/app/organizaciones/nueva');
+  await expect(page.getByRole('link', { name: 'Conocer la metodología' }).first()).toHaveAttribute('href', '#/metodologia');
+  await expect(page.getByRole('link', { name: 'Crear una evaluación' })).toHaveAttribute('href', '#/app/evaluaciones/nueva');
+  // Cifras derivadas del banco: con movimiento reducido se muestran de inmediato, sin animación.
+  const metrics = page.getByRole('region', { name: 'El modelo en cifras' });
+  await expect(metrics).toContainText('225');
+  await expect(metrics).toContainText('1.350');
+  // Con movimiento reducido el contenido de aparición progresiva es visible sin desplazarse.
+  const opacity = await page.locator('.reveal').last().evaluate((el) => getComputedStyle(el).opacity);
+  expect(opacity).toBe('1');
+  const animated = await page.locator('.kenburns').first().evaluate((el) => getComputedStyle(el).animationName);
+  expect(animated).toBe('none');
+  // Atribución de autoría en el pie de página.
+  const author = page.getByRole('contentinfo').getByRole('link', { name: /Sergio Gómez Flórez/ });
+  await expect(author).toHaveAttribute('href', 'https://www.linkedin.com/in/sergio-gomez-florez/');
+  await expect(author).toHaveAttribute('target', '_blank');
+  await expect(author).toHaveAttribute('rel', /noopener/);
+  await expect(page.getByRole('contentinfo')).toContainText('Diseñado y creado por: Sergio Gómez Flórez');
+  // Video de fondo: con movimiento reducido solo se muestra el póster (no hay elemento <video>).
+  await expect(page.locator('video')).toHaveCount(0);
+  // Carrusel de pantallas: sin avance automático con movimiento reducido, pero navegable.
+  const carousel = page.locator('[aria-roledescription="carrusel"]');
+  await carousel.scrollIntoViewIfNeeded();
+  await expect(carousel.getByRole('button', { name: 'Pausar el carrusel' })).toHaveCount(0);
+  await carousel.getByRole('button', { name: 'Diapositiva siguiente' }).click();
+  await expect(carousel.getByRole('button', { name: /Ir a la diapositiva 2/ })).toHaveAttribute('aria-current', 'true');
+  expect(external).toEqual([]);
+  expect(errors).toEqual([]);
+  await ctx.close();
+});
+
+test('Rediseño · la navegación de la aplicación indica el siguiente paso con datos reales', async ({ page }) => {
+  await page.goto('');
+  await page.getByRole('button', { name: 'Explorar demostración' }).first().click();
+  await expect(page).toHaveURL(/resultados/, { timeout: 30_000 });
+  const chip = page.getByRole('banner').getByRole('link', { name: /Siguiente paso/ });
+  await expect(chip).toBeVisible();
+  await expect(page.getByRole('navigation', { name: 'Navegación principal' })).toContainText('Evaluación activa');
+  await chip.click();
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+  // El elemento contextual activo es único: «Evaluaciones» cede el resaltado dentro de una evaluación.
+  const current = page.getByRole('navigation', { name: 'Navegación principal' }).locator('[aria-current="page"]');
+  await expect(current).toHaveCount(1);
+});
+
+test('Rediseño · flujo de intercambio: exporta el paquete de la evaluación y lo importa en otro navegador', async ({ page, browser }) => {
+  await page.goto('');
+  await page.getByRole('button', { name: 'Explorar demostración' }).first().click();
+  await expect(page).toHaveURL(/resultados/, { timeout: 30_000 });
+  await page.goto(page.url().replace('/resultados', '/informes'));
+  const card = page.locator('section', { has: page.getByRole('heading', { name: 'Paquete de evaluación' }) });
+  const [pkgDl] = await Promise.all([page.waitForEvent('download'), (async () => {
+    await card.getByRole('button', { name: 'Exportar' }).click();
+    await page.getByRole('dialog').getByRole('button', { name: 'Exportar' }).click();
+  })()]);
+  expect(pkgDl.suggestedFilename()).toMatch(/\.dm-assessment\.json$/);
+  const dir = await mkdtemp(join(tmpdir(), 'docmaturity-e2e-'));
+  const pkgPath = join(dir, 'evaluacion.dm-assessment.json');
+  await pkgDl.saveAs(pkgPath);
+
+  const other = await browser.newContext({ locale: 'es-CO' });
+  const op = await other.newPage();
+  const external = watchExternal(op);
+  await op.goto('#/app');
+  await op.getByRole('button', { name: 'Importar evaluación' }).first().click();
+  await op.getByRole('dialog').locator('input[type="file"]').setInputFiles(pkgPath);
+  await op.getByRole('dialog').getByRole('button', { name: 'Importar', exact: true }).click();
+  await expect(op.getByText('Evaluación importada').first()).toBeVisible();
+  await op.goto('#/app/evaluaciones');
+  await expect(op.getByText('Demostración: diagnóstico 2026').first()).toBeVisible();
+  expect(external).toEqual([]);
+  await other.close();
+});
+
+test('Rediseño · portada con video de fondo local, marquesina y carrusel con pausa', async ({ page }) => {
+  const external = watchExternal(page);
+  const errors = watchErrors(page);
+  await page.goto('');
+  // El video es local y silenciado, con póster y dos formatos.
+  const video = page.locator('video').first();
+  await expect(video).toHaveAttribute('poster', /hero-poster/);
+  expect(await video.evaluate((v: HTMLVideoElement) => v.muted && v.loop)).toBe(true);
+  await expect(video.locator('source')).toHaveCount(2);
+  // Marquesina de referentes: la copia decorativa queda oculta a tecnologías de asistencia.
+  await expect(page.getByRole('list', { name: 'Referentes, primera fila' })).toContainText('ISO 15489');
+  // Carrusel con control de pausa (WCAG 2.2.2) y seis diapositivas.
+  const carousel = page.locator('[aria-roledescription="carrusel"]');
+  await carousel.scrollIntoViewIfNeeded();
+  await expect(carousel.locator('[aria-roledescription="diapositiva"]')).toHaveCount(6);
+  await carousel.getByRole('button', { name: 'Pausar el carrusel' }).click();
+  await expect(carousel.getByRole('button', { name: 'Reanudar el carrusel' })).toBeVisible();
+  expect(external).toEqual([]);
+  expect(errors).toEqual([]);
 });

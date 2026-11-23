@@ -71,8 +71,8 @@ export default defineConfig({
         short_name: 'DOCMATURITY',
         description: 'Diagnóstico de madurez en gestión documental y gobierno de la información.',
         lang: 'es-CO',
-        theme_color: '#142B3A',
-        background_color: '#F7F8FA',
+        theme_color: '#0B1020',
+        background_color: '#0B1020',
         display: 'standalone',
         start_url: '.',
         scope: '.',
@@ -84,7 +84,17 @@ export default defineConfig({
         ],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,svg,png,woff2,json}'],
+        globPatterns: ['**/*.{js,css,html,svg,png,webp,avif,woff2,json}'],
+        // Los medios de la portada (capturas, renders y video) no se precargan: se guardan en caché
+        // la primera vez que se ven, para no sumar ~1,5 MB a la instalación de la aplicación.
+        globIgnores: ['**/assets/shot-*', '**/assets/render-*', '**/assets/hero-*'],
+        runtimeCaching: [
+          {
+            urlPattern: ({ request, sameOrigin }) => sameOrigin && request.destination === 'image',
+            handler: 'CacheFirst',
+            options: { cacheName: 'dm-imagenes', expiration: { maxEntries: 60 } },
+          },
+        ],
         maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
         navigateFallback: 'index.html',
         cleanupOutdatedCaches: true,

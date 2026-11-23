@@ -1,0 +1,205 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><style>html,body{margin:0;background:#05070f;overflow:hidden}canvas{display:block}</style>
+<script type="importmap">{"imports":{"three":"/node_modules/three/build/three.module.js","three/addons/":"/node_modules/three/examples/jsm/"}}</script>
+</head><body>
+<script type="module">
+import * as THREE from 'three';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+
+const P = new URLSearchParams(location.search);
+const MODE = P.get('mode') || 'field';
+const W = +(P.get('w') || 960), H = +(P.get('h') || 540);
+const MINT = new THREE.Color('#35D9A4'), VIOLET = new THREE.Color('#8E78F7'), MID = new THREE.Color('#0B1020');
+const LEVELS = ['#C98040', '#A08735', '#447C51', '#00695E', '#004F5E', '#18324B'];
+
+// Generador pseudoaleatorio determinista: los cuadros del bucle son reproducibles.
+let seed = 7; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(1); renderer.setSize(W, H);
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
+document.body.appendChild(renderer.domElement);
+const scene = new THREE.Scene();
+scene.background = (() => {
+  // Fondo atmosférico: luz violeta arriba a la derecha y menta abajo a la izquierda.
+  const c = document.createElement('canvas'); c.width = 1600; c.height = 900; const g = c.getContext('2d');
+  g.fillStyle = '#05070f'; g.fillRect(0, 0, 1600, 900);
+  const blob = (x, y, r, col) => { const gr = g.createRadialGradient(x, y, 0, x, y, r); gr.addColorStop(0, col); gr.addColorStop(1, 'rgba(5,7,15,0)'); g.fillStyle = gr; g.fillRect(0, 0, 1600, 900); };
+  const bg = P.get('bg') || 'default';
+  if (bg !== 'plain') {
+    blob(1260, 140, 760, 'rgba(110,86,230,0.42)');
+    blob(220, 820, 720, 'rgba(30,170,125,0.34)');
+    blob(820, 480, 520, 'rgba(20,40,80,0.45)');
+  }
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
+})();
+const camera = new THREE.PerspectiveCamera(38, W / H, 0.1, 200);
+
+/** Textura de «documento»: encabezado, renglones y un bloque de tabla, muy tenues. */
+function docTexture(variant) {
+  const c = document.createElement('canvas'); c.width = 256; c.height = 362;
+  const g = c.getContext('2d');
+  g.fillStyle = '#000'; g.fillRect(0, 0, 256, 362);
+  g.fillStyle = variant % 3 === 0 ? '#35D9A4' : variant % 3 === 1 ? '#8E78F7' : '#AAB6C7';
+  g.globalAlpha = 0.9; g.fillRect(22, 24, 70 + (variant % 4) * 18, 9);
+  g.globalAlpha = 0.45; g.fillStyle = '#AAB6C7';
+  let y = 56;
+  for (let i = 0; i < 14; i++) { const w = 212 - ((i * 37 + variant * 13) % 90); g.fillRect(22, y, w, 4); y += 15; if (i === 6) y += 10; }
+  g.globalAlpha = 0.35;
+  for (let r = 0; r < 3; r++) for (let k = 0; k < 4; k++) g.fillRect(22 + k * 54, 290 + r * 16, 46, 8);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4;
+  return t;
+}
+const TEX = Array.from({ length: 6 }, (_, i) => docTexture(i));
+
+/** Hoja de vidrio con borde luminoso. */
+function sheet(scale = 1, edgeColor = MINT, edgeOpacity = 0.6, texIndex = 0, bodyOpacity = 0.5) {
+  const grp = new THREE.Group();
+  const geo = new RoundedBoxGeometry(1 * scale, 1.414 * scale, 0.012 * scale, 2, 0.035 * scale);
+  const mat = new THREE.MeshPhysicalMaterial({ color: '#16233a', metalness: 0.1, roughness: 0.18, transparent: true, opacity: bodyOpacity, emissive: '#ffffff', emissiveMap: TEX[texIndex % TEX.length], emissiveIntensity: 0.22, clearcoat: 1, clearcoatRoughness: 0.15, side: THREE.DoubleSide, depthWrite: false });
+  const mesh = new THREE.Mesh(geo, mat); grp.add(mesh);
+  const edges = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.PlaneGeometry(1 * scale, 1.414 * scale)), new THREE.LineBasicMaterial({ color: edgeColor, transparent: true, opacity: edgeOpacity, blending: THREE.AdditiveBlending }));
+  edges.position.z = 0.008 * scale; grp.add(edges);
+  grp.userData = { mesh, edges, mat };
+  return grp;
+}
+
+function particles(n, spread, color, size) {
+  const g = new THREE.BufferGeometry(); const a = new Float32Array(n * 3);
+  for (let i = 0; i < n; i++) { a[i * 3] = (rnd() - 0.5) * spread.x; a[i * 3 + 1] = (rnd() - 0.5) * spread.y; a[i * 3 + 2] = -rnd() * spread.z; }
+  g.setAttribute('position', new THREE.BufferAttribute(a, 3));
+  const c = document.createElement('canvas'); c.width = c.height = 64; const x = c.getContext('2d');
+  const gr = x.createRadialGradient(32, 32, 0, 32, 32, 32); gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(0.3, 'rgba(255,255,255,0.5)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
+  x.fillStyle = gr; x.fillRect(0, 0, 64, 64);
+  const m = new THREE.PointsMaterial({ size, map: new THREE.CanvasTexture(c), color, transparent: true, opacity: 0.85, depthWrite: false, blending: THREE.AdditiveBlending, sizeAttenuation: true });
+  return new THREE.Points(g, m);
+}
+
+function glowBeam(width, color, opacity = 0.5) {
+  const c = document.createElement('canvas'); c.width = 4; c.height = 256; const x = c.getContext('2d');
+  const gr = x.createLinearGradient(0, 0, 0, 256); gr.addColorStop(0, 'rgba(255,255,255,0)'); gr.addColorStop(0.5, 'rgba(255,255,255,1)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
+  x.fillStyle = gr; x.fillRect(0, 0, 4, 256);
+  const m = new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(c), color, transparent: true, opacity, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide });
+  return new THREE.Mesh(new THREE.PlaneGeometry(width, 0.9), m);
+}
+
+function bokeh(n, area, colors, sizeMin, sizeMax, opacity) {
+  const c = document.createElement('canvas'); c.width = c.height = 128; const x = c.getContext('2d');
+  const gr = x.createRadialGradient(64, 64, 0, 64, 64, 64); gr.addColorStop(0, 'rgba(255,255,255,0.9)'); gr.addColorStop(0.55, 'rgba(255,255,255,0.35)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
+  x.fillStyle = gr; x.fillRect(0, 0, 128, 128); const tex = new THREE.CanvasTexture(c);
+  const grp = new THREE.Group();
+  for (let i = 0; i < n; i++) {
+    const m = new THREE.SpriteMaterial({ map: tex, color: colors[i % colors.length], transparent: true, opacity: opacity * (0.4 + rnd() * 0.6), blending: THREE.AdditiveBlending, depthWrite: false, fog: false });
+    const sp = new THREE.Sprite(m); const sz = sizeMin + rnd() * (sizeMax - sizeMin); sp.scale.set(sz, sz, 1);
+    sp.position.set((rnd() - 0.5) * area.x, (rnd() - 0.5) * area.y, -rnd() * area.z);
+    sp.userData.ph = rnd() * Math.PI * 2; grp.add(sp);
+  }
+  return grp;
+}
+scene.add(new THREE.AmbientLight('#9fb3d1', 0.25));
+const keyMint = new THREE.PointLight(MINT, 30, 30, 1.6); scene.add(keyMint);
+const keyViolet = new THREE.PointLight(VIOLET, 34, 34, 1.6); scene.add(keyViolet);
+const rim = new THREE.DirectionalLight('#cfe7ff', 0.6); rim.position.set(-3, 5, 4); scene.add(rim);
+
+let update = () => {};
+const LOOP = +(P.get('loop') || 12);
+
+if (MODE === 'field') {
+  // Campo de documentos que avanza hacia la cámara en un bucle perfecto.
+  scene.fog = new THREE.FogExp2('#05070f', 0.055);
+  const L = 36, sheets = [];
+  for (let i = 0; i < 64; i++) {
+    let x, y; do { x = (rnd() - 0.5) * 16; y = (rnd() - 0.5) * 9; } while (Math.hypot(x / 1.6, y) < 1.5);
+    const s = sheet(0.8 + rnd() * 1.1, rnd() < 0.6 ? MINT : VIOLET, 0.35 + rnd() * 0.5, i, 0.45 + rnd() * 0.35);
+    s.userData.mat.emissiveIntensity = 0.35 + rnd() * 0.35; s.userData.mat.color.set(rnd() < 0.5 ? '#163a3a' : '#272150');
+    s.userData.base = { x, y, z: -rnd() * L, rx: (rnd() - 0.5) * 0.9, ry: (rnd() - 0.5) * 1.4, rz: (rnd() - 0.5) * 0.6, ph: rnd() * Math.PI * 2 };
+    scene.add(s); sheets.push(s);
+  }
+  const dust = particles(900, { x: 22, y: 13, z: L }, '#cfe9ff', 0.06); scene.add(dust);
+  const dustMint = particles(260, { x: 20, y: 12, z: L }, MINT, 0.11); scene.add(dustMint);
+  const beam = glowBeam(40, MINT, 0.16); beam.scale.y = 3; beam.rotation.set(-Math.PI / 2.4, 0, 0.18); scene.add(beam);
+  const orbs = bokeh(26, { x: 22, y: 12, z: 26 }, ['#35D9A4', '#8E78F7', '#9cc8ff'], 0.8, 3.2, 0.5); scene.add(orbs);
+  camera.position.set(0, 0, 6);
+  update = (t) => {
+    const p = t / LOOP, w = p * Math.PI * 2;
+    for (const s of sheets) {
+      const b = s.userData.base;
+      let z = b.z + p * L; z = ((z % L) + L) % L - L + 5; // avanza y reaparece al fondo
+      s.position.set(b.x + Math.sin(w + b.ph) * 0.25, b.y + Math.cos(w + b.ph) * 0.18, z);
+      s.rotation.set(b.rx + Math.sin(w + b.ph) * 0.12, b.ry + Math.cos(w * 1 + b.ph) * 0.18, b.rz);
+      const near = THREE.MathUtils.clamp((z + 30) / 30, 0, 1);
+      s.userData.edges.material.opacity = 0.15 + 0.55 * near;
+    }
+    for (const d of [dust, dustMint]) { d.position.z = (p * L) % L; d.rotation.z = Math.sin(w) * 0.05; }
+    beam.position.set(0, Math.sin(w) * 2.2, -10 + Math.cos(w) * 3);
+    orbs.children.forEach((o, k) => { o.position.x += Math.sin(w + o.userData.ph) * 0.004; o.material.opacity = 0.12 + 0.18 * (0.5 + 0.5 * Math.sin(w * 2 + o.userData.ph)); });
+    orbs.position.z = Math.sin(w) * 1.5;
+    keyMint.position.set(Math.sin(w) * 5, 1.5 + Math.cos(w) * 1.5, -4);
+    keyViolet.position.set(-Math.cos(w) * 6, -1.2 + Math.sin(w) * 1.2, -9);
+    camera.position.set(Math.sin(w) * 0.6, Math.cos(w) * 0.3, 6);
+    camera.lookAt(Math.sin(w) * 0.3, 0, -10);
+  };
+}
+
+if (MODE === 'stack') {
+  // Pila de evidencias: hojas apiladas con un haz de lectura que las atraviesa.
+  scene.fog = new THREE.FogExp2('#05070f', 0.035);
+  for (let i = 0; i < 9; i++) {
+    const s = sheet(2.1, i === 4 ? MINT : i % 3 === 0 ? VIOLET : new THREE.Color('#AAB6C7'), i === 4 ? 0.95 : 0.35, i, i === 4 ? 0.7 : 0.45);
+    s.rotation.set(-Math.PI / 2 + 0.02, 0, 0.6 + i * 0.012);
+    s.position.set(i * 0.035, i * 0.22 - 0.9, -i * 0.02);
+    if (i === 4) s.position.x += 0.9;
+    scene.add(s);
+  }
+  const beam = glowBeam(7, MINT, 0.32); beam.scale.y = 0.6; beam.position.set(0.4, 0.05, 0.2); beam.rotation.set(-Math.PI / 2, 0, 0.6); scene.add(beam);
+  scene.add(bokeh(14, { x: 16, y: 10, z: 10 }, ['#35D9A4', '#8E78F7'], 0.6, 2.4, 0.35));
+  scene.add(particles(500, { x: 14, y: 9, z: 12 }, '#cfe9ff', 0.05));
+  keyMint.position.set(2.5, 2.5, 2); keyViolet.position.set(-4, 1, -3);
+  camera.position.set(4.6, 3.6, 5.2); camera.lookAt(0.4, 0, 0);
+}
+
+if (MODE === 'strata') {
+  // Estratos del modelo: seis losas con los colores de la escala de madurez.
+  scene.fog = new THREE.FogExp2('#05070f', 0.03);
+  LEVELS.forEach((c, i) => {
+    const geo = new RoundedBoxGeometry(4.4 - i * 0.42, 0.16, 2.6 - i * 0.22, 3, 0.06);
+    const m = new THREE.MeshPhysicalMaterial({ color: c, metalness: 0.2, roughness: 0.3, clearcoat: 1, transparent: true, opacity: 0.95, emissive: c, emissiveIntensity: 0.06 });
+    const mesh = new THREE.Mesh(geo, m); mesh.position.set(0, i * 0.42 - 1.1, 0); scene.add(mesh);
+    const e = new THREE.LineSegments(new THREE.EdgesGeometry(geo), new THREE.LineBasicMaterial({ color: i === 3 ? MINT : '#ffffff', transparent: true, opacity: i === 3 ? 0.9 : 0.18, blending: THREE.AdditiveBlending }));
+    e.position.copy(mesh.position); scene.add(e);
+  });
+  const s = sheet(0.9, MINT, 0.9, 2, 0.6); s.position.set(1.6, 1.6, 0.6); s.rotation.set(-0.25, -0.5, 0.08); scene.add(s);
+  scene.add(bokeh(14, { x: 16, y: 10, z: 10 }, ['#35D9A4', '#8E78F7'], 0.6, 2.4, 0.3));
+  scene.add(particles(450, { x: 14, y: 9, z: 12 }, '#cfe9ff', 0.05));
+  keyMint.position.set(3, 3, 3); keyViolet.position.set(-4, 0, -2);
+  camera.position.set(5.2, 3.1, 6.2); camera.lookAt(0, 0, 0);
+}
+
+if (MODE === 'vault') {
+  // Bóveda local: un cubo de vidrio que contiene documentos; nada sale del dispositivo.
+  scene.fog = new THREE.FogExp2('#05070f', 0.03);
+  const cube = new RoundedBoxGeometry(2.6, 2.6, 2.6, 4, 0.18);
+  const glass = new THREE.MeshPhysicalMaterial({ color: '#7fb6ff', metalness: 0, roughness: 0.08, transmission: 0, transparent: true, opacity: 0.12, clearcoat: 1, side: THREE.DoubleSide, depthWrite: false });
+  scene.add(new THREE.Mesh(cube, glass));
+  const e = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(2.6, 2.6, 2.6)), new THREE.LineBasicMaterial({ color: MINT, transparent: true, opacity: 0.75, blending: THREE.AdditiveBlending })); scene.add(e);
+  for (let i = 0; i < 5; i++) { const s = sheet(0.95, i === 2 ? MINT : VIOLET, 0.6, i, 0.55); s.position.set((i - 2) * 0.32, 0, (i - 2) * 0.18); s.rotation.set(0, 0.6, 0); scene.add(s); }
+  const core = new THREE.PointLight(MINT, 6, 8, 1.4); scene.add(core);
+  scene.add(bokeh(14, { x: 16, y: 10, z: 10 }, ['#35D9A4', '#8E78F7'], 0.6, 2.4, 0.3));
+  scene.add(particles(500, { x: 14, y: 9, z: 12 }, '#cfe9ff', 0.05));
+  keyViolet.position.set(-4, 2, -3); keyMint.position.set(3, -1, 3);
+  camera.position.set(4.2, 2.6, 5.4); camera.lookAt(0, 0, 0);
+}
+
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+const BLOOM = { field: 0.9, stack: 0.75, strata: 0.38, vault: 0.42 };
+composer.addPass(new UnrealBloomPass(new THREE.Vector2(W, H), +(P.get('bloom') || BLOOM[MODE] || 0.8), 0.55, 0.14));
+composer.addPass(new OutputPass());
+
+window.renderAt = (t) => { update(t); composer.render(); return true; };
+window.ready = true;
+</script></body></html>

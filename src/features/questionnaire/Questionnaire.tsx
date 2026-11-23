@@ -105,22 +105,22 @@ export function Questionnaire({ questions, responses, context, onSave, onSkipSec
 
   return (
     <div className="min-h-screen bg-canvas">
-      <header className="sticky top-0 z-20 border-b border-line bg-white">
+      <header className="on-dark sticky top-0 z-20 bg-midnight text-white">
         <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 md:px-6">
           <div className="min-w-0">
-            <p className="truncate text-xs text-muted">{context.organization} · {context.assessment}</p>
-            <p className="truncate text-sm font-medium text-navy">{context.participant} · {context.profile}</p>
+            <p className="truncate text-xs text-fog">{context.organization} · {context.assessment}</p>
+            <p className="truncate text-sm font-semibold text-white">{context.participant} · {context.profile}</p>
           </div>
-          <div className="flex items-center gap-3">
-            <span className="text-xs text-muted" role="status" aria-live="polite">
-              {save.state === 'saving' ? 'Guardando…' : save.state === 'saved' ? `Guardado ${save.at?.toLocaleTimeString('es-CO')}` : save.state === 'error' ? <span className="text-danger">Error al guardar: {save.message}</span> : 'Guardado automático'}
+          <div className="flex flex-wrap items-center gap-2 md:gap-3">
+            <span className="w-full text-xs whitespace-nowrap text-fog sm:w-auto" role="status" aria-live="polite">
+              {save.state === 'saving' ? 'Guardando…' : save.state === 'saved' ? `Guardado ${save.at?.toLocaleTimeString('es-CO')}` : save.state === 'error' ? <span className="text-[#FCA5A5]">Error al guardar: {save.message}</span> : 'Guardado automático'}
             </span>
             {extraActions}
-            <Button size="sm" icon={<LogOut className="size-3.5" />} onClick={onExit}>Guardar y salir</Button>
+            <Button size="sm" variant="outline-light" icon={<LogOut className="size-3.5" />} onClick={onExit}>Guardar y salir</Button>
             <Button size="sm" variant="primary" icon={<Flag className="size-3.5" />} onClick={() => setSummary(true)}>Finalizar entrevista</Button>
           </div>
         </div>
-        <div className="px-4 pb-2 md:px-6"><Progress value={answeredPct} label="Avance de la entrevista" /></div>
+        <div className="px-4 pb-2.5 md:px-6"><Progress dark value={answeredPct} label="Avance de la entrevista" /></div>
       </header>
 
       <div className="grid lg:grid-cols-[260px_minmax(0,1fr)_320px]">
@@ -177,23 +177,24 @@ export function Questionnaire({ questions, responses, context, onSave, onSkipSec
               {q.maturityDescriptors.map((d, i) => {
                 const checked = r?.value === i;
                 return (
-                  <label key={i} className={cx('flex cursor-pointer gap-4 rounded-md border bg-white px-4 py-3 transition-colors duration-150', checked ? 'border-petrol ring-1 ring-petrol' : 'border-line hover:border-slate-300')}>
+                  <label key={i} className={cx('flex cursor-pointer gap-4 rounded-lg border px-4 py-3 transition-colors duration-150 focus-within:ring-2 focus-within:ring-mint-strong focus-within:ring-offset-2', checked ? 'border-mint-strong bg-mint-soft/60 ring-1 ring-mint-strong' : 'border-line bg-white hover:border-[#b8c4d4]')}>
                     <input type="radio" name={`lvl-${q.id}`} className="sr-only" checked={checked} onChange={() => choose(i)} />
-                    <span className={cx('flex size-8 shrink-0 items-center justify-center rounded-md border text-sm font-semibold num', checked ? 'border-petrol bg-petrol text-white' : 'border-line text-navy')}>{checked ? <Check className="size-4" aria-hidden /> : i}</span>
+                    <span className={cx('flex size-8 shrink-0 items-center justify-center rounded-md border text-sm font-semibold num', checked ? 'border-mint-strong bg-mint-strong text-white' : 'border-line bg-soft text-navy')}>{checked ? <Check className="size-4" aria-hidden /> : i}</span>
                     <span className="min-w-0">
-                      <span className="block text-xs font-semibold uppercase tracking-wider text-muted">Nivel {i} · {LEVEL_NAMES[i]}</span>
+                      <span className={cx('block text-xs font-semibold uppercase tracking-wider', checked ? 'text-mint-strong' : 'text-muted')}>Nivel {i} · {LEVEL_NAMES[i]}</span>
                       <span className="mt-0.5 block text-sm text-ink">{d}</span>
                     </span>
                   </label>
                 );
               })}
             </div>
-            <div className="mt-4 flex flex-wrap gap-2">
-              <Button size="sm" variant={r?.special === 'NO_SABE' ? 'subtle' : 'secondary'} icon={<CircleHelp className="size-3.5" />} onClick={() => special('NO_SABE')}>No sabe</Button>
+            <p className="mt-5 text-xs font-medium text-muted">Si no puede elegir un nivel</p>
+            <div className="mt-2 flex flex-wrap gap-2">
+              <Button size="sm" aria-pressed={r?.special === 'NO_SABE'} variant={r?.special === 'NO_SABE' ? 'subtle' : 'secondary'} icon={<CircleHelp className="size-3.5" />} onClick={() => special('NO_SABE')}>No sabe</Button>
               <Tip content="Propone que el criterio no es pertinente. Solo el evaluador puede validar la no aplicabilidad con justificación.">
-                <Button size="sm" variant={r?.special === 'NO_APLICA_PROPUESTO' ? 'subtle' : 'secondary'} onClick={() => special('NO_APLICA_PROPUESTO')}>No aplica</Button>
+                <Button size="sm" aria-pressed={r?.special === 'NO_APLICA_PROPUESTO'} variant={r?.special === 'NO_APLICA_PROPUESTO' ? 'subtle' : 'secondary'} onClick={() => special('NO_APLICA_PROPUESTO')}>No aplica</Button>
               </Tip>
-              <Button size="sm" variant={r?.special === 'OMITIDA' ? 'subtle' : 'secondary'} icon={<SkipForward className="size-3.5" />} onClick={() => special('OMITIDA')}>Omitir pregunta</Button>
+              <Button size="sm" aria-pressed={r?.special === 'OMITIDA'} variant={r?.special === 'OMITIDA' ? 'subtle' : 'secondary'} icon={<SkipForward className="size-3.5" />} onClick={() => special('OMITIDA')}>Omitir pregunta</Button>
               <Button size="sm" onClick={() => setSkipDim(q.dimensionId)}>Omitir sección</Button>
               <Button size="sm" variant="ghost" icon={r?.flagged ? <BookmarkCheck className="size-3.5 text-gold" /> : <Bookmark className="size-3.5" />} onClick={() => persist({ flagged: !r?.flagged })} aria-pressed={Boolean(r?.flagged)}>{r?.flagged ? 'Marcada para revisión' : 'Marcar para revisión'}</Button>
             </div>

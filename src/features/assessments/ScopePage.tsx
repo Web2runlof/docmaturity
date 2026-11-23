@@ -57,7 +57,7 @@ function ScopeCriteria({ a, locked, save, org }: Props & { org: Parameters<typeo
     return save({ questionIds: QUESTIONS.map((q) => q.id).filter((x) => ids.includes(x)).concat(ids.filter((x) => x.startsWith('CUS-'))), excludedQuestions: excluded, selectedDimensions: [...selected].sort() as DimensionId[], modality: a.modality === 'custom' ? 'custom' : 'custom' }, on ? 'Criterio incluido' : 'Criterio excluido');
   };
   return (
-    <div className="grid gap-6 lg:grid-cols-[240px_1fr]">
+    <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[240px_1fr]">
       <nav aria-label="Dimensiones" className="panel h-fit p-2">
         {DIMENSIONS.map((d) => {
           const n = a.questionIds.filter((x) => x.startsWith(d.id)).length;

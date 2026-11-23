@@ -1,6 +1,6 @@
 # Informe de pruebas
 
-Ejecución del 20 de noviembre de 2026 sobre la versión 1.0.0 (Node.js 22.23, Chromium/Chrome 153 en Linux).
+Ejecución del 21 de noviembre de 2026 sobre la versión 2.0.0 (rama `redesign/identidad-v2`; Node.js 22.23, Chrome en Linux).
 
 ## 1. Resumen
 
@@ -10,8 +10,9 @@ Ejecución del 20 de noviembre de 2026 sobre la versión 1.0.0 (Node.js 22.23, C
 | Tipos | `npm run typecheck` | Sin errores (TypeScript estricto) |
 | Banco | `npm run bank` | 15 dimensiones, 225 criterios, 1.350 descriptores únicos, 22 críticos |
 | Unitarias e integración | `npm run test` | **92 de 92 aprobadas** (6 archivos) |
-| Build de producción | `npm run build` | Correcto; 107 recursos precargados por el service worker (≈ 4,4 MB) |
-| End-to-end | `npm run test:e2e` | **8 de 8 aprobadas** (7 escritorio 1440 × 900 y 1 móvil Pixel 7) |
+| Build de producción | `npm run build` | Correcto; 117 recursos precargados por el service worker (≈ 5,0 MB) |
+| End-to-end | `npm run test:e2e` | **12 de 12 aprobadas** (11 escritorio 1440 × 900 y 1 móvil Pixel 7) |
+| Desbordamiento horizontal | 24 rutas × 360/768/1024/1440 px | Sin desbordamientos ni errores de consola |
 
 ## 2. Cobertura de los 60 casos obligatorios
 
@@ -102,6 +103,20 @@ U = prueba unitaria o de integración (Vitest, `tests/unit`); E = prueba end-to-
 | Demostración enriquecida | 1 entrevista importada con hash, E2/E3 en ≥ 8 dimensiones, soporte > 20 %, iniciativas valoradas y una en la fase 4 |
 
 Además, se cargó la demostración en el sitio compilado y se recorrieron todas las rutas públicas y de la aplicación (incluidas las vistas Validada y Comparación, las pestañas de la hoja de ruta y de brechas, y las páginas 404) sin errores de consola ni peticiones externas. Un barrido automático del texto visible de esas 29 pantallas y de los dos PDF no encontró códigos internos (`NO_SABE`, nombres de campos, identificadores con guion bajo), siglas en minúscula, plurales con paréntesis ni porcentajes con punto decimal.
+
+## 2 ter. Rediseño 2.0 (sin cambios de cálculo)
+
+| Verificación | Prueba |
+|---|---|
+| Titular de la portada y rutas de «Iniciar diagnóstico», «Conocer la metodología» y «Crear una evaluación» | E `Rediseño · pie de página…` |
+| Atribución «Diseñado y creado por: Sergio Gómez Flórez» con enlace a LinkedIn, `target="_blank"` y `rel="noopener noreferrer"` | E `Rediseño · pie de página…` |
+| Cifras de la portada derivadas del banco (225, 1.350) | E `Rediseño · pie de página…` |
+| Movimiento reducido: contenido visible sin animación ni Ken Burns | E `Rediseño · pie de página…` (contexto `reducedMotion: 'reduce'`) |
+| Movimiento reducido: póster en lugar de video y carrusel sin avance automático | E `Rediseño · pie de página…` |
+| Video de fondo local (silenciado, en bucle, póster, WebM y MP4), marquesina accesible y carrusel con pausa, sin solicitudes externas | E `Rediseño · portada con video…` |
+| Siguiente paso y resaltado único en la navegación | E `Rediseño · la navegación…` |
+| Paquete de evaluación exportado desde Informes e importado en otro navegador | E `Rediseño · flujo de intercambio…` |
+| Flujo completo (organización → evaluación → entrevista → evidencia → validación → resultados → informes → exportación e importación) | E `01/04/49`, `19–24`, `43/44/45`, `42`, `Rediseño · flujo de intercambio…` |
 
 ## 3. Casos matemáticos obligatorios
 

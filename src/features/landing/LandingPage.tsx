@@ -1,65 +1,75 @@
 import { useState, type ReactNode } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowRight, BarChart3, Building2, Check, ClipboardCheck, FileJson, FileSearch, GraduationCap, Lock, Route, ShieldCheck, Users } from 'lucide-react';
-import { DIMENSIONS, QUESTIONS, SOURCES, LEVEL_NAMES, getDimensionFamily } from '@/data/bank';
-import type { VerificationStatus } from '@/types/bank';
-import { EChart } from '@/components/charts/EChart';
-import { LevelLegend } from '@/components/charts/LevelLegend';
-import { heatmapOption } from '@/components/charts/options';
-import { DEFAULT_THRESHOLDS, LEVEL_COLORS } from '@/engine/constants';
-import { levelIndex } from '@/engine/scoring';
+import {
+  ArrowRight, ArrowUpRight, Check, ClipboardList, FileDown, FileSearch, GitBranch, HardDrive, KeyRound, Layers3, MessagesSquare, Scale, ShieldAlert, ShieldCheck, WifiOff,
+} from 'lucide-react';
+import { DIMENSIONS, QUESTIONS, SOURCES } from '@/data/bank';
+import { MGDA_FAMILIES, MODALITY_LABEL } from '@/config/vocabulary';
 import { openOrLoadDemo } from '@/services/demo';
 import { attempt } from '@/app/store';
-import { MGDA_FAMILIES, TIER_LABEL, VERIFICATION_LABEL, WORK_CYCLE } from '@/config/vocabulary';
-import { cx, fmtPct, fmtScore } from '@/utils/core';
+import { buttonClass } from '@/components/ui';
+import { AnimatedCounter, BackgroundVideo, Marquee, MotionScope, Reveal, ScrollRevealText, WordRotator, useElementProgress, useSpotlight } from '@/components/motion';
+import { cx, fmtPct } from '@/utils/core';
+import { MODALITY_INFO } from '../common';
+import { Carousel, type Slide } from './Carousel';
+import { HERO_VIDEO, RENDERS, SHOTS } from './media';
 
-/** Datos ilustrativos simulados para la composición visual de la portada (no provienen de ninguna organización). */
-const ILLUSTRATIVE = {
-  global: 2.1,
-  coverage: 86,
-  support: 41,
-  families: [2.62, 1.9, 2.45, 1.38, 2.05],
-  /** Brechas en orden de prioridad, con códigos y nombres reales del banco. */
-  gaps: [
-    { id: 'D11-Q01', level: 1, target: 3 },
-    { id: 'D03-Q02', level: 1.5, target: 3 },
-    { id: 'D03-Q01', level: 2, target: 3 },
-  ],
-  /** Mapa de calor ilustrativo: familia (filas) × perfil (columnas). */
-  heatCols: ['Alta dirección', 'Gestión documental', 'Tecnología', 'Jurídica'],
-  heat: [
-    [3.0, 2.5, 2.0, 2.5],
-    [2.0, 2.5, 1.5, 1.0],
-    [2.5, 3.0, 2.0, 2.0],
-    [1.5, 2.0, 2.5, 1.0],
-    [2.0, 2.5, 1.5, 2.0],
-  ],
-};
+const CRITICAL = QUESTIONS.filter((q) => q.isCritical).length;
+const pill = (...extra: (string | false | undefined)[]) => cx('rounded-full', ...extra);
 
-const CYCLE_ICONS = { caracterizar: Building2, alcance: ClipboardCheck, entrevistar: Users, validar: FileSearch, analizar: BarChart3, planear: Route } as const;
-
-const TIER_COUNTS = { quick: QUESTIONS.filter((q) => q.coreTier === 'quick').length, standard: QUESTIONS.filter((q) => q.coreTier !== 'professional').length, professional: QUESTIONS.length };
-const MODALITIES = [
-  { name: TIER_LABEL.quick, count: TIER_COUNTS.quick, time: 'Una sesión', color: LEVEL_COLORS[5], text: 'Panorama inicial con los criterios esenciales de cada dimensión.' },
-  { name: TIER_LABEL.standard, count: TIER_COUNTS.standard, time: 'Varias entrevistas', color: LEVEL_COLORS[3], text: `Diagnóstico equilibrado para planificar con varios perfiles. Incluye los criterios de la modalidad ${TIER_LABEL.quick}.` },
-  { name: TIER_LABEL.professional, count: TIER_COUNTS.professional, time: 'Consultoría', color: '#8FC9C0', text: 'Todos los criterios del banco, con evidencias y validación detallada.' },
+/** Cifras del producto: se derivan del banco versionado y de la configuración. */
+const METRICS = [
+  { value: DIMENSIONS.length, label: 'dimensiones', note: `en ${MGDA_FAMILIES.length} familias de capacidades` },
+  { value: QUESTIONS.length, label: 'criterios', note: 'con verificaciones observables' },
+  { value: QUESTIONS.length * 6, label: 'descriptores de nivel', note: 'redactados uno a uno' },
+  { value: CRITICAL, label: 'criterios críticos', note: 'alertan en los niveles 0 y 1' },
+  { value: SOURCES.length, label: 'referentes', note: 'con estado de verificación' },
 ];
+
+const SLIDES: Slide[] = [
+  { ...SHOTS.cuestionario, tag: 'Entrevista', title: 'Un criterio a la vez', text: 'Seis niveles descritos, aclaraciones, ejemplos y evidencias sugeridas. Las respuestas especiales nunca se convierten en cero.' },
+  { ...SHOTS.validacion, tag: 'Validación', title: 'Mesa de validación', text: 'Lo declarado frente a lo demostrado: discrepancias, contradicciones y evidencias de cada criterio.' },
+  { ...SHOTS.resumen, tag: 'Seguimiento', title: 'Cada evaluación, con su estado', text: 'Avance del ciclo, madurez preliminar y validada, cobertura y siguiente paso recomendado.' },
+  { ...SHOTS.brechas, tag: 'Análisis', title: 'Brechas y riesgos explicados', text: 'Cada brecha frente a la meta, con la acción propuesta, el responsable y la evidencia de cumplimiento.' },
+  { ...SHOTS.ruta, tag: 'Transformación', title: 'Hoja de ruta en cuatro fases', text: 'Iniciativas priorizadas que respetan las dependencias entre criterios y se pueden editar.' },
+  { ...SHOTS.informes, tag: 'Informes', title: 'Informes listos para presentar', text: 'Informe ejecutivo y técnico en PDF, libro de análisis en XLSX y paquetes con verificación de integridad.' },
+];
+
+const STEPS = [
+  { img: RENDERS.field, kicker: 'Paso 1', title: 'Caracterice y entreviste', accent: 'entreviste', text: 'Registre la organización, elija la modalidad y entreviste a cada perfil. Las entrevistas también se distribuyen por archivo y se responden sin conexión.', points: ['Aplicabilidad según la naturaleza jurídica', 'Una respuesta por participante, consolidada por mediana'] },
+  { img: RENDERS.stack, kicker: 'Paso 2', title: 'Evidencie y valide', accent: 'valide', text: 'Cada criterio guarda su sustento documental del E0 al E3. En la mesa de validación se contrasta lo percibido con lo demostrado.', points: ['Discrepancias y contradicciones detectadas', 'Lo validado nunca sobrescribe lo respondido'] },
+  { img: RENDERS.strata, kicker: 'Paso 3', title: 'Analice y priorice', accent: 'priorice', text: 'Madurez por dimensión y familia, brechas frente a la meta, riesgos y una hoja de ruta ordenada por prioridad explicada.', points: ['Fórmulas deterministas y documentadas', 'Informes ejecutivo y técnico'] },
+];
+
+const CAPABILITIES = [
+  { icon: MessagesSquare, title: 'Entrevistas distribuidas', text: 'Asignaciones por archivo, respuestas sin conexión y consolidación con verificación de integridad.' },
+  { icon: FileSearch, title: 'Evidencias graduadas', text: 'Del E0 al E3, con soporte expresado en porcentaje y trazabilidad hasta el criterio.' },
+  { icon: Scale, title: 'Mesa de validación', text: 'Percibido frente a validado, con justificación y registro de cada decisión.' },
+  { icon: ShieldAlert, title: 'Brechas y riesgos', text: 'Matriz de probabilidad e impacto y bandas de riesgo explícitas.' },
+  { icon: GitBranch, title: 'Hoja de ruta con dependencias', text: 'Cuatro fases, prioridad de cinco factores y reprogramación según dependencias.' },
+  { icon: FileDown, title: 'Informes y exportaciones', text: 'PDF ejecutivo y técnico, XLSX y paquetes cifrables con contraseña.' },
+];
+
+const MODALITIES = [
+  { key: 'quick', featured: false, use: 'Una sesión', includes: ['Criterios estratégicos de cada dimensión', 'Comparación rápida de percepciones', 'Ideal para clase o primer acercamiento'] },
+  { key: 'standard', featured: true, use: 'Varias entrevistas', includes: [`Incluye la modalidad ${MODALITY_LABEL.quick.toLowerCase()}`, 'Lectura amplia de capacidades', 'Evidencias, validación y hoja de ruta'] },
+  { key: 'professional', featured: false, use: 'Consultoría', includes: [`Banco completo de ${QUESTIONS.length} criterios`, 'Distribución entre perfiles', 'Validación detallada criterio a criterio'] },
+  { key: 'custom', featured: false, use: 'Alcance focalizado', includes: ['Dimensiones elegidas', 'Preguntas propias y metas', 'Exclusiones justificadas'] },
+] as const;
 
 const FAQ = [
   { q: '¿DOCMATURITY certifica a la organización?', a: 'No. Es una herramienta de autodiagnóstico y consultoría. Sus resultados no constituyen certificación, auditoría oficial ni puntaje de instrumentos como el MGDA o el FURAG, y no acreditan conformidad con normas ISO o MoReq.' },
   { q: '¿Dónde se guardan los datos?', a: 'En el navegador del dispositivo, mediante IndexedDB. No hay servidor, registro de usuarios ni sincronización. Para trasladar información se exportan archivos que pueden protegerse con contraseña.' },
-  { q: '¿Cómo responden las personas entrevistadas si no tienen la aplicación instalada?', a: 'La persona evaluadora genera un archivo de asignación. La persona entrevistada lo abre en la sección «Responder entrevista», responde sin conexión y devuelve un archivo de respuestas que la persona evaluadora importa.' },
-  { q: '¿Qué pasa con las respuestas «No sé» o «No aplica»?', a: 'No se convierten en cero. «No sé», «Omitida», «Pendiente» y «No aplica (propuesto)» dejan el criterio sin puntuación y reducen la cobertura. «No aplica (validado)» retira el criterio del alcance y «No asignada» indica que la pregunta no forma parte de esa entrevista: ninguna de las dos reduce la cobertura.' },
-  { q: '¿Se puede usar en clase?', a: 'Sí. El laboratorio académico incluye cinco casos ficticios, una sesión guiada de 60 minutos, insignias por la calidad del proceso y un entregable en PDF apto para Moodle.' },
-  { q: '¿Usa inteligencia artificial?', a: 'El motor de cálculo y la narrativa son deterministas. Existe un asistente opcional que solo genera una instrucción anonimizada para que la persona evaluadora la use, si lo desea, en una herramienta autorizada por su organización.' },
+  { q: '¿Cómo responden las personas entrevistadas sin instalar nada?', a: 'La persona evaluadora genera un archivo de asignación. La persona entrevistada lo abre en «Responder entrevista», responde sin conexión y devuelve un archivo de respuestas que se importa en la evaluación.' },
+  { q: '¿Qué pasa con las respuestas «No sé» o «No aplica»?', a: 'No se convierten en cero. «No sé», «Omitida», «Pendiente» y «No aplica (propuesto)» dejan el criterio sin puntuación y reducen la cobertura. «No aplica (validado)» retira el criterio del alcance.' },
+  { q: '¿Se puede usar en clase?', a: 'Sí. El laboratorio académico incluye cinco casos ficticios, una sesión guiada de 60 minutos, insignias por la calidad del proceso y un entregable en PDF.' },
   { q: '¿Funciona sin conexión?', a: 'Sí. Después de la primera visita la aplicación se instala como aplicación web progresiva y funciona sin conexión.' },
 ];
-
-const coverageBandLabel = (v: number) => (v < DEFAULT_THRESHOLDS.coverageInsufficient ? 'Insuficiente' : v < DEFAULT_THRESHOLDS.coverageExploratory ? 'Exploratoria' : v < DEFAULT_THRESHOLDS.coveragePartial ? 'Parcial' : 'Alta');
 
 export default function LandingPage() {
   const nav = useNavigate();
   const [busy, setBusy] = useState(false);
+  useSpotlight();
   const demo = async () => {
     if (busy) return;
     setBusy(true);
@@ -67,363 +77,373 @@ export default function LandingPage() {
     setBusy(false);
     if (id) nav(`/app/evaluaciones/${id}/resultados`);
   };
-  const typeCounts = SOURCES.reduce<Record<string, number>>((acc, s) => ({ ...acc, [s.type]: (acc[s.type] ?? 0) + 1 }), {});
-  const verification = (Object.keys(VERIFICATION_LABEL) as VerificationStatus[]).map((k) => ({ k, label: VERIFICATION_LABEL[k], n: SOURCES.filter((s) => s.verificationStatus === k).length }));
-  const critical = QUESTIONS.filter((q) => q.isCritical).length;
-
   return (
-    <>
+    <div className="bg-midnight">
       <Hero busy={busy} onDemo={demo} />
+      <ReferencesMarquee />
+      <Metrics />
+      <Method />
+      <Showcase />
+      <Capabilities />
+      <Modalities />
+      <Privacy />
+      <Statement />
+      <Faq />
+      <Closing busy={busy} onDemo={demo} />
+    </div>
+  );
+}
 
-      {/* 1. Introducción */}
-      <Band id="introduccion" eyebrow="01 · El diagnóstico" title="Un diagnóstico que distingue lo que se percibe de lo que se demuestra.">
-        <div className="grid gap-10 md:grid-cols-3">
-          <Prose title="Qué evalúa">Capacidades organizacionales para crear, gestionar, proteger, preservar y aprovechar documentos e información, desde la política hasta la automatización.</Prose>
-          <Prose title="Cómo lo sustenta">Cada criterio tiene seis descriptores de nivel, verificaciones observables y evidencias sugeridas. Los resultados declaran su cobertura y su soporte de evidencias.</Prose>
-          <Prose title="Qué no hace">No certifica, no emite puntajes oficiales y no reemplaza el análisis jurídico. Las asociaciones con referentes son conceptuales y verificables.</Prose>
+/* ---------------------------------------------------------------------- */
+
+function Chip({ children, dark = true }: { children: ReactNode; dark?: boolean }) {
+  return (
+    <span className={cx('inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-medium', dark ? 'border-white/12 bg-white/[0.06] text-[#cfd7e3] backdrop-blur' : 'border-line bg-white text-muted')}>
+      <span className={cx('size-1.5 rounded-full', dark ? 'bg-mint' : 'bg-mint-strong')} aria-hidden />{children}
+    </span>
+  );
+}
+
+/** Titular con una expresión en serif itálica: rasgo editorial de la identidad. */
+function Accent({ text, accent, className }: { text: string; accent?: string; className?: string }) {
+  if (!accent || !text.includes(accent)) return <>{text}</>;
+  const i = text.indexOf(accent);
+  return <>{text.slice(0, i)}<em className={cx('font-serif font-normal tracking-normal italic', className)}>{accent}</em>{text.slice(i + accent.length)}</>;
+}
+
+function Heading({ id, chip, title, accent, lead, dark = true, center = false, className }: { id: string; chip: string; title: string; accent?: string; lead?: ReactNode; dark?: boolean; center?: boolean; className?: string }) {
+  return (
+    <Reveal className={cx(center ? 'mx-auto max-w-3xl text-center' : 'max-w-3xl', className)}>
+      <Chip dark={dark}>{chip}</Chip>
+      <h2 id={id} className={cx('mt-5 font-display text-[2.2rem] leading-[1.04] font-semibold tracking-[-0.035em] md:text-[3.4rem]', dark ? 'text-white' : 'text-ink')}>
+        <Accent text={title} accent={accent} className={dark ? 'text-mint' : 'text-mint-strong'} />
+      </h2>
+      {lead && <p className={cx('mt-5 max-w-2xl text-base leading-relaxed md:text-lg', center && 'mx-auto', dark ? 'text-fog' : 'text-muted')}>{lead}</p>}
+    </Reveal>
+  );
+}
+
+/* ===== Héroe con video de fondo desenfocado ===== */
+
+const HERO_FEATURES = [
+  { icon: ShieldCheck, text: 'Sin registro ni servidor' },
+  { icon: WifiOff, text: 'Funciona sin conexión' },
+  { icon: KeyRound, text: 'Exportación cifrable' },
+];
+
+function Hero({ busy, onDemo }: { busy: boolean; onDemo: () => void }) {
+  const [frameRef, p] = useElementProgress<HTMLDivElement>(1, 0.55);
+  return (
+    <MotionScope as="section" aria-labelledby="hero-t" className="on-dark relative isolate overflow-hidden bg-midnight text-white">
+      <div aria-hidden className="grain absolute inset-0 -z-10">
+        <BackgroundVideo {...HERO_VIDEO} className="scale-110 opacity-90" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_35%,rgba(11,16,32,0.1),rgba(11,16,32,0.72)_72%)]" />
+        <div className="absolute inset-x-0 bottom-0 h-[42%] bg-gradient-to-b from-transparent to-midnight" />
+      </div>
+
+      <div className="mx-auto flex max-w-[1240px] flex-col items-center px-5 pt-36 pb-16 text-center md:px-8 md:pt-44">
+        <Reveal><Chip>Modelo DIAM 1.0 · {QUESTIONS.length} criterios<span className="hidden sm:inline"> · 100 % en su navegador</span></Chip></Reveal>
+        {/* El titular entra con una animación de carga (no de desplazamiento) para no retrasar el LCP. */}
+        <div className="hero-in">
+          <h1 id="hero-t" className="mt-7 max-w-[1100px] font-display text-[2.6rem] leading-[1] font-semibold tracking-[-0.035em] text-white sm:text-[3.6rem] lg:text-[4.8rem]">
+            Diagnostique lo que funciona. Evidencie lo que falta. <span className="sm:whitespace-nowrap">Priorice <em className="font-serif font-normal tracking-normal text-mint italic">lo que sigue.</em></span>
+          </h1>
         </div>
-      </Band>
+        <Reveal delay={180}>
+          <p className="mx-auto mt-7 max-w-[660px] text-lg leading-relaxed text-[#cfd7e3] md:text-xl">Madurez documental y de gobierno de la información con entrevistas, evidencias y resultados trazables.</p>
+          <p className="mt-3 text-base text-fog md:text-lg"><WordRotator prefix="Para" wordClassName="font-medium text-white" words={['entidades públicas', 'empresas privadas', 'archivos y centros de documentación', 'equipos de consultoría', 'programas académicos']} /></p>
+        </Reveal>
+        <Reveal delay={260} className="mt-10 flex flex-wrap items-center justify-center gap-3">
+          <Link to="/app/organizaciones/nueva" className={buttonClass('primary', 'lg', pill('h-12 px-7 shadow-[0_10px_40px_-10px_rgba(53,217,164,0.7)]'))}>Iniciar diagnóstico <ArrowRight className="size-4" aria-hidden /></Link>
+          <Link to="/metodologia" className={buttonClass('outline-light', 'lg', pill('h-12 border-white/20 bg-white/[0.06] px-7 backdrop-blur'))}>Conocer la metodología</Link>
+        </Reveal>
+        <Reveal delay={320}>
+          <button type="button" onClick={onDemo} disabled={busy} aria-busy={busy} className="mt-5 inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-fog underline-offset-4 transition-colors hover:text-white hover:underline disabled:opacity-60">
+            {busy ? 'Abriendo…' : 'Explorar demostración'}<ArrowRight className="size-3.5" aria-hidden />
+          </button>
+        </Reveal>
+        <Reveal delay={380} className="mt-6">
+          <ul className="flex flex-wrap justify-center gap-x-7 gap-y-3 text-sm text-[#cfd7e3]" aria-label="Funcionamiento">
+            {HERO_FEATURES.map((f) => <li key={f.text} className="flex items-center gap-2"><f.icon className="size-4 text-mint" aria-hidden />{f.text}</li>)}
+          </ul>
+        </Reveal>
 
-      {/* 2. Cómo funciona */}
-      <Band id="como-funciona" eyebrow="02 · Cómo funciona" title="Seis momentos de un mismo ciclo de trabajo." tone="white">
-        <ol className="grid gap-x-10 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
-          {WORK_CYCLE.map((s, i) => {
-            const Icon = CYCLE_ICONS[s.key as keyof typeof CYCLE_ICONS];
-            return (
-              <li key={s.key} className="border-t-2 border-navy pt-5">
-                <div className="flex items-baseline justify-between"><span className="font-display text-3xl font-semibold text-slate-300 num">{String(i + 1).padStart(2, '0')}</span><Icon className="size-5 text-teal" aria-hidden /></div>
-                <h3 className="mt-3 text-lg font-semibold">{s.title}</h3>
-                <p className="mt-2 text-sm text-muted">{s.text}</p>
-              </li>
-            );
-          })}
-        </ol>
-        <p className="mt-8 text-sm"><Link to="/como-funciona" className="inline-flex items-center gap-1 font-medium text-teal hover:underline">Ver dónde se hace cada momento en la aplicación <ArrowRight className="size-4" aria-hidden /></Link></p>
-      </Band>
+        {/* Vista real del producto: se endereza al desplazarse. */}
+        <div ref={frameRef} className="mt-16 w-full [perspective:1800px]">
+          <div className="relative mx-auto max-w-[1120px] origin-top will-change-transform" style={{ transform: `rotateX(${(1 - p) * 16}deg) scale(${0.94 + p * 0.06})` }}>
+            <div aria-hidden className="absolute -inset-x-10 top-10 -bottom-10 -z-10 rounded-[40px] bg-[radial-gradient(ellipse_at_center,rgba(53,217,164,0.35),transparent_65%)] blur-2xl" />
+            <div className="overflow-hidden rounded-[18px] border border-white/15 bg-white/[0.05] p-1.5 shadow-[0_50px_120px_-30px_rgba(0,0,0,0.9)] backdrop-blur">
+              <div className="flex items-center justify-between gap-3 px-3 py-2 text-[11px] text-fog">
+                <span className="flex gap-1.5" aria-hidden><span className="size-2.5 rounded-full bg-white/20" /><span className="size-2.5 rounded-full bg-white/20" /><span className="size-2.5 rounded-full bg-white/20" /></span>
+                <span className="truncate">docmaturity · Resultados</span>
+                <span className="rounded-full border border-mint/40 px-2 py-0.5 text-[10px] text-mint">Datos de demostración</span>
+              </div>
+              <img src={SHOTS.resultados.src} srcSet={`${SHOTS.resultados.small} 960w, ${SHOTS.resultados.src} 1600w`} sizes="(min-width: 1180px) 1120px, 94vw" alt="Tablero de resultados de DOCMATURITY con un caso de demostración: madurez percibida, cobertura, soporte de evidencias y solidez del diagnóstico" className="block h-auto w-full rounded-[12px]" width={1600} height={1000} decoding="async" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </MotionScope>
+  );
+}
 
-      {/* 3. Dimensiones */}
-      <Band id="dimensiones" eyebrow="03 · Dimensiones de evaluación" title="Quince dimensiones organizadas en cinco familias.">
-        <div className="grid gap-px overflow-hidden rounded-lg border border-line bg-line lg:grid-cols-5">
-          {MGDA_FAMILIES.map((f) => {
-            const dims = DIMENSIONS.filter((d) => getDimensionFamily(d.id) === f.key);
-            return (
-              <div key={f.key} className="flex flex-col bg-white p-5">
-                <p className="text-[11px] font-semibold tracking-[0.1em] text-gold uppercase">{f.key}</p>
-                <h3 className="mt-2 text-base font-semibold">{f.title}</h3>
-                <p className="mt-1 text-xs text-muted">{f.text}</p>
-                <ul className="mt-4 space-y-2.5 border-t border-line pt-4">
-                  {dims.map((d) => (
-                    <li key={d.id} className="grid grid-cols-[36px_1fr] gap-2 text-sm">
-                      <span className="text-xs font-semibold text-teal num">{d.id}</span>
-                      <span><span className="font-medium text-ink">{d.name}</span><span className="block text-xs text-muted">{QUESTIONS.filter((q) => q.dimensionId === d.id).length} criterios</span></span>
-                    </li>
-                  ))}
+/* ===== Marquesina de referentes ===== */
+
+function ReferencesMarquee() {
+  const names = SOURCES.filter((s) => s.type !== 'referente_academico' && s.shortLabel !== 'Complementarios').map((s) => s.shortLabel);
+  const half = Math.ceil(names.length / 2);
+  const row = (xs: string[]) => xs.map((t) => (
+    <span className="flex items-center">
+      <span className="px-6 font-display text-lg font-medium tracking-[-0.01em] whitespace-nowrap text-white/60 transition-colors hover:text-white md:text-xl">{t}</span>
+      <span className="size-1 rounded-full bg-mint/60" aria-hidden />
+    </span>
+  ));
+  return (
+    <MotionScope as="section" aria-label="Referentes metodológicos" className="on-dark border-y border-white/[0.07] bg-midnight py-12">
+      <p className="mb-8 px-5 text-center text-sm text-fog">Construido a partir de normativa colombiana, estándares internacionales y modelos de madurez. <Link to="/referentes" className="ml-1 font-medium text-mint hover:underline">Ver los {SOURCES.length} referentes</Link></p>
+      <Marquee label="Referentes, primera fila" items={row(names.slice(0, half))} duration={55} />
+      <Marquee label="Referentes, segunda fila" items={row(names.slice(half))} duration={62} reverse className="mt-4" />
+      <p className="mx-auto mt-8 max-w-2xl px-5 text-center text-xs text-fog/80">Asociaciones conceptuales: no implican aval del AGN ni de organismos de normalización.</p>
+    </MotionScope>
+  );
+}
+
+/* ===== Cifras ===== */
+
+function Metrics() {
+  return (
+    <section aria-label="El modelo en cifras" className="on-dark bg-midnight text-white">
+      <dl className="mx-auto grid max-w-[1240px] grid-cols-2 gap-y-12 px-5 py-20 md:grid-cols-5 md:px-8 md:py-24">
+        {METRICS.map((m, i) => (
+          <Reveal key={m.label} delay={i * 70} className="border-l border-white/10 pl-5">
+            <dt className="sr-only">{m.label}</dt>
+            <dd className="font-display text-[3rem] leading-none font-semibold tracking-[-0.045em] text-white lg:text-[4.2rem]"><AnimatedCounter value={m.value} duration={1300} /></dd>
+            <dd className="mt-3 text-sm font-medium text-white" aria-hidden>{m.label}</dd>
+            <dd className="mt-0.5 text-xs text-fog">{m.note}</dd>
+          </Reveal>
+        ))}
+      </dl>
+    </section>
+  );
+}
+
+/* ===== Método en tres pasos ===== */
+
+function Method() {
+  return (
+    <section id="como-funciona" aria-labelledby="como-funciona-t" className="bg-soft">
+      <div className="mx-auto max-w-[1240px] px-5 py-24 md:px-8 md:py-32">
+        <Heading id="como-funciona-t" dark={false} center chip="Cómo funciona" title="Del documento a la decisión, en tres pasos." accent="decisión" lead="Cada paso deja un registro que alimenta al siguiente. Nada se calcula fuera del motor ni pierde su vínculo con el criterio y la evidencia." />
+        <ol className="mt-20 space-y-24 md:space-y-32">
+          {STEPS.map((s, i) => (
+            <li key={s.title} className="grid items-center gap-10 md:grid-cols-2 md:gap-16">
+              <Reveal className={cx('relative', i % 2 === 1 && 'md:order-2')}>
+                <div className="group relative overflow-hidden rounded-[28px] bg-midnight shadow-[0_40px_80px_-40px_rgba(11,16,32,0.55)]">
+                  <img src={s.img.small} srcSet={`${s.img.small} 800w, ${s.img.src} 1600w`} sizes="(min-width: 768px) 600px, 92vw" alt="" aria-hidden loading="lazy" decoding="async" className="aspect-[16/11] w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.04]" />
+                  <span className="absolute top-5 left-5 rounded-full border border-white/15 bg-midnight/60 px-3 py-1 text-xs font-medium text-white backdrop-blur">{s.kicker}</span>
+                </div>
+              </Reveal>
+              <Reveal delay={120}>
+                <p className="font-display text-sm font-semibold text-mint-strong num">0{i + 1} — 03</p>
+                <h3 className="mt-3 font-display text-[2rem] leading-[1.05] font-semibold tracking-[-0.03em] text-ink md:text-[2.75rem]"><Accent text={s.title} accent={s.accent} className="text-mint-strong" /></h3>
+                <p className="mt-5 max-w-lg text-base leading-relaxed text-muted md:text-lg">{s.text}</p>
+                <ul className="mt-7 space-y-3">
+                  {s.points.map((pt) => <li key={pt} className="flex items-start gap-3 text-sm text-ink"><span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-mint-soft text-mint-strong"><Check className="size-3" aria-hidden /></span>{pt}</li>)}
                 </ul>
-              </div>
+              </Reveal>
+            </li>
+          ))}
+        </ol>
+        <Reveal className="mt-20 text-center"><Link to="/como-funciona" className="inline-flex items-center gap-1.5 text-sm font-semibold text-mint-strong hover:underline">Ver los seis momentos del ciclo de trabajo <ArrowRight className="size-4" aria-hidden /></Link></Reveal>
+      </div>
+    </section>
+  );
+}
+
+/* ===== Carrusel de pantallas reales ===== */
+
+function Showcase() {
+  return (
+    <MotionScope as="section" id="plataforma" aria-labelledby="plataforma-t" className="on-dark relative isolate overflow-hidden bg-midnight py-24 text-white md:py-32">
+      <div aria-hidden className="absolute inset-x-0 top-0 -z-10 h-[520px] bg-[radial-gradient(ellipse_at_50%_0%,rgba(142,120,247,0.22),transparent_65%)]" />
+      <div className="mx-auto mb-14 flex max-w-[1240px] flex-wrap items-end justify-between gap-6 px-5 md:px-8">
+        <Heading id="plataforma-t" chip="La plataforma por dentro" title="Pensada para trabajar, no solo para mirar." accent="trabajar" />
+        <Reveal><Link to="/app" className={buttonClass('outline-light', 'md', pill('border-white/20'))}>Abrir la aplicación <ArrowUpRight className="size-4" aria-hidden /></Link></Reveal>
+      </div>
+      <Carousel slides={SLIDES} label="Pantallas de la aplicación" />
+    </MotionScope>
+  );
+}
+
+/* ===== Capacidades ===== */
+
+function Capabilities() {
+  return (
+    <section aria-labelledby="capacidades-t" className="bg-white">
+      <div className="mx-auto max-w-[1240px] px-5 py-24 md:px-8 md:py-32">
+        <div className="grid gap-10 lg:grid-cols-[1fr_1fr] lg:items-end">
+          <Heading id="capacidades-t" dark={false} chip="Capacidades" title="Todo el diagnóstico en un mismo registro." accent="mismo registro" />
+          <Reveal delay={100}><p className="max-w-xl text-base leading-relaxed text-muted lg:ml-auto">Las cifras del informe salen del motor y conservan su vínculo con la respuesta, la evidencia y la decisión de validación que las sustentan.</p></Reveal>
+        </div>
+        <ul className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {CAPABILITIES.map((c, i) => (
+            <Reveal as="li" key={c.title} delay={(i % 3) * 80} className="spotlight group rounded-[20px] border border-line bg-soft p-7 transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1 hover:border-mint-strong/30 hover:shadow-[0_24px_50px_-30px_rgba(11,16,32,0.4)]">
+              <span className="flex size-12 items-center justify-center rounded-2xl bg-midnight text-mint transition-transform duration-300 group-hover:scale-105"><c.icon className="size-5" aria-hidden /></span>
+              <h3 className="mt-6 font-display text-xl font-semibold tracking-[-0.02em] text-ink">{c.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted">{c.text}</p>
+            </Reveal>
+          ))}
+        </ul>
+      </div>
+    </section>
+  );
+}
+
+/* ===== Modalidades como planes ===== */
+
+function Modalities() {
+  return (
+    <MotionScope as="section" id="modalidades" aria-labelledby="modalidades-t" className="on-dark relative isolate overflow-hidden bg-midnight text-white">
+      <div aria-hidden className="absolute -bottom-40 left-1/2 -z-10 h-[520px] w-[900px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(53,217,164,0.16),transparent_65%)]" />
+      <div className="mx-auto max-w-[1240px] px-5 py-24 md:px-8 md:py-32">
+        <Heading id="modalidades-t" center chip="Modalidades" title="Elija la profundidad del diagnóstico." accent="profundidad" lead="Las tres modalidades del banco son acumulativas: cada una incluye los criterios de la anterior." />
+        <ul className="mt-16 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          {MODALITIES.map((m, i) => {
+            const n = MODALITY_INFO[m.key].count;
+            return (
+              <Reveal as="li" key={m.key} delay={i * 80} className={cx('spotlight relative flex flex-col rounded-[24px] border p-7', m.featured ? 'border-mint/60 bg-[linear-gradient(180deg,rgba(53,217,164,0.14),rgba(18,26,42,1)_55%)] shadow-[0_30px_80px_-40px_rgba(53,217,164,0.6)]' : 'border-white/10 bg-surface')}>
+                {m.featured && <span className="absolute -top-3 left-7 rounded-full bg-mint px-3 py-1 text-[11px] font-semibold text-midnight">Recomendada</span>}
+                <h3 className="font-display text-lg font-semibold text-white">{MODALITY_LABEL[m.key]}</h3>
+                <p className="mt-1 text-sm text-fog">{m.use}</p>
+                <p className="mt-8 flex items-baseline gap-2">
+                  <span className={cx('font-display leading-none font-semibold tracking-[-0.04em] text-white num', n ? 'text-[3.2rem]' : 'text-[2.4rem]')}>{n ?? 'A medida'}</span>
+                  {n && <span className="text-sm text-fog">criterios</span>}
+                </p>
+                <p className="mt-2 text-xs text-fog">{n ? `${fmtPct((n / QUESTIONS.length) * 100)} del banco` : 'Dimensiones y criterios elegidos'}</p>
+                <ul className="mt-7 flex-1 space-y-3 border-t border-white/10 pt-6">
+                  {m.includes.map((t) => <li key={t} className="flex items-start gap-2.5 text-sm text-[#d6dde8]"><Check className="mt-0.5 size-4 shrink-0 text-mint" aria-hidden />{t}</li>)}
+                </ul>
+                <Link to="/app/evaluaciones/nueva" className={buttonClass(m.featured ? 'primary' : 'outline-light', 'md', pill('mt-8 w-full', !m.featured && 'border-white/20'))}>Elegir esta modalidad<span className="sr-only">: {MODALITY_LABEL[m.key]}</span></Link>
+              </Reveal>
             );
           })}
-        </div>
-        <p className="mt-4 max-w-4xl text-xs text-muted">Las familias se inspiran en los componentes del Modelo de Gestión Documental y Administración de Archivos, usados como lente de lectura. La familia de cada dimensión corresponde a su componente MGDA predominante; cada criterio conserva su propio componente. {critical} criterios están marcados como críticos y generan alertas cuando se ubican en niveles 0 o 1. <Link to="/metodologia#componentes" className="text-teal hover:underline">Ver criterios por componente</Link>.</p>
-      </Band>
+        </ul>
+      </div>
+    </MotionScope>
+  );
+}
 
-      {/* 4. Referentes */}
-      <Band id="referentes" eyebrow="04 · Referentes metodológicos" title="Fundamentación declarada, con estado de verificación por referente." tone="white">
-        <div className="grid gap-10 lg:grid-cols-[1fr_1.2fr]">
-          <div className="space-y-4 text-sm text-muted">
-            <p>El modelo se construyó a partir de normativa colombiana, estándares internacionales de gestión de documentos y preservación, modelos de madurez y requisitos de sistemas, y literatura académica.</p>
-            <p>Cada uno de los {SOURCES.length} referentes declara si fue verificado, verificado parcialmente, usado como referencia conceptual o aún no verificado. DOCMATURITY no reproduce textos protegidos ni afirma correspondencias con cláusulas específicas.</p>
-            <Link to="/referentes" className="inline-flex items-center gap-1 font-medium text-teal hover:underline">Ver el registro de referentes <ArrowRight className="size-4" aria-hidden /></Link>
-          </div>
-          <div className="space-y-5">
-            <figure>
-              <figcaption className="mb-2 text-xs font-semibold tracking-[0.08em] text-muted uppercase">Estado de verificación</figcaption>
-              <div className="flex h-3 overflow-hidden rounded-full bg-slate-100" aria-hidden>
-                {verification.map((v, i) => <span key={v.k} style={{ width: `${(v.n / SOURCES.length) * 100}%`, background: [LEVEL_COLORS[3], '#5FA59B', '#B9D8D3', '#E2E8F0'][i] }} />)}
-              </div>
-              <dl className="mt-3 grid grid-cols-2 gap-x-6 gap-y-2 sm:grid-cols-4">
-                {verification.map((v, i) => (
-                  <div key={v.k}><dt className="flex items-center gap-1.5 text-xs text-muted"><span className="inline-block size-2.5 rounded-[2px]" style={{ background: [LEVEL_COLORS[3], '#5FA59B', '#B9D8D3', '#CBD5E1'][i] }} aria-hidden />{v.label}</dt><dd className="font-display text-2xl font-semibold text-navy num">{v.n}</dd></div>
-                ))}
-              </dl>
-            </figure>
-            <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-4">
-              {[
-                ['norma_juridica', 'Normas jurídicas'], ['estandar_tecnico', 'Estándares técnicos'], ['modelo_madurez', 'Modelos de madurez'], ['modelo_requisitos', 'Modelos de requisitos'],
-                ['metodologia', 'Metodologías'], ['buena_practica', 'Buenas prácticas'], ['modelo_gestion', 'Modelos de gestión'], ['referente_academico', 'Referentes académicos'],
-              ].map(([k, label]) => (
-                <div key={k} className="bg-white p-4"><dt className="text-xs text-muted">{label}</dt><dd className="mt-1 font-display text-2xl font-semibold text-navy num">{typeCounts[k] ?? 0}</dd></div>
-              ))}
-            </dl>
-          </div>
-        </div>
-      </Band>
+/* ===== Privacidad ===== */
 
-      {/* 5. Modalidades */}
-      <Band id="modalidades" eyebrow="05 · Modalidades de diagnóstico" title="La profundidad se ajusta al propósito.">
-        <div className="panel p-6">
-          <div className="relative h-3 rounded-full bg-slate-100" aria-hidden>
-            {MODALITIES.slice().reverse().map((m) => <span key={m.name} className="absolute inset-y-0 left-0 rounded-full" style={{ width: `${(m.count / QUESTIONS.length) * 100}%`, background: m.color }} />)}
+const PRIVACY = [
+  { icon: HardDrive, title: 'Datos en el dispositivo', text: 'IndexedDB del navegador. Sin servidor, cuentas, telemetría ni rastreadores.' },
+  { icon: WifiOff, title: 'Sin conexión', text: 'Se instala como aplicación web progresiva después de la primera visita.' },
+  { icon: KeyRound, title: 'Cifrado opcional', text: 'AES-GCM de 256 bits con clave derivada por PBKDF2. La contraseña no se guarda.' },
+  { icon: Layers3, title: 'Respaldos bajo su control', text: 'Copia completa en un archivo que usted conserva y restaura donde quiera.' },
+];
+
+function Privacy() {
+  return (
+    <section id="proteccion" aria-labelledby="proteccion-t" className="bg-soft">
+      <div className="mx-auto grid max-w-[1240px] items-center gap-14 px-5 py-24 md:px-8 md:py-32 lg:grid-cols-2">
+        <Reveal className="relative order-last lg:order-first">
+          <div className="group relative overflow-hidden rounded-[28px] bg-midnight">
+            <img src={RENDERS.vault.small} srcSet={`${RENDERS.vault.small} 800w, ${RENDERS.vault.src} 1600w`} sizes="(min-width: 1024px) 600px, 92vw" alt="" aria-hidden loading="lazy" decoding="async" className="aspect-[16/12] w-full object-cover transition-transform duration-[1200ms] group-hover:scale-[1.04]" />
+            <div className="absolute inset-x-5 bottom-5 flex items-center gap-3 rounded-2xl border border-white/10 bg-midnight/60 p-4 text-white backdrop-blur-md">
+              <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-mint text-midnight"><ShieldCheck className="size-5" aria-hidden /></span>
+              <p className="text-sm"><span className="block font-semibold">Ninguna solicitud a servidores externos</span><span className="text-fog">Se comprueba en cada versión con pruebas automáticas.</span></p>
+            </div>
           </div>
-          <div className="mt-6 grid gap-8 md:grid-cols-4">
-            {MODALITIES.map((m) => (
-              <div key={m.name}>
-                <p className="font-display text-3xl font-semibold text-navy num">{m.count}</p>
-                <p className="text-xs text-muted">criterios · {fmtPct((m.count / QUESTIONS.length) * 100)} del banco</p>
-                <h3 className="mt-3 flex items-center gap-2 text-base font-semibold"><span className="size-2.5 rounded-sm" style={{ background: m.color }} aria-hidden />{m.name}</h3>
-                <p className="text-xs font-medium text-teal">{m.time}</p>
-                <p className="mt-1 text-sm text-muted">{m.text}</p>
-              </div>
+        </Reveal>
+        <div>
+          <Heading id="proteccion-t" dark={false} chip="Privacidad y autonomía" title="Su información no sale del dispositivo." accent="no sale" lead="Usted decide qué se exporta, con quién se comparte y cuándo se respalda." />
+          <ul className="mt-10 grid gap-7 sm:grid-cols-2">
+            {PRIVACY.map((it, i) => (
+              <Reveal as="li" key={it.title} delay={i * 70}>
+                <it.icon className="size-5 text-mint-strong" aria-hidden />
+                <h3 className="mt-3 font-semibold text-ink">{it.title}</h3>
+                <p className="mt-1 text-sm leading-relaxed text-muted">{it.text}</p>
+              </Reveal>
             ))}
-            <div>
-              <p className="font-display text-3xl font-semibold text-navy">A la medida</p>
-              <p className="text-xs text-muted">dimensiones y criterios elegidos</p>
-              <h3 className="mt-3 flex items-center gap-2 text-base font-semibold"><span className="size-2.5 rounded-sm border border-dashed border-slate-400" aria-hidden />Personalizado</h3>
-              <p className="text-xs font-medium text-teal">Alcance focalizado</p>
-              <p className="mt-1 text-sm text-muted">Dimensiones seleccionadas, preguntas propias y exclusiones justificadas.</p>
-            </div>
-          </div>
+          </ul>
+          <Reveal className="mt-10"><Link to="/privacidad" className="inline-flex items-center gap-1.5 text-sm font-semibold text-mint-strong hover:underline">Leer la política de privacidad <ArrowRight className="size-4" aria-hidden /></Link></Reveal>
         </div>
-      </Band>
+      </div>
+    </section>
+  );
+}
 
-      {/* 6. Entrevistas */}
-      <Band id="entrevistas" eyebrow="06 · Entrevistas y consolidación" title="Entrevistas distribuidas sin servidor." tone="white">
-        <InterviewLanes />
-      </Band>
+/* ===== Declaración que se ilumina al desplazarse ===== */
 
-      {/* 7. Resultados visuales */}
-      <Band id="resultados" eyebrow="07 · Resultados visuales" title="Resultados que muestran su propio grado de certeza.">
-        <div className="grid gap-6 lg:grid-cols-[1.1fr_1fr]">
-          <figure className="panel p-5">
-            <figcaption className="mb-2 flex items-baseline justify-between"><span className="text-sm font-semibold text-navy">Mapa de calor por familia y perfil</span><span className="text-[11px] text-muted">Datos ilustrativos</span></figcaption>
-            <EChart height={260} label="Mapa de calor ilustrativo de mediana por familia y perfil de entrevistado" option={heatmapOption(MGDA_FAMILIES.map((f) => f.title), ILLUSTRATIVE.heatCols, ILLUSTRATIVE.heat, { valueLabel: 'Mediana' })} />
-            <div className="mt-2"><LevelLegend /></div>
-            <p className="mt-2 text-xs text-muted">En la aplicación, el mismo mapa se construye por dimensión y perfil (o área) con la mediana de las respuestas.</p>
-          </figure>
-          <div className="grid gap-4 sm:grid-cols-2">
-            {[
-              ['Madurez percibida y validada', 'Se presentan por separado; la validada solo considera criterios revisados por la persona evaluadora.'],
-              ['Cobertura', `Cuántos criterios del alcance tienen datos. Por debajo de ${DEFAULT_THRESHOLDS.coverageExploratory} %, el resultado se marca como exploratorio.`],
-              ['Soporte de evidencias', 'Nivel de sustento documental de cada criterio, de E0 a E3, expresado en porcentaje.'],
-              ['Solidez diagnóstica', 'Índice orientativo de 0 a 100 que combina cobertura, evidencias y acuerdo entre entrevistados.'],
-            ].map(([t, d]) => <div key={t} className="panel p-4"><h3 className="text-sm font-semibold">{t}</h3><p className="mt-1 text-xs text-muted">{d}</p></div>)}
-            <div className="panel p-4 sm:col-span-2">
-              <h3 className="text-sm font-semibold">Escala de madurez</h3>
-              <ol className="mt-3 grid grid-cols-6 gap-1">{LEVEL_NAMES.map((n, i) => <li key={n} className="text-center"><span className="block h-1.5 rounded-sm" style={{ background: LEVEL_COLORS[i] }} /><span className="mt-1.5 block text-[11px] font-semibold num">{i}</span><span className="block text-[10px] leading-tight text-muted">{n}</span></li>)}</ol>
-            </div>
-          </div>
-        </div>
-      </Band>
+function Statement() {
+  return (
+    <section aria-labelledby="declaracion-t" className="on-dark bg-midnight text-white">
+      <div className="mx-auto max-w-[1100px] px-5 py-28 md:px-8 md:py-40">
+        <ScrollRevealText as="h2" id="declaracion-t" className="font-display text-[2rem] leading-[1.12] font-semibold tracking-[-0.035em] text-white md:text-[3.6rem]" text="Una organización no alcanza madurez por tener documentos. La demuestra en sus capacidades de gestión." />
+        <Reveal className="mt-12 flex flex-wrap items-center gap-x-8 gap-y-4 text-sm text-fog">
+          <span className="flex items-center gap-2"><ClipboardList className="size-4 text-mint" aria-hidden />Herramienta de autodiagnóstico y consultoría</span>
+          <span>No certifica ni emite puntajes oficiales</span>
+          <Link to="/metodologia" className="font-medium text-mint hover:underline">Ver la metodología</Link>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
 
-      {/* 8. Protección */}
-      <Band id="proteccion" eyebrow="08 · Protección de información" title="Minimización de datos por diseño." tone="white">
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-          {[
-            [Lock, 'Datos en el dispositivo', 'Sin servidor, sin cuentas, sin telemetría ni rastreadores externos.'],
-            [FileJson, 'Archivos verificables', 'Paquetes con hash SHA-256 para detectar alteraciones accidentales. No constituyen firma digital.'],
-            [ShieldCheck, 'Cifrado opcional', 'Exportaciones con AES-GCM de 256 bits y clave derivada con PBKDF2. La contraseña no se guarda.'],
-            [FileSearch, 'Evidencias mínimas', 'Se recomienda registrar referencias y no adjuntar historias clínicas, expedientes reservados ni credenciales.'],
-          ].map(([Icon, t, d]) => {
-            const I = Icon as typeof Lock;
-            return <div key={t as string}><I className="size-5 text-teal" aria-hidden /><h3 className="mt-3 text-base font-semibold">{t as string}</h3><p className="mt-1 text-sm text-muted">{d as string}</p></div>;
-          })}
-        </div>
-        <p className="mt-8 max-w-3xl text-xs text-muted">La protección con contraseña de un archivo exportado no cifra los datos almacenados en el navegador. La aplicación no sustituye el análisis institucional de protección de datos personales. <Link to="/privacidad" className="text-teal hover:underline">Leer la política de privacidad</Link>.</p>
-      </Band>
+/* ===== Preguntas frecuentes ===== */
 
-      {/* 9. FAQ */}
-      <Band id="preguntas" eyebrow="09 · Preguntas frecuentes" title="Preguntas frecuentes.">
-        <div className="max-w-3xl divide-y divide-line border-y border-line">
+function Faq() {
+  return (
+    <section id="preguntas" aria-labelledby="preguntas-t" className="bg-white">
+      <div className="mx-auto grid max-w-[1240px] gap-12 px-5 py-24 md:px-8 md:py-32 lg:grid-cols-[0.8fr_1.2fr]">
+        <Heading id="preguntas-t" dark={false} chip="Preguntas frecuentes" title="Lo que conviene saber antes de empezar." accent="antes de empezar" />
+        <div className="divide-y divide-line border-y border-line">
           {FAQ.map((f) => (
-            <details key={f.q} className="group py-4">
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-medium text-navy"><span>{f.q}</span><span className="text-xl leading-none text-muted transition-transform group-open:rotate-45" aria-hidden>+</span></summary>
-              <p className="mt-2 text-sm text-muted">{f.a}</p>
+            <details key={f.q} className="group py-5">
+              <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-4 font-display text-lg font-medium tracking-[-0.01em] text-ink"><span>{f.q}</span><span className="flex size-8 shrink-0 items-center justify-center rounded-full border border-line text-lg leading-none text-muted transition-[transform,background-color] duration-200 group-open:rotate-45 group-open:bg-mint-soft" aria-hidden>+</span></summary>
+              <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted">{f.a}</p>
             </details>
           ))}
         </div>
-      </Band>
+      </div>
+    </section>
+  );
+}
 
-      {/* 10. Acceso */}
-      <section id="acceso" className="bg-navy text-white">
-        <div className="mx-auto grid max-w-[1240px] gap-10 px-5 py-16 md:px-8 lg:grid-cols-[1.2fr_1fr]">
-          <div>
-            <p className="text-[11px] font-semibold tracking-[0.12em] text-gold uppercase">10 · Acceso al producto</p>
-            <h2 className="mt-3 text-3xl font-semibold text-white">Empiece por caracterizar la organización.</h2>
-            <p className="mt-3 max-w-lg text-slate-300">La aplicación guía cada etapa. Puede explorar primero un caso de demostración ficticio y eliminarlo después.</p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <Link to="/app/organizaciones/nueva" className="inline-flex h-11 items-center gap-2 rounded-md bg-white px-5 text-sm font-semibold text-navy hover:bg-slate-100">Iniciar diagnóstico</Link>
-              <button onClick={demo} disabled={busy} className="inline-flex h-11 items-center rounded-md border border-white/30 px-5 text-sm font-semibold text-white hover:bg-white/10 disabled:opacity-60">Explorar caso de demostración</button>
+/* ===== Cierre con video ===== */
+
+const ACCESS = [
+  { to: '/app', title: 'Abrir la aplicación', text: 'Organizaciones, evaluaciones e informes.' },
+  { to: '/responder', title: 'Responder una entrevista', text: 'Para quien recibió un archivo de asignación.' },
+  { to: '/app/academico', title: 'Laboratorio académico', text: 'Casos ficticios para diplomados y pregrado.' },
+];
+
+function Closing({ busy, onDemo }: { busy: boolean; onDemo: () => void }) {
+  return (
+    <section id="acceso" aria-labelledby="acceso-t" className="bg-white px-3 pb-3 md:px-5 md:pb-5">
+      <MotionScope className="on-dark grain relative isolate overflow-hidden rounded-[32px] bg-midnight text-white">
+        <div aria-hidden className="absolute inset-0 -z-10">
+          <BackgroundVideo {...HERO_VIDEO} className="scale-125 opacity-80" />
+          <div className="absolute inset-0 bg-midnight/45" />
+        </div>
+        <div className="mx-auto grid max-w-[1240px] gap-12 px-6 py-24 md:px-10 md:py-32 lg:grid-cols-[1.4fr_1fr] lg:items-end">
+          <Reveal>
+            <Chip>Comience hoy, sin registro</Chip>
+            <h2 id="acceso-t" className="mt-6 font-display text-[2.4rem] leading-[1.02] font-semibold tracking-[-0.04em] text-white md:text-[4rem]">Su próximo diagnóstico empieza <em className="font-serif font-normal tracking-normal text-mint italic">aquí.</em></h2>
+            <div className="mt-10 flex flex-wrap gap-3">
+              <Link to="/app/evaluaciones/nueva" className={buttonClass('primary', 'lg', pill('h-12 px-7'))}>Crear una evaluación <ArrowRight className="size-4" aria-hidden /></Link>
+              <button type="button" onClick={onDemo} disabled={busy} aria-busy={busy} className={buttonClass('outline-light', 'lg', pill('h-12 border-white/20 bg-white/[0.06] px-7 backdrop-blur'))}>{busy ? 'Abriendo…' : 'Explorar caso de demostración'}</button>
             </div>
-          </div>
-          <ul className="grid gap-px overflow-hidden rounded-lg bg-white/10 text-sm">
-            {[
-              ['/app', 'Abrir la aplicación', 'Organizaciones, evaluaciones e informes.'],
-              ['/responder', 'Responder una entrevista', 'Para personas que recibieron un archivo de asignación.'],
-              ['/app/academico', 'Laboratorio académico', 'Casos ficticios para diplomados y pregrado.'],
-            ].map(([to, t, d]) => (
-              <li key={to}><Link to={to} className="flex items-center justify-between gap-4 bg-navy-dark/60 px-5 py-4 hover:bg-navy-dark"><span><span className="block font-semibold text-white">{t}</span><span className="text-xs text-slate-300">{d}</span></span>{to === '/app/academico' ? <GraduationCap className="size-5 text-gold" aria-hidden /> : <ArrowRight className="size-4 text-gold" aria-hidden />}</Link></li>
-            ))}
-          </ul>
+          </Reveal>
+          <Reveal delay={120}>
+            <ul className="divide-y divide-white/10 overflow-hidden rounded-[20px] border border-white/10 bg-midnight/50 backdrop-blur-md">
+              {ACCESS.map((a) => (
+                <li key={a.to}><Link to={a.to} className="group flex min-h-16 items-center justify-between gap-4 px-5 py-4 transition-colors hover:bg-white/[0.06]"><span><span className="block font-semibold text-white">{a.title}</span><span className="text-xs text-fog">{a.text}</span></span><ArrowUpRight className="size-4 shrink-0 text-mint transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden /></Link></li>
+              ))}
+            </ul>
+          </Reveal>
         </div>
-      </section>
-    </>
-  );
-}
-
-/** Héroe oscuro con tarjetas de vidrio: la composición usa datos ilustrativos y nombres reales del modelo. */
-function Hero({ busy, onDemo }: { busy: boolean; onDemo: () => void }) {
-  return (
-    <section className="relative isolate overflow-hidden bg-[#07131D] text-white" aria-labelledby="hero-t">
-      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute inset-0 opacity-[0.06]" style={{ backgroundImage: 'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)', backgroundSize: '64px 64px', maskImage: 'radial-gradient(ellipse 70% 60% at 68% 42%, #000 20%, transparent 75%)', WebkitMaskImage: 'radial-gradient(ellipse 70% 60% at 68% 42%, #000 20%, transparent 75%)' }} />
-        <div className="absolute top-[-6%] right-[-4%] size-[720px] rounded-full opacity-70" style={{ background: 'radial-gradient(circle at 50% 50%, rgba(13,148,136,0.30), rgba(13,148,136,0.08) 45%, transparent 70%)' }} />
-        <div className="absolute top-[7%] right-[4%] hidden size-[260px] rounded-full lg:block" style={{ background: 'radial-gradient(circle at 34% 28%, #E6FFFB 0%, #7FE3D5 12%, #14A898 34%, #0B5D63 58%, #0A2B3A 80%, #07131D 100%)', boxShadow: '0 0 140px 30px rgba(20,168,152,0.28), inset -30px -40px 80px rgba(7,19,29,0.75)' }} />
-        <div className="absolute bottom-0 left-0 h-40 w-full bg-gradient-to-t from-[#07131D] to-transparent" />
-      </div>
-
-      <div className="mx-auto grid max-w-[1240px] items-center gap-14 px-5 pt-16 pb-20 md:px-8 lg:grid-cols-[0.95fr_1.05fr] lg:pt-20 lg:pb-28">
-        <div>
-          <p className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-3.5 py-1.5 text-xs text-slate-200 backdrop-blur">
-            <span className="size-1.5 rounded-full bg-[#5EEAD4]" aria-hidden />
-            Modelo DIAM, versión 1.0 · {DIMENSIONS.length} dimensiones · {QUESTIONS.length} criterios
-          </p>
-          <h1 id="hero-t" className="mt-6 max-w-xl text-[2.5rem] leading-[1.05] font-bold tracking-[-0.02em] text-white md:text-[3.25rem]">Conozca la madurez documental de su organización.</h1>
-          <p className="mt-6 max-w-lg text-lg leading-relaxed text-slate-300">Evalúe capacidades, identifique brechas y convierta los resultados en una hoja de ruta de transformación.</p>
-          <div className="mt-9 flex flex-wrap gap-3">
-            <Link to="/app/organizaciones/nueva" className="inline-flex h-12 items-center gap-2 rounded-full bg-white px-6 text-sm font-semibold text-[#07131D] shadow-[0_8px_30px_-8px_rgba(255,255,255,0.45)] transition-colors hover:bg-slate-100">Iniciar diagnóstico <ArrowRight className="size-4" aria-hidden /></Link>
-            <button type="button" onClick={onDemo} disabled={busy} aria-busy={busy} className="inline-flex h-12 items-center rounded-full border border-white/25 bg-white/[0.04] px-6 text-sm font-semibold text-white backdrop-blur transition-colors hover:bg-white/10 disabled:opacity-60">{busy ? 'Abriendo…' : 'Explorar demostración'}</button>
-          </div>
-          <p className="mt-7 max-w-md text-xs text-slate-400">Funciona en el navegador, sin registro ni servidor. Los datos permanecen en el dispositivo de la persona evaluadora.</p>
-        </div>
-        <HeroCards />
-      </div>
+      </MotionScope>
     </section>
-  );
-}
-
-const glass = 'rounded-2xl border border-white/12 bg-[#0E2130]/70 shadow-[0_30px_80px_-30px_rgba(0,0,0,0.75)] backdrop-blur-xl';
-
-/** Tarjetas de la portada: tablero (claro), brechas prioritarias y ciclo de trabajo (vidrio). */
-function HeroCards() {
-  const fam = MGDA_FAMILIES.map((f, i) => ({ title: f.title, v: ILLUSTRATIVE.families[i] }));
-  const gaps = ILLUSTRATIVE.gaps.map((g) => ({ ...g, name: QUESTIONS.find((q) => q.id === g.id)?.criterion ?? g.id }));
-  const current = 4; // «Analizar»
-  return (
-    <div className="relative mx-auto w-full max-w-[600px]" aria-label="Vista ilustrativa del tablero de resultados con datos simulados">
-      {/* Tablero principal */}
-      <div className="relative z-10 rounded-2xl border border-white/60 bg-white/[0.97] text-ink shadow-[0_40px_100px_-30px_rgba(0,0,0,0.8)] lg:mr-10 lg:pb-8">
-        <div className="flex items-center justify-between border-b border-line px-5 py-3">
-          <span className="text-xs font-semibold text-navy">Resultados</span>
-          <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] text-muted">Datos ilustrativos simulados</span>
-        </div>
-        <dl className="grid grid-cols-3 divide-x divide-line border-b border-line">
-          {[
-            ['Madurez percibida', fmtScore(ILLUSTRATIVE.global), LEVEL_NAMES[levelIndex(ILLUSTRATIVE.global)]],
-            ['Cobertura del diagnóstico', fmtPct(ILLUSTRATIVE.coverage), `Resultado ${coverageBandLabel(ILLUSTRATIVE.coverage).toLowerCase()}`],
-            ['Soporte de evidencias', fmtPct(ILLUSTRATIVE.support), 'E0 a E3'],
-          ].map(([k, v, h]) => (
-            <div key={k} className="px-4 py-3"><dt className="text-[10.5px] leading-tight text-muted">{k}</dt><dd className="mt-1 font-display text-[1.45rem] leading-none font-semibold text-navy num">{v}</dd><dd className="mt-1 text-[10.5px] text-teal">{h}</dd></div>
-          ))}
-        </dl>
-        <div className="px-5 pt-4 pb-5">
-          <div className="flex items-baseline justify-between"><p className="text-[11px] font-semibold tracking-[0.08em] text-muted uppercase">Madurez por familia</p><p className="flex items-center gap-1.5 text-[10.5px] text-muted"><span className="inline-block h-3 w-[3px] rounded-sm bg-gold" aria-hidden />Meta 3,00</p></div>
-          <ul className="mt-3 space-y-2.5">
-            {fam.map((f) => (
-              <li key={f.title} className="grid grid-cols-[150px_1fr_34px] items-center gap-3 text-xs">
-                <span className="whitespace-nowrap text-ink">{f.title}</span>
-                <span className="relative h-2.5 rounded-sm bg-slate-100">
-                  <span className="absolute inset-y-0 left-0 rounded-sm" style={{ width: `${(f.v / 5) * 100}%`, background: LEVEL_COLORS[levelIndex(f.v)] }} />
-                  <span className="absolute -top-1 -bottom-1 w-[3px] rounded-sm bg-gold" style={{ left: `calc(${(3 / 5) * 100}% - 1px)` }} aria-hidden />
-                </span>
-                <span className="text-right font-medium num">{fmtScore(f.v)}</span>
-              </li>
-            ))}
-          </ul>
-          <ol className="mt-4 grid grid-cols-6 gap-1" aria-label="Escala de madurez">{LEVEL_NAMES.map((n, i) => <li key={n} title={`${i} · ${n}`}><span className="block h-1 rounded-sm" style={{ background: LEVEL_COLORS[i] }} /><span className="mt-1 block text-center text-[9.5px] text-muted num">{i}</span></li>)}</ol>
-        </div>
-      </div>
-
-      <div className="relative z-20 mt-4 grid gap-4 sm:grid-cols-[1.08fr_1fr] lg:-mt-8 lg:ml-10">
-      {/* Brechas prioritarias */}
-      <div className={cx(glass, 'p-4')}>
-        <p className="text-[10.5px] font-semibold tracking-[0.1em] text-[#5EEAD4] uppercase">Brechas prioritarias</p>
-        <p className="text-[10.5px] text-slate-400">Ordenadas por prioridad</p>
-        <ol className="mt-3 space-y-3">
-          {gaps.map((g, i) => (
-            <li key={g.id} className="grid grid-cols-[16px_1fr] gap-2 text-xs">
-              <span className="font-semibold text-slate-400 num">{i + 1}</span>
-              <span>
-                <span className="block font-semibold text-white">{g.id}</span>
-                <span className="block leading-snug text-slate-300">{g.name}</span>
-                <span className="mt-0.5 block text-[10.5px] text-slate-400 num">nivel {fmtScore(g.level)} · brecha {fmtScore(g.target - g.level)}</span>
-              </span>
-            </li>
-          ))}
-        </ol>
-      </div>
-
-      {/* Ciclo de trabajo */}
-      <div className={cx(glass, 'p-4')}>
-        <p className="text-[10.5px] font-semibold tracking-[0.1em] text-[#5EEAD4] uppercase">Ciclo de trabajo</p>
-        <p className="text-[10.5px] text-slate-400">Seis momentos</p>
-        <ol className="mt-3 space-y-2">
-          {WORK_CYCLE.map((s, i) => (
-            <li key={s.key} className="flex items-center gap-2 text-[11.5px]">
-              <span className={cx('flex size-5 shrink-0 items-center justify-center rounded-full border text-[10px] font-semibold num', i < current ? 'border-[#14A898] bg-[#14A898] text-white' : i === current ? 'border-[#5EEAD4] text-[#5EEAD4]' : 'border-white/20 text-slate-400')} aria-hidden>{i < current ? <Check className="size-3" /> : i + 1}</span>
-              <span className={cx('leading-tight', i <= current ? 'text-white' : 'text-slate-400')}>{s.title}</span>
-              <span className="sr-only">{i < current ? '(completado)' : i === current ? '(en curso)' : '(pendiente)'}</span>
-            </li>
-          ))}
-        </ol>
-      </div>
-      </div>
-    </div>
-  );
-}
-
-function Band({ id, eyebrow, title, children, tone = 'canvas' }: { id: string; eyebrow: string; title: string; children: ReactNode; tone?: 'canvas' | 'white' }) {
-  return (
-    <section id={id} aria-labelledby={`${id}-t`} className={cx('border-b border-line', tone === 'white' ? 'bg-white' : 'bg-canvas')}>
-      <div className="mx-auto max-w-[1240px] px-5 py-16 md:px-8 md:py-20">
-        <p className="eyebrow">{eyebrow}</p>
-        <h2 id={`${id}-t`} className="mt-3 mb-10 max-w-2xl text-2xl font-semibold md:text-[2rem]">{title}</h2>
-        {children}
-      </div>
-    </section>
-  );
-}
-
-function Prose({ title, children }: { title: string; children: ReactNode }) {
-  return <div className="border-l-2 border-gold pl-5"><h3 className="text-base font-semibold">{title}</h3><p className="mt-2 text-sm text-muted">{children}</p></div>;
-}
-
-/** Carriles del flujo distribuido de entrevistas. */
-function InterviewLanes() {
-  const lanes = [
-    { who: 'Persona evaluadora', steps: [{ col: 1, n: 1, t: 'Crea la asignación', d: 'Perfil, criterios e instrucciones' }, { col: 4, n: 6, t: 'Importa y consolida', d: 'Verificación de hash, revisiones y duplicados' }, { col: 5, n: 7, t: 'Valida en la mesa', d: 'Discrepancias, contradicciones y evidencias' }] },
-    { who: 'Archivo', steps: [{ col: 2, n: 2, t: '.dm-assignment.json', d: 'Opcionalmente cifrado' }, { col: 3, n: 5, t: '.dm-interview.json', d: 'Con hash SHA-256' }] },
-    { who: 'Persona entrevistada', steps: [{ col: 2, n: 3, t: 'Abre «Responder entrevista»', d: 'Sin cuenta ni instalación' }, { col: 3, n: 4, t: 'Responde sin conexión', d: 'Guarda avance y exporta' }] },
-  ];
-  return (
-    <div>
-      <div className="hidden overflow-hidden rounded-lg border border-line md:block">
-        {lanes.map((l, li) => (
-          <div key={l.who} className={cx('grid grid-cols-[150px_repeat(5,1fr)]', li > 0 && 'border-t border-line')}>
-            <div className="flex items-center bg-slate-50 px-4 py-5 text-sm font-semibold text-navy">{l.who}</div>
-            {[1, 2, 3, 4, 5].map((c) => {
-              const s = l.steps.find((x) => x.col === c);
-              return (
-                <div key={c} className="border-l border-dashed border-line p-3">
-                  {s && <div className={cx('rounded-md border p-3', l.who === 'Archivo' ? 'border-gold/50 bg-[#FDF8F0]' : 'border-line bg-white')}><p className="flex items-baseline gap-2 text-sm font-semibold text-ink"><span className="text-xs font-semibold text-teal num">{s.n}</span>{s.t}</p><p className="mt-0.5 text-xs text-muted">{s.d}</p></div>}
-                </div>
-              );
-            })}
-          </div>
-        ))}
-      </div>
-      <ol className="space-y-3 md:hidden">
-        {['Persona evaluadora: crea la asignación', 'Archivo .dm-assignment.json', 'Persona entrevistada: responde sin conexión', 'Archivo .dm-interview.json con hash', 'Persona evaluadora: importa, consolida y valida'].map((t, i) => <li key={t} className="panel flex gap-3 p-3 text-sm"><span className="font-semibold text-teal num">{i + 1}</span>{t}</li>)}
-      </ol>
-      <p className="mt-4 text-xs text-muted">El intercambio se realiza por los canales que la organización autorice (correo institucional, carpeta compartida, memoria USB). La aplicación nunca carga archivos a servidores externos.</p>
-    </div>
   );
 }

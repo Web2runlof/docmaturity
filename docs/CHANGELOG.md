@@ -2,6 +2,52 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); versiones semánticas.
 
+## [2.0.0] — 2026-11-21 (rama `redesign/identidad-v2`, sin publicar)
+
+Rediseño visual y de experiencia. No cambian el modelo DIAM, el banco versionado, el motor de cálculo, el esquema de IndexedDB ni los formatos de importación y exportación. Sistema documentado en [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md).
+
+### Identidad y sistema visual
+- Tokens nuevos (Midnight, Deep Surface, Elevated, Mint, Violet, Soft White, Neutral) con remapeo de los nombres heredados: todas las pantallas adoptan la paleta sin reescribirse. La escala de madurez y los colores de riesgo no cambian.
+- Isotipo, favicon e íconos de la PWA renovados; color de tema `#0B1020`.
+- Tipografía: Inter Tight para titulares e Instrument Serif itálica para la expresión destacada de la portada (locales).
+- Sistema de movimiento propio (`src/components/motion`): aparición al desplazarse, contadores, paralaje del héroe, luz ambiental, Ken Burns, progreso ligado al desplazamiento y transición de página. Todo se desactiva con movimiento reducido y se pausa fuera de la vista.
+- Tres imágenes generativas originales en WebP local (1024 y 1920 px), diferidas salvo la del héroe; el precache incluye `webp` y `avif`.
+
+### Portada
+- Héroe a casi toda la altura con composición propia (madurez por dimensión, brecha por familia frente a la meta y trazabilidad de una brecha hasta su evidencia) y llamadas a la acción reales: «Iniciar diagnóstico», «Conocer la metodología» y «Explorar demostración».
+- Cifras derivadas del banco con contador: 15 dimensiones, 225 criterios, 1.350 descriptores, 22 críticos, 4 modalidades y 29 referentes.
+- Ciclo de trabajo en línea de tiempo (horizontal en escritorio, vertical en pantallas angostas), capacidades en bento asimétrico, vista de producto con componentes reales sobre datos ilustrativos (cargada de forma diferida), escalera del modelo, privacidad y autonomía, y cierre «Una organización no alcanza madurez por tener documentos. La demuestra en sus capacidades de gestión.».
+- Encabezado transparente sobre el héroe que se vuelve sólido al desplazarse; menú completo desde 1280 px.
+- Pie de página con «Diseñado y creado por: Sergio Gómez Flórez» enlazado a LinkedIn (pestaña nueva, `noopener noreferrer`).
+- Páginas informativas con banda de entrada oscura.
+
+### Portada, segunda versión (tras la revisión del 23 de noviembre)
+- Héroe con video de fondo propio desenfocado (escena 3D original, 12 s en bucle, 247 KB en WebM) y contenido encima; póster con movimiento reducido o ahorro de datos.
+- Titular con serif itálica, palabra rotativa («Para entidades públicas, empresas privadas…») y vista real del producto que se endereza al desplazarse.
+- Navegación flotante en cápsula, marquesina de referentes, cifras grandes, método en tres pasos con renders 3D originales, carrusel de seis pantallas reales (arrastre, teclado, avance automático con pausa y Ken Burns), capacidades con luz que sigue al puntero, modalidades como tabla de planes, privacidad con render, declaración que se ilumina al desplazarse y cierre con video.
+- Pie con la marca a gran escala; se conserva «Diseñado y creado por: Sergio Gómez Flórez».
+- Los medios de la portada se guardan en caché al verse y no engrosan el precache de la PWA.
+
+### Aplicación
+- Navegación lateral oscura agrupada (Trabajo, Conocimiento, Sistema) con indicador activo, tarjeta de evaluación activa con avance del ciclo y siguiente paso; «Evaluaciones» cede el resaltado dentro de una evaluación.
+- Encabezado con migas de pan y «Siguiente paso» calculado con los datos locales (alcance → participantes → entrevistas → evidencias → validación → hoja de ruta → informes).
+- Menú móvil como diálogo modal con cierre por Escape y retorno del foco; transición discreta entre rutas.
+- Inicio como panorama: indicadores, evaluaciones en curso con avance y siguiente paso, finalizadas, actividad reciente del registro local y aviso de respaldo vencido.
+- Nueva evaluación en dos pasos con tarjetas de modalidad comparables y resumen fijo.
+- Formulario de organización con bloques numerados e índice fijo.
+- Cuestionario en modo enfocado: encabezado oscuro, selección inequívoca, foco visible en los niveles y respuestas especiales agrupadas con estado presionado.
+- Mesa de validación y evidencias con estados de icono y texto (`StatusBadge`).
+- Informes agrupados: Informes · Datos y análisis · Intercambio y respaldo.
+- Laboratorio académico con acento violeta.
+
+### Accesibilidad y calidad
+- Enlaces con aspecto de botón sin botones anidados (`buttonClass`).
+- Rejillas de dos columnas con `minmax(0, 1fr)`: sin desbordamiento horizontal en 24 rutas a 360, 768, 1024 y 1440 px.
+- Versión de la aplicación unificada en 2.0.0 (los paquetes declaraban 1.0.0).
+
+### Pruebas
+- E2E actualizadas al nuevo titular y cuatro pruebas nuevas: video de fondo, marquesina y carrusel con pausa; autoría del pie de página, cifras del banco, rutas de las llamadas a la acción, movimiento reducido y carga diferida de la vista de producto; siguiente paso y resaltado único de la navegación; exportación del paquete de evaluación e importación en otro navegador.
+
 ## [1.1.0] — 2026-11-20
 
 Correcciones de la auditoría funcional. No cambia la arquitectura (sin servidor) ni el contenido del banco de criterios.

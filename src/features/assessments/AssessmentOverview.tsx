@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Archive, CheckCircle2, Download, Lock, RotateCcw, Trash2 } from 'lucide-react';
 import type { AssessmentStatus } from '@/types/domain';
 import { useAssessmentData } from '@/hooks/useAssessment';
-import { Button, Callout, ConfirmDialog, Dialog, Field, KeyValue, LevelTag, PageHeader, Progress, Section, Tag, Textarea } from '@/components/ui';
+import { Button, Callout, ConfirmDialog, Dialog, Field, KeyValue, LevelTag, PageHeader, Progress, Section, Tag, Textarea, buttonClass } from '@/components/ui';
 import { deleteAssessment, reopenAssessment, updateAssessment } from '@/services/repo';
 import { buildAssessmentPackage } from '@/services/packages';
 import { attempt } from '@/app/store';
@@ -71,8 +71,8 @@ export default function AssessmentOverview() {
 
       {a.status === 'finalizado' && <div className="mb-6"><Callout tone="success" title="Evaluación finalizada"><Lock className="mr-1 inline size-3.5" />Los datos históricos no se modifican silenciosamente. Para cambios, reabra la evaluación: se conservará una instantánea de la revisión actual.</Callout></div>}
 
-      <div className="grid gap-6 xl:grid-cols-[1.5fr_1fr]">
-        <Section title="Estado del diagnóstico" actions={next && <Link to={`/app/evaluaciones/${aid}/${next.to}`}><Button size="sm" variant="primary">{next.label}</Button></Link>}>
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-6 xl:grid-cols-[1.5fr_1fr]">
+        <Section title="Estado del diagnóstico" actions={next && <Link to={`/app/evaluaciones/${aid}/${next.to}`} className={buttonClass('primary', 'sm')}>{next.label}</Link>}>
           <div className="grid gap-6 sm:grid-cols-2">
             <div>
               <p className="text-xs text-muted">{analysis.globalPreliminary.labelText}</p>

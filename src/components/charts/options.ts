@@ -10,14 +10,14 @@ import { levelIndex } from '@/engine/scoring';
 import { LEVEL_NAMES } from '@/data/bank';
 import { fmtPct, fmtScore } from '@/utils/core';
 
-const INK = '#182633';
-const MUTED = '#64748B';
-const LINE = '#E2E8F0';
+const INK = '#172033';
+const MUTED = '#5B6B82';
+const LINE = '#E6EBF2';
 const GOLD = '#C69B59';
 const fmt = (v: unknown) => (typeof v === 'number' ? fmtScore(v) : 'Sin datos');
 /** Etiqueta de eje solo para valores enteros (los ejes con margen no rotulan los extremos fraccionarios). */
 const intLabel = (v: number) => (Number.isInteger(v) && v >= 0 && v <= 5 ? String(v) : '');
-const tooltip = { backgroundColor: '#0F202D', borderWidth: 0, textStyle: { color: '#fff', fontSize: 12 }, extraCssText: 'border-radius:5px;' };
+const tooltip = { backgroundColor: '#0B1020', borderWidth: 0, padding: [8, 10], textStyle: { color: '#fff', fontSize: 12, fontFamily: 'Inter, sans-serif' }, extraCssText: 'border-radius:8px;box-shadow:0 12px 30px -12px rgba(11,16,32,.45);' };
 const axisLabel = { color: MUTED, fontSize: 11 };
 const legendBase = { bottom: 0, icon: 'roundRect', itemWidth: 10, itemHeight: 10, textStyle: { color: MUTED, fontSize: 11 } };
 const MONTHS = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
