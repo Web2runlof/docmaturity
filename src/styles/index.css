@@ -5,6 +5,9 @@
  * Documentación: docs/DESIGN_SYSTEM.md. Toda regla de color, tipografía, radio, sombra y movimiento
  * nace aquí; los componentes no definen colores sueltos.
  */
+/* Ángulo animable para el borde luminoso giratorio. */
+@property --dm-angle { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+
 @theme {
   --font-display: "Inter Tight", "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-serif: "Instrument Serif", ui-serif, Georgia, serif;
@@ -337,7 +340,9 @@
   [data-motion="paused"] .float-slower,
   [data-motion="paused"] .ambient-drift,
   [data-motion="paused"] .kenburns,
-  [data-motion="paused"] .marquee-track { animation-play-state: paused; }
+  [data-motion="paused"] .marquee-track,
+  [data-motion="paused"] .glow-border::before,
+  [data-motion="paused"] .glare::after { animation-play-state: paused; }
 
   /* Marquesina continua (referentes); se detiene al pasar el puntero o enfocar. */
   .marquee-track { animation: dm-marquee var(--marquee-dur, 48s) linear infinite; }
@@ -349,6 +354,38 @@
 
   /* Entrada del titular del héroe al cargar la página. */
   .hero-in { animation: dm-hero-in 760ms var(--ease-out) 60ms both; }
+
+  /* Titular del héroe: cada palabra entra escalonada al cargar. */
+  .hero-word { display: inline-block; animation: dm-hero-in 900ms var(--ease-out) both; animation-delay: calc(60ms + var(--i, 0) * 55ms); }
+
+  /* Borde luminoso que gira alrededor de un marco (vista del producto, plan recomendado). */
+  .glow-border { position: relative; isolation: isolate; }
+  .glow-border::before {
+    content: ""; position: absolute; inset: -1px; z-index: 2; border-radius: inherit; padding: 1px; pointer-events: none;
+    background: conic-gradient(from var(--dm-angle), transparent 0deg, transparent 210deg, rgb(53 217 164 / 0.95) 285deg, rgb(142 120 247 / 0.9) 330deg, transparent 360deg);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude;
+    animation: dm-spin 7s linear infinite;
+  }
+
+  /* Reflejo que recorre la captura del producto cada pocos segundos. */
+  .glare { position: relative; overflow: hidden; }
+  .glare::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(110deg, transparent 40%, rgb(255 255 255 / 0.16) 50%, transparent 60%);
+    transform: translateX(-100%); animation: dm-glare 8s var(--ease-in-out) 1.8s infinite;
+  }
+
+  /* Destello al pasar el puntero por un botón principal. */
+  .btn-shine { position: relative; overflow: hidden; }
+  .btn-shine::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(105deg, transparent 35%, rgb(255 255 255 / 0.55) 50%, transparent 65%);
+    transform: translateX(-130%); transition: transform 750ms var(--ease-out);
+  }
+  .btn-shine:hover::after { transform: translateX(130%); }
+
+  /* Cifras con degradado vertical. */
+  .text-gradient { background: linear-gradient(180deg, #fff 30%, rgb(255 255 255 / 0.5)); -webkit-background-clip: text; background-clip: text; color: transparent; }
 
   /* Palabra rotativa del héroe. */
   .word-in { animation: dm-word-in 520ms var(--ease-out) both; }
@@ -372,10 +409,18 @@
   .page-in { animation: dm-page-in 260ms var(--ease-out) both; }
 
   @media (prefers-reduced-motion: reduce) {
-    .float-slow, .float-slower, .ambient-drift, .kenburns, .page-in, .marquee-track, .word-in, .carousel-progress, .hero-in { animation: none !important; }
+    .float-slow, .float-slower, .ambient-drift, .kenburns, .page-in, .marquee-track, .word-in, .carousel-progress, .hero-in, .hero-word, .glow-border::before, .glare::after { animation: none !important; }
+    .btn-shine::after { display: none; }
   }
 }
 
+@keyframes dm-spin {
+  to { --dm-angle: 360deg; }
+}
+@keyframes dm-glare {
+  0% { transform: translateX(-100%); }
+  35%, 100% { transform: translateX(100%); }
+}
 @keyframes dm-hero-in {
   from { opacity: 0.01; transform: translate3d(0, 18px, 0); filter: blur(6px); }
   to { opacity: 1; transform: none; filter: none; }

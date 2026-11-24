@@ -73,7 +73,12 @@ Implementado con CSS y APIs nativas (`IntersectionObserver`, `requestAnimationFr
 | Palabra rotativa (`WordRotator`) | Héroe | Cada 2,6 s; ancho reservado para que el texto no salte |
 | Texto que se ilumina (`ScrollRevealText`) | Declaración | Ligado al desplazamiento |
 | Carrusel con avance automático | Pantallas de la aplicación | 6 s por diapositiva, con botón de pausa |
-| Luz que sigue al puntero (`.spotlight`) | Tarjetas de capacidades y modalidades | Inmediata |
+| Luz que sigue al puntero (`.spotlight`) | Mosaico de resultados y modalidades | Inmediata |
+| Titular palabra por palabra (`SplitWords`) | Héroe | 900 ms por palabra, escalonado 55 ms; al cargar, no al desplazarse |
+| Botón magnético (`data-magnetic`) y destello (`.btn-shine`) | Llamadas a la acción | 260 ms / 750 ms; solo con ratón |
+| Borde luminoso (`.glow-border`) y reflejo (`.glare`) | Vista del producto y plan recomendado | 7 s y 8 s; pausados fuera de la vista |
+| Inclinación con el puntero (`usePointerTilt`) | Vista del producto | Hasta 5°; solo con ratón |
+| Narrativa fija (`useActiveStep`) | Método en tres pasos | Fundido de 900 ms entre imágenes |
 | Gráficos | ECharts | 650 ms de entrada, 380 ms de actualización |
 
 Reglas:
@@ -89,10 +94,12 @@ Todos los medios son originales y locales (`src/assets/landing/`); el procedimie
 
 | Recurso | Qué es | Uso | Peso |
 |---|---|---|---|
-| `hero-loop.webm` / `.mp4` | Escena 3D propia (campo de documentos de vidrio con luz menta y violeta), 12 s en bucle perfecto, desenfocada al codificar | Fondo del héroe y del cierre | 247 KB / 524 KB |
+| `hero-loop.webm` / `.mp4` | Escena 3D propia (campo de documentos de vidrio con luz menta y violeta) a 1280 × 720, 12 s en bucle perfecto, con profundidad de campo y grano fino | Fondo del héroe y del cierre | 655 KB / 937 KB |
 | `hero-poster.webp` | Primer cuadro del video | Póster, movimiento reducido y ahorro de datos | 8 KB |
 | `render-field`, `render-stack`, `render-strata`, `render-vault` | Renders 3D fijos (800 y 1600 px) | Pasos del método y privacidad | 7–67 KB |
-| `shot-*` | Capturas reales de la aplicación con el caso de demostración (960 y 1600 px) | Vista del producto en el héroe y carrusel | 32–120 KB |
+| `shot-*` | Capturas reales de la aplicación con el caso de demostración (960 y 1600 px) | Carrusel | 32–120 KB |
+| `hero-product` | Tablero de resultados a doble densidad (1200 y 2000 px) | Vista del producto en el héroe | 70 / 138 KB |
+| `detail-*` | Recortes de componentes reales a doble densidad | Mosaico de resultados | 20–61 KB |
 
 Reglas:
 
@@ -125,7 +132,7 @@ Reglas:
 
 | Pantalla | Nivel de rediseño |
 |---|---|
-| Portada | Reconstruida dos veces. Versión actual: navegación flotante, héroe con video desenfocado y vista real del producto, marquesina de referentes, cifras, método en tres pasos con renders 3D, carrusel de pantallas, capacidades, modalidades como planes, privacidad, declaración que se ilumina, preguntas y cierre con video. |
+| Portada | Versión 2.1: navegación flotante; héroe con video de profundidad de campo, titular palabra por palabra y vista del producto con borde luminoso, reflejo, inclinación y anotaciones; marquesina; cifras; método como narrativa fija; mosaico de resultados con recortes reales; carrusel con cursor de arrastre; modalidades; privacidad; preguntas; cierre con declaración y video. Página oscura continua con paneles claros redondeados. |
 | Navegación y pie públicos | Cápsula flotante translúcida; pie con marca a gran escala y «Diseñado y creado por: Sergio Gómez Flórez» (LinkedIn, pestaña nueva). |
 | Cómo funciona, Metodología, Referentes, Privacidad | Banda de entrada oscura; contenido sin cambios. |
 | Estructura de la aplicación | Reconstruida (navegación, encabezado, transición). |
@@ -150,8 +157,8 @@ Reglas:
 
 | Ruta | Antes (v1.1) FCP / LCP | Ahora FCP / LCP | JS | CLS |
 |---|---|---|---|---|
-| Portada | 472 / 1 172 ms | 524 / 1 224 ms | 698 → 473 KB | 0,007 |
+| Portada | 472 / 1 172 ms | 580 / 1 196 ms | 698 → 475 KB | 0 |
 | Inicio de la aplicación | 520 / 820 ms | 504 / 852 ms | 460 → 467 KB | 0 |
 | Metodología | 492 / 724 ms | 580 / 908 ms | 465 → 470 KB | 0 |
 
-La portada carga 108 KB de imagen al inicio (póster y vista del producto); el video (247 KB en WebM) se descarga después y solo si el movimiento no está reducido. El titular del héroe entra con una animación de carga, no de desplazamiento, para no retrasar el LCP.
+La portada carga 175 KB de imagen al inicio (póster y vista del producto); el video (655 KB en WebM) se descarga después y solo si el movimiento no está reducido. El titular entra con una animación de carga y sus fuentes se precargan, para no retrasar el LCP ni mover el diseño.

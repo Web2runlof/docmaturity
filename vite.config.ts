@@ -55,6 +55,25 @@ function cspPlugin(): Plugin {
   };
 }
 
+/**
+ * Precarga las fuentes del titular de la portada (Inter Tight 600 e Instrument Serif itálica)
+ * para que el titular no cambie de forma al llegar la fuente (CLS).
+ */
+function fontPreloadPlugin(): Plugin {
+  const wanted = [/inter-tight-latin-600-normal-[\w-]+\.woff2$/, /instrument-serif-latin-400-italic-[\w-]+\.woff2$/];
+  return {
+    name: 'docmaturity-font-preload',
+    apply: 'build',
+    transformIndexHtml: {
+      order: 'post',
+      handler(_html, ctx) {
+        const files = Object.keys(ctx.bundle ?? {}).filter((f) => wanted.some((r) => r.test(f)));
+        return files.map((f) => ({ tag: 'link', attrs: { rel: 'preload', as: 'font', type: 'font/woff2', crossorigin: '', href: `${base}${f}` }, injectTo: 'head' as const }));
+      },
+    },
+  };
+}
+
 export default defineConfig({
   base,
   plugins: [
@@ -62,6 +81,7 @@ export default defineConfig({
     tailwindcss(),
     cspPlugin(),
     cnamePlugin(),
+    fontPreloadPlugin(),
     VitePWA({
       registerType: 'prompt',
       injectRegister: false,

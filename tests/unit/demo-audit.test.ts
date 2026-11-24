@@ -18,6 +18,7 @@ import { weightedMean } from '@/engine/scoring/stats';
 import { LENS_DIMENSIONS } from '@/engine/constants';
 import { fmtPct, fmtScore } from '@/utils/core';
 import type { AssessmentBundle } from '@/types/domain';
+import { DEMO_FIGURES } from '@/features/landing/figures';
 
 const narrativeText = (a: Analysis, b: AssessmentBundle) => buildNarrative(a, { risks: b.risks, initiatives: b.initiatives }).flatMap((s) => s.paragraphs.map((p) => p.text)).join(' ');
 
@@ -129,6 +130,13 @@ describe('Demostración enriquecida (V14)', () => {
     id = await openOrLoadDemo();
     bundle = (await loadBundle(id))!;
     a = analyzeAssessment(bundle);
+  });
+
+  it('las cifras que la portada atribuye al caso de demostración coinciden con el motor', () => {
+    expect(fmtScore(a.views.preliminary.global.score)).toBe(DEMO_FIGURES.perceived);
+    expect(fmtPct(a.coverage.coverage)).toBe(DEMO_FIGURES.coverage);
+    expect(fmtPct(a.evidence.support)).toBe(DEMO_FIGURES.support);
+    expect(String(Math.round(a.solidity.index as number))).toBe(DEMO_FIGURES.solidity);
   });
 
   it('incluye una entrevista distribuida importada con hash', () => {

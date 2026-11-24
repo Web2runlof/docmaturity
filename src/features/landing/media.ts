@@ -28,6 +28,13 @@ import shotInformes from '@/assets/landing/shot-informes.webp';
 import shotInformes960 from '@/assets/landing/shot-informes-960.webp';
 import shotResumen from '@/assets/landing/shot-resumen.webp';
 import shotResumen960 from '@/assets/landing/shot-resumen-960.webp';
+import heroProduct from '@/assets/landing/hero-product.webp';
+import heroProduct1200 from '@/assets/landing/hero-product-1200.webp';
+import detailRadar from '@/assets/landing/detail-radar.webp';
+import detailCalor from '@/assets/landing/detail-calor.webp';
+import detailRiesgos from '@/assets/landing/detail-riesgos.webp';
+import detailValidacion from '@/assets/landing/detail-validacion.webp';
+import detailGantt from '@/assets/landing/detail-gantt.webp';
 
 export const HERO_VIDEO = { webm: heroWebm, mp4: heroMp4, poster: heroPoster };
 export const RENDERS = {
@@ -45,3 +52,8 @@ export const SHOTS = {
   informes: { src: shotInformes, small: shotInformes960 },
   resumen: { src: shotResumen, small: shotResumen960 },
 };
+
+/** Captura del tablero a doble densidad para el héroe. */
+export const HERO_PRODUCT = { src: heroProduct, small: heroProduct1200 };
+/** Recortes de detalle de componentes reales (caso de demostración) para el mosaico de resultados. */
+export const DETAILS = { radar: detailRadar, calor: detailCalor, riesgos: detailRiesgos, validacion: detailValidacion, gantt: detailGantt };

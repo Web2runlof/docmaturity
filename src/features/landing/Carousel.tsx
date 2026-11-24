@@ -19,6 +19,8 @@ export function Carousel({ slides, label }: { slides: Slide[]; label: string }) 
   const [inView, setInView] = useState(false);
   const reduced = useReducedMotion();
   const drag = useRef<{ x: number; left: number; moved: boolean } | null>(null);
+  const cursor = useRef<HTMLDivElement>(null);
+  const wrap = useRef<HTMLDivElement>(null);
   const n = slides.length;
 
   // Diapositiva activa: la que ocupa la mayor parte del carril.
@@ -52,6 +54,12 @@ export function Carousel({ slides, label }: { slides: Slide[]; label: string }) 
     track.current.setPointerCapture(e.pointerId);
   };
   const onMove = (e: RPointerEvent<HTMLDivElement>) => {
+    // Cursor de arrastre que sigue al puntero (solo ratón).
+    if (e.pointerType === 'mouse' && cursor.current && wrap.current) {
+      const r = wrap.current.getBoundingClientRect();
+      cursor.current.style.transform = `translate3d(${e.clientX - r.left - 44}px, ${e.clientY - r.top - 44}px, 0) scale(${drag.current ? 0.82 : 1})`;
+      cursor.current.style.opacity = '1';
+    }
     const d = drag.current;
     if (!d || !track.current) return;
     const dx = e.clientX - d.x;
@@ -71,14 +79,17 @@ export function Carousel({ slides, label }: { slides: Slide[]; label: string }) 
   const running = autoplay && !hover && inView;
 
   return (
-    <div aria-roledescription="carrusel" aria-label={label} className="relative" onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onFocus={() => setHover(true)} onBlur={() => setHover(false)}>
+    <div ref={wrap} aria-roledescription="carrusel" aria-label={label} className="relative" onMouseEnter={() => setHover(true)} onMouseLeave={() => { setHover(false); if (cursor.current) cursor.current.style.opacity = '0'; }} onFocus={() => setHover(true)} onBlur={() => setHover(false)}>
+      {!reduced && (
+        <div ref={cursor} aria-hidden className="pointer-events-none absolute top-0 left-0 z-20 hidden size-[88px] items-center justify-center rounded-full bg-mint text-[13px] font-semibold text-midnight opacity-0 shadow-[0_10px_40px_-8px_rgba(53,217,164,0.7)] transition-[opacity,transform] duration-150 ease-out [@media(pointer:fine)]:flex">Arrastre</div>
+      )}
       <div
         ref={track}
         tabIndex={0}
         aria-label={`${label}: use las flechas para cambiar de diapositiva`}
         onKeyDown={(e) => { if (e.key === 'ArrowRight') { e.preventDefault(); go(active + 1); } if (e.key === 'ArrowLeft') { e.preventDefault(); go(active - 1); } }}
-        onPointerDown={onDown} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp}
-        className="relative flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-px-5 px-5 pb-2 [scrollbar-width:none] select-none md:scroll-px-[max(2rem,calc((100vw-1240px)/2))] md:px-[max(2rem,calc((100vw-1240px)/2))] [&::-webkit-scrollbar]:hidden cursor-grab active:cursor-grabbing"
+        onPointerDown={onDown} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp} onPointerLeave={() => { if (cursor.current) cursor.current.style.opacity = '0'; }}
+        className={cx('relative flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-px-5 px-5 pb-2 [scrollbar-width:none] select-none md:scroll-px-[max(2rem,calc((100vw-1240px)/2))] md:px-[max(2rem,calc((100vw-1240px)/2))] [&::-webkit-scrollbar]:hidden cursor-grab active:cursor-grabbing', !reduced && '[@media(pointer:fine)]:cursor-none')}
       >
         {slides.map((s, i) => (
           <figure key={s.title} data-index={i} role="group" aria-roledescription="diapositiva" aria-label={`${i + 1} de ${n}: ${s.title}`} className={cx('relative m-0 w-[88%] shrink-0 snap-start overflow-hidden rounded-[22px] border border-white/10 bg-elevated transition-[opacity,transform] duration-500 md:w-[74%] lg:w-[min(1000px,72vw)]', i === active ? 'opacity-100' : 'opacity-55')}>

@@ -8,6 +8,7 @@ import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { BokehPass } from 'three/addons/postprocessing/BokehPass.js';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 
 const P = new URLSearchParams(location.search);
@@ -101,8 +102,8 @@ function bokeh(n, area, colors, sizeMin, sizeMax, opacity) {
   return grp;
 }
 scene.add(new THREE.AmbientLight('#9fb3d1', 0.25));
-const keyMint = new THREE.PointLight(MINT, 30, 30, 1.6); scene.add(keyMint);
-const keyViolet = new THREE.PointLight(VIOLET, 34, 34, 1.6); scene.add(keyViolet);
+const keyMint = new THREE.PointLight(MINT, +(P.get('light') || 30), 30, 1.6); scene.add(keyMint);
+const keyViolet = new THREE.PointLight(VIOLET, +(P.get('light') || 30) * 1.13, 34, 1.6); scene.add(keyViolet);
 const rim = new THREE.DirectionalLight('#cfe7ff', 0.6); rim.position.set(-3, 5, 4); scene.add(rim);
 
 let update = () => {};
@@ -136,7 +137,7 @@ if (MODE === 'field') {
     }
     for (const d of [dust, dustMint]) { d.position.z = (p * L) % L; d.rotation.z = Math.sin(w) * 0.05; }
     beam.position.set(0, Math.sin(w) * 2.2, -10 + Math.cos(w) * 3);
-    orbs.children.forEach((o, k) => { o.position.x += Math.sin(w + o.userData.ph) * 0.004; o.material.opacity = 0.12 + 0.18 * (0.5 + 0.5 * Math.sin(w * 2 + o.userData.ph)); });
+    orbs.children.forEach((o, k) => { o.position.x += Math.sin(w + o.userData.ph) * 0.004; o.material.opacity = 0.06 + 0.12 * (0.5 + 0.5 * Math.sin(w * 2 + o.userData.ph)); });
     orbs.position.z = Math.sin(w) * 1.5;
     keyMint.position.set(Math.sin(w) * 5, 1.5 + Math.cos(w) * 1.5, -4);
     keyViolet.position.set(-Math.cos(w) * 6, -1.2 + Math.sin(w) * 1.2, -9);
@@ -197,7 +198,9 @@ if (MODE === 'vault') {
 const composer = new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene, camera));
 const BLOOM = { field: 0.9, stack: 0.75, strata: 0.38, vault: 0.42 };
-composer.addPass(new UnrealBloomPass(new THREE.Vector2(W, H), +(P.get('bloom') || BLOOM[MODE] || 0.8), 0.55, 0.14));
+composer.addPass(new UnrealBloomPass(new THREE.Vector2(W, H), +(P.get('bloom') || BLOOM[MODE] || 0.8), 0.55, +(P.get('threshold') || 0.14)));
+// Profundidad de campo opcional (?dof=distancia): planos cercanos y lejanos se desenfocan como en una lente.
+if (P.get('dof')) composer.addPass(new BokehPass(scene, camera, { focus: +P.get('dof'), aperture: +(P.get('aperture') || 0.004), maxblur: +(P.get('maxblur') || 0.012) }));
 composer.addPass(new OutputPass());
 
 window.renderAt = (t) => { update(t); composer.render(); return true; };
