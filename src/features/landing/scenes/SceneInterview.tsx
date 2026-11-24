@@ -7,7 +7,7 @@ import { Building2, WifiOff } from 'lucide-react';
 import { DARK as C, Ico, Panel, Pill, Txt } from './kit';
 import { timeline } from './timeline';
 
-const tl = timeline('si', 11);
+const tl = timeline('si', 12.5);
 
 const PROFILES = [
   { x: 40, ini: 'AD', name: ['Alta', 'dirección'], answer: '3', progress: 1.5 },

@@ -7,7 +7,7 @@ import { FileText } from 'lucide-react';
 import { DARK as C, Ico, Panel, Txt } from './kit';
 import { timeline } from './timeline';
 
-const tl = timeline('sp', 12);
+const tl = timeline('sp', 13.5);
 
 const BAR = { x0: 180, unit: 64 };
 const bx = (v: number) => BAR.x0 + BAR.unit * v;

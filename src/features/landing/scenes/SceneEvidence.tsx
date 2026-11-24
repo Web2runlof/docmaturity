@@ -8,7 +8,7 @@ import { Check, FileText, Lock } from 'lucide-react';
 import { DARK as C, Ico, Panel, Pill, Txt } from './kit';
 import { timeline } from './timeline';
 
-const tl = timeline('se', 11);
+const tl = timeline('se', 12.5);
 
 const header = tl.enter(0, { y: 12 });
 const left = tl.enter(0.5, { y: 12 });
