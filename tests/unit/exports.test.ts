@@ -7,6 +7,7 @@ import { analyzeAssessment, compareAssessments } from '@/engine/analyze';
 import { buildWorkbook } from '@/services/exports/xlsx';
 import { buildAcademicPDF, buildExecutivePDF, buildTechnicalPDF, pdfSafe } from '@/services/exports/pdf';
 import { ACADEMIC_CASES } from '@/data/demo/cases';
+import { heatmapOption, wrapWords } from '@/components/charts/options';
 
 beforeEach(async () => {
   await db.delete();
@@ -77,4 +78,15 @@ describe('Exportaciones', () => {
     const modified = { ...an2, assessment: { ...an2.assessment, bankVersion: '0.9.0' } };
     expect(compareAssessments([an1, modified])!.limitations.length).toBeGreaterThan(0);
   }, 60000);
+});
+
+describe('Gráficos', () => {
+  it('los rótulos de columna del mapa de calor se parten por palabras sin desbordar la columna', () => {
+    expect(wrapWords('Seguridad de la información', 11)).toBe('Seguridad\nde la\ninformación');
+    expect(wrapWords('Responsables de procesos', 11)).toBe('Responsables\nde procesos');
+    expect(wrapWords('Jurídica', 11)).toBe('Jurídica');
+    const opt = heatmapOption(['D01'], ['Alta dirección', 'Seguridad de la información'], [[3, null]]) as { xAxis: { axisLabel: { formatter: (v: string, i: number) => string; rotate: number } } };
+    expect(opt.xAxis.axisLabel.rotate).toBe(0);
+    expect(opt.xAxis.axisLabel.formatter('', 1)).toBe('Seguridad\nde la\ninformación');
+  });
 });

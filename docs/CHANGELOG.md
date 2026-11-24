@@ -11,10 +11,13 @@ Portada de nivel superior. Sin cambios en el modelo, el motor de cálculo, la ba
 - Titular que entra palabra por palabra al cargar, botones con destello y efecto magnético.
 - Vista del producto a doble densidad con borde luminoso giratorio, reflejo que la recorre, inclinación con el puntero y tres anotaciones con cifras reales del caso de demostración (madurez percibida 2,64, cobertura 97,9 %, solidez 66). Una prueba unitaria verifica que esas cifras coinciden con el motor.
 - Método en tres pasos como narrativa fija: la imagen se queda en pantalla y cambia según el paso que se lee.
-- Mosaico «Cifras que se pueden auditar» con recortes reales del tablero (validación, mapa de calor, radar, riesgos, brecha frente a la meta y hoja de ruta).
+- Mosaico «Cifras que se pueden auditar» con recortes reales del tablero (validación, mapa de calor, radar, riesgos y hoja de ruta).
 - Página oscura continua con paneles claros redondeados; cifras con degradado; plan recomendado con borde animado; preguntas frecuentes sobre fondo oscuro; la declaración y el acceso comparten el bloque final con video.
 - Cursor «Arrastre» en el carrusel.
 - Precarga de las fuentes del titular: el diseño ya no se mueve al llegar la fuente (CLS 0).
+
+### Corregido
+- Mapa de calor del tablero: los nombres de perfil largos («Seguridad de la información», «Responsables de procesos») se encimaban sobre la columna vecina. Ahora se parten por palabras y, en pantallas estrechas, se inclinan.
 
 ## [2.0.0] — 2026-11-21 (rama `redesign/identidad-v2`, sin publicar)
 

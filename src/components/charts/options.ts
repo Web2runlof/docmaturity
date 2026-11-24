@@ -15,6 +15,17 @@ const MUTED = '#5B6B82';
 const LINE = '#E6EBF2';
 const GOLD = '#C69B59';
 const fmt = (v: unknown) => (typeof v === 'number' ? fmtScore(v) : 'Sin datos');
+
+/** Parte un rótulo en líneas de hasta `max` caracteres sin cortar palabras. */
+export function wrapWords(text: string, max: number): string {
+  const out: string[] = [];
+  for (const word of text.split(/\s+/).filter(Boolean)) {
+    const last = out.length - 1;
+    if (last >= 0 && out[last].length + 1 + word.length <= max) out[last] += ` ${word}`;
+    else out.push(word);
+  }
+  return out.join('\n');
+}
 /** Etiqueta de eje solo para valores enteros (los ejes con margen no rotulan los extremos fraccionarios). */
 const intLabel = (v: number) => (Number.isInteger(v) && v >= 0 && v <= 5 ? String(v) : '');
 const tooltip = { backgroundColor: '#0B1020', borderWidth: 0, padding: [8, 10], textStyle: { color: '#fff', fontSize: 12, fontFamily: 'Inter, sans-serif' }, extraCssText: 'border-radius:8px;box-shadow:0 12px 30px -12px rgba(11,16,32,.45);' };
@@ -112,16 +123,22 @@ export function heatmapOption(rows: string[], cols: string[], cells: (number | n
     if (v === null) empty.push([j, i, -1]);
     else data.push({ value: [j, i, Math.round(v * 100) / 100], label: { color: LEVEL_LABEL_COLORS[levelIndex(v)] }, itemStyle: { color: LEVEL_COLORS[levelIndex(v)] } } as (typeof data)[number]);
   }));
-  const longLabels = cols.some((c) => c.length > 12);
+  // Con pocas columnas los rótulos se parten por palabras en líneas cortas, para que
+  // nombres como «Seguridad de la información» no invadan la columna vecina.
+  const wrap = cols.length <= 6;
+  const lines = wrap ? cols.map((c) => wrapWords(c, 11)) : cols;
+  const maxLines = wrap ? Math.max(1, ...lines.map((l) => l.split('\n').length)) : 1;
   return {
     tooltip: { ...tooltip, formatter: (p: { seriesIndex: number; data: { value: [number, number, number] } | [number, number, number] }) => { const v = Array.isArray(p.data) ? p.data : p.data.value; return `${rows[v[1]]} · ${cols[v[0]]}<br/>${opts.valueLabel ?? 'Valor'}: ${p.seriesIndex === 1 ? 'Sin datos' : fmt(v[2])}`; } },
-    grid: { left: 8, right: 12, top: 8, bottom: longLabels && cols.length <= 6 ? 40 : 16, containLabel: true },
-    xAxis: { type: 'category', data: cols, axisLabel: { ...axisLabel, interval: 0, rotate: cols.length > 6 ? 30 : 0, width: cols.length <= 6 ? 84 : undefined, overflow: cols.length <= 6 ? 'break' : undefined }, axisTick: { show: false }, splitArea: { show: false } },
+    grid: { left: 8, right: 12, top: 8, bottom: 8 + (maxLines - 1) * 4, containLabel: true },
+    xAxis: { type: 'category', data: cols, axisLabel: { ...axisLabel, interval: 0, rotate: wrap ? 0 : 30, lineHeight: 13, formatter: (_v: string, i: number) => lines[i] }, axisTick: { show: false }, splitArea: { show: false } },
     yAxis: { type: 'category', data: rows, inverse: true, axisLabel: { ...axisLabel, color: INK }, axisTick: { show: false } },
     series: [
       { type: 'heatmap', data, label: { show: true, fontSize: 10, formatter: (p: { data: { value: [number, number, number] } }) => fmt(p.data.value[2]) }, itemStyle: { borderColor: '#fff', borderWidth: 2 }, emphasis: { itemStyle: { borderColor: INK, borderWidth: 1 } } },
       { type: 'heatmap', name: 'Sin datos', data: empty, label: { show: true, fontSize: 10, color: NO_DATA_COLOR, formatter: '—' }, itemStyle: { color: '#F8FAFC', borderColor: '#fff', borderWidth: 2 }, emphasis: { disabled: true } },
     ],
+    // En contenedores estrechos las columnas no caben ni partidas: los rótulos se inclinan.
+    ...(wrap ? { media: [{ query: { maxWidth: cols.length * 58 + 50 }, option: { grid: { bottom: 8 }, xAxis: { axisLabel: { rotate: 40, formatter: (_v: string, i: number) => cols[i] } } } }] } : {}),
   };
 }
 

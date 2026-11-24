@@ -307,13 +307,13 @@ function Method() {
 
 /* ===== Mosaico de resultados con recortes reales ===== */
 
-function Tile({ title, text, img, alt, className, imgClassName, dark = false, fill = false }: { title: string; text: string; img: string; alt: string; className?: string; imgClassName?: string; dark?: boolean; fill?: boolean }) {
+function Tile({ title, text, img, alt, className, imgClassName, dark = false }: { title: string; text: string; img: string; alt: string; className?: string; imgClassName?: string; dark?: boolean }) {
   return (
     <Reveal as="li" className={cx('spotlight group relative flex flex-col overflow-hidden rounded-[28px] border p-7 md:p-8', dark ? 'border-white/10 bg-midnight text-white [--spot:rgb(53_217_164/0.18)]' : 'border-line bg-white', className)}>
       <h3 className={cx('font-display text-xl font-semibold tracking-[-0.02em] md:text-[1.4rem]', dark ? 'text-white' : 'text-ink')}>{title}</h3>
       <p className={cx('mt-2 max-w-md text-sm leading-relaxed', dark ? 'text-fog' : 'text-muted')}>{text}</p>
-      <div className={cx('relative mt-7 flex-1 [mask-image:linear-gradient(to_bottom,#000_78%,transparent)]', fill ? 'min-h-[380px]' : 'min-h-0')}>
-        <img src={img} alt={alt} loading="lazy" decoding="async" className={cx('w-full rounded-[16px] border border-line bg-white object-cover object-top shadow-[0_30px_60px_-35px_rgba(11,16,32,0.55)] transition-transform duration-700 ease-out group-hover:-translate-y-1.5 group-hover:scale-[1.015]', fill && 'absolute inset-0 h-full', imgClassName)} />
+      <div className="relative mt-7 min-h-0 flex-1 [mask-image:linear-gradient(to_bottom,#000_78%,transparent)]">
+        <img src={img} alt={alt} loading="lazy" decoding="async" className={cx('w-full rounded-[16px] border border-line bg-white object-cover object-top shadow-[0_30px_60px_-35px_rgba(11,16,32,0.55)] transition-transform duration-700 ease-out group-hover:-translate-y-1.5 group-hover:scale-[1.015]', imgClassName)} />
       </div>
     </Reveal>
   );
@@ -328,12 +328,11 @@ function ResultsBento() {
           <Reveal delay={100}><p className="max-w-xl text-base leading-relaxed text-muted lg:ml-auto">Cada gráfico tiene su tabla alternativa y cada cifra conserva su vínculo con la respuesta, la evidencia y la decisión de validación que la sustentan. Imágenes del caso de demostración.</p></Reveal>
         </div>
         <ul className="mt-16 grid gap-4 lg:grid-cols-6">
-          <Tile className="lg:col-span-4" title="Mesa de validación" text="El nivel final se decide con justificación, evidencias asociadas y contradicciones resueltas; lo respondido se conserva." img={DETAILS.validacion} alt="Formulario de validación del evaluador con el nivel final, la justificación y la evidencia asociada" imgClassName="max-h-[420px]" />
-          <Tile className="lg:col-span-2 lg:row-span-2" dark fill title="Percepciones por perfil" text="La mediana de cada grupo por dimensión muestra dónde coinciden y dónde divergen." img={DETAILS.calor} alt="Mapa de calor con la mediana de respuestas por dimensión y perfil" imgClassName="border-white/10" />
-          <Tile className="lg:col-span-2" title="Madurez por dimensión" text="Serie percibida frente a la meta en las quince dimensiones." img={DETAILS.radar} alt="Radar de madurez percibida por dimensión frente a la meta" imgClassName="max-h-[300px]" />
+          <Tile className="lg:col-span-4" title="Mesa de validación" text="El nivel final se decide con justificación, evidencias asociadas y contradicciones resueltas; lo respondido se conserva." img={DETAILS.validacion} alt="Formulario de validación del evaluador con el nivel final, la justificación y la evidencia asociada" imgClassName="max-h-[330px]" />
+          <Tile className="lg:col-span-2" dark title="Percepciones por perfil" text="La mediana de cada grupo por dimensión muestra dónde coinciden y dónde divergen." img={DETAILS.calor} alt="Mapa de calor con la mediana de respuestas por dimensión y perfil" imgClassName="border-white/10" />
+          <Tile className="lg:col-span-2" title="Madurez por dimensión" text="Serie percibida frente a la meta en las quince dimensiones; la distancia es la brecha." img={DETAILS.radar} alt="Radar de madurez percibida por dimensión frente a la meta" imgClassName="max-h-[300px]" />
           <Tile className="lg:col-span-2" title="Matriz de riesgos" text="Probabilidad por impacto, con bandas explícitas." img={DETAILS.riesgos} alt="Matriz de riesgos de probabilidad por impacto" imgClassName="max-h-[300px]" />
-          <Tile className="lg:col-span-3" title="Brecha frente a la meta" text="La marca dorada indica la meta de cada dimensión." img={DETAILS.meta} alt="Barras de madurez actual por dimensión frente a la meta" imgClassName="max-h-[360px]" />
-          <Tile className="lg:col-span-3" title="Hoja de ruta por fases" text="Iniciativas en cuatro fases que respetan las dependencias." img={DETAILS.gantt} alt="Diagrama de la hoja de ruta con iniciativas en cuatro fases" imgClassName="max-h-[360px]" />
+          <Tile className="lg:col-span-2" title="Hoja de ruta por fases" text="Iniciativas en cuatro fases que respetan las dependencias." img={DETAILS.gantt} alt="Diagrama de la hoja de ruta con iniciativas en cuatro fases" imgClassName="max-h-[300px]" />
         </ul>
       </div>
     </LightPanel>
