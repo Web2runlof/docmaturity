@@ -280,3 +280,86 @@ export function useSpotlight() {
     return () => document.removeEventListener('pointermove', on);
   }, []);
 }
+
+const finePointer = () => typeof window !== 'undefined' && window.matchMedia?.('(pointer: fine)').matches;
+
+/**
+ * Botones «magnéticos»: los elementos con `data-magnetic` se desplazan levemente hacia el puntero.
+ * Solo con ratón o panel táctil y sin movimiento reducido.
+ */
+export function useMagnetic(strength = 0.22, max = 8) {
+  useEffect(() => {
+    if (prefersReducedMotion() || !finePointer()) return;
+    const els = Array.from(document.querySelectorAll<HTMLElement>('[data-magnetic]'));
+    const offs: Array<() => void> = [];
+    for (const el of els) {
+      const move = (e: PointerEvent) => {
+        const r = el.getBoundingClientRect();
+        const dx = Math.max(-max, Math.min(max, (e.clientX - (r.left + r.width / 2)) * strength));
+        const dy = Math.max(-max, Math.min(max, (e.clientY - (r.top + r.height / 2)) * strength));
+        el.style.transform = `translate3d(${dx}px, ${dy}px, 0)`;
+      };
+      const leave = () => { el.style.transform = ''; };
+      el.style.transition = 'transform 260ms cubic-bezier(0.22,1,0.36,1)';
+      el.addEventListener('pointermove', move);
+      el.addEventListener('pointerleave', leave);
+      offs.push(() => { el.removeEventListener('pointermove', move); el.removeEventListener('pointerleave', leave); el.style.transform = ''; });
+    }
+    return () => offs.forEach((f) => f());
+  }, [strength, max]);
+}
+
+/**
+ * Inclinación 3D según la posición del puntero sobre un elemento. Devuelve la referencia y los
+ * grados actuales (x, y); en reposo, con movimiento reducido o en pantallas táctiles, ambos son 0.
+ */
+export function usePointerTilt<T extends HTMLElement>(maxDeg = 4) {
+  const ref = useRef<T>(null);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || prefersReducedMotion() || !finePointer()) return;
+    let frame = 0;
+    const move = (e: PointerEvent) => {
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        const r = el.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - 0.5;
+        const py = (e.clientY - r.top) / r.height - 0.5;
+        setTilt({ x: -py * maxDeg, y: px * maxDeg });
+      });
+    };
+    const leave = () => setTilt({ x: 0, y: 0 });
+    el.addEventListener('pointermove', move);
+    el.addEventListener('pointerleave', leave);
+    return () => { el.removeEventListener('pointermove', move); el.removeEventListener('pointerleave', leave); if (frame) cancelAnimationFrame(frame); };
+  }, [maxDeg]);
+  return [ref, tilt] as const;
+}
+
+/** Divide un texto en palabras que entran escalonadas al cargar (no depende del desplazamiento). */
+export function SplitWords({ text, start = 0 }: { text: string; start?: number }) {
+  return (
+    <>
+      {text.split(' ').map((w, k, arr) => (
+        <span key={k}><span className="hero-word" style={{ '--i': start + k } as CSSProperties}>{w}</span>{k < arr.length - 1 ? ' ' : ''}</span>
+      ))}
+    </>
+  );
+}
+
+/** Índice del paso activo de una narrativa con desplazamiento: el que cruza el centro de la vista. */
+export function useActiveStep(count: number) {
+  const refs = useRef<Array<HTMLElement | null>>([]);
+  const [active, setActive] = useState(0);
+  useEffect(() => {
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) if (e.isIntersecting) setActive(Number((e.target as HTMLElement).dataset.step));
+    }, { rootMargin: '-45% 0px -45% 0px' });
+    refs.current.slice(0, count).forEach((el) => el && io.observe(el));
+    return () => io.disconnect();
+  }, [count]);
+  const bind = (i: number) => (el: HTMLElement | null) => { refs.current[i] = el; };
+  return [active, bind] as const;
+}

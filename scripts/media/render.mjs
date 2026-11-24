@@ -13,7 +13,8 @@ const browser = await chromium.launch({ executablePath: process.env.PLAYWRIGHT_C
 const page = await browser.newPage({ viewport: { width: +w, height: +h } });
 page.on('console', (m) => { if (m.type() === 'error') console.log('console', m.text()); });
 page.on('pageerror', (e) => console.log('pageerror', e.message));
-await page.goto(`http://localhost:5181/scripts/media/scene.html?mode=${mode}&w=${w}&h=${h}&loop=${loop || 12}`);
+const EXTRA = process.env.SCENE_EXTRA || '';
+await page.goto(`http://localhost:5181/scripts/media/scene.html?mode=${mode}&w=${w}&h=${h}&loop=${loop || 12}${EXTRA}`);
 await page.waitForFunction(() => window.ready === true, null, { timeout: 30000 });
 const N = +frames; const fps = +(fpsArg || 30); const start = Date.now();
 for (let i = 0; i < N; i++) {

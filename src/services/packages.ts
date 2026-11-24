@@ -12,7 +12,7 @@ import {
 } from '@/schemas/packages';
 import { nowISO, packageHash, safeParseJSON, uuid } from '@/utils/core';
 
-export const APP_VERSION = '2.0.0';
+export const APP_VERSION = '2.1.0';
 
 export class PackageError extends Error {}
 
