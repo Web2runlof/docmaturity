@@ -237,6 +237,18 @@ test('Rediseño · pie de página con autoría, portada con cifras del banco y m
   await expect(author).toHaveAttribute('target', '_blank');
   await expect(author).toHaveAttribute('rel', /noopener/);
   await expect(page.getByRole('contentinfo')).toContainText('Diseñado y creado por: Sergio Gómez Flórez');
+  // Licencia Creative Commons Atribución 4.0 enlazada desde el pie de página.
+  const license = page.getByRole('contentinfo').getByRole('link', { name: /CC BY 4\.0/ });
+  await expect(license).toHaveAttribute('href', 'https://creativecommons.org/licenses/by/4.0/deed.es');
+  await expect(license).toHaveAttribute('rel', /license/);
+  await expect(page.getByRole('contentinfo')).not.toContainText('MIT');
+  // Escenas animadas: con movimiento reducido quedan quietas en su estado final y sin elementos de paso.
+  // Se montan al acercarse a la vista.
+  await page.locator('#proteccion').scrollIntoViewIfNeeded();
+  const scene = page.locator('#proteccion svg.sc-root');
+  await expect(scene).toBeVisible();
+  expect(await scene.locator('g[class^="sd"]').first().evaluate((el) => getComputedStyle(el).animationName)).toBe('none');
+  expect(await scene.locator('.sc-transient').first().evaluate((el) => getComputedStyle(el).display)).toBe('none');
   // Video de fondo: con movimiento reducido solo se muestra el póster (no hay elemento <video>).
   await expect(page.locator('video')).toHaveCount(0);
   // Carrusel de pantallas: sin avance automático con movimiento reducido, pero navegable.
@@ -310,6 +322,16 @@ test('Rediseño · portada con video de fondo local, marquesina y carrusel con p
   await expect(carousel.locator('[aria-roledescription="diapositiva"]')).toHaveCount(6);
   await carousel.getByRole('button', { name: 'Pausar el carrusel' }).click();
   await expect(carousel.getByRole('button', { name: 'Reanudar el carrusel' })).toBeVisible();
+  // Método: una escena animada por paso; solo la del paso activo se reproduce.
+  const method = page.locator('#como-funciona');
+  await method.scrollIntoViewIfNeeded();
+  const sticky = method.locator('.sticky');
+  await expect(sticky.locator('svg.sc-root[role="img"]')).toHaveCount(3);
+  await expect(sticky.locator('[data-paused="false"]')).toHaveCount(1);
+  expect(await sticky.locator('[data-paused="false"] g[class^="s"]').first().evaluate((el) => getComputedStyle(el).animationName)).not.toBe('none');
+  // Privacidad: escena del dispositivo, accesible como imagen con descripción.
+  await page.locator('#proteccion').scrollIntoViewIfNeeded();
+  await expect(page.locator('#proteccion svg.sc-root')).toHaveAttribute('aria-label', /no sale ninguna solicitud/);
   expect(external).toEqual([]);
   expect(errors).toEqual([]);
 });

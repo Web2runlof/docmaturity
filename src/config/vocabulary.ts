@@ -74,3 +74,6 @@ export const VERIFICATION_LABEL = {
 
 /** Estados de las iniciativas de la hoja de ruta. */
 export const INITIATIVE_STATUS_LABEL = { propuesta: 'Propuesta', aprobada: 'Aprobada', en_ejecucion: 'En ejecución', finalizada: 'Finalizada', cancelada: 'Cancelada' } as const;
+
+/** Licencia de la obra: Creative Commons Atribución 4.0 Internacional (resumen en español). */
+export const LICENSE_URL = 'https://creativecommons.org/licenses/by/4.0/deed.es';

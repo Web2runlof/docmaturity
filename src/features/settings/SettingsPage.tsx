@@ -10,6 +10,7 @@ import { buildBackup, getSettings, restoreBackup, validateBackup } from '@/servi
 import { decryptPackage, isEncryptedPackage } from '@/services/crypto';
 import { removeSimulatedData } from '@/services/demo';
 import { PACKAGE_LIMITS, type BackupPackage } from '@/schemas/packages';
+import { LICENSE_URL } from '@/config/vocabulary';
 import { attempt, attemptOk, notify } from '@/app/store';
 import { fmtBytes, fmtDate, fmtPct, readFileText, safeParseJSON } from '@/utils/core';
 import { BANK_VERSION, METHODOLOGY_VERSION } from '@/data/bank';
@@ -198,7 +199,7 @@ function About() {
       <div className="mt-5 space-y-2 text-sm text-muted">
         <p className="flex items-start gap-2"><ShieldCheck className="mt-0.5 size-4 shrink-0 text-teal" aria-hidden />Aplicación estática sin servidor, sin registro de usuarios, sin telemetría y sin envío automático de datos.</p>
         <p>DOCMATURITY es una herramienta de autodiagnóstico y consultoría. Sus resultados no constituyen certificación, auditoría oficial ni puntaje de instrumentos oficiales.</p>
-        <p>Código abierto bajo licencia MIT.</p>
+        <p>Obra bajo licencia <a href={LICENSE_URL} target="_blank" rel="noopener noreferrer license" className="font-medium text-teal underline underline-offset-4">Creative Commons Atribución 4.0 Internacional (CC BY 4.0)</a>: puede copiarse, adaptarse y redistribuirse, incluso con fines comerciales, reconociendo la autoría.</p>
       </div>
     </Section>
   );

@@ -2,7 +2,7 @@
 
 Todos los medios de `src/assets/landing/` son originales:
 
-- **Video y renders 3D** (`hero-loop.*`, `hero-poster.webp`, `render-*.webp`): escena propia en three.js (`scene.html`) renderizada cuadro a cuadro con Chrome sin interfaz (`render.mjs`). Modos: `field` (campo de documentos en bucle), `stack` (pila de evidencias), `strata` (estratos del modelo) y `vault` (bóveda local).
+- **Video y renders 3D** (`hero-loop.*`, `hero-poster.webp`, `render-*.webp`): escena propia en three.js (`scene.html`) renderizada cuadro a cuadro con Chrome sin interfaz (`render.mjs`). Modos: `field` (campo de documentos en bucle), `stack` (pila de evidencias), `strata` (estratos del modelo) y `vault` (bóveda local). Desde la versión 2.2 la portada solo usa el video y el póster; los pasos del método y la privacidad son escenas SVG animadas (`src/features/landing/scenes/`), así que los modos de render fijo quedan disponibles pero sin archivos publicados.
 - **Pantallas** (`shot-*.webp`): capturas reales de la aplicación con el caso de demostración ficticio.
 
 ```bash

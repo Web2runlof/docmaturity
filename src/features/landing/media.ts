@@ -1,19 +1,11 @@
 /**
- * Medios originales de la portada. El video y los renders 3D se generan con
+ * Medios originales de la portada. El video de fondo se genera con
  * `scripts/media/` (escena propia en three.js); las pantallas son capturas reales de la
  * aplicación con datos de demostración ficticios. Ningún recurso proviene de terceros.
  */
 import heroWebm from '@/assets/landing/hero-loop.webm';
 import heroMp4 from '@/assets/landing/hero-loop.mp4';
 import heroPoster from '@/assets/landing/hero-poster.webp';
-import renderField from '@/assets/landing/render-field.webp';
-import renderField800 from '@/assets/landing/render-field-800.webp';
-import renderStack from '@/assets/landing/render-stack.webp';
-import renderStack800 from '@/assets/landing/render-stack-800.webp';
-import renderStrata from '@/assets/landing/render-strata.webp';
-import renderStrata800 from '@/assets/landing/render-strata-800.webp';
-import renderVault from '@/assets/landing/render-vault.webp';
-import renderVault800 from '@/assets/landing/render-vault-800.webp';
 import shotResultados from '@/assets/landing/shot-resultados.webp';
 import shotResultados960 from '@/assets/landing/shot-resultados-960.webp';
 import shotCuestionario from '@/assets/landing/shot-cuestionario.webp';
@@ -37,12 +29,6 @@ import detailValidacion from '@/assets/landing/detail-validacion.webp';
 import detailGantt from '@/assets/landing/detail-gantt.webp';
 
 export const HERO_VIDEO = { webm: heroWebm, mp4: heroMp4, poster: heroPoster };
-export const RENDERS = {
-  field: { src: renderField, small: renderField800 },
-  stack: { src: renderStack, small: renderStack800 },
-  strata: { src: renderStrata, small: renderStrata800 },
-  vault: { src: renderVault, small: renderVault800 },
-};
 export const SHOTS = {
   resultados: { src: shotResultados, small: shotResultados960 },
   cuestionario: { src: shotCuestionario, small: shotCuestionario960 },
