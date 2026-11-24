@@ -1,6 +1,6 @@
 # Informe de pruebas
 
-Ejecución del 24 de noviembre de 2026 sobre la versión 2.1.0 (rama `redesign/portada-premium`; Node.js 22.23, Chrome en Linux).
+Ejecución del 24 de noviembre de 2026 sobre la versión 2.2.0 (rama `redesign/metodo-animado`; Node.js 22.23, Chrome en Linux).
 
 ## 1. Resumen
 
@@ -10,7 +10,7 @@ Ejecución del 24 de noviembre de 2026 sobre la versión 2.1.0 (rama `redesign/p
 | Tipos | `npm run typecheck` | Sin errores (TypeScript estricto) |
 | Banco | `npm run bank` | 15 dimensiones, 225 criterios, 1.350 descriptores únicos, 22 críticos |
 | Unitarias e integración | `npm run test` | **94 de 94 aprobadas** (6 archivos) |
-| Build de producción | `npm run build` | Correcto; 105 recursos precargados por el service worker (≈ 4,8 MB); los medios de la portada se guardan en caché al verse |
+| Build de producción | `npm run build` | Correcto; 107 recursos precargados por el service worker (≈ 4,7 MB); los medios de la portada se guardan en caché al verse |
 | End-to-end | `npm run test:e2e` | **12 de 12 aprobadas** (11 escritorio 1440 × 900 y 1 móvil Pixel 7) |
 | Desbordamiento horizontal | 24 rutas × 360/768/1024/1440 px | Sin desbordamientos ni errores de consola |
 
@@ -114,6 +114,10 @@ Además, se cargó la demostración en el sitio compilado y se recorrieron todas
 | Movimiento reducido: contenido visible sin animación ni Ken Burns | E `Rediseño · pie de página…` (contexto `reducedMotion: 'reduce'`) |
 | Cifras del caso de demostración que muestra la portada (2,64 · 97,9 % · 26,5 % · 66) iguales a las del motor | U `demo-audit` |
 | Rótulos de columna del mapa de calor partidos por palabras, sin encimarse (escritorio) e inclinados en pantallas estrechas | U `exports` (Gráficos) y revisión visual a 1360, 1024 y 390 px |
+| Escenas animadas: una por paso del método; solo la del paso activo se reproduce; la de privacidad es accesible como imagen con descripción | E `Rediseño · portada con video…` |
+| Escenas con movimiento reducido: quietas en su estado final y sin elementos de paso | E `Rediseño · pie de página…` |
+| Licencia CC BY 4.0 enlazada desde el pie de página (`rel="license"`), sin menciones a MIT | E `Rediseño · pie de página…` |
+| Portada sin desbordamiento horizontal con las escenas montadas, a 360, 768, 1024 y 1440 px; una sola hoja de estilos de escenas | revisión automática |
 | Movimiento reducido: póster en lugar de video y carrusel sin avance automático | E `Rediseño · pie de página…` |
 | Video de fondo local (silenciado, en bucle, póster, WebM y MP4), marquesina accesible y carrusel con pausa, sin solicitudes externas | E `Rediseño · portada con video…` |
 | Siguiente paso y resaltado único en la navegación | E `Rediseño · la navegación…` |

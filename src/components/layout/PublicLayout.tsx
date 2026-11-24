@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Logo } from '@/components/brand/Logo';
 import { SkipLink, buttonClass } from '@/components/ui';
 import { cx } from '@/utils/core';
+import { LICENSE_URL } from '@/config/vocabulary';
 
 const LINKS = [
   { to: '/como-funciona', label: 'Cómo funciona' },
@@ -71,7 +72,7 @@ export function PublicLayout() {
         </div>
         <div className="border-t border-white/10">
           <div className="mx-auto flex max-w-[1280px] flex-col gap-3 px-5 py-5 text-xs md:flex-row md:items-center md:justify-between md:px-8">
-            <p>Código abierto bajo licencia MIT. Los referentes citados conservan sus propias licencias.</p>
+            <p>Obra bajo licencia <a href={LICENSE_URL} target="_blank" rel="noopener noreferrer license" className="font-medium text-white underline decoration-white/30 underline-offset-4 transition-colors hover:text-mint">Creative Commons Atribución 4.0 (CC BY 4.0)<span className="sr-only"> (se abre en una pestaña nueva)</span></a>. Los referentes citados conservan sus propias licencias.</p>
             <p>
               Diseñado y creado por:{' '}
               <a href={AUTHOR.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 font-medium text-white underline decoration-mint/60 underline-offset-4 transition-colors hover:text-mint">

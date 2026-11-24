@@ -96,13 +96,14 @@ Todos los medios son originales y locales (`src/assets/landing/`); el procedimie
 |---|---|---|---|
 | `hero-loop.webm` / `.mp4` | Escena 3D propia (campo de documentos de vidrio con luz menta y violeta) a 1280 × 720, 12 s en bucle perfecto, con profundidad de campo y grano fino | Fondo del héroe y del cierre | 655 KB / 937 KB |
 | `hero-poster.webp` | Primer cuadro del video | Póster, movimiento reducido y ahorro de datos | 8 KB |
-| `render-field`, `render-stack`, `render-strata`, `render-vault` | Renders 3D fijos (800 y 1600 px) | Pasos del método y privacidad | 7–67 KB |
+| Escenas animadas (`src/features/landing/scenes/`) | Ilustraciones SVG en movimiento dibujadas con la tipografía y la paleta del sitio: entrevistas y mediana; evidencia y validación; madurez, prioridad y hoja de ruta; perímetro del dispositivo | Pasos del método y privacidad | sin archivos de imagen; ≈ 25 KB de código |
 | `shot-*` | Capturas reales de la aplicación con el caso de demostración (960 y 1600 px) | Carrusel | 32–120 KB |
 | `hero-product` | Tablero de resultados a doble densidad (1200 y 2000 px) | Vista del producto en el héroe | 70 / 138 KB |
 | `detail-*` | Recortes de componentes reales a doble densidad | Mosaico de resultados | 20–61 KB |
 
 Reglas:
 
+- Las escenas animadas describen su movimiento como una línea de tiempo en segundos (`scenes/timeline.ts`); todas las piezas de una escena comparten la misma duración, así que el ciclo se repite sincronizado. Su estado sin animación es el final: con movimiento reducido la escena se muestra completa y quieta, y los elementos de paso (cursor, archivos en tránsito, estados intermedios) se ocultan. Se detienen fuera de la vista y, en el método, solo se anima la escena del paso activo, que empieza desde el principio cada vez que se activa.
 - El video es silenciado, en bucle, `playsinline`, sin controles y oculto a tecnologías de asistencia. Solo se reproduce mientras está en la vista; con movimiento reducido o ahorro de datos se muestra el póster.
 - El desenfoque va «horneado» en el archivo: el navegador no aplica filtros en tiempo real.
 - Las imágenes usan `srcset`, carga diferida (salvo la vista del producto del héroe) y fondo Midnight de respaldo.
@@ -132,7 +133,7 @@ Reglas:
 
 | Pantalla | Nivel de rediseño |
 |---|---|
-| Portada | Versión 2.1: navegación flotante; héroe con video de profundidad de campo, titular palabra por palabra y vista del producto con borde luminoso, reflejo, inclinación y anotaciones; marquesina; cifras; método como narrativa fija; mosaico de resultados con recortes reales; carrusel con cursor de arrastre; modalidades; privacidad; preguntas; cierre con declaración y video. Página oscura continua con paneles claros redondeados. |
+| Portada | Versión 2.2: navegación flotante; héroe con video de profundidad de campo, titular palabra por palabra y vista del producto con borde luminoso, reflejo, inclinación y anotaciones; marquesina; cifras; método como narrativa fija con una escena animada por paso; mosaico de resultados con recortes reales; carrusel con cursor de arrastre; modalidades; privacidad con escena animada del dispositivo; preguntas; cierre con declaración y video. Página oscura continua con paneles claros redondeados. |
 | Navegación y pie públicos | Cápsula flotante translúcida; pie con marca a gran escala y «Diseñado y creado por: Sergio Gómez Flórez» (LinkedIn, pestaña nueva). |
 | Cómo funciona, Metodología, Referentes, Privacidad | Banda de entrada oscura; contenido sin cambios. |
 | Estructura de la aplicación | Reconstruida (navegación, encabezado, transición). |
@@ -157,8 +158,8 @@ Reglas:
 
 | Ruta | Antes (v1.1) FCP / LCP | Ahora FCP / LCP | JS | CLS |
 |---|---|---|---|---|
-| Portada | 472 / 1 172 ms | 580 / 1 196 ms | 698 → 475 KB | 0 |
+| Portada | 472 / 1 172 ms | 572 / 1 288 ms | 698 → 485 KB | 0 |
 | Inicio de la aplicación | 520 / 820 ms | 504 / 852 ms | 460 → 467 KB | 0 |
 | Metodología | 492 / 724 ms | 580 / 908 ms | 465 → 470 KB | 0 |
 
-La portada carga 175 KB de imagen al inicio (póster y vista del producto); el video (655 KB en WebM) se descarga después y solo si el movimiento no está reducido. El titular entra con una animación de carga y sus fuentes se precargan, para no retrasar el LCP ni mover el diseño.
+La portada carga 85 KB de imagen al inicio (póster y vista del producto); las escenas animadas no usan imágenes y se montan al acercarse a la vista; el video (655 KB en WebM) se descarga después y solo si el movimiento no está reducido. El titular entra con una animación de carga y sus fuentes se precargan, para no retrasar el LCP ni mover el diseño.

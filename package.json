@@ -1,9 +1,9 @@
 {
   "name": "docmaturity",
   "private": true,
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "DOCMATURITY — Diagnóstico de madurez en gestión documental y gobierno de la información (modelo DIAM v1.0)",
-  "license": "MIT",
+  "license": "CC-BY-4.0",
   "type": "module",
   "scripts": {
     "dev": "vite",

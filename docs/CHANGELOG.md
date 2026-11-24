@@ -2,6 +2,23 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); versiones semánticas.
 
+## [2.2.0] — 2026-11-24
+
+Escenas animadas y licencia Creative Commons. Sin cambios en el modelo, el motor de cálculo, la base de datos local ni los formatos.
+
+### Portada
+- «Cómo funciona»: cada paso tiene ahora una escena animada que cuenta lo que dice su texto, en lugar de un render 3D decorativo.
+  - Paso 1: la organización elige la modalidad; cuatro perfiles reciben su entrevista por archivo, la responden sin conexión y sus respuestas se consolidan por mediana. «No sabe» se aparta: no cuenta como cero.
+  - Paso 2: lo percibido (mediana 4,00) frente a lo demostrado (evidencia que sube de E1 a E2); se señala la discrepancia y el evaluador valida el nivel 3 con justificación, sin sobrescribir lo respondido.
+  - Paso 3: madurez por dimensión frente a la meta con la brecha resaltada; prioridad de cinco factores que reordena las iniciativas; hoja de ruta por fases con dependencias e informes ejecutivo y técnico.
+  - Solo se anima la escena del paso activo, que empieza desde el principio al activarse.
+- Privacidad: escena más grande, sin fondo, sobre el panel claro. Muestra el perímetro del dispositivo, la base local que sigue guardando sin conexión, el cifrado que activa la persona, el respaldo que sale solo hacia su carpeta y «0 solicitudes» a servidores externos.
+- Las escenas son SVG con la tipografía y la paleta del sitio (sin archivos de imagen). Se montan al acercarse a la vista, se detienen fuera de ella y, con movimiento reducido, se muestran quietas en su estado final.
+- Se retiran los cuatro renders fijos que ya no se usan.
+
+### Licencia
+- La obra pasa de la licencia MIT a Creative Commons Atribución 4.0 Internacional (CC BY 4.0). Permite copiar, adaptar y redistribuir, incluso con fines comerciales, reconociendo la autoría. Se actualizan `LICENSE` (con encabezado en español y el texto legal), `package.json`, el README, el pie de página y Configuración.
+
 ## [2.1.0] — 2026-11-24
 
 Portada de nivel superior. Sin cambios en el modelo, el motor de cálculo, la base de datos local ni los formatos.

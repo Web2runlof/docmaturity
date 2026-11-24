@@ -1,4 +1,4 @@
-import { useState, type CSSProperties, type ReactNode } from 'react';
+import { useEffect, useState, type CSSProperties, type ReactNode } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, ArrowUpRight, Check, HardDrive, KeyRound, Layers3, ShieldCheck, WifiOff } from 'lucide-react';
 import { DIMENSIONS, QUESTIONS, SOURCES } from '@/data/bank';
@@ -14,7 +14,8 @@ import { cx, fmtPct } from '@/utils/core';
 import { MODALITY_INFO } from '../common';
 import { Carousel, type Slide } from './Carousel';
 import { DEMO_FIGURES } from './figures';
-import { DETAILS, HERO_PRODUCT, HERO_VIDEO, RENDERS, SHOTS } from './media';
+import { DETAILS, HERO_PRODUCT, HERO_VIDEO, SHOTS } from './media';
+import { METHOD_SCENES, SceneDevice, WhenNear, useWide } from './scenes';
 
 const CRITICAL = QUESTIONS.filter((q) => q.isCritical).length;
 const pill = (...extra: (string | false | undefined)[]) => cx('rounded-full', ...extra);
@@ -38,9 +39,9 @@ const SLIDES: Slide[] = [
 ];
 
 const STEPS = [
-  { img: RENDERS.field, title: 'Caracterice y entreviste', accent: 'entreviste', text: 'Registre la organización, elija la modalidad y entreviste a cada perfil. Las entrevistas también se distribuyen por archivo y se responden sin conexión.', points: ['Aplicabilidad según la naturaleza jurídica', 'Una respuesta por participante, consolidada por mediana', 'Respuestas especiales que nunca se convierten en cero'] },
-  { img: RENDERS.stack, title: 'Evidencie y valide', accent: 'valide', text: 'Cada criterio guarda su sustento documental del E0 al E3. En la mesa de validación se contrasta lo percibido con lo demostrado.', points: ['Discrepancias y contradicciones detectadas', 'Lo validado nunca sobrescribe lo respondido', 'Justificación y registro de cada decisión'] },
-  { img: RENDERS.strata, title: 'Analice y priorice', accent: 'priorice', text: 'Madurez por dimensión y familia, brechas frente a la meta, riesgos y una hoja de ruta ordenada por prioridad explicada.', points: ['Fórmulas deterministas y documentadas', 'Prioridad de cinco factores con dependencias', 'Informes ejecutivo y técnico'] },
+  { title: 'Caracterice y entreviste', accent: 'entreviste', text: 'Registre la organización, elija la modalidad y entreviste a cada perfil. Las entrevistas también se distribuyen por archivo y se responden sin conexión.', points: ['Aplicabilidad según la naturaleza jurídica', 'Una respuesta por participante, consolidada por mediana', 'Respuestas especiales que nunca se convierten en cero'] },
+  { title: 'Evidencie y valide', accent: 'valide', text: 'Cada criterio guarda su sustento documental del E0 al E3. En la mesa de validación se contrasta lo percibido con lo demostrado.', points: ['Discrepancias y contradicciones detectadas', 'Lo validado nunca sobrescribe lo respondido', 'Justificación y registro de cada decisión'] },
+  { title: 'Analice y priorice', accent: 'priorice', text: 'Madurez por dimensión y familia, brechas frente a la meta, riesgos y una hoja de ruta ordenada por prioridad explicada.', points: ['Fórmulas deterministas y documentadas', 'Prioridad de cinco factores con dependencias', 'Informes ejecutivo y técnico'] },
 ];
 
 const MODALITIES = [
@@ -260,24 +261,45 @@ function Metrics() {
 
 /* ===== Método: narrativa fija al desplazarse ===== */
 
+/** Fondo de las escenas del método: superficie oscura, retícula de puntos y luz ambiental. */
+function SceneBackdrop() {
+  return (
+    <>
+      <div aria-hidden className="sc-dots absolute inset-0" />
+      <div aria-hidden className="absolute -top-28 -left-24 size-[22rem] rounded-full bg-mint/[0.10] blur-3xl" />
+      <div aria-hidden className="absolute -right-24 bottom-0 size-[26rem] rounded-full bg-violet/[0.13] blur-3xl" />
+    </>
+  );
+}
+
 function Method() {
   const [active, bind] = useActiveStep(STEPS.length);
+  const wide = useWide();
+  // Cada vez que un paso se activa, su escena empieza desde el principio.
+  const [runs, setRuns] = useState(() => STEPS.map(() => 0));
+  useEffect(() => { setRuns((r) => r.map((v, i) => (i === active ? v + 1 : v))); }, [active]);
   return (
-    <section id="como-funciona" aria-labelledby="como-funciona-t" className="on-dark relative bg-midnight text-white">
+    <MotionScope as="section" id="como-funciona" aria-labelledby="como-funciona-t" className="on-dark relative bg-midnight text-white">
       <div className="mx-auto max-w-[1240px] px-5 pt-28 pb-10 md:px-8 md:pt-36">
         <Heading id="como-funciona-t" chip="Cómo funciona" title="Del documento a la decisión, en tres pasos." accent="decisión" lead="Cada paso deja un registro que alimenta al siguiente. Nada se calcula fuera del motor ni pierde su vínculo con el criterio y la evidencia." />
       </div>
       <div className="mx-auto grid max-w-[1240px] gap-10 px-5 pb-28 md:px-8 lg:grid-cols-[1.08fr_1fr] lg:gap-20 md:pb-36">
-        {/* Visual fijo (escritorio): las imágenes se funden según el paso activo. */}
+        {/* Visual fijo (escritorio): la escena del paso activo se anima; las demás esperan en pausa. */}
         <div className="hidden lg:block">
           <div className="sticky top-28 h-[min(620px,calc(100vh-9rem))]">
-            <div className="relative h-full overflow-hidden rounded-[32px] border border-white/10 bg-surface shadow-[0_50px_120px_-50px_rgba(0,0,0,0.9)]">
-              {STEPS.map((s, i) => (
-                <img key={s.title} src={s.img.src} alt="" aria-hidden loading="lazy" decoding="async" className={cx('absolute inset-0 size-full object-cover transition-[opacity,transform] duration-[900ms] ease-out', i === active ? 'scale-100 opacity-100' : 'scale-[1.06] opacity-0')} />
-              ))}
-              <div aria-hidden className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-midnight/90 to-transparent" />
+            <div className="relative h-full overflow-hidden rounded-[32px] border border-white/10 bg-[#0D1424] shadow-[0_50px_120px_-50px_rgba(0,0,0,0.9)]">
+              <SceneBackdrop />
+              {wide && (
+                <WhenNear className="absolute inset-0">
+                  {METHOD_SCENES.map((Scene, i) => (
+                    <div key={STEPS[i].title} data-paused={i !== active} className={cx('absolute inset-0 transition-[opacity,transform] duration-700 ease-out', i === active ? 'scale-100 opacity-100' : 'scale-[0.98] opacity-0')}>
+                      <Scene key={runs[i]} />
+                    </div>
+                  ))}
+                </WhenNear>
+              )}
               <div className="absolute inset-x-7 bottom-7 flex items-end justify-between">
-                <p aria-hidden className="font-display text-[5rem] leading-none font-semibold tracking-[-0.05em] text-white/90 num">0{active + 1}</p>
+                <p aria-hidden className="font-display text-[clamp(3.5rem,9vh,5rem)] leading-none font-semibold tracking-[-0.05em] text-white/90 num">0{active + 1}</p>
                 <ol className="mb-3 flex gap-2" aria-hidden>
                   {STEPS.map((s, i) => <li key={s.title} className={cx('h-1 rounded-full transition-all duration-500', i === active ? 'w-10 bg-mint' : 'w-4 bg-white/25')} />)}
                 </ol>
@@ -286,22 +308,28 @@ function Method() {
           </div>
         </div>
         <ol className="space-y-16 lg:space-y-0">
-          {STEPS.map((s, i) => (
-            <li key={s.title} ref={bind(i)} data-step={i} className={cx('transition-opacity duration-500 lg:flex lg:min-h-[78vh] lg:items-center', i === active ? 'lg:opacity-100' : 'lg:opacity-35')}>
-              <div>
-                <div className="mb-8 overflow-hidden rounded-[24px] border border-white/10 lg:hidden"><img src={s.img.small} srcSet={`${s.img.small} 800w, ${s.img.src} 1600w`} sizes="92vw" alt="" aria-hidden loading="lazy" decoding="async" className="aspect-[16/11] w-full object-cover" /></div>
-                <p className="font-display text-sm font-semibold text-mint num">Paso 0{i + 1}</p>
-                <h3 className="mt-4 font-display text-[2.1rem] leading-[1.04] font-semibold tracking-[-0.035em] text-white md:text-[3rem]"><Accent text={s.title} accent={s.accent} className="text-mint" /></h3>
-                <p className="mt-6 max-w-lg text-base leading-relaxed text-fog md:text-lg">{s.text}</p>
-                <ul className="mt-8 space-y-3.5 border-t border-white/[0.08] pt-7">
-                  {s.points.map((pt) => <li key={pt} className="flex items-start gap-3 text-[0.95rem] text-[#d6dde8]"><span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-mint/15 text-mint"><Check className="size-3" aria-hidden /></span>{pt}</li>)}
-                </ul>
-              </div>
-            </li>
-          ))}
+          {STEPS.map((s, i) => {
+            const Scene = METHOD_SCENES[i];
+            return (
+              <li key={s.title} ref={bind(i)} data-step={i} className={cx('transition-opacity duration-500 lg:flex lg:min-h-[78vh] lg:items-center', i === active ? 'lg:opacity-100' : 'lg:opacity-35')}>
+                <div>
+                  <div className="relative mb-8 overflow-hidden rounded-[24px] border border-white/10 bg-[#0D1424] lg:hidden">
+                    <SceneBackdrop />
+                    <WhenNear className="relative aspect-[560/520]">{!wide && <Scene viewBox="0 0 560 520" />}</WhenNear>
+                  </div>
+                  <p className="font-display text-sm font-semibold text-mint num">Paso 0{i + 1}</p>
+                  <h3 className="mt-4 font-display text-[2.1rem] leading-[1.04] font-semibold tracking-[-0.035em] text-white md:text-[3rem]"><Accent text={s.title} accent={s.accent} className="text-mint" /></h3>
+                  <p className="mt-6 max-w-lg text-base leading-relaxed text-fog md:text-lg">{s.text}</p>
+                  <ul className="mt-8 space-y-3.5 border-t border-white/[0.08] pt-7">
+                    {s.points.map((pt) => <li key={pt} className="flex items-start gap-3 text-[0.95rem] text-[#d6dde8]"><span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-mint/15 text-mint"><Check className="size-3" aria-hidden /></span>{pt}</li>)}
+                  </ul>
+                </div>
+              </li>
+            );
+          })}
         </ol>
       </div>
-    </section>
+    </MotionScope>
   );
 }
 
@@ -393,15 +421,15 @@ function Modalities() {
 function Privacy() {
   return (
     <LightPanel id="proteccion" labelledBy="proteccion-t">
-      <div className="mx-auto grid max-w-[1240px] items-center gap-14 px-5 py-24 md:px-10 md:py-32 lg:grid-cols-[1.05fr_1fr]">
-        <Reveal className="relative order-last lg:order-first">
-          <div className="group relative overflow-hidden rounded-[30px] bg-midnight shadow-[0_50px_100px_-50px_rgba(11,16,32,0.7)]">
-            <img src={RENDERS.vault.small} srcSet={`${RENDERS.vault.small} 800w, ${RENDERS.vault.src} 1600w`} sizes="(min-width: 1024px) 620px, 92vw" alt="" aria-hidden loading="lazy" decoding="async" className="aspect-[16/12] w-full object-cover transition-transform duration-[1400ms] group-hover:scale-[1.05]" />
-            <div className="absolute inset-x-5 bottom-5 flex items-center gap-3 rounded-2xl border border-white/10 bg-midnight/65 p-4 text-white backdrop-blur-md">
+      <div className="mx-auto grid max-w-[1240px] items-center gap-14 px-5 py-24 md:px-10 md:py-32 lg:grid-cols-[1.35fr_1fr] lg:gap-12">
+        <Reveal className="relative order-last lg:order-first lg:-ml-6">
+          <MotionScope className="relative">
+            <WhenNear className="aspect-[640/508]"><SceneDevice /></WhenNear>
+            <div className="mt-3 ml-[4%] flex max-w-md items-center gap-3 rounded-2xl bg-midnight p-4 text-white shadow-[0_30px_60px_-30px_rgba(11,16,32,0.6)]">
               <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-mint text-midnight"><ShieldCheck className="size-5" aria-hidden /></span>
               <p className="text-sm"><span className="block font-semibold">Ninguna solicitud a servidores externos</span><span className="text-fog">Se comprueba en cada versión con pruebas automáticas.</span></p>
             </div>
-          </div>
+          </MotionScope>
         </Reveal>
         <div>
           <Heading id="proteccion-t" dark={false} chip="Privacidad y autonomía" title="Su información no sale del dispositivo." accent="no sale" lead="Usted decide qué se exporta, con quién se comparte y cuándo se respalda." />
